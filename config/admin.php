@@ -262,7 +262,7 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'public',
+        'disk' => 'cosv5',
 
         // Image and file upload path under the disk above.
         'directory' => [

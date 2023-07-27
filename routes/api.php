@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Dingo\Api\Routing\Router;
@@ -26,6 +27,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'user','middleware' => 'api.jwt.auth'],function ($api){
         $api->any('{action}', function (Request $request, UserController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'index','middleware' => 'api.jwt.auth'],function ($api){
+        $api->any('{action}', function (Request $request, IndexController $index, $action) {
             return $index->$action($request);
         });
     });

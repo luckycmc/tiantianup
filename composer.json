@@ -8,14 +8,16 @@
         "php": "^7.3|^8.0",
         "dcat/laravel-admin": "2.*",
         "dingo/api": "^3.0",
+        "freyo/flysystem-qcloud-cos-v5": "^2.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "tymon/jwt-auth": "^1.0",
+        "overtrue/easy-sms": "^2.4",
         "overtrue/laravel-wechat": "^5.1",
-        "overtrue/easy-sms": "^2.4"
+        "qcloud/cos-sdk-v5": "^2.6",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

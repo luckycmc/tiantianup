@@ -174,7 +174,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Overtrue\LaravelWeChat\ServiceProvider::class
+        Overtrue\LaravelWeChat\ServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class
 
     ],
 
@@ -230,7 +232,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'EasyWechat' => Overtrue\LaravelWeChat\Facade::class
+        'EasyWechat' => Overtrue\LaravelWeChat\Facade::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWtFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 
     ],
 

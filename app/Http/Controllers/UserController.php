@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserContact;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +52,7 @@ class UserController extends Controller
         $user_id = Auth::id();
         // 用户编号
         $data['number'] = create_number($data['city_id'],$user_id);
+        $data['created_at'] = Carbon::now();
         $result = DB::table('users')->where('id',$user_id)->update($data);
         if (!$result) {
             return $this->error('更新失败');
@@ -86,5 +89,53 @@ class UserController extends Controller
         $user->mobile = $mobile;
         $user->save();
         return $this->success('绑定成功');
+    }
+
+    /**
+     * 添加联系人
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function add_contacts()
+    {
+        $data = \request()->all();
+        $rules = [
+            'name' => 'required',
+            'mobile' => 'required|phone_number',
+            'relation' => 'required'
+        ];
+        $messages = [
+            'name.required' => '姓名不能为空',
+            'mobile.required' => '手机号不能为空',
+            'relation.required' => '关系不能为空'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $error = $validator->errors();
+            return $this->error(json_encode(',',$error->all()));
+        }
+        $user_id = Auth::id();
+        // 查询是否存在
+        $contact_info = UserContact::where(['user_id' => $user_id,'name' => $data['name'],'mobile' => $data['mobile'],'relation' => $data['relation']])->first();
+        if ($contact_info) {
+            return $this->error('联系人已存在');
+        }
+        $data['user_id'] = Auth::id();
+        $data['created_at'] = Carbon::now();
+        $result = DB::table('user_contacts')->insert($data);
+        if (!$result) {
+            return $this->error('添加失败');
+        }
+        return $this->success('添加成功');
+    }
+
+    /**
+     * 联系人
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_contacts()
+    {
+        $user_id = Auth::id();
+        $contacts = UserContact::where('user_id',$user_id)->get();
+        return $this->success('联系人',$contacts);
     }
 }

@@ -119,8 +119,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection graduate_cert
      * @property Grid\Column|Collection diploma
      * @property Grid\Column|Collection teacher_cert
-     * @property Grid\Column|Collection contact_name
-     * @property Grid\Column|Collection contact_mobile
      * @property Grid\Column|Collection nickname
      * @property Grid\Column|Collection gender
      * @property Grid\Column|Collection birthday
@@ -241,8 +239,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection graduate_cert(string $label = null)
      * @method Grid\Column|Collection diploma(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
-     * @method Grid\Column|Collection contact_name(string $label = null)
-     * @method Grid\Column|Collection contact_mobile(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
      * @method Grid\Column|Collection gender(string $label = null)
      * @method Grid\Column|Collection birthday(string $label = null)
@@ -368,8 +364,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection graduate_cert
      * @property Show\Field|Collection diploma
      * @property Show\Field|Collection teacher_cert
-     * @property Show\Field|Collection contact_name
-     * @property Show\Field|Collection contact_mobile
      * @property Show\Field|Collection nickname
      * @property Show\Field|Collection gender
      * @property Show\Field|Collection birthday
@@ -490,8 +484,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection graduate_cert(string $label = null)
      * @method Show\Field|Collection diploma(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
-     * @method Show\Field|Collection contact_name(string $label = null)
-     * @method Show\Field|Collection contact_mobile(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
      * @method Show\Field|Collection gender(string $label = null)
      * @method Show\Field|Collection birthday(string $label = null)
