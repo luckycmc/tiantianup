@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use Dingo\Api\Routing\Router;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+$api = app(Router::class);
+$api->version('v1', function ($api) {
+    $api->group(['prefix'=>'login'],function ($api){
+        $api->any('{action}', function (Request $request, LoginController $index, $action) {
+            return $index->$action($request);
+        });
+    });
 });

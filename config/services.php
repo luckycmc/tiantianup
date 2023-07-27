@@ -30,4 +30,28 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sms' => [
+        'timeout' => 5.0,
+        // 默认发送配置
+        'default' => [
+            // 网关调用策略，默认：顺序调用
+            'strategy' => \Overtrue\EasySms\Strategies\OrderStrategy::class,
+
+            // 默认可用的发送网关
+            'gateways' => [
+                'smsbao'
+            ],
+        ],
+        'gateways' => [
+            'errorlog' => [
+                'file' => storage_path().'\\logs\\easy-sms.log',
+            ],
+            // 添加短信宝的配置
+            'smsbao' => [
+                'user' => env('DXB_SMS_USERNAME'),
+                'password' => env('DXB_SMS_PASSWORD'),
+            ],
+        ],
+    ],
+
 ];
