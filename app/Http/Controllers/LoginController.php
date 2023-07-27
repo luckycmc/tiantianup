@@ -47,35 +47,6 @@ class LoginController extends Controller
         return $this->success('登录成功',compact('token','user_id'));
     }
 
-    /**
-     * 绑定手机号
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function bind_mobile()
-    {
-        $data = \request()->all();
-        $rules = [
-            'mobile' => 'required|phone_number',
-            'code' => 'required'
-        ];
-        $messages = [
-            'mobile.required' => '手机号不能为空',
-            'mobile.phone_number' => '手机号格式不正确',
-            'code.required' => '验证码不能为空'
-        ];
-        $validator = Validator::make($data,$rules,$messages);
-        if ($validator->fails()) {
-            $error = $validator->errors();
-            return $this->error(json_encode(',',$error->all()));
-        }
-        $user_id = $data['user_id'] ?? 0;
-        $mobile = $data['mobile'];
-        $user = User::find($user_id);
-        $user->mobile = $mobile;
-        $user->save();
-        return $this->success('绑定成功');
-    }
-
     public function mobile_login()
     {
         $data = \request()->all();

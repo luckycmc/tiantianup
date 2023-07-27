@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
 use Dingo\Api\Routing\Router;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,11 @@ $api = app(Router::class);
 $api->version('v1', function ($api) {
     $api->group(['prefix'=>'login'],function ($api){
         $api->any('{action}', function (Request $request, LoginController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'user','middleware' => 'api.jwt.auth'],function ($api){
+        $api->any('{action}', function (Request $request, UserController $index, $action) {
             return $index->$action($request);
         });
     });
