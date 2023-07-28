@@ -97,7 +97,10 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection address
      * @property Grid\Column|Collection door_image
      * @property Grid\Column|Collection business_license
-     * @property Grid\Column|Collection student_id
+     * @property Grid\Column|Collection gender
+     * @property Grid\Column|Collection school
+     * @property Grid\Column|Collection birthday
+     * @property Grid\Column|Collection grade
      * @property Grid\Column|Collection token
      * @property Grid\Column|Collection tokenable_type
      * @property Grid\Column|Collection tokenable_id
@@ -120,10 +123,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection diploma
      * @property Grid\Column|Collection teacher_cert
      * @property Grid\Column|Collection nickname
-     * @property Grid\Column|Collection gender
-     * @property Grid\Column|Collection birthday
-     * @property Grid\Column|Collection school
-     * @property Grid\Column|Collection grade
      * @property Grid\Column|Collection total_income
      * @property Grid\Column|Collection withdraw_balance
      * @property Grid\Column|Collection is_real_auth
@@ -217,7 +216,10 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection address(string $label = null)
      * @method Grid\Column|Collection door_image(string $label = null)
      * @method Grid\Column|Collection business_license(string $label = null)
-     * @method Grid\Column|Collection student_id(string $label = null)
+     * @method Grid\Column|Collection gender(string $label = null)
+     * @method Grid\Column|Collection school(string $label = null)
+     * @method Grid\Column|Collection birthday(string $label = null)
+     * @method Grid\Column|Collection grade(string $label = null)
      * @method Grid\Column|Collection token(string $label = null)
      * @method Grid\Column|Collection tokenable_type(string $label = null)
      * @method Grid\Column|Collection tokenable_id(string $label = null)
@@ -240,10 +242,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection diploma(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
-     * @method Grid\Column|Collection gender(string $label = null)
-     * @method Grid\Column|Collection birthday(string $label = null)
-     * @method Grid\Column|Collection school(string $label = null)
-     * @method Grid\Column|Collection grade(string $label = null)
      * @method Grid\Column|Collection total_income(string $label = null)
      * @method Grid\Column|Collection withdraw_balance(string $label = null)
      * @method Grid\Column|Collection is_real_auth(string $label = null)
@@ -342,7 +340,10 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection address
      * @property Show\Field|Collection door_image
      * @property Show\Field|Collection business_license
-     * @property Show\Field|Collection student_id
+     * @property Show\Field|Collection gender
+     * @property Show\Field|Collection school
+     * @property Show\Field|Collection birthday
+     * @property Show\Field|Collection grade
      * @property Show\Field|Collection token
      * @property Show\Field|Collection tokenable_type
      * @property Show\Field|Collection tokenable_id
@@ -365,10 +366,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection diploma
      * @property Show\Field|Collection teacher_cert
      * @property Show\Field|Collection nickname
-     * @property Show\Field|Collection gender
-     * @property Show\Field|Collection birthday
-     * @property Show\Field|Collection school
-     * @property Show\Field|Collection grade
      * @property Show\Field|Collection total_income
      * @property Show\Field|Collection withdraw_balance
      * @property Show\Field|Collection is_real_auth
@@ -462,7 +459,10 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection address(string $label = null)
      * @method Show\Field|Collection door_image(string $label = null)
      * @method Show\Field|Collection business_license(string $label = null)
-     * @method Show\Field|Collection student_id(string $label = null)
+     * @method Show\Field|Collection gender(string $label = null)
+     * @method Show\Field|Collection school(string $label = null)
+     * @method Show\Field|Collection birthday(string $label = null)
+     * @method Show\Field|Collection grade(string $label = null)
      * @method Show\Field|Collection token(string $label = null)
      * @method Show\Field|Collection tokenable_type(string $label = null)
      * @method Show\Field|Collection tokenable_id(string $label = null)
@@ -485,10 +485,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection diploma(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
-     * @method Show\Field|Collection gender(string $label = null)
-     * @method Show\Field|Collection birthday(string $label = null)
-     * @method Show\Field|Collection school(string $label = null)
-     * @method Show\Field|Collection grade(string $label = null)
      * @method Show\Field|Collection total_income(string $label = null)
      * @method Show\Field|Collection withdraw_balance(string $label = null)
      * @method Show\Field|Collection is_real_auth(string $label = null)

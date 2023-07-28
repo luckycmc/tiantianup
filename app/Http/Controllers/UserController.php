@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ParentStudent;
 use App\Models\User;
 use App\Models\UserContact;
 use Carbon\Carbon;
@@ -47,7 +48,7 @@ class UserController extends Controller
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $error = $validator->errors();
-            return $this->error(json_encode(',',$error->all()));
+            return $this->error(implode(',',$error->all()));
         }
         $user_id = Auth::id();
         // 用户编号
@@ -79,7 +80,7 @@ class UserController extends Controller
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $error = $validator->errors();
-            return $this->error(json_encode(',',$error->all()));
+            return $this->error(implode(',',$error->all()));
         }
         // 校验验证码
         $sendcode = Redis::get($data['mobile']);
@@ -111,7 +112,7 @@ class UserController extends Controller
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $error = $validator->errors();
-            return $this->error(json_encode(',',$error->all()));
+            return $this->error(implode(',',$error->all()));
         }
         $user_id = Auth::id();
         // 查询是否存在
@@ -135,7 +136,57 @@ class UserController extends Controller
     public function get_contacts()
     {
         $user_id = Auth::id();
-        $contacts = UserContact::where('user_id',$user_id)->get();
+        $contacts = UserContact::where('user_id',$user_id)->orderBy('created_at','desc')->get();
         return $this->success('联系人',$contacts);
+    }
+
+    /**
+     * 家长添加学生
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function add_students()
+    {
+        $data = \request()->all();
+        $rules = [
+            'name' => 'required|regex:/^[\p{Han}a-zA-Z]+$/u|max:20',
+            'gender' => 'required',
+            'grade' => 'required',
+        ];
+        $messages = [
+            'name.required' => '姓名不能为空',
+            'name.regex' => '姓名只能为汉字或英文',
+            'name.max' => '姓名最多为20个字符',
+            'gender.required' => '性别不能为空',
+            'grade.required' => '年级不能为空'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $error = $validator->errors();
+            return $this->error(implode(',',$error->all()));
+        }
+        $user_id = Auth::id();
+        // 查询是否存在
+        $student_info = ParentStudent::where(['user_id' => $user_id,'name' => $data['name'],'gender' => $data['gender'],'grade' => $data['grade']])->first();
+        if ($student_info) {
+            return $this->error('学生已存在');
+        }
+        $data['user_id'] = $user_id;
+        $data['created_at'] = Carbon::now();
+        $result = DB::table('parent_students')->insert($data);
+        if (!$result) {
+            return $this->error('添加失败');
+        }
+        return $this->success('添加成功');
+    }
+
+    /**
+     * 学生列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function student_list()
+    {
+        $user_id = Auth::id();
+        $result = ParentStudent::where('user_id',$user_id)->orderBy('created_at','desc')->get();
+        return $this->success('学生列表',$result);
     }
 }

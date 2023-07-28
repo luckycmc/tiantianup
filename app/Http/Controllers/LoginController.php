@@ -62,7 +62,7 @@ class LoginController extends Controller
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $error = $validator->errors();
-            return $this->error(json_encode(',',$error->all()));
+            return $this->error(implode(',',$error->all()));
         }
         // 校验验证码
         $sendcode = Redis::get($data['mobile']);
