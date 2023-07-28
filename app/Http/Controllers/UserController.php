@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ParentStudent;
+use App\Models\TeacherCareer;
+use App\Models\TeacherInfo;
 use App\Models\User;
 use App\Models\UserContact;
 use Carbon\Carbon;
@@ -188,5 +190,62 @@ class UserController extends Controller
         $user_id = Auth::id();
         $result = ParentStudent::where('user_id',$user_id)->orderBy('created_at','desc')->get();
         return $this->success('学生列表',$result);
+    }
+
+    /**
+     * 完善资料-教师
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_teacher_info()
+    {
+        $data = \request()->all();
+        $user_id = Auth::id();
+        $data['user_id'] = $user_id;
+        // 查询是否存在
+        if (TeacherInfo::where('user_id',$user_id)->exists()) {
+            $data['updated_at'] = Carbon::now();
+            $result = DB::table('teacher_info')->where('user_id',$user_id)->update($data);
+        } else {
+            $data['created_at'] = Carbon::now();
+            $result = DB::table('teacher_info')->insert($data);
+        }
+        if (!$result) {
+            return $this->error('提交失败');
+        }
+        return $this->success('提交成功');
+    }
+
+    /**
+     * 教学经历-教师
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function teaching_experience()
+    {
+        $data = \request()->all();
+        $user_id = Auth::id();
+        $data['user_id'] = $user_id;
+        // 查询是否存在
+        if (TeacherCareer::where('user_id',$user_id)->exists()) {
+            $data['updated_at'] = Carbon::now();
+            $result = DB::table('teacher_career')->where('user_id',$user_id)->update($data);
+        } else {
+            $data['created_at'] = Carbon::now();
+            $result = DB::table('teacher_career')->insert($data);
+        }
+        if (!$result) {
+            return $this->error('提交失败');
+        }
+        return $this->success('提交成功');
+    }
+
+    /**
+     * 经历列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function experience_list()
+    {
+        $user_id = Auth::id();
+        $result = TeacherCareer::where('user_id',$user_id)->orderBy('updated_at','desc')->get();
+        return $this->success('经历列表',$result);
     }
 }
