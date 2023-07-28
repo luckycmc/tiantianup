@@ -30,8 +30,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'open_id'
     ];
 
     /**
@@ -65,5 +64,17 @@ class User extends Authenticatable implements JWTSubject
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format($this->created_at ?: 'Y-m-d H:i:s');
+    }
+
+    // 教师经历
+    public function teacher_experience()
+    {
+        return $this->hasMany(TeacherCareer::class);
+    }
+    
+    // 教师信息
+    public function teacher_info()
+    {
+        return $this->hasOne(TeacherInfo::class);
     }
 }

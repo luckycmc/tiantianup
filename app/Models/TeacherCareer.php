@@ -10,5 +10,10 @@ class TeacherCareer extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'teacher_career';
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class);
+    }
     
 }

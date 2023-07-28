@@ -225,13 +225,8 @@ class UserController extends Controller
         $user_id = Auth::id();
         $data['user_id'] = $user_id;
         // 查询是否存在
-        if (TeacherCareer::where('user_id',$user_id)->exists()) {
-            $data['updated_at'] = Carbon::now();
-            $result = DB::table('teacher_career')->where('user_id',$user_id)->update($data);
-        } else {
-            $data['created_at'] = Carbon::now();
-            $result = DB::table('teacher_career')->insert($data);
-        }
+        $data['created_at'] = Carbon::now();
+        $result = DB::table('teacher_career')->insert($data);
         if (!$result) {
             return $this->error('提交失败');
         }
