@@ -42,6 +42,10 @@ class IndexController extends Controller
         return $this->success('获取定位',$result);
     }
 
+    /**
+     * 推荐教师列表
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function teacher_list()
     {
         $data = \request()->all();
@@ -65,5 +69,33 @@ class IndexController extends Controller
             $teacher->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
         }
         return $this->success('推荐教师列表',$teachers);
+    }
+
+    /**
+     * 教师详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function teacher_detail()
+    {
+        $data = \request()->all();
+        $id = $data['teacher_id'];
+        $result = User::with(['teacher_experience','teacher_info'])->where(['id' => $id])->first();
+        // dd($result->toArray());
+        if (!$result) {
+            return $this->error('教师不存在');
+        }
+        $teaching_year = 0;
+        $subject = [];
+        foreach ($result->teacher_experience as $experience) {
+            $start_time = Carbon::parse($experience->start_time);
+            $end_time = Carbon::parse($experience->end_time);
+            $teaching_years = $start_time->diffInYears($end_time);
+            $teaching_year += $teaching_years;
+            // 课程
+            $subject[] = explode(',',$experience->subject);
+        }
+        $result->teaching_year = $teaching_year;
+        $result->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
+        return $this->success('教师详情',$result);
     }
 }
