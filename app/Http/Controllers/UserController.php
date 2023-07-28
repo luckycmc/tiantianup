@@ -248,4 +248,28 @@ class UserController extends Controller
         $result = TeacherCareer::where('user_id',$user_id)->orderBy('updated_at','desc')->get();
         return $this->success('经历列表',$result);
     }
+
+    /**
+     * 删除经历
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_experience()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $experience_info = TeacherCareer::find($id);
+        if (!$experience_info) {
+            return $this->error('经历不存在');
+        }
+        // 当前用户id
+        $user_id = Auth::id();
+        if($experience_info->user_id !== $user_id) {
+            return $this->error('无权删除');
+        }
+        $result = $experience_info->delete();
+        if (!$result) {
+            return $this->error('删除失败');
+        }
+        return $this->success('删除成功');
+    }
 }
