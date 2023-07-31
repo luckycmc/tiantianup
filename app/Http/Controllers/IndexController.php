@@ -169,6 +169,10 @@ class IndexController extends Controller
         return $this->success('课程详情',$result);
     }
 
+    /**
+     * 收藏&取消收藏
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function collect()
     {
         $data = \request()->all();
