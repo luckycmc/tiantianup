@@ -54,7 +54,7 @@ class UserController extends Controller
         }
         $user_id = Auth::id();
         // 用户编号
-        $data['number'] = create_number($data['city_id'],$user_id);
+        $data['number'] = create_user_number($data['city_id'],$user_id);
         $data['created_at'] = Carbon::now();
         $result = DB::table('users')->where('id',$user_id)->update($data);
         if (!$result) {

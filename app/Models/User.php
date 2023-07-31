@@ -77,4 +77,40 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(TeacherInfo::class);
     }
+
+    // 教师图片
+    public function teacher_images()
+    {
+        return $this->hasMany(TeacherImage::class);
+    }
+    
+    // 教师风采
+    public function teacher_demeanor($teacher_id)
+    {
+        return $this->teacher_images()->where('user_id',$teacher_id)->where('type',2)->get();
+    }
+
+    // 收藏课程
+    public function collects()
+    {
+        return $this->hasMany(Collect::class, 'user_id');
+    }
+
+    // 是否收藏课程
+    public function has_collect_course($course_id)
+    {
+        return $this->collects()->where('course_id', $course_id)->where('type', 2)->exists();
+    }
+
+    // 是否收藏教师
+    public function has_collect_teacher($teacher_id)
+    {
+        return $this->collects()->where('teacher_id', $teacher_id)->where('type', 1)->exists();
+    }
+
+    // 教师标签
+    public function teacher_tags()
+    {
+        return $this->hasMany(TeacherTag::class,'user_id','id');
+    }
 }

@@ -62,7 +62,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection editer_id
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
-     * @property Grid\Column|Collection url
+     * @property Grid\Column|Collection cover_image
+     * @property Grid\Column|Collection method
      * @property Grid\Column|Collection subject
      * @property Grid\Column|Collection count
      * @property Grid\Column|Collection class_price
@@ -88,6 +89,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection failed_at
      * @property Grid\Column|Collection send_platform
      * @property Grid\Column|Collection author
+     * @property Grid\Column|Collection url
      * @property Grid\Column|Collection nature
      * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection id_card_no
@@ -95,6 +97,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection city_id
      * @property Grid\Column|Collection district_id
      * @property Grid\Column|Collection address
+     * @property Grid\Column|Collection longitude
+     * @property Grid\Column|Collection latitude
      * @property Grid\Column|Collection door_image
      * @property Grid\Column|Collection business_license
      * @property Grid\Column|Collection gender
@@ -108,6 +112,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection last_used_at
      * @property Grid\Column|Collection region_name
      * @property Grid\Column|Collection code
+     * @property Grid\Column|Collection initial
      * @property Grid\Column|Collection region_type
      * @property Grid\Column|Collection is_last
      * @property Grid\Column|Collection show_platform
@@ -122,6 +127,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection graduate_cert
      * @property Grid\Column|Collection diploma
      * @property Grid\Column|Collection teacher_cert
+     * @property Grid\Column|Collection update_at
      * @property Grid\Column|Collection nickname
      * @property Grid\Column|Collection total_income
      * @property Grid\Column|Collection withdraw_balance
@@ -181,7 +187,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection editer_id(string $label = null)
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
-     * @method Grid\Column|Collection url(string $label = null)
+     * @method Grid\Column|Collection cover_image(string $label = null)
+     * @method Grid\Column|Collection method(string $label = null)
      * @method Grid\Column|Collection subject(string $label = null)
      * @method Grid\Column|Collection count(string $label = null)
      * @method Grid\Column|Collection class_price(string $label = null)
@@ -207,6 +214,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection failed_at(string $label = null)
      * @method Grid\Column|Collection send_platform(string $label = null)
      * @method Grid\Column|Collection author(string $label = null)
+     * @method Grid\Column|Collection url(string $label = null)
      * @method Grid\Column|Collection nature(string $label = null)
      * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection id_card_no(string $label = null)
@@ -214,6 +222,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection city_id(string $label = null)
      * @method Grid\Column|Collection district_id(string $label = null)
      * @method Grid\Column|Collection address(string $label = null)
+     * @method Grid\Column|Collection longitude(string $label = null)
+     * @method Grid\Column|Collection latitude(string $label = null)
      * @method Grid\Column|Collection door_image(string $label = null)
      * @method Grid\Column|Collection business_license(string $label = null)
      * @method Grid\Column|Collection gender(string $label = null)
@@ -227,6 +237,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection last_used_at(string $label = null)
      * @method Grid\Column|Collection region_name(string $label = null)
      * @method Grid\Column|Collection code(string $label = null)
+     * @method Grid\Column|Collection initial(string $label = null)
      * @method Grid\Column|Collection region_type(string $label = null)
      * @method Grid\Column|Collection is_last(string $label = null)
      * @method Grid\Column|Collection show_platform(string $label = null)
@@ -241,6 +252,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection graduate_cert(string $label = null)
      * @method Grid\Column|Collection diploma(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
+     * @method Grid\Column|Collection update_at(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
      * @method Grid\Column|Collection total_income(string $label = null)
      * @method Grid\Column|Collection withdraw_balance(string $label = null)
@@ -305,7 +317,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection editer_id
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
-     * @property Show\Field|Collection url
+     * @property Show\Field|Collection cover_image
+     * @property Show\Field|Collection method
      * @property Show\Field|Collection subject
      * @property Show\Field|Collection count
      * @property Show\Field|Collection class_price
@@ -331,6 +344,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection failed_at
      * @property Show\Field|Collection send_platform
      * @property Show\Field|Collection author
+     * @property Show\Field|Collection url
      * @property Show\Field|Collection nature
      * @property Show\Field|Collection contact
      * @property Show\Field|Collection id_card_no
@@ -338,6 +352,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection city_id
      * @property Show\Field|Collection district_id
      * @property Show\Field|Collection address
+     * @property Show\Field|Collection longitude
+     * @property Show\Field|Collection latitude
      * @property Show\Field|Collection door_image
      * @property Show\Field|Collection business_license
      * @property Show\Field|Collection gender
@@ -351,6 +367,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection last_used_at
      * @property Show\Field|Collection region_name
      * @property Show\Field|Collection code
+     * @property Show\Field|Collection initial
      * @property Show\Field|Collection region_type
      * @property Show\Field|Collection is_last
      * @property Show\Field|Collection show_platform
@@ -365,6 +382,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection graduate_cert
      * @property Show\Field|Collection diploma
      * @property Show\Field|Collection teacher_cert
+     * @property Show\Field|Collection update_at
      * @property Show\Field|Collection nickname
      * @property Show\Field|Collection total_income
      * @property Show\Field|Collection withdraw_balance
@@ -424,7 +442,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection editer_id(string $label = null)
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
-     * @method Show\Field|Collection url(string $label = null)
+     * @method Show\Field|Collection cover_image(string $label = null)
+     * @method Show\Field|Collection method(string $label = null)
      * @method Show\Field|Collection subject(string $label = null)
      * @method Show\Field|Collection count(string $label = null)
      * @method Show\Field|Collection class_price(string $label = null)
@@ -450,6 +469,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection failed_at(string $label = null)
      * @method Show\Field|Collection send_platform(string $label = null)
      * @method Show\Field|Collection author(string $label = null)
+     * @method Show\Field|Collection url(string $label = null)
      * @method Show\Field|Collection nature(string $label = null)
      * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection id_card_no(string $label = null)
@@ -457,6 +477,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection city_id(string $label = null)
      * @method Show\Field|Collection district_id(string $label = null)
      * @method Show\Field|Collection address(string $label = null)
+     * @method Show\Field|Collection longitude(string $label = null)
+     * @method Show\Field|Collection latitude(string $label = null)
      * @method Show\Field|Collection door_image(string $label = null)
      * @method Show\Field|Collection business_license(string $label = null)
      * @method Show\Field|Collection gender(string $label = null)
@@ -470,6 +492,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection last_used_at(string $label = null)
      * @method Show\Field|Collection region_name(string $label = null)
      * @method Show\Field|Collection code(string $label = null)
+     * @method Show\Field|Collection initial(string $label = null)
      * @method Show\Field|Collection region_type(string $label = null)
      * @method Show\Field|Collection is_last(string $label = null)
      * @method Show\Field|Collection show_platform(string $label = null)
@@ -484,6 +507,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection graduate_cert(string $label = null)
      * @method Show\Field|Collection diploma(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
+     * @method Show\Field|Collection update_at(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
      * @method Show\Field|Collection total_income(string $label = null)
      * @method Show\Field|Collection withdraw_balance(string $label = null)
