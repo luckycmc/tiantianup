@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TeacherController;
@@ -38,6 +39,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'teacher','middleware' => 'api.jwt.auth'],function ($api){
         $api->any('{action}', function (Request $request, TeacherController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'course','middleware' => 'api.jwt.auth'],function ($api){
+        $api->any('{action}', function (Request $request, CourseController $index, $action) {
             return $index->$action($request);
         });
     });

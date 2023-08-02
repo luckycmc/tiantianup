@@ -18,10 +18,8 @@ class TeacherController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 排序
         $order = $data['order'] ?? 'desc';
-        $sort_field = 'users.created_at';
-        if (isset($data['sort_age'])) {
-            $sort_field = 'users.age';
-        } elseif (isset($data['sort_teaching_year'])) {
+        $sort_field = 'users.age';
+        if (isset($data['sort_teaching_year'])) {
             $sort_field = 'teacher_info.teaching_year';
         } elseif (isset($data['sort_education'])) {
             $sort_field = 'teacher_info.education_id';
@@ -55,7 +53,7 @@ class TeacherController extends Controller
             ->select('users.*','teacher_info.highest_education','teacher_info.graduate_school','teacher_info.teaching_year','teacher_career.subject')
             ->paginate($page_size);
         foreach ($result as $v) {
-            // 课程
+            // 科目
             $v->subject = explode(',',$v->subject);
         }
         return $this->success('教师列表',$result);
