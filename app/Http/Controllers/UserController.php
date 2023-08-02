@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
@@ -286,6 +287,10 @@ class UserController extends Controller
         
     }
 
+    /**
+     * 我的收藏
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function collection()
     {
         $data = \request()->all();
@@ -313,5 +318,41 @@ class UserController extends Controller
         }
 
         return $this->success('我的收藏',$result);
+    }
+
+    /**
+     * 我的钱包
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bill()
+    {
+        $data = \request()->all();
+        $is_all = $data['is_all'] ?? 0;
+        $page_size = $data['page_size'] ?? 10;
+        // 当前用户
+        $user = Auth::user();
+        if ($is_all) {
+            // 筛选
+            $where = [];
+            if (isset($data['in_or_out'])) {
+                $condition = $data['in_or_out'] == 0 ? '>' : '<';
+                $where[] = ['amount',$condition,0];
+            }
+            if (isset($data['type'])) {
+                $where[] = ['type','=',$data['type']];
+            }
+            if (isset($data['created_at'])) {
+                $where[] = ['created_at','>=',$data['created_at'][0]];
+                $where[] = ['created_at','<=',$data['created_at'][1]];
+            }
+            $result = Bill::where('user_id',$user->id)->where($where)->paginate($page_size);
+        } else {
+            $result = Bill::where('user_id',$user->id)->limit(10)->get();
+        }
+        // 我的收益
+        $total_income = $user->total_income;
+        // 可提现余额
+        $withdraw_balance = $user->withdraw_balance;
+        return $this->success('我的钱包',compact('result','total_income','withdraw_balance'));
     }
 }

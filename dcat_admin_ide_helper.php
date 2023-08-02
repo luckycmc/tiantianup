@@ -122,13 +122,16 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection id_card_backend
      * @property Grid\Column|Collection picture
      * @property Grid\Column|Collection highest_education
+     * @property Grid\Column|Collection education_id
      * @property Grid\Column|Collection graduate_school
      * @property Grid\Column|Collection speciality
      * @property Grid\Column|Collection graduate_cert
      * @property Grid\Column|Collection diploma
      * @property Grid\Column|Collection teacher_cert
+     * @property Grid\Column|Collection teaching_year
      * @property Grid\Column|Collection update_at
      * @property Grid\Column|Collection nickname
+     * @property Grid\Column|Collection age
      * @property Grid\Column|Collection total_income
      * @property Grid\Column|Collection withdraw_balance
      * @property Grid\Column|Collection is_real_auth
@@ -247,13 +250,16 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection id_card_backend(string $label = null)
      * @method Grid\Column|Collection picture(string $label = null)
      * @method Grid\Column|Collection highest_education(string $label = null)
+     * @method Grid\Column|Collection education_id(string $label = null)
      * @method Grid\Column|Collection graduate_school(string $label = null)
      * @method Grid\Column|Collection speciality(string $label = null)
      * @method Grid\Column|Collection graduate_cert(string $label = null)
      * @method Grid\Column|Collection diploma(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
+     * @method Grid\Column|Collection teaching_year(string $label = null)
      * @method Grid\Column|Collection update_at(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
+     * @method Grid\Column|Collection age(string $label = null)
      * @method Grid\Column|Collection total_income(string $label = null)
      * @method Grid\Column|Collection withdraw_balance(string $label = null)
      * @method Grid\Column|Collection is_real_auth(string $label = null)
@@ -377,13 +383,16 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection id_card_backend
      * @property Show\Field|Collection picture
      * @property Show\Field|Collection highest_education
+     * @property Show\Field|Collection education_id
      * @property Show\Field|Collection graduate_school
      * @property Show\Field|Collection speciality
      * @property Show\Field|Collection graduate_cert
      * @property Show\Field|Collection diploma
      * @property Show\Field|Collection teacher_cert
+     * @property Show\Field|Collection teaching_year
      * @property Show\Field|Collection update_at
      * @property Show\Field|Collection nickname
+     * @property Show\Field|Collection age
      * @property Show\Field|Collection total_income
      * @property Show\Field|Collection withdraw_balance
      * @property Show\Field|Collection is_real_auth
@@ -502,13 +511,16 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection id_card_backend(string $label = null)
      * @method Show\Field|Collection picture(string $label = null)
      * @method Show\Field|Collection highest_education(string $label = null)
+     * @method Show\Field|Collection education_id(string $label = null)
      * @method Show\Field|Collection graduate_school(string $label = null)
      * @method Show\Field|Collection speciality(string $label = null)
      * @method Show\Field|Collection graduate_cert(string $label = null)
      * @method Show\Field|Collection diploma(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
+     * @method Show\Field|Collection teaching_year(string $label = null)
      * @method Show\Field|Collection update_at(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
+     * @method Show\Field|Collection age(string $label = null)
      * @method Show\Field|Collection total_income(string $label = null)
      * @method Show\Field|Collection withdraw_balance(string $label = null)
      * @method Show\Field|Collection is_real_auth(string $label = null)
