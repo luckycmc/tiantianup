@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collect;
 use App\Models\Course;
 use App\Models\Region;
+use App\Models\RotateImage;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -200,5 +201,17 @@ class IndexController extends Controller
             return $this->error('操作失败');
         }
         return $this->success('收藏成功');
+    }
+
+    /**
+     * 获取轮播图
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_rotate()
+    {
+        $data = \request()->all();
+        $platform = $data['platform'] ?? 0;
+        $result = RotateImage::where('show_platform',$platform)->get();
+        return $this->success('轮播图',$result);
     }
 }
