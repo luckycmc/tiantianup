@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.5",
         "overtrue/easy-sms": "^2.4",
         "overtrue/laravel-wechat": "^5.1",
+        "phayes/geophp": "^1.2",
         "qcloud/cos-sdk-v5": "^2.6",
         "tymon/jwt-auth": "^1.0"
     },

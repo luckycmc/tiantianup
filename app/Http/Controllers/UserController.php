@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Collect;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
 use App\Models\TeacherInfo;
@@ -278,5 +279,39 @@ class UserController extends Controller
             return $this->error('删除失败');
         }
         return $this->success('删除成功');
+    }
+
+    public function my_team()
+    {
+        
+    }
+
+    public function collection()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $type = $data['type'] ?? 1;
+        $longitude = $data['longitude'] ?? 0;
+        $latitude = $data['latitude'] ?? 0;
+        // 当前用户
+        $user = Auth::user();
+        if ($type == 1) {
+            $result = Collect::with(['teacher','teacher_info','teacher_career'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
+            foreach ($result as $v) {
+                $subject = [];
+                foreach ($v->teacher_career as $vv) {
+                    // 课程
+                    $subject[] = explode(',',$vv->subject);
+                }
+                $v->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
+            }
+        } else {
+            $result = Collect::with(['course','course_organ'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
+            foreach ($result as $v) {
+                $v->distance = calculate_distance($data['latitude'],$data['longitude'],$v->course_organ->latitude,$v->course_organ->longitude);
+            }
+        }
+
+        return $this->success('我的收藏',$result);
     }
 }
