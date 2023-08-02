@@ -355,4 +355,62 @@ class UserController extends Controller
         $withdraw_balance = $user->withdraw_balance;
         return $this->success('我的钱包',compact('result','total_income','withdraw_balance'));
     }
+
+    /**
+     * 申请提现
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function withdraw()
+    {
+        $data = \request()->all();
+        $rules = [
+            'amount' => 'required|integer',
+            'username' => 'required',
+            'mobile' => 'required|phone_number'
+        ];
+        $messages = [
+            'amount.required' => '金额不能为空',
+            'amount.integer' => '金额只能为正整数',
+            'username.required' => '用户名不能为空',
+            'mobile.required' => '手机号不能为空',
+            'mobile.phone_number' => '手机号格式错误'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $user = Auth::user();
+        if ($data['amount'] > $user->withdraw_balance) {
+            return $this->error('可提现余额不足');
+        }
+        // 提现记录
+        $withdraw_data = [
+            'user_id' => $user->id,
+            'amount' => $data['amount'],
+            'type' => $data['type'],
+            'username' => $data['username'],
+            'mobile' => $data['mobile'],
+            'status' => 0,
+            'created_at' => Carbon::now()
+        ];
+        // 账单记录
+        $bill_data = [
+            'user_id' => $user->id,
+            'amount' => '-'.$data['amount'],
+            'type' => 1,
+            'status' => 0,
+            'created_at' => Carbon::now()
+        ];
+        DB::transaction(function () use ($withdraw_data,$bill_data,$user,$data) {
+            // 写入提现表
+            DB::table('withdraw')->insert($withdraw_data);
+            // 写入账单
+            DB::table('bills')->insert($bill_data);
+            // 更新余额
+            DB::table('users')->where('id',$user->id)->decrement('withdraw_balance',$data['amount']);
+        });
+        return $this->success('申请成功');
+    }
 }
