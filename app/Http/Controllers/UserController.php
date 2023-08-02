@@ -55,6 +55,7 @@ class UserController extends Controller
         $user_id = Auth::id();
         // 用户编号
         $data['number'] = create_user_number($data['city_id'],$user_id);
+        $data['age'] = Carbon::parse($data['birthday'])->diffInYears(Carbon::now());
         $data['created_at'] = Carbon::now();
         $result = DB::table('users')->where('id',$user_id)->update($data);
         if (!$result) {
@@ -227,6 +228,17 @@ class UserController extends Controller
         // 查询是否存在
         $data['created_at'] = Carbon::now();
         $result = DB::table('teacher_career')->insert($data);
+        // 计算教龄
+        $teacher_experience = TeacherCareer::where('user_id',$user_id)->get();
+        $teaching_year = 0;
+        foreach ($teacher_experience as $value) {
+            $start_time = Carbon::parse($value->start_time);
+            $end_time = Carbon::parse($value->end_time);
+            $teaching_years = $start_time->diffInYears($end_time);
+            $teaching_year += $teaching_years;
+        }
+        // 更新教龄
+        DB::table('teacher_info')->where('user_id',$user_id)->update(['teaching_year' => $teaching_year]);
         if (!$result) {
             return $this->error('提交失败');
         }

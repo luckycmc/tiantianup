@@ -85,7 +85,6 @@ class IndexController extends Controller
         $data = \request()->all();
         $id = $data['teacher_id'];
         $result = User::with(['teacher_experience','teacher_info','teacher_tags'])->where(['id' => $id])->first();
-        // dd($result->toArray());
         if (!$result) {
             return $this->error('教师不存在');
         }
