@@ -476,4 +476,36 @@ class UserController extends Controller
         }
         return $this->success('活动详情',$result);
     }
+
+    /**
+     * 更换手机号
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_mobile()
+    {
+        $data = \request()->all();
+        $rules = [
+            'mobile' => 'required|phone_number'
+        ];
+        $messages = [
+            'mobile.required' => '手机号不能为空',
+            'mobile.phone_number' => '手机号格式错误'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $user = Auth::user();
+        // 判断手机号是否已经被使用
+        $is_user = User::where('mobile',$data['mobile'])->first();
+        if ($is_user) {
+            return $this->error('该手机号已被注册');
+        }
+        // 更新手机号
+        $user->mobile = $data['mobile'];
+        $user->save();
+        return $this->success('绑定成功');
+    }
 }
