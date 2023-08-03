@@ -569,4 +569,59 @@ class UserController extends Controller
         }
         return $this->success('投递成功');
     }
+
+    /**
+     * 实名认证
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function real_auth()
+    {
+        $data = \request()->all();
+        $rules = [
+            'id_card_front' => 'required',
+            'id_card_backend' => 'required',
+            'picture' => 'required'
+        ];
+        $messages = [
+            'id_card_front.required' => '身份证正面照片不能为空',
+            'id_card_backend.required' => '身份证背面照片不能为空',
+            'picture.required' => '个人照片不能为空'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $user = Auth::user();
+        $auth_data = [
+            'user_id' => $user->id,
+            'id_card_front' => $data['id_card_front'],
+            'id_card_backend' => $data['id_card_backend']
+        ];
+        $result = TeacherInfo::updateOrCreate(['user_id' => $user->id],$auth_data);
+        if (!$result) {
+            return $this->error('提交失败');
+        }
+        return $this->success('提交成功');
+    }
+
+    /**
+     * 获取实名认证结果
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_real_auth()
+    {
+        // 当前用户
+        $user = Auth::user();
+        // 查询数据
+        if (!$user->is_real_auth) {
+            // 失败原因
+            $reason = $user->teacher_info->reason;
+            return $this->error('审核未通过',compact('reason'));
+        }
+        // 返回身份证号和真实姓名
+        $info = $user->teacher_info;
+        return $this->success('认证成功',$info);
+    }
 }
