@@ -138,6 +138,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection has_teacher_cert
      * @property Grid\Column|Collection is_recommend
      * @property Grid\Column|Collection open_id
+     * @property Grid\Column|Collection account
      *
      * @method Grid\Column|Collection id(string $label = null)
      * @method Grid\Column|Collection active_id(string $label = null)
@@ -266,6 +267,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection has_teacher_cert(string $label = null)
      * @method Grid\Column|Collection is_recommend(string $label = null)
      * @method Grid\Column|Collection open_id(string $label = null)
+     * @method Grid\Column|Collection account(string $label = null)
      */
     class Grid {}
 
@@ -399,6 +401,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection has_teacher_cert
      * @property Show\Field|Collection is_recommend
      * @property Show\Field|Collection open_id
+     * @property Show\Field|Collection account
      *
      * @method Show\Field|Collection id(string $label = null)
      * @method Show\Field|Collection active_id(string $label = null)
@@ -527,6 +530,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection has_teacher_cert(string $label = null)
      * @method Show\Field|Collection is_recommend(string $label = null)
      * @method Show\Field|Collection open_id(string $label = null)
+     * @method Show\Field|Collection account(string $label = null)
      */
     class Show {}
 

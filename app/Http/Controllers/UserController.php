@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\ParentStudent;
@@ -414,6 +415,10 @@ class UserController extends Controller
         return $this->success('申请成功');
     }
 
+    /**
+     * 提现记录
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function withdraw_record()
     {
         $data = \request()->all();
@@ -431,5 +436,44 @@ class UserController extends Controller
         }
         $result = Withdraw::where($where)->where('user_id' , $user->id)->paginate($page_size);
         return $this->success('提现记录',$result);
+    }
+
+    /**
+     * 活动列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function activity_list()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $status = $data['status'];
+        // 当前用户
+        $user = Auth::user();
+        // 用户角色
+        $role = $user->role;
+        if (in_array($role,[1,2])) {
+            $object = 1;
+        } else if ($role == 3) {
+            $object = 2;
+        } else {
+            $object = 3;
+        }
+        $result = Activity::where(['status' => $status,'object' => 0])->orWhere(['status' => $status,'object' => $object])->paginate($page_size);
+        return $this->success('活动列表',$result);
+    }
+
+    /**
+     * 活动详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function activity_detail()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $result = Activity::with('reward')->find($id);
+        if (!$result) {
+            return $this->error('活动不存在');
+        }
+        return $this->success('活动详情',$result);
     }
 }
