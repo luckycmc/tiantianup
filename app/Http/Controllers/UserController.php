@@ -9,6 +9,7 @@ use App\Models\TeacherCareer;
 use App\Models\TeacherInfo;
 use App\Models\User;
 use App\Models\UserContact;
+use App\Models\Withdraw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -366,14 +367,13 @@ class UserController extends Controller
         $rules = [
             'amount' => 'required|integer',
             'username' => 'required',
-            'mobile' => 'required|phone_number'
+            'account' => 'required'
         ];
         $messages = [
             'amount.required' => '金额不能为空',
             'amount.integer' => '金额只能为正整数',
             'username.required' => '用户名不能为空',
-            'mobile.required' => '手机号不能为空',
-            'mobile.phone_number' => '手机号格式错误'
+            'account.required' => '账号不能为空'
         ];
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
@@ -391,7 +391,7 @@ class UserController extends Controller
             'amount' => $data['amount'],
             'type' => $data['type'],
             'username' => $data['username'],
-            'mobile' => $data['mobile'],
+            'account' => $data['account'],
             'status' => 0,
             'created_at' => Carbon::now()
         ];
@@ -412,5 +412,24 @@ class UserController extends Controller
             DB::table('users')->where('id',$user->id)->decrement('withdraw_balance',$data['amount']);
         });
         return $this->success('申请成功');
+    }
+
+    public function withdraw_record()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 0;
+        // 当前用户
+        $user = Auth::user();
+        // 筛选条件
+        $where = [];
+        if (isset($data['created_at'])) {
+            $where[] = ['created_at','>=',$data['created_at'][0]];
+            $where[] = ['created_at','<=',$data['created_at'][1]];
+        }
+        if (isset($data['status'])) {
+            $where[] = ['status','=',$data['status']];
+        }
+        $result = Withdraw::where($where)->where('user_id' , $user->id)->paginate($page_size);
+        return $this->success('提现记录',$result);
     }
 }
