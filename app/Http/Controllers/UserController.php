@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Bill;
 use App\Models\Collect;
+use App\Models\Course;
+use App\Models\DeliverLog;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
 use App\Models\TeacherInfo;
@@ -507,5 +509,64 @@ class UserController extends Controller
         $user->mobile = $data['mobile'];
         $user->save();
         return $this->success('绑定成功');
+    }
+
+    /**
+     * 检查教师资料
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function check_teacher_info()
+    {
+        // 当前用户
+        $user = Auth::user();
+        // 查询资料
+        if (!$user->is_real_auth || !TeacherInfo::where('user_id',$user->id)->exists() || !TeacherCareer::where('user_id',$user->id)->exists()) {
+            return $this->error('资料不完善');
+        }
+        return $this->success('资料完善');
+    }
+
+    /**
+     * 投递
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deliver()
+    {
+        $data = \request()->all();
+        $rules = [
+            'introduce' => 'required',
+            'course_id' => 'required'
+        ];
+        $messages = [
+            'introduce.required' => '个人介绍不能为空',
+            'course_id.required' => '课程不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 查询课程
+        $course_info = Course::find($data['course_id']);
+        if (!$course_info) {
+            return $this->error('课程不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        // 查看是否已投递
+        $deliver_data = [
+            'user_id' => $user->id,
+            'course_id' => $data['course_id'],
+            'status' => 0,
+            'introduce' => '个人介绍',
+            'image' => $data['image'] ?? '',
+            'created_at' => Carbon::now()
+        ];
+        // 保存数据
+        $result = DeliverLog::updateOrCreate(['user_id' => $user->id,'course_id' => $data['course_id']],$deliver_data);
+        if (!$result) {
+            return $this->error('投递失败');
+        }
+        return $this->success('投递成功');
     }
 }

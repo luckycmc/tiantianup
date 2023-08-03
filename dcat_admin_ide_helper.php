@@ -81,6 +81,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection tag
      * @property Grid\Column|Collection presale_header_id
      * @property Grid\Column|Collection aftersale_header_id
+     * @property Grid\Column|Collection introduce
      * @property Grid\Column|Collection uuid
      * @property Grid\Column|Collection connection
      * @property Grid\Column|Collection queue
@@ -210,6 +211,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection tag(string $label = null)
      * @method Grid\Column|Collection presale_header_id(string $label = null)
      * @method Grid\Column|Collection aftersale_header_id(string $label = null)
+     * @method Grid\Column|Collection introduce(string $label = null)
      * @method Grid\Column|Collection uuid(string $label = null)
      * @method Grid\Column|Collection connection(string $label = null)
      * @method Grid\Column|Collection queue(string $label = null)
@@ -344,6 +346,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection tag
      * @property Show\Field|Collection presale_header_id
      * @property Show\Field|Collection aftersale_header_id
+     * @property Show\Field|Collection introduce
      * @property Show\Field|Collection uuid
      * @property Show\Field|Collection connection
      * @property Show\Field|Collection queue
@@ -473,6 +476,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection tag(string $label = null)
      * @method Show\Field|Collection presale_header_id(string $label = null)
      * @method Show\Field|Collection aftersale_header_id(string $label = null)
+     * @method Show\Field|Collection introduce(string $label = null)
      * @method Show\Field|Collection uuid(string $label = null)
      * @method Show\Field|Collection connection(string $label = null)
      * @method Show\Field|Collection queue(string $label = null)
