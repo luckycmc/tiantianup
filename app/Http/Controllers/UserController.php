@@ -607,21 +607,73 @@ class UserController extends Controller
     }
 
     /**
-     * 获取实名认证结果
+     * 获取实名认证结果&教育经历审核结果
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get_real_auth()
+    public function get_verify_result()
     {
+        $data = \request()->all();
+        $type = $data['type'] ?? 1;
+        if ($type == 1) {
+            $condition = 'is_real_auth';
+            $reason_field = 'real_auth_reason';
+        } else {
+            $condition = 'is_education';
+            $reason_field = 'education_reason';
+        }
         // 当前用户
         $user = Auth::user();
         // 查询数据
-        if (!$user->is_real_auth) {
+        if (!$user->$condition) {
             // 失败原因
-            $reason = $user->teacher_info->reason;
+            $reason = $user->teacher_info->$reason_field;
             return $this->error('审核未通过',compact('reason'));
         }
-        // 返回身份证号和真实姓名
+        // 返回教师信息
         $info = $user->teacher_info;
-        return $this->success('认证成功',$info);
+        return $this->success('审核成功',$info);
+    }
+
+    public function update_education()
+    {
+        $data = \request()->all();
+        $rules = [
+            'highest_education' => 'required',
+            'education_id' => 'required',
+            'graduate_school' => 'required',
+            'speciality' => 'required',
+            'graduate_cert' => 'required',
+            'diploma' => 'required',
+        ];
+        $messages = [
+            'highest_education.required' => '学历不能为空',
+            'education_id.required' => '学历id不能为空',
+            'graduate_school.required' => '毕业院校不能为空',
+            'speciality.required' => '专业不能为空',
+            'graduate_cert.required' => '毕业证书不能为空',
+            'diploma.required' => '学位证书不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $user = Auth::user();
+        $education_data = [
+            'user_id' => $user->id,
+            'highest_education' => $data['highest_education'],
+            'education_id' => $data['education_id'],
+            'graduate_school' => $data['graduate_school'],
+            'speciality' => $data['speciality'],
+            'graduate_cert' => $data['graduate_cert'],
+            'diploma' => $data['diploma'],
+            'teacher_cert' => $data['teacher_cert'] ?? '',
+        ];
+        $result = TeacherInfo::updateOrCreate(['user_id' => $user->id],$education_data);
+        if (!$result) {
+            return $this->error('提交失败');
+        }
+        return $this->success('提交成功');
     }
 }
