@@ -3,6 +3,7 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use Dingo\Api\Routing\Router;
@@ -44,6 +45,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'course','middleware' => 'api.jwt.auth'],function ($api){
         $api->any('{action}', function (Request $request, CourseController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'tag','middleware' => 'api.jwt.auth'],function ($api){
+        $api->any('{action}', function (Request $request, TagController $index, $action) {
             return $index->$action($request);
         });
     });

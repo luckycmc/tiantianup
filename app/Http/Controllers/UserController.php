@@ -10,6 +10,7 @@ use App\Models\DeliverLog;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
 use App\Models\TeacherInfo;
+use App\Models\TeacherTag;
 use App\Models\User;
 use App\Models\UserContact;
 use App\Models\Withdraw;
@@ -634,6 +635,10 @@ class UserController extends Controller
         return $this->success('审核成功',$info);
     }
 
+    /**
+     * 教育经历
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update_education()
     {
         $data = \request()->all();
@@ -675,5 +680,29 @@ class UserController extends Controller
             return $this->error('提交失败');
         }
         return $this->success('提交成功');
+    }
+
+    /**
+     * 设置标签
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setting_tags()
+    {
+        $data = \request()->all();
+        // 当前用户
+        $user = Auth::user();
+        $tag_data = [];
+        foreach ($data['tag_name'] as $v) {
+            $tag_data[] = [
+                'user_id' => $user->id,
+                'tag' => $v,
+                'created_at' => Carbon::now()
+            ];
+        }
+        DB::transaction(function () use ($user, $tag_data) {
+            DB::table('teacher_tags')->where('user_id',$user->id)->delete();
+            DB::table('teacher_tags')->insert($tag_data);
+        });
+        return $this->success('设置成功');
     }
 }

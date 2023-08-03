@@ -121,6 +121,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection teaching_type
      * @property Grid\Column|Collection id_card_front
      * @property Grid\Column|Collection id_card_backend
+     * @property Grid\Column|Collection real_name
+     * @property Grid\Column|Collection real_auth_reason
      * @property Grid\Column|Collection picture
      * @property Grid\Column|Collection highest_education
      * @property Grid\Column|Collection education_id
@@ -129,6 +131,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection graduate_cert
      * @property Grid\Column|Collection diploma
      * @property Grid\Column|Collection teacher_cert
+     * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
      * @property Grid\Column|Collection update_at
      * @property Grid\Column|Collection nickname
@@ -136,6 +139,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection total_income
      * @property Grid\Column|Collection withdraw_balance
      * @property Grid\Column|Collection is_real_auth
+     * @property Grid\Column|Collection is_education
      * @property Grid\Column|Collection has_teacher_cert
      * @property Grid\Column|Collection is_recommend
      * @property Grid\Column|Collection open_id
@@ -251,6 +255,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection teaching_type(string $label = null)
      * @method Grid\Column|Collection id_card_front(string $label = null)
      * @method Grid\Column|Collection id_card_backend(string $label = null)
+     * @method Grid\Column|Collection real_name(string $label = null)
+     * @method Grid\Column|Collection real_auth_reason(string $label = null)
      * @method Grid\Column|Collection picture(string $label = null)
      * @method Grid\Column|Collection highest_education(string $label = null)
      * @method Grid\Column|Collection education_id(string $label = null)
@@ -259,6 +265,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection graduate_cert(string $label = null)
      * @method Grid\Column|Collection diploma(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
+     * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
      * @method Grid\Column|Collection update_at(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
@@ -266,6 +273,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection total_income(string $label = null)
      * @method Grid\Column|Collection withdraw_balance(string $label = null)
      * @method Grid\Column|Collection is_real_auth(string $label = null)
+     * @method Grid\Column|Collection is_education(string $label = null)
      * @method Grid\Column|Collection has_teacher_cert(string $label = null)
      * @method Grid\Column|Collection is_recommend(string $label = null)
      * @method Grid\Column|Collection open_id(string $label = null)
@@ -386,6 +394,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection teaching_type
      * @property Show\Field|Collection id_card_front
      * @property Show\Field|Collection id_card_backend
+     * @property Show\Field|Collection real_name
+     * @property Show\Field|Collection real_auth_reason
      * @property Show\Field|Collection picture
      * @property Show\Field|Collection highest_education
      * @property Show\Field|Collection education_id
@@ -394,6 +404,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection graduate_cert
      * @property Show\Field|Collection diploma
      * @property Show\Field|Collection teacher_cert
+     * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
      * @property Show\Field|Collection update_at
      * @property Show\Field|Collection nickname
@@ -401,6 +412,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection total_income
      * @property Show\Field|Collection withdraw_balance
      * @property Show\Field|Collection is_real_auth
+     * @property Show\Field|Collection is_education
      * @property Show\Field|Collection has_teacher_cert
      * @property Show\Field|Collection is_recommend
      * @property Show\Field|Collection open_id
@@ -516,6 +528,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection teaching_type(string $label = null)
      * @method Show\Field|Collection id_card_front(string $label = null)
      * @method Show\Field|Collection id_card_backend(string $label = null)
+     * @method Show\Field|Collection real_name(string $label = null)
+     * @method Show\Field|Collection real_auth_reason(string $label = null)
      * @method Show\Field|Collection picture(string $label = null)
      * @method Show\Field|Collection highest_education(string $label = null)
      * @method Show\Field|Collection education_id(string $label = null)
@@ -524,6 +538,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection graduate_cert(string $label = null)
      * @method Show\Field|Collection diploma(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
+     * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
      * @method Show\Field|Collection update_at(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
@@ -531,6 +546,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection total_income(string $label = null)
      * @method Show\Field|Collection withdraw_balance(string $label = null)
      * @method Show\Field|Collection is_real_auth(string $label = null)
+     * @method Show\Field|Collection is_education(string $label = null)
      * @method Show\Field|Collection has_teacher_cert(string $label = null)
      * @method Show\Field|Collection is_recommend(string $label = null)
      * @method Show\Field|Collection open_id(string $label = null)
