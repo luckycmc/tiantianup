@@ -176,7 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Overtrue\LaravelWeChat\ServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-        Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class
+        Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class,
+        Yansongda\LaravelPay\PayServiceProvider::class,
 
     ],
 
@@ -235,6 +236,7 @@ return [
         'EasyWechat' => Overtrue\LaravelWeChat\Facade::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWtFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Pay' => Yansongda\LaravelPay\Facades\Pay::class
 
     ],
 
