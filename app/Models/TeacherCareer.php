@@ -10,6 +10,7 @@ class TeacherCareer extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'teacher_career';
+    protected $guarded = [];
 
     public function teacher()
     {

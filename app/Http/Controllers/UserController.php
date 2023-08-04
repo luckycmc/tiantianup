@@ -230,11 +230,15 @@ class UserController extends Controller
     public function teaching_experience()
     {
         $data = \request()->all();
+        $id = $data['id'] ?? 0;
         $user_id = Auth::id();
         $data['user_id'] = $user_id;
         // 查询是否存在
         $data['created_at'] = Carbon::now();
-        $result = DB::table('teacher_career')->insert($data);
+        $result = TeacherCareer::updateOrCreate(['id' => $id],$data);
+        if (!$result) {
+            return $this->error('保存失败');
+        }
         // 计算教龄
         $teacher_experience = TeacherCareer::where('user_id',$user_id)->get();
         $teaching_year = 0;
@@ -704,5 +708,29 @@ class UserController extends Controller
             DB::table('teacher_tags')->insert($tag_data);
         });
         return $this->success('设置成功');
+    }
+
+    /**
+     * 教学经历详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function career_detail()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        // 查询经历
+        $career_info = TeacherCareer::find($id);
+        if (!$career_info) {
+            return $this->error('经历不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        if ($user->id !== $career_info->user_id) {
+            return $this->error('错误请求');
+        }
+        $career_info->object = explode('、',$career_info->object);
+        $career_info->subject = explode('、',$career_info->subject);
+        $career_info->teaching_type = explode('、',$career_info->teaching_type);
+        return $this->success('教学经历',$career_info);
     }
 }
