@@ -315,7 +315,7 @@ class UserController extends Controller
                 $subject = [];
                 foreach ($v->teacher_career as $vv) {
                     // 课程
-                    $subject[] = explode(',',$vv->subject);
+                    $subject[] = explode('、',$vv->subject);
                 }
                 $v->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
             }
