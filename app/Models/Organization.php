@@ -24,4 +24,9 @@ class Organization extends Model
     {
         return $this->hasOne(Region::class,'id','district_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
