@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\User;
+use App\Models\UserCourse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -66,6 +69,12 @@ class CourseController extends Controller
             ->where($where)
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
+        // 当前用户
+        $user = Auth::user();
+        foreach ($result as $v) {
+            // 是否已报名
+            $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+        }
         return $this->success('课程列表',$result);
     }
 }

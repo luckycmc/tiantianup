@@ -45,7 +45,7 @@ $api->version('v1', function ($api) {
             return $index->$action($request);
         });
     });
-    $api->group(['prefix'=>'course','middleware' => ['api.jwt.auth','check.organization.status']],function ($api){
+    $api->group(['prefix'=>'course','middleware' => 'api.jwt.auth'],function ($api){
         $api->any('{action}', function (Request $request, CourseController $index, $action) {
             return $index->$action($request);
         });
