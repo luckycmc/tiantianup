@@ -125,18 +125,19 @@ class UserController extends Controller
             return $this->error(implode(',',$error->all()));
         }
         $user_id = Auth::id();
-        // 查询是否存在
+        /*// 查询是否存在
         $contact_info = UserContact::where(['user_id' => $user_id,'name' => $data['name'],'mobile' => $data['mobile'],'relation' => $data['relation']])->first();
         if ($contact_info) {
             return $this->error('联系人已存在');
-        }
+        }*/
         $data['user_id'] = Auth::id();
         $data['created_at'] = Carbon::now();
-        $result = DB::table('user_contacts')->insert($data);
+        $result = UserContact::updateOrCreate(['user_id' => $user_id,'relation' => $data['relation']],$data);
+        // $result = DB::table('user_contacts')->insert($data);
         if (!$result) {
-            return $this->error('添加失败');
+            return $this->error('操作失败');
         }
-        return $this->success('添加成功');
+        return $this->success('操作成功');
     }
 
     /**

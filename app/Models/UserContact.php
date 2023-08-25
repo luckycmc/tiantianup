@@ -10,5 +10,6 @@ class UserContact extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'user_contacts';
+    protected $guarded = [];
     
 }
