@@ -83,4 +83,9 @@ class OrganizationController extends Controller
         }
         return $this->success('生成订单成功',compact('out_trade_no'));
     }
+
+    public function create_course()
+    {
+        $data = \request()->all();
+    }
 }
