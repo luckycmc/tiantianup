@@ -10,6 +10,7 @@
         "dingo/api": "^3.0",
         "freyo/flysystem-qcloud-cos-v5": "^2.2",
         "fruitcake/laravel-cors": "^2.0",
+        "godruoyi/php-snowflake": "^2.2",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",

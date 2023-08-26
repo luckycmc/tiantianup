@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use Overtrue\EasySms\EasySms;
@@ -32,6 +33,7 @@ class LoginController extends Controller
         }
         // 判断用户是否存在
         $is_user = User::where(['open_id' => $session['openid']])->first();
+        Log::info('open_id: '.$session['openid']);
         if (!$is_user) {
             $new_user = new User();
             $new_user->open_id = $session['openid'];
@@ -131,5 +133,11 @@ class LoginController extends Controller
         $sendcode = Redis::get($mobile);
         if(!$sendcode || $sendcode!=$code) return $this->error('验证码不正确');
         return $this->success('验证通过');
+    }
+
+    public function get_open_id()
+    {
+        $data = \request()->all();
+        $code = $data['code'] ?? '';
     }
 }

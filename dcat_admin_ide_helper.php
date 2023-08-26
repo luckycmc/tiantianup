@@ -55,6 +55,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection teacher_image
      * @property Grid\Column|Collection logo
      * @property Grid\Column|Collection poster
+     * @property Grid\Column|Collection service_price
      * @property Grid\Column|Collection amount
      * @property Grid\Column|Collection course_id
      * @property Grid\Column|Collection teacher_id
@@ -62,6 +63,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection editer_id
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
+     * @property Grid\Column|Collection role
+     * @property Grid\Column|Collection grade
      * @property Grid\Column|Collection cover_image
      * @property Grid\Column|Collection method
      * @property Grid\Column|Collection subject
@@ -77,7 +80,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection reason
      * @property Grid\Column|Collection wechat
      * @property Grid\Column|Collection city
-     * @property Grid\Column|Collection role
      * @property Grid\Column|Collection tag
      * @property Grid\Column|Collection presale_header_id
      * @property Grid\Column|Collection aftersale_header_id
@@ -102,10 +104,15 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection latitude
      * @property Grid\Column|Collection door_image
      * @property Grid\Column|Collection business_license
+     * @property Grid\Column|Collection student_id
+     * @property Grid\Column|Collection class_time
+     * @property Grid\Column|Collection class_price_min
+     * @property Grid\Column|Collection class_price_max
+     * @property Grid\Column|Collection class_number
+     * @property Grid\Column|Collection notes
      * @property Grid\Column|Collection gender
      * @property Grid\Column|Collection school
      * @property Grid\Column|Collection birthday
-     * @property Grid\Column|Collection grade
      * @property Grid\Column|Collection token
      * @property Grid\Column|Collection tokenable_type
      * @property Grid\Column|Collection tokenable_id
@@ -134,6 +141,9 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
      * @property Grid\Column|Collection update_at
+     * @property Grid\Column|Collection out_trade_no
+     * @property Grid\Column|Collection discount
+     * @property Grid\Column|Collection pay_type
      * @property Grid\Column|Collection nickname
      * @property Grid\Column|Collection age
      * @property Grid\Column|Collection total_income
@@ -189,6 +199,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection teacher_image(string $label = null)
      * @method Grid\Column|Collection logo(string $label = null)
      * @method Grid\Column|Collection poster(string $label = null)
+     * @method Grid\Column|Collection service_price(string $label = null)
      * @method Grid\Column|Collection amount(string $label = null)
      * @method Grid\Column|Collection course_id(string $label = null)
      * @method Grid\Column|Collection teacher_id(string $label = null)
@@ -196,6 +207,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection editer_id(string $label = null)
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
+     * @method Grid\Column|Collection role(string $label = null)
+     * @method Grid\Column|Collection grade(string $label = null)
      * @method Grid\Column|Collection cover_image(string $label = null)
      * @method Grid\Column|Collection method(string $label = null)
      * @method Grid\Column|Collection subject(string $label = null)
@@ -211,7 +224,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection reason(string $label = null)
      * @method Grid\Column|Collection wechat(string $label = null)
      * @method Grid\Column|Collection city(string $label = null)
-     * @method Grid\Column|Collection role(string $label = null)
      * @method Grid\Column|Collection tag(string $label = null)
      * @method Grid\Column|Collection presale_header_id(string $label = null)
      * @method Grid\Column|Collection aftersale_header_id(string $label = null)
@@ -236,10 +248,15 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection latitude(string $label = null)
      * @method Grid\Column|Collection door_image(string $label = null)
      * @method Grid\Column|Collection business_license(string $label = null)
+     * @method Grid\Column|Collection student_id(string $label = null)
+     * @method Grid\Column|Collection class_time(string $label = null)
+     * @method Grid\Column|Collection class_price_min(string $label = null)
+     * @method Grid\Column|Collection class_price_max(string $label = null)
+     * @method Grid\Column|Collection class_number(string $label = null)
+     * @method Grid\Column|Collection notes(string $label = null)
      * @method Grid\Column|Collection gender(string $label = null)
      * @method Grid\Column|Collection school(string $label = null)
      * @method Grid\Column|Collection birthday(string $label = null)
-     * @method Grid\Column|Collection grade(string $label = null)
      * @method Grid\Column|Collection token(string $label = null)
      * @method Grid\Column|Collection tokenable_type(string $label = null)
      * @method Grid\Column|Collection tokenable_id(string $label = null)
@@ -268,6 +285,9 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
      * @method Grid\Column|Collection update_at(string $label = null)
+     * @method Grid\Column|Collection out_trade_no(string $label = null)
+     * @method Grid\Column|Collection discount(string $label = null)
+     * @method Grid\Column|Collection pay_type(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
      * @method Grid\Column|Collection age(string $label = null)
      * @method Grid\Column|Collection total_income(string $label = null)
@@ -328,6 +348,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection teacher_image
      * @property Show\Field|Collection logo
      * @property Show\Field|Collection poster
+     * @property Show\Field|Collection service_price
      * @property Show\Field|Collection amount
      * @property Show\Field|Collection course_id
      * @property Show\Field|Collection teacher_id
@@ -335,6 +356,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection editer_id
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
+     * @property Show\Field|Collection role
+     * @property Show\Field|Collection grade
      * @property Show\Field|Collection cover_image
      * @property Show\Field|Collection method
      * @property Show\Field|Collection subject
@@ -350,7 +373,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection reason
      * @property Show\Field|Collection wechat
      * @property Show\Field|Collection city
-     * @property Show\Field|Collection role
      * @property Show\Field|Collection tag
      * @property Show\Field|Collection presale_header_id
      * @property Show\Field|Collection aftersale_header_id
@@ -375,10 +397,15 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection latitude
      * @property Show\Field|Collection door_image
      * @property Show\Field|Collection business_license
+     * @property Show\Field|Collection student_id
+     * @property Show\Field|Collection class_time
+     * @property Show\Field|Collection class_price_min
+     * @property Show\Field|Collection class_price_max
+     * @property Show\Field|Collection class_number
+     * @property Show\Field|Collection notes
      * @property Show\Field|Collection gender
      * @property Show\Field|Collection school
      * @property Show\Field|Collection birthday
-     * @property Show\Field|Collection grade
      * @property Show\Field|Collection token
      * @property Show\Field|Collection tokenable_type
      * @property Show\Field|Collection tokenable_id
@@ -407,6 +434,9 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
      * @property Show\Field|Collection update_at
+     * @property Show\Field|Collection out_trade_no
+     * @property Show\Field|Collection discount
+     * @property Show\Field|Collection pay_type
      * @property Show\Field|Collection nickname
      * @property Show\Field|Collection age
      * @property Show\Field|Collection total_income
@@ -462,6 +492,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection teacher_image(string $label = null)
      * @method Show\Field|Collection logo(string $label = null)
      * @method Show\Field|Collection poster(string $label = null)
+     * @method Show\Field|Collection service_price(string $label = null)
      * @method Show\Field|Collection amount(string $label = null)
      * @method Show\Field|Collection course_id(string $label = null)
      * @method Show\Field|Collection teacher_id(string $label = null)
@@ -469,6 +500,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection editer_id(string $label = null)
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
+     * @method Show\Field|Collection role(string $label = null)
+     * @method Show\Field|Collection grade(string $label = null)
      * @method Show\Field|Collection cover_image(string $label = null)
      * @method Show\Field|Collection method(string $label = null)
      * @method Show\Field|Collection subject(string $label = null)
@@ -484,7 +517,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection reason(string $label = null)
      * @method Show\Field|Collection wechat(string $label = null)
      * @method Show\Field|Collection city(string $label = null)
-     * @method Show\Field|Collection role(string $label = null)
      * @method Show\Field|Collection tag(string $label = null)
      * @method Show\Field|Collection presale_header_id(string $label = null)
      * @method Show\Field|Collection aftersale_header_id(string $label = null)
@@ -509,10 +541,15 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection latitude(string $label = null)
      * @method Show\Field|Collection door_image(string $label = null)
      * @method Show\Field|Collection business_license(string $label = null)
+     * @method Show\Field|Collection student_id(string $label = null)
+     * @method Show\Field|Collection class_time(string $label = null)
+     * @method Show\Field|Collection class_price_min(string $label = null)
+     * @method Show\Field|Collection class_price_max(string $label = null)
+     * @method Show\Field|Collection class_number(string $label = null)
+     * @method Show\Field|Collection notes(string $label = null)
      * @method Show\Field|Collection gender(string $label = null)
      * @method Show\Field|Collection school(string $label = null)
      * @method Show\Field|Collection birthday(string $label = null)
-     * @method Show\Field|Collection grade(string $label = null)
      * @method Show\Field|Collection token(string $label = null)
      * @method Show\Field|Collection tokenable_type(string $label = null)
      * @method Show\Field|Collection tokenable_id(string $label = null)
@@ -541,6 +578,9 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
      * @method Show\Field|Collection update_at(string $label = null)
+     * @method Show\Field|Collection out_trade_no(string $label = null)
+     * @method Show\Field|Collection discount(string $label = null)
+     * @method Show\Field|Collection pay_type(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
      * @method Show\Field|Collection age(string $label = null)
      * @method Show\Field|Collection total_income(string $label = null)
