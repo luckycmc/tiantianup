@@ -26,6 +26,7 @@ function create_user_number($city_id,$user_id)
 function create_course_number($course_id)
 {
     $course_info = Course::with(['teaching_method','teaching_type','teaching_subject'])->find($course_id);
+    // dd($course_info);
     $method_id = $course_info->teaching_method->id;
     $type_id = $course_info->teaching_type->id;
     $subject_id = $course_info->teaching_subject->id;

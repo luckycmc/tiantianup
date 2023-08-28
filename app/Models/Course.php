@@ -35,8 +35,9 @@ class Course extends Model
         return $this->hasMany(Collect::class, 'course_id');
     }
 
-    public function user()
+    // 所属机构
+    public function users()
     {
-        return $this->belongsToMany(User::class,'user_courses');
+        return $this->belongsTo(User::class,'organ_id','id');
     }
 }
