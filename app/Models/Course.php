@@ -38,6 +38,11 @@ class Course extends Model
     // 所属机构
     public function users()
     {
-        return $this->belongsTo(User::class,'organ_id','id');
+        return $this->belongsToMany(User::class,'deliver_log','course_id','user_id');
+    }
+
+    public function deliver()
+    {
+        return $this->hasMany(DeliverLog::class,'course_id');
     }
 }

@@ -11,5 +11,15 @@ class DeliverLog extends Model
 	use HasDateTimeFormatter;
     protected $table = 'deliver_log';
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class,'course_id');
+    }
     
 }

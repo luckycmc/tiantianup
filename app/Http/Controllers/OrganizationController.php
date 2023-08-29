@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -180,9 +181,17 @@ class OrganizationController extends Controller
             $course_info->status = 3;
             $course_info->save();
         }
+        if (!in_array($course_info->status,[0,2])) {
+            // 查询投递人数
+            $course_info->deliver_count = $course_info->deliver->count();
+        }
         return $this->success('课程详情',$course_info);
     }
 
+    /**
+     * 编辑需求
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update_course()
     {
         $data = \request()->all();
@@ -215,5 +224,36 @@ class OrganizationController extends Controller
             return $this->error('编辑失败');
         }
         return $this->success('编辑成功');
+    }
+
+    /**
+     * 投递教师
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deliver_teachers()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        $page_size = $data['page_size'] ?? 10;
+        $page = $data['page'] ?? 1;
+        // 查询课程信息
+        $course_info = Course::find($course_id);
+        if (!$course_info) {
+            return $this->error('课程不存在');
+        }
+        // 查询教师列表
+        $teacher_info = $course_info->users;
+        foreach ($teacher_info as $v) {
+            $v->subject = $course_info->subject;
+            $v->teacher_info = $v->teacher_info;
+        }
+        // 分页
+        $result = new LengthAwarePaginator(
+            $teacher_info->forPage($page,$page_size),
+            $teacher_info->count(),
+            $page_size,
+            $page
+        );
+        return $this->success('投递教师列表',$result);
     }
 }

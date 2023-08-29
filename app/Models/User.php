@@ -122,6 +122,11 @@ class User extends Authenticatable implements JWTSubject
     // 课程
     public function courses()
     {
-        $this->hasMany(Course::class);
+        return $this->belongsToMany(Course::class,'deliver_log','user_id','course_id');
+    }
+
+    public function deliver_log()
+    {
+        return $this->hasMany(DeliverLog::class,'user_id');
     }
 }
