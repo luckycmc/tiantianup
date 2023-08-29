@@ -177,10 +177,43 @@ class OrganizationController extends Controller
             return $this->error('课程不存在');
         }
         if ($course_info->end_time < date('Y-m-d H:i:s')) {
-            $course_info->show_status = 3;
-        } else {
-            $course_info->show_status = $course_info->status;
+            $course_info->status = 3;
+            $course_info->save();
         }
-        dd($course_info->toArray());
+        return $this->success('课程详情',$course_info);
+    }
+
+    public function update_course()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        // 查询课程
+        $course_info = Course::find($id);
+        if (!$course_info) {
+            return $this->error('课程不存在');
+        }
+        $rules = [
+            'name' => 'required',
+            'type' => 'required',
+            'method' => 'required',
+            'subject' => 'required',
+        ];
+        $messages = [
+            'name.required' => '名称不能为空',
+            'type.required' => '辅导类型不能为空',
+            'method.required' => '上课形式不能为空',
+            'subject.required' => '科目不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 更新数据
+        $result = DB::table('courses')->where('id',$id)->update($data);
+        if (!$result) {
+            return $this->error('编辑失败');
+        }
+        return $this->success('编辑成功');
     }
 }
