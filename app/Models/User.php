@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Admin\Controllers\MessageController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -128,5 +129,11 @@ class User extends Authenticatable implements JWTSubject
     public function deliver_log()
     {
         return $this->hasMany(DeliverLog::class,'user_id');
+    }
+
+    // 消息
+    public function message()
+    {
+        return $this->hasMany(Message::class,'user_id');
     }
 }

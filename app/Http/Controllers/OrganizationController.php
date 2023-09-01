@@ -245,7 +245,6 @@ class OrganizationController extends Controller
         $teacher_info = $course_info->users;
         foreach ($teacher_info as $v) {
             $v->subject = $course_info->subject;
-            $v->teacher_info = $v->teacher_info;
         }
         // 分页
         $result = new LengthAwarePaginator(
@@ -255,5 +254,19 @@ class OrganizationController extends Controller
             $page
         );
         return $this->success('投递教师列表',$result);
+    }
+
+    /**
+     * 机构中心
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index()
+    {
+        // 当前机构
+        $user = Auth::user();
+        $balance = $user->withdraw_balance;
+        $income = $user->total_income;
+        $unread_message = $user->message()->where('status',0)->count();
+        return $this->success('机构中心',compact('balance','income','unread_message'));
     }
 }

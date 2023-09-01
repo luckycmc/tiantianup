@@ -68,16 +68,23 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection cover_image
      * @property Grid\Column|Collection method
      * @property Grid\Column|Collection subject
-     * @property Grid\Column|Collection count
+     * @property Grid\Column|Collection count_min
+     * @property Grid\Column|Collection count_max
+     * @property Grid\Column|Collection class_number
      * @property Grid\Column|Collection class_price
      * @property Grid\Column|Collection duration
      * @property Grid\Column|Collection class_duration
+     * @property Grid\Column|Collection class_date
+     * @property Grid\Column|Collection class_type
      * @property Grid\Column|Collection base_count
      * @property Grid\Column|Collection base_price
+     * @property Grid\Column|Collection improve_count
      * @property Grid\Column|Collection improve_price
      * @property Grid\Column|Collection max_price
-     * @property Grid\Column|Collection reviewer_id
+     * @property Grid\Column|Collection class_commission
+     * @property Grid\Column|Collection reviewer
      * @property Grid\Column|Collection reason
+     * @property Grid\Column|Collection entry_number
      * @property Grid\Column|Collection wechat
      * @property Grid\Column|Collection city
      * @property Grid\Column|Collection tag
@@ -104,11 +111,11 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection latitude
      * @property Grid\Column|Collection door_image
      * @property Grid\Column|Collection business_license
+     * @property Grid\Column|Collection reviewer_id
      * @property Grid\Column|Collection student_id
      * @property Grid\Column|Collection class_time
      * @property Grid\Column|Collection class_price_min
      * @property Grid\Column|Collection class_price_max
-     * @property Grid\Column|Collection class_number
      * @property Grid\Column|Collection notes
      * @property Grid\Column|Collection gender
      * @property Grid\Column|Collection school
@@ -212,16 +219,23 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection cover_image(string $label = null)
      * @method Grid\Column|Collection method(string $label = null)
      * @method Grid\Column|Collection subject(string $label = null)
-     * @method Grid\Column|Collection count(string $label = null)
+     * @method Grid\Column|Collection count_min(string $label = null)
+     * @method Grid\Column|Collection count_max(string $label = null)
+     * @method Grid\Column|Collection class_number(string $label = null)
      * @method Grid\Column|Collection class_price(string $label = null)
      * @method Grid\Column|Collection duration(string $label = null)
      * @method Grid\Column|Collection class_duration(string $label = null)
+     * @method Grid\Column|Collection class_date(string $label = null)
+     * @method Grid\Column|Collection class_type(string $label = null)
      * @method Grid\Column|Collection base_count(string $label = null)
      * @method Grid\Column|Collection base_price(string $label = null)
+     * @method Grid\Column|Collection improve_count(string $label = null)
      * @method Grid\Column|Collection improve_price(string $label = null)
      * @method Grid\Column|Collection max_price(string $label = null)
-     * @method Grid\Column|Collection reviewer_id(string $label = null)
+     * @method Grid\Column|Collection class_commission(string $label = null)
+     * @method Grid\Column|Collection reviewer(string $label = null)
      * @method Grid\Column|Collection reason(string $label = null)
+     * @method Grid\Column|Collection entry_number(string $label = null)
      * @method Grid\Column|Collection wechat(string $label = null)
      * @method Grid\Column|Collection city(string $label = null)
      * @method Grid\Column|Collection tag(string $label = null)
@@ -248,11 +262,11 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection latitude(string $label = null)
      * @method Grid\Column|Collection door_image(string $label = null)
      * @method Grid\Column|Collection business_license(string $label = null)
+     * @method Grid\Column|Collection reviewer_id(string $label = null)
      * @method Grid\Column|Collection student_id(string $label = null)
      * @method Grid\Column|Collection class_time(string $label = null)
      * @method Grid\Column|Collection class_price_min(string $label = null)
      * @method Grid\Column|Collection class_price_max(string $label = null)
-     * @method Grid\Column|Collection class_number(string $label = null)
      * @method Grid\Column|Collection notes(string $label = null)
      * @method Grid\Column|Collection gender(string $label = null)
      * @method Grid\Column|Collection school(string $label = null)
@@ -361,16 +375,23 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection cover_image
      * @property Show\Field|Collection method
      * @property Show\Field|Collection subject
-     * @property Show\Field|Collection count
+     * @property Show\Field|Collection count_min
+     * @property Show\Field|Collection count_max
+     * @property Show\Field|Collection class_number
      * @property Show\Field|Collection class_price
      * @property Show\Field|Collection duration
      * @property Show\Field|Collection class_duration
+     * @property Show\Field|Collection class_date
+     * @property Show\Field|Collection class_type
      * @property Show\Field|Collection base_count
      * @property Show\Field|Collection base_price
+     * @property Show\Field|Collection improve_count
      * @property Show\Field|Collection improve_price
      * @property Show\Field|Collection max_price
-     * @property Show\Field|Collection reviewer_id
+     * @property Show\Field|Collection class_commission
+     * @property Show\Field|Collection reviewer
      * @property Show\Field|Collection reason
+     * @property Show\Field|Collection entry_number
      * @property Show\Field|Collection wechat
      * @property Show\Field|Collection city
      * @property Show\Field|Collection tag
@@ -397,11 +418,11 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection latitude
      * @property Show\Field|Collection door_image
      * @property Show\Field|Collection business_license
+     * @property Show\Field|Collection reviewer_id
      * @property Show\Field|Collection student_id
      * @property Show\Field|Collection class_time
      * @property Show\Field|Collection class_price_min
      * @property Show\Field|Collection class_price_max
-     * @property Show\Field|Collection class_number
      * @property Show\Field|Collection notes
      * @property Show\Field|Collection gender
      * @property Show\Field|Collection school
@@ -505,16 +526,23 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection cover_image(string $label = null)
      * @method Show\Field|Collection method(string $label = null)
      * @method Show\Field|Collection subject(string $label = null)
-     * @method Show\Field|Collection count(string $label = null)
+     * @method Show\Field|Collection count_min(string $label = null)
+     * @method Show\Field|Collection count_max(string $label = null)
+     * @method Show\Field|Collection class_number(string $label = null)
      * @method Show\Field|Collection class_price(string $label = null)
      * @method Show\Field|Collection duration(string $label = null)
      * @method Show\Field|Collection class_duration(string $label = null)
+     * @method Show\Field|Collection class_date(string $label = null)
+     * @method Show\Field|Collection class_type(string $label = null)
      * @method Show\Field|Collection base_count(string $label = null)
      * @method Show\Field|Collection base_price(string $label = null)
+     * @method Show\Field|Collection improve_count(string $label = null)
      * @method Show\Field|Collection improve_price(string $label = null)
      * @method Show\Field|Collection max_price(string $label = null)
-     * @method Show\Field|Collection reviewer_id(string $label = null)
+     * @method Show\Field|Collection class_commission(string $label = null)
+     * @method Show\Field|Collection reviewer(string $label = null)
      * @method Show\Field|Collection reason(string $label = null)
+     * @method Show\Field|Collection entry_number(string $label = null)
      * @method Show\Field|Collection wechat(string $label = null)
      * @method Show\Field|Collection city(string $label = null)
      * @method Show\Field|Collection tag(string $label = null)
@@ -541,11 +569,11 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection latitude(string $label = null)
      * @method Show\Field|Collection door_image(string $label = null)
      * @method Show\Field|Collection business_license(string $label = null)
+     * @method Show\Field|Collection reviewer_id(string $label = null)
      * @method Show\Field|Collection student_id(string $label = null)
      * @method Show\Field|Collection class_time(string $label = null)
      * @method Show\Field|Collection class_price_min(string $label = null)
      * @method Show\Field|Collection class_price_max(string $label = null)
-     * @method Show\Field|Collection class_number(string $label = null)
      * @method Show\Field|Collection notes(string $label = null)
      * @method Show\Field|Collection gender(string $label = null)
      * @method Show\Field|Collection school(string $label = null)
