@@ -132,8 +132,13 @@ class User extends Authenticatable implements JWTSubject
     }
 
     // 消息
-    public function message()
+    public function messages()
     {
         return $this->hasMany(Message::class,'user_id');
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class,'user_id');
     }
 }

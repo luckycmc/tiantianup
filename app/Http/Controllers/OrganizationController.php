@@ -266,7 +266,24 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $balance = $user->withdraw_balance;
         $income = $user->total_income;
-        $unread_message = $user->message()->where('status',0)->count();
+        $unread_message = $user->messages()->where('status',0)->count();
         return $this->success('机构中心',compact('balance','income','unread_message'));
+    }
+
+    /**
+     * 详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function detail()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        // 当前机构
+        $user = Auth::user();
+        $balance = $user->withdraw_balance;
+        $income = $user->total_income;
+        // 收支明细
+        $bills = $user->bills()->take(5)->get();
+        return $this->success('详情',compact('balance','income','bills'));
     }
 }
