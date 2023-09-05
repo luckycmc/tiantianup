@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseInformation;
 use App\Models\Course;
+use App\Models\OrganRole;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -277,7 +278,6 @@ class OrganizationController extends Controller
     public function detail()
     {
         $data = \request()->all();
-        $page_size = $data['page_size'] ?? 10;
         // 当前机构
         $user = Auth::user();
         $balance = $user->withdraw_balance;
@@ -285,5 +285,18 @@ class OrganizationController extends Controller
         // 收支明细
         $bills = $user->bills()->take(5)->get();
         return $this->success('详情',compact('balance','income','bills'));
+    }
+
+    public function role_list()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        // 查询角色列表
+        $role_list = OrganRole::paginate($page_size);
+        foreach ($role_list as $v) {
+            $v->user_count = $v->users()->count();
+            $v->has_privilege = $v->privileges()->exists();
+        }
+        return $this->success('角色列表',$role_list);
     }
 }

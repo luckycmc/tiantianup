@@ -100,6 +100,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection send_platform
      * @property Grid\Column|Collection author
      * @property Grid\Column|Collection url
+     * @property Grid\Column|Collection privilege
+     * @property Grid\Column|Collection privilege_id
      * @property Grid\Column|Collection nature
      * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection id_card_no
@@ -251,6 +253,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection send_platform(string $label = null)
      * @method Grid\Column|Collection author(string $label = null)
      * @method Grid\Column|Collection url(string $label = null)
+     * @method Grid\Column|Collection privilege(string $label = null)
+     * @method Grid\Column|Collection privilege_id(string $label = null)
      * @method Grid\Column|Collection nature(string $label = null)
      * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection id_card_no(string $label = null)
@@ -407,6 +411,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection send_platform
      * @property Show\Field|Collection author
      * @property Show\Field|Collection url
+     * @property Show\Field|Collection privilege
+     * @property Show\Field|Collection privilege_id
      * @property Show\Field|Collection nature
      * @property Show\Field|Collection contact
      * @property Show\Field|Collection id_card_no
@@ -558,6 +564,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection send_platform(string $label = null)
      * @method Show\Field|Collection author(string $label = null)
      * @method Show\Field|Collection url(string $label = null)
+     * @method Show\Field|Collection privilege(string $label = null)
+     * @method Show\Field|Collection privilege_id(string $label = null)
      * @method Show\Field|Collection nature(string $label = null)
      * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection id_card_no(string $label = null)

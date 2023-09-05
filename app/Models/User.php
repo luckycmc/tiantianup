@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Admin\Controllers\MessageController;
+use Dcat\Admin\Models\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -140,5 +141,10 @@ class User extends Authenticatable implements JWTSubject
     public function bills()
     {
         return $this->hasMany(Bill::class,'user_id');
+    }
+
+    public function role()
+    {
+        return $this->belongsToMany(OrganRole::class, 'organ_user_role', 'user_id', 'role_id');
     }
 }
