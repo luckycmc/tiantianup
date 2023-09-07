@@ -549,6 +549,4 @@ class OrganizationController extends Controller
         }
         return $this->success('操作成功');
     }
-
-
 }

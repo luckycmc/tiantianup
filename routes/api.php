@@ -9,6 +9,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use Dingo\Api\Routing\Router;
 use Illuminate\Http\Request;
@@ -74,6 +75,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'payment','middleware' => ['api.jwt.auth']],function ($api){
         $api->any('{action}', function (Request $request, PaymentController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'team','middleware' => ['api.jwt.auth']],function ($api){
+        $api->any('{action}', function (Request $request, TeamController $index, $action) {
             return $index->$action($request);
         });
     });

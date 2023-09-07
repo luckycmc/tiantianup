@@ -147,4 +147,16 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(OrganRole::class,'id','organ_role_id');
     }
+
+    // 一级团队
+    public function child()
+    {
+        return $this->hasMany(User::class,'parent_id');
+    }
+
+    // 二级团队
+    public function grandson()
+    {
+        return $this->child()->with('grand_son');
+    }
 }
