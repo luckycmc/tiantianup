@@ -424,29 +424,6 @@ class UserController extends Controller
     }
 
     /**
-     * 提现记录
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function withdraw_record()
-    {
-        $data = \request()->all();
-        $page_size = $data['page_size'] ?? 0;
-        // 当前用户
-        $user = Auth::user();
-        // 筛选条件
-        $where = [];
-        if (isset($data['created_at'])) {
-            $where[] = ['created_at','>=',$data['created_at'][0]];
-            $where[] = ['created_at','<=',$data['created_at'][1]];
-        }
-        if (isset($data['status'])) {
-            $where[] = ['status','=',$data['status']];
-        }
-        $result = Withdraw::where($where)->where('user_id' , $user->id)->paginate($page_size);
-        return $this->success('提现记录',$result);
-    }
-
-    /**
      * 更换手机号
      * @return \Illuminate\Http\JsonResponse
      */

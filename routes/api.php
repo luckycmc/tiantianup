@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IndexController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WithdrawController;
 use Dingo\Api\Routing\Router;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +82,16 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'team','middleware' => ['api.jwt.auth']],function ($api){
         $api->any('{action}', function (Request $request, TeamController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'bill','middleware' => ['api.jwt.auth']],function ($api){
+        $api->any('{action}', function (Request $request, BillController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'withdraw','middleware' => ['api.jwt.auth']],function ($api){
+        $api->any('{action}', function (Request $request, WithdrawController $index, $action) {
             return $index->$action($request);
         });
     });
