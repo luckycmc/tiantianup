@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseInformation;
 use App\Models\Course;
+use App\Models\OrganPrivilege;
 use App\Models\OrganRole;
+use App\Models\OrganRolePrivilege;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -287,6 +289,10 @@ class OrganizationController extends Controller
         return $this->success('详情',compact('balance','income','bills'));
     }
 
+    /**
+     * 角色列表
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function role_list()
     {
         $data = \request()->all();
@@ -299,4 +305,142 @@ class OrganizationController extends Controller
         }
         return $this->success('角色列表',$role_list);
     }
+
+    /**
+     * 角色详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function role_detail()
+    {
+        $data = \request()->all();
+        $role_id = $data['role_id'] ?? 0;
+        $role_info = OrganRole::with('privileges')->find($role_id);
+        if (!$role_id) {
+            return $this->error('角色不存在');
+        }
+        return $this->success('角色详情',$role_info);
+    }
+
+    /**
+     * 权限列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function privilege_list()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 0;
+        $result = OrganPrivilege::paginate($page_size);
+        return $this->success('权限列表',$result);
+    }
+
+    /**
+     * 分配权限
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function add_role_privilege()
+    {
+        $data = \request()->all();
+        $role_id = $data['role_id'] ?? 0;
+        if (!OrganRole::find($role_id)) {
+            return $this->error('角色不存在');
+        }
+        // 分配权限
+        $insert_data = [];
+        // 删除当前角色的所有权限
+        OrganRolePrivilege::where('role_id',$role_id)->delete();
+        foreach ($data['privileges'] as $v) {
+            $insert_data[] = [
+                'role_id' => $role_id,
+                'privilege_id' => $v,
+                'created_at' => Carbon::now(),
+            ];
+        }
+        // 保存权限
+        $result = DB::table('organ_role_privilege')->insert($insert_data);
+        if (!$result) {
+            return $this->error('保存失败');
+        }
+        return $this->success('保存成功');
+    }
+
+    /**
+     * 添加角色
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function add_role()
+    {
+        $data = \request()->all();
+        $role_id = $data['role_id'] ?? 0;
+        $rules = [
+            'name' => 'required',
+            'description' => 'required',
+            'privileges' => 'required'
+        ];
+        $messages = [
+            'name.required' => '名称不能为空',
+            'description.required' => '描述不能为空',
+            'privileges.required' => '权限不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 保存角色
+        $role_info = OrganRole::find($role_id);
+        if ($role_info) {
+            $role_info->name = $data['name'];
+            $role_info->description = $data['description'];
+            $role_info->save();
+            // 删除权限
+            OrganRolePrivilege::where('role_id',$role_id)->delete();
+            $id = $role_id;
+        } else {
+            $role_data = [
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'updated_at' => Carbon::now()
+            ];
+            $id = DB::table('organ_roles')->insertGetId($role_data);
+        }
+        $privilege_data = [];
+        foreach ($data['privileges'] as $v) {
+            $privilege_data[] = [
+                'role_id' => $id,
+                'privilege_id' => $v,
+                'created_at' => Carbon::now(),
+            ];
+        }
+        $result = DB::table('organ_role_privilege')->insert($privilege_data);
+        if (!$result) {
+            return $this->error('保存失败');
+        }
+        return $this->success('保存成功');
+    }
+
+    /**
+     * 删除角色
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_role()
+    {
+        $data = \request()->all();
+        $role_id = $data['role_id'] ?? 0;
+        $role_info = OrganRole::with('users')->find($role_id);
+        if (!$role_info) {
+            return $this->error('角色不存在');
+        }
+        if ($role_info->users->count() > 0) {
+            return $this->error('请先移除角色下的所有用户');
+        }
+        // 删除角色
+        DB::transaction(function () use ($role_info) {
+            // 删除角色
+            $role_info->delete();
+            $role_info->privileges()->detach();
+        });
+        return $this->success('操作成功');
+    }
+
+
 }
