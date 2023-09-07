@@ -143,8 +143,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Bill::class,'user_id');
     }
 
-    public function role()
+    public function organ_role()
     {
-        return $this->belongsToMany(OrganRole::class, 'organ_user_role', 'user_id', 'role_id');
+        return $this->hasOne(OrganRole::class,'id','organ_role_id');
     }
 }

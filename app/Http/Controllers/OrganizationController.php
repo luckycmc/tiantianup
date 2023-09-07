@@ -442,5 +442,113 @@ class OrganizationController extends Controller
         return $this->success('操作成功');
     }
 
+    /**
+     * 成员列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function member()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        // 当前用户
+        $user = Auth::user();
+        $members = User::with('organ_role')->whereNotIn('id',[$user->id])->where(['role' => 4,'status' => 1])->paginate($page_size);
+        foreach ($members as $member) {
+            $member->role_name = $member->organ_role->name;
+        }
+        return $this->success('成员列表',$members);
+    }
+
+    /**
+     * 成员详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function member_detail()
+    {
+        $data = \request()->all();
+        $user_id = $data['user_id'] ?? 0;
+        $user_info = User::with('organ_role')->find($user_id);
+        if (!$user_info) {
+            return $this->error('用户不存在');
+        }
+        if ($user_info->role !== 4) {
+            return $this->error('该用户不是机构成员');
+        }
+        return $this->success('成员详情',$user_info);
+    }
+
+    /**
+     * 删除&禁用启用
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_member()
+    {
+        $data = \request()->all();
+        $user_id = $data['user_id'] ?? 0;
+        $type = $data['type'] ?? 0;
+        $user_info = User::find($user_id);
+        // 当前用户
+        $user = Auth::user();
+        if (!$user_info) {
+            return $this->error('用户不存在');
+        }
+        if ($user_info->role !== 4) {
+            return $this->error('该用户不是机构成员');
+        }
+        if ($user_id == $user->id) {
+            return $this->error('您不能禁用自己');
+        }
+        if ($type == 0) {
+            // 删除用户
+            $user_info->delete();
+        } else {
+            // 禁用&启用
+            $user_info->status = $user_info->status == 2 ? 1 : 2;
+            $user_info->save();
+        }
+        return $this->success('操作成功');
+    }
+
+    /**
+     * 编辑机构成员
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_member()
+    {
+        $data = \request()->all();
+        $user_id = $data['user_id'] ?? 0;
+        $rules = [
+            'name' => 'required',
+            'gender' => 'required',
+            'organ_role_id' => 'required'
+        ];
+        $messages = [
+            'name.required' => '姓名不能为空',
+            'gender.required' => '性别不能为空',
+            'organ_role_id.required' => '角色不能为空'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $error = $validator->errors();
+            return $this->error(implode(',',$error->all()));
+        }
+        $user_info = User::find($user_id);
+        if (!$user_info) {
+            return $this->error('用户不存在');
+        }
+        if ($user_info->role !== 4) {
+            return $this->error('该用户不是机构成员');
+        }
+        // 更新用户
+        $user_info->name = $data['name'];
+        $user_info->gender = $data['gender'];
+        $user_info->organ_role_id = $data['organ_role_id'];
+        $result = $user_info->save();
+        if (!$result) {
+            return $this->error('操作失败');
+        }
+        return $this->success('操作成功');
+    }
+
 
 }
