@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\UserCourse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -77,5 +78,33 @@ class CourseController extends Controller
             $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
         }
         return $this->success('课程列表',$result);
+    }
+
+    /**
+     * 联系商家
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function entry()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'];
+        $course_info = Course::find($course_id);
+        if (!$course_info) {
+            return $this->error('课程不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        $insert_data = [
+            'user_id' => $user->id,
+            'course_id' => $course_id,
+            'role' => $user->role,
+            'created_at' => Carbon::now()
+        ];
+        // 保存数据
+        $result = DB::table('user_courses')->insert($insert_data);
+        if (!$result) {
+            return $this->error('联系机构失败');
+        }
+        return $this->success('稍后会有商家给您致电');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
 use App\Models\Region;
@@ -212,5 +213,14 @@ class IndexController extends Controller
         $platform = $data['platform'] ?? 0;
         $result = RotateImage::where('show_platform',$platform)->get();
         return $this->success('轮播图',$result);
+    }
+
+    public function my_profile()
+    {
+        // 当前用户
+        $user = Auth::user();
+        // 收益
+        $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
+
     }
 }

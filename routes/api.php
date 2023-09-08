@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeacherController;
@@ -92,6 +93,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'withdraw','middleware' => ['api.jwt.auth']],function ($api){
         $api->any('{action}', function (Request $request, WithdrawController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'parent','middleware' => ['api.jwt.auth']],function ($api){
+        $api->any('{action}', function (Request $request, ParentController $index, $action) {
             return $index->$action($request);
         });
     });
