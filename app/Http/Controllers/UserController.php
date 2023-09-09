@@ -672,4 +672,41 @@ class UserController extends Controller
         $career_info->teaching_type = explode('、',$career_info->teaching_type);
         return $this->success('教学经历',$career_info);
     }
+
+    /**
+     * 我的报名
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function my_entry()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $date_sort = $data['date_sort'] ?? 'desc';
+        $entry_start_date = $data['entry_start_date'] ?? Carbon::createFromTimestamp(0)->format('Y-m-d');
+        $entry_end_date = $data['entry_end_date'] ?? Carbon::now()->format('Y-m-d');
+        // 当前用户
+        $user = Auth::user();
+        $where = [];
+        if (isset($data['type'])) {
+            $where[] = ['type','=',$data['type']];
+        }
+        if (isset($data['subject'])) {
+            $where[] = ['subject','=',$data['subject']];
+        }
+        if (isset($data['method'])) {
+            $where[] = ['method','=',$data['method']];
+        }
+        if (isset($data['class_price_min']) && isset($data['class_price_max'])) {
+            $where[] = ['class_price','>=',$data['class_price_min']];
+            $where[] = ['class_price','<=',$data['class_price_max']];
+        }
+        // 查询我报名的课程
+        $course = $user->user_courses()->where($where)->wherePivotBetween('created_at',[$entry_start_date." 00:00:00",$entry_end_date." 23:59:59"])->orderByPivot('created_at',$date_sort)->paginate($page_size);
+        foreach ($course as $v) {
+            $v->is_expire = Carbon::now() > $v->end_time ? 1 : 0;
+            $v->entry_time = Carbon::parse($v->pivot->created_at)->format('Y-m-d H:i:s');
+            $v->organization_name = $v->organization->name;
+        }
+        return $this->success('我的报名',$course);
+    }
 }

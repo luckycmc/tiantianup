@@ -20,5 +20,10 @@ class UserCourse extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function scopeOrderByCreationTime($query)
+    {
+        return $query->orderBy('created_at');
+    }
     
 }

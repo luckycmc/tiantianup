@@ -159,4 +159,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->child()->with('grand_son');
     }
+
+    public function user_courses()
+    {
+        return $this->belongsToMany(Course::class,'user_courses','user_id','course_id')->withPivot('created_at');
+    }
 }
