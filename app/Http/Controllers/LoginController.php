@@ -33,10 +33,10 @@ class LoginController extends Controller
         }
         // 判断用户是否存在
         $is_user = User::where(['open_id' => $session['openid']])->first();
-        Log::info('open_id: '.$session['openid']);
         if (!$is_user) {
             $new_user = new User();
             $new_user->open_id = $session['openid'];
+            $new_user->parent_id = $data['parent_id'] ?? null;
             $new_user->save();
             $is_user = $new_user;
         }
@@ -75,6 +75,7 @@ class LoginController extends Controller
             // 注册新用户
             $new_user = new User();
             $new_user->mobile = $data['mobile'];
+            $new_user->parent_id = $data['parent_id'] ?? null;
             $new_user->save();
             $is_user = $new_user;
         }
