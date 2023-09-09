@@ -6,6 +6,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
+use App\Models\Message;
 use Dingo\Api\Routing\Router;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +100,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'parent','middleware' => ['api.jwt.auth']],function ($api){
         $api->any('{action}', function (Request $request, ParentController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'message','middleware' => ['api.jwt.auth']],function ($api){
+        $api->any('{action}', function (Request $request, MessageController $index, $action) {
             return $index->$action($request);
         });
     });
