@@ -17,7 +17,7 @@ return [
         'address' => '详细地址',
         'door_image' => '门头照片',
         'business_license' => '营业执照',
-        'status' => '状态0待审核1已通过2已拒绝',
+        'status' => '审核状态',
         'reviewer_id' => '审核人id',
     ],
     'options' => [

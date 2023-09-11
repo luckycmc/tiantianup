@@ -7,6 +7,10 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use function Symfony\Component\String\s;
 
 class RegionController extends AdminController
 {
@@ -66,5 +70,15 @@ class RegionController extends AdminController
             $form->text('region_type');
             $form->text('is_last');
         });
+    }
+
+    public function city(Request $request)
+    {
+        $id = $request->get('q') ?? 0;
+        $data = DB::table('regions')->where('parent_id',$id)->select('region_name as text','id')->get();
+        if (!$data) {
+            return [];
+        }
+        return $data;
     }
 }

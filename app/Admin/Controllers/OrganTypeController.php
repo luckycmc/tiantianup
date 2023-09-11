@@ -2,14 +2,14 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Repositories\TeachingMethod;
+use App\Admin\Repositories\OrganType;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\DB;
 
-class TeachingMethodController extends AdminController
+class OrganTypeController extends AdminController
 {
     /**
      * Make a grid builder.
@@ -18,7 +18,7 @@ class TeachingMethodController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new TeachingMethod(), function (Grid $grid) {
+        return Grid::make(new OrganType(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('name');
             $grid->column('update_at');
@@ -40,7 +40,7 @@ class TeachingMethodController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new TeachingMethod(), function (Show $show) {
+        return Show::make($id, new OrganType(), function (Show $show) {
             $show->field('id');
             $show->field('name');
             $show->field('update_at');
@@ -55,7 +55,7 @@ class TeachingMethodController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new TeachingMethod(), function (Form $form) {
+        return Form::make(new OrganType(), function (Form $form) {
             $form->display('id');
             $form->text('name');
             $form->text('update_at');
@@ -65,7 +65,7 @@ class TeachingMethodController extends AdminController
 
     public function list()
     {
-        $data = DB::table('teaching_methods')->select('name as id','name as text')->get();
+        $data = DB::table('organ_type')->select('name as id','name as text')->get();
         if (!$data) {
             return [];
         }

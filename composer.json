@@ -19,6 +19,7 @@
         "overtrue/laravel-wechat": "^5.1",
         "phayes/geophp": "^1.2",
         "qcloud/cos-sdk-v5": "^2.6",
+        "super-eggs/dcat-distpicker": "^2.1",
         "tymon/jwt-auth": "^1.0",
         "yansongda/laravel-pay": "^3.3"
     },

@@ -13,5 +13,13 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
+    $router->prefix('/api')->group(function ($router) {
+        $router->get('/admin_users', 'AuthController@admin_users');
+        $router->get('/province', 'RegionController@province');
+        $router->get('/city', 'RegionController@city');
+        $router->get('/organ_type', 'OrganTypeController@list');
+        $router->get('/nature', 'TeachingMethodController@list');
+    });
+    $router->resource('/organization','OrganizationController');
 
 });

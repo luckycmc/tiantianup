@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dcat\Admin\Models\Administrator;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 
 use Illuminate\Database\Eloquent\Model;
@@ -28,5 +29,10 @@ class Organization extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reviewer()
+    {
+        return $this->hasOne(Administrator::class,'id','reviewer_id');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Organization;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -17,29 +18,30 @@ class OrganizationController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Organization(), function (Grid $grid) {
-            $grid->column('id')->sortable();
+        return Grid::make(new Organization(['user','province','city','district','reviewer']), function (Grid $grid) {
+            $grid->column('user.number','ID');
             $grid->column('name');
             $grid->column('type');
-            $grid->column('nature');
-            $grid->column('contact');
+            $grid->column('nature','培训类型');
+            $grid->column('user.name','负责人');
             $grid->column('mobile');
             $grid->column('id_card_no');
-            $grid->column('province_id');
-            $grid->column('city_id');
-            $grid->column('district_id');
-            $grid->column('address');
-            $grid->column('door_image');
-            $grid->column('business_license');
-            $grid->column('status');
-            $grid->column('reviewer_id');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('region','省市区')->display(function () {
+                return $this->province->region_name.$this->city->region_name.$this->district->region_name;
+            });
+            $grid->column('contact');
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
+            $grid->column('user.status')->select([1 => '正常', 0 => '禁用']);
+            $grid->column('reviewer.name','审核人');
+            $grid->column('updated_at','审核时间');
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->like('name');
+                $filter->equal('type')->select('/api/organ_type');
+                $filter->equal('nature','培训类型')->select('/api/nature');
             });
+            // 禁用删除
+            $grid->disableDeleteButton();
         });
     }
 
@@ -52,24 +54,20 @@ class OrganizationController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new Organization(), function (Show $show) {
-            $show->field('id');
+        return Show::make($id, new Organization(['user','province','city','district','reviewer']), function (Show $show) {
+            $show->field('user.number','ID');
             $show->field('name');
             $show->field('type');
-            $show->field('nature');
-            $show->field('contact');
+            $show->field('nature','培训类型');
+            $show->field('user.name','负责人');
             $show->field('mobile');
             $show->field('id_card_no');
-            $show->field('province_id');
-            $show->field('city_id');
-            $show->field('district_id');
-            $show->field('address');
-            $show->field('door_image');
-            $show->field('business_license');
-            $show->field('status');
-            $show->field('reviewer_id');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('region','省市区')->as(function () {
+                return $this->province->region_name.$this->city->region_name.$this->district->region_name;
+            });
+            $show->field('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
+            $show->field('reviewer.name','审核人');
+            $show->field('updated_at','审核时间');
         });
     }
 
@@ -80,23 +78,24 @@ class OrganizationController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new Organization(), function (Form $form) {
-            $form->display('id');
+        return Form::make(new Organization(['user','province','city','district','reviewer']), function (Form $form) {
+            $form->display('user.number','ID');
             $form->text('name');
             $form->text('type');
             $form->text('nature');
             $form->text('contact');
             $form->text('mobile');
             $form->text('id_card_no');
-            $form->text('province_id');
-            $form->text('city_id');
-            $form->text('district_id');
+            $form->select('province_id','省份')->options('/api/city')->load('city_id', '/api/city');
+            $form->select('city_id','城市')->options('/api/city')->load('district_id', '/api/city');
+            $form->select('district_id','区县');
             $form->text('address');
             $form->text('door_image');
             $form->text('business_license');
-            $form->text('status');
-            $form->text('reviewer_id');
-        
+            $form->hidden('user.status','账号状态');
+            $form->select('status')->options([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
+            $form->select('reviewer_id','审核人')->options('/api/admin_users');
+
             $form->display('created_at');
             $form->display('updated_at');
         });

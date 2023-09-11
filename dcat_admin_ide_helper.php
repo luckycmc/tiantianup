@@ -102,6 +102,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection url
      * @property Grid\Column|Collection privilege
      * @property Grid\Column|Collection privilege_id
+     * @property Grid\Column|Collection update_at
      * @property Grid\Column|Collection nature
      * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection id_card_no
@@ -149,11 +150,11 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection teacher_cert
      * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
-     * @property Grid\Column|Collection update_at
      * @property Grid\Column|Collection out_trade_no
      * @property Grid\Column|Collection discount
      * @property Grid\Column|Collection pay_type
      * @property Grid\Column|Collection nickname
+     * @property Grid\Column|Collection organ_role_id
      * @property Grid\Column|Collection age
      * @property Grid\Column|Collection total_income
      * @property Grid\Column|Collection withdraw_balance
@@ -255,6 +256,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection url(string $label = null)
      * @method Grid\Column|Collection privilege(string $label = null)
      * @method Grid\Column|Collection privilege_id(string $label = null)
+     * @method Grid\Column|Collection update_at(string $label = null)
      * @method Grid\Column|Collection nature(string $label = null)
      * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection id_card_no(string $label = null)
@@ -302,11 +304,11 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection teacher_cert(string $label = null)
      * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
-     * @method Grid\Column|Collection update_at(string $label = null)
      * @method Grid\Column|Collection out_trade_no(string $label = null)
      * @method Grid\Column|Collection discount(string $label = null)
      * @method Grid\Column|Collection pay_type(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
+     * @method Grid\Column|Collection organ_role_id(string $label = null)
      * @method Grid\Column|Collection age(string $label = null)
      * @method Grid\Column|Collection total_income(string $label = null)
      * @method Grid\Column|Collection withdraw_balance(string $label = null)
@@ -413,6 +415,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection url
      * @property Show\Field|Collection privilege
      * @property Show\Field|Collection privilege_id
+     * @property Show\Field|Collection update_at
      * @property Show\Field|Collection nature
      * @property Show\Field|Collection contact
      * @property Show\Field|Collection id_card_no
@@ -460,11 +463,11 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection teacher_cert
      * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
-     * @property Show\Field|Collection update_at
      * @property Show\Field|Collection out_trade_no
      * @property Show\Field|Collection discount
      * @property Show\Field|Collection pay_type
      * @property Show\Field|Collection nickname
+     * @property Show\Field|Collection organ_role_id
      * @property Show\Field|Collection age
      * @property Show\Field|Collection total_income
      * @property Show\Field|Collection withdraw_balance
@@ -566,6 +569,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection url(string $label = null)
      * @method Show\Field|Collection privilege(string $label = null)
      * @method Show\Field|Collection privilege_id(string $label = null)
+     * @method Show\Field|Collection update_at(string $label = null)
      * @method Show\Field|Collection nature(string $label = null)
      * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection id_card_no(string $label = null)
@@ -613,11 +617,11 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection teacher_cert(string $label = null)
      * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
-     * @method Show\Field|Collection update_at(string $label = null)
      * @method Show\Field|Collection out_trade_no(string $label = null)
      * @method Show\Field|Collection discount(string $label = null)
      * @method Show\Field|Collection pay_type(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
+     * @method Show\Field|Collection organ_role_id(string $label = null)
      * @method Show\Field|Collection age(string $label = null)
      * @method Show\Field|Collection total_income(string $label = null)
      * @method Show\Field|Collection withdraw_balance(string $label = null)

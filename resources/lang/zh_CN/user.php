@@ -1,0 +1,37 @@
+<?php 
+return [
+    'labels' => [
+        'User' => 'User',
+        'user' => 'User',
+    ],
+    'fields' => [
+        'parent_id' => '父级id',
+        'avatar' => '头像',
+        'nickname' => '昵称',
+        'name' => '姓名',
+        'number' => '编号',
+        'role' => '角色1为学生2为家长3为教师4为机构',
+        'organ_role_id' => '机构角色id',
+        'gender' => '性别0为女1为男',
+        'mobile' => '手机号',
+        'birthday' => '出生年月日',
+        'age' => '年龄',
+        'province_id' => '省份id',
+        'city_id' => '城市id',
+        'district_id' => '区县id',
+        'address' => '详细地址',
+        'school' => '学校',
+        'grade' => '年级',
+        'introduction' => '自我介绍',
+        'total_income' => '总收益',
+        'withdraw_balance' => '可提现余额',
+        'status' => '状态1为正常0为未注册2为禁用',
+        'is_real_auth' => '是否实名认证0为否1为是',
+        'is_education' => '是否通过教育经历审核0为否1为是',
+        'has_teacher_cert' => '是否有教师资格证0为否1为是',
+        'is_recommend' => '是否推荐0为否1为是',
+        'open_id' => 'openid',
+    ],
+    'options' => [
+    ],
+];
