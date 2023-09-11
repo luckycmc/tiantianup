@@ -215,12 +215,61 @@ class IndexController extends Controller
         return $this->success('轮播图',$result);
     }
 
+    /**
+     * 个人主页
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function my_profile()
     {
         // 当前用户
         $user = Auth::user();
         // 收益
         $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
+        // 我的收藏
+        $user->collection = $user->collects()->count();
+        // 我的报名
+        $user->entry = $user->user_courses()->count();
+        // 未读消息
+        $user->message = $user->messages()->where('status',0)->count();
+        return $this->success('个人主页',$user);
+    }
 
+    /**
+     * 获取省份
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_province()
+    {
+        $province = Region::where('region_type',1)->get();
+        $result = $province->sortBy('initial')->groupBy('initial');
+        return $this->success('省份',$result);
+    }
+
+    /**
+     * 获取城市
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_city()
+    {
+        $data = \request()->all();
+        $province_id = $data['province_id'] ?? 0;
+        // 查询省份
+        $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
+        $result = $city->sortBy('initial')->groupBy('initial');
+        return $this->success('城市',$result);
+    }
+
+    /**
+     * 获取区县
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_district()
+    {
+        $data = \request()->all();
+        $city_id = $data['city_id'] ?? 0;
+        // 查询省份
+        $district = Region::where(['region_type' => 3,'parent_id' => $city_id])->get();
+        $result = $district->sortBy('initial')->groupBy('initial');
+        return $this->success('城市',$result);
     }
 }
