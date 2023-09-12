@@ -81,6 +81,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection improve_count
      * @property Grid\Column|Collection improve_price
      * @property Grid\Column|Collection max_price
+     * @property Grid\Column|Collection adder_role
      * @property Grid\Column|Collection class_commission
      * @property Grid\Column|Collection reviewer
      * @property Grid\Column|Collection reason
@@ -104,6 +105,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection privilege_id
      * @property Grid\Column|Collection update_at
      * @property Grid\Column|Collection nature
+     * @property Grid\Column|Collection training_type
      * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection id_card_no
      * @property Grid\Column|Collection province_id
@@ -235,6 +237,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection improve_count(string $label = null)
      * @method Grid\Column|Collection improve_price(string $label = null)
      * @method Grid\Column|Collection max_price(string $label = null)
+     * @method Grid\Column|Collection adder_role(string $label = null)
      * @method Grid\Column|Collection class_commission(string $label = null)
      * @method Grid\Column|Collection reviewer(string $label = null)
      * @method Grid\Column|Collection reason(string $label = null)
@@ -258,6 +261,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection privilege_id(string $label = null)
      * @method Grid\Column|Collection update_at(string $label = null)
      * @method Grid\Column|Collection nature(string $label = null)
+     * @method Grid\Column|Collection training_type(string $label = null)
      * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection id_card_no(string $label = null)
      * @method Grid\Column|Collection province_id(string $label = null)
@@ -394,6 +398,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection improve_count
      * @property Show\Field|Collection improve_price
      * @property Show\Field|Collection max_price
+     * @property Show\Field|Collection adder_role
      * @property Show\Field|Collection class_commission
      * @property Show\Field|Collection reviewer
      * @property Show\Field|Collection reason
@@ -417,6 +422,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection privilege_id
      * @property Show\Field|Collection update_at
      * @property Show\Field|Collection nature
+     * @property Show\Field|Collection training_type
      * @property Show\Field|Collection contact
      * @property Show\Field|Collection id_card_no
      * @property Show\Field|Collection province_id
@@ -548,6 +554,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection improve_count(string $label = null)
      * @method Show\Field|Collection improve_price(string $label = null)
      * @method Show\Field|Collection max_price(string $label = null)
+     * @method Show\Field|Collection adder_role(string $label = null)
      * @method Show\Field|Collection class_commission(string $label = null)
      * @method Show\Field|Collection reviewer(string $label = null)
      * @method Show\Field|Collection reason(string $label = null)
@@ -571,6 +578,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection privilege_id(string $label = null)
      * @method Show\Field|Collection update_at(string $label = null)
      * @method Show\Field|Collection nature(string $label = null)
+     * @method Show\Field|Collection training_type(string $label = null)
      * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection id_card_no(string $label = null)
      * @method Show\Field|Collection province_id(string $label = null)

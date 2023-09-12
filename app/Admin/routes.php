@@ -19,7 +19,9 @@ Route::group([
         $router->get('/city', 'RegionController@city');
         $router->get('/organ_type', 'OrganTypeController@list');
         $router->get('/nature', 'TeachingMethodController@list');
+        $router->get('/education', 'EducationController@list');
     });
     $router->resource('/organization','OrganizationController');
+    $router->resource('/teacher_info','TeacherInfoController');
 
 });
