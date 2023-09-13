@@ -3,12 +3,15 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\Recommend;
+use App\Admin\Repositories\TeacherImage;
 use App\Admin\Repositories\TeacherInfo;
 use App\Admin\Repositories\User;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Dcat\Admin\Widgets\Tab;
 use Illuminate\Support\Facades\Log;
 
 class TeacherInfoController extends AdminController
@@ -63,6 +66,71 @@ class TeacherInfoController extends AdminController
         });
     }
 
+    public function show($id,Content $content) {
+        return $content->title('教师详情')
+            ->body(Tab::make()
+                ->add('基本信息',$this->detail($id))
+                ->add('实名认证',$this->real_auth($id))
+                ->add('资格证书',$this->cert($id))
+                ->add('教育经历',$this->education($id))
+                ->add('教学经历',$this->career($id))
+                ->add('教师风采',$this->images($id))
+            );
+    }
+
+    // 实名认证
+    private function real_auth($id) {
+        return Show::make($id,new User(['teacher_info']),function (Show $show) {
+            $show->field('is_real_auth','实名认证状态')->using([0 => '未实名', 1 => '已实名']);
+            $show->field('teacher_info.id_card_front','身份证人像面')->image();
+            $show->field('teacher_info.id_card_backend','身份证人像面')->image();
+        });
+    }
+
+    // 资格证书
+    private function cert($id) {
+        return Show::make($id,new User(['teacher_info']),function (Show $show) {
+            $show->field('teacher_info.teacher_cert','资格证书')->image();
+            $show->field('teacher_info.graduate_cert','荣誉证书')->image();
+            $show->field('teacher_info.diploma','其他证书')->image();
+        });
+    }
+
+    // 教育经历
+    private function education($id) {
+        return Show::make($id,new User(['teacher_info']),function (Show $show) {
+            $show->field('teacher_info.highest_education','最高学历');
+            $show->field('teacher_info.graduate_school','毕业院校');
+            $show->field('teacher_info.speciality','所学专业');
+            $show->field('teacher_info.graduate_cert','毕业证书')->image();
+            $show->field('teacher_info.diploma','学位证书')->image();
+        });
+    }
+
+    // 教学经历
+    private function career($id) {
+        return Show::make($id,new User(['teacher_info']),function (Show $show) {
+            $show->field('teacher_info.highest_education','最高学历');
+            $show->field('teacher_info.graduate_school','毕业院校');
+            $show->field('teacher_info.speciality','所学专业');
+            $show->field('teacher_info.graduate_cert','毕业证书')->image();
+            $show->field('teacher_info.diploma','学位证书')->image();
+        });
+    }
+
+    // 个人风采
+    private function images($id) {
+        $images = \App\Models\TeacherImage::where(['user_id' => $id,'type' => 2])->get();
+        $html = '<div class="image-gallery">';
+        foreach ($images as $image) {
+            // 自定义图片样式等
+            $html .= "<img style='width: 180px;height: 180px' src='{$image->url}' alt='教师风采' />";
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
     /**
      * Make a show builder.
      *
@@ -72,7 +140,7 @@ class TeacherInfoController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new User(['teacher_info','province','city','district']), function (Show $show) {
+        return Show::make($id, new User(['teacher_info','province','city','district','teacher_tags']), function (Show $show) {
             $show->field('number','ID');
             $show->field('name','教师姓名');
             $show->field('gender','性别')->using([0 => '女',1 => '男']);
@@ -86,6 +154,9 @@ class TeacherInfoController extends AdminController
             $show->field('has_teacher_cert','是否有教师资格证')->using([0 => '否',1 => '是']);
             $show->field('teacher_info.status','审核状态')->using([0 => '待审核', 1 => '审核通过', 2 => '拒绝']);
             $show->field('is_recommend','推荐')->using([0 => '否', 1 => '是']);
+            $show->field('teacher_tags','教师标签')->as(function ($teacher_tags) {
+                return implode(',', collect($teacher_tags)->pluck('tag')->all());
+            });
         });
     }
 
@@ -120,10 +191,8 @@ class TeacherInfoController extends AdminController
                 if ($form->isCreating()) {
                     // 自增ID
                     $user_id = $result;
-                    Log::info('user_id: '.$user_id);
                     $user_info = \App\Models\User::find($user_id);
                     $city_id = $user_info->city_id;
-                    Log::info('city_id: '.$city_id);
                     $user_info->number = create_user_number($city_id,$user_id);
                     $user_info->save();
                 }
