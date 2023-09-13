@@ -9,6 +9,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Log;
 
 class TeacherInfoController extends AdminController
 {
@@ -96,20 +97,37 @@ class TeacherInfoController extends AdminController
     protected function form()
     {
         return Form::make(new User(['teacher_info','province','city','district']), function (Form $form) {
-            $form->display('number','ID');
-            $form->text('name');
-            $form->text('gender');
-            $form->text('mobile');
-            $form->text('status');
-            $form->text('region');
-            $form->text('teacher_info.highest_education');
-            $form->text('is_real_auth');
-            $form->text('graduate_cert');
-            $form->text('teacher_info.status');
-            $form->text('is_recommend');
-        
+            if ($form->isEditing()) {
+                $form->display('number','ID');
+            }
+            $form->text('name','姓名');
+            $form->select('gender','性别')->options([1 => '男',0 => '女']);
+            $form->mobile('mobile','手机号');
+            $form->date('birthday','生日');
+            $form->select('province_id','省份')->options('/api/city')->load('city_id', '/api/city');
+            $form->select('city_id','城市')->options('/api/city')->load('district_id', '/api/city');
+            $form->select('district_id','区县');
+            $form->text('address','详细地址');
+            $form->text('introduction','个人简介');
+            if ($form->isCreating()) {
+                $form->hidden('role')->value(3);
+                $form->hidden('is_recommend')->value(0);
+            }
             $form->display('created_at');
             $form->display('updated_at');
+            $form->saved(function (Form $form, $result) {
+                // 判断是否是新增操作
+                if ($form->isCreating()) {
+                    // 自增ID
+                    $user_id = $result;
+                    Log::info('user_id: '.$user_id);
+                    $user_info = \App\Models\User::find($user_id);
+                    $city_id = $user_info->city_id;
+                    Log::info('city_id: '.$city_id);
+                    $user_info->number = create_user_number($city_id,$user_id);
+                    $user_info->save();
+                }
+            });
         });
     }
 }
