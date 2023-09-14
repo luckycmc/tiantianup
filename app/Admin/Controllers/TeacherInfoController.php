@@ -6,6 +6,7 @@ use App\Admin\Actions\Grid\Recommend;
 use App\Admin\Repositories\TeacherImage;
 use App\Admin\Repositories\TeacherInfo;
 use App\Admin\Repositories\User;
+use App\Models\TeacherCareer;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
@@ -109,13 +110,19 @@ class TeacherInfoController extends AdminController
 
     // 教学经历
     private function career($id) {
-        return Show::make($id,new User(['teacher_info']),function (Show $show) {
-            $show->field('teacher_info.highest_education','最高学历');
-            $show->field('teacher_info.graduate_school','毕业院校');
-            $show->field('teacher_info.speciality','所学专业');
-            $show->field('teacher_info.graduate_cert','毕业证书')->image();
-            $show->field('teacher_info.diploma','学位证书')->image();
-        });
+        $careers = TeacherCareer::where('user_id',$id)->get();
+        $html = '<table><thead><tr><th>所在单位</th><th>所授科目</th><th>授课对象</th><th>上课方式</th><th>开始时间</th><th>结束时间</th></tr></thead><tbody>';
+        foreach ($careers as $career) {
+            $html .= "<tr><td>{$career->organization}</td>";
+            $html .= "<td>{$career->subject}</td>";
+            $html .= "<td>{$career->object}</td>";
+            $html .= "<td>{$career->teaching_type}</td>";
+            $html .= "<td>{$career->start_time}</td>";
+            $html .= "<td>{$career->end_time}</td>";
+            $html .= "</tr>";
+        }
+        $html .= '</tbody></table>';
+        return $html;
     }
 
     // 个人风采
