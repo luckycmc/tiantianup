@@ -272,4 +272,16 @@ class IndexController extends Controller
         $result = $district->sortBy('initial')->groupBy('initial');
         return $this->success('城市',$result);
     }
+
+    /**
+     * 获取省市区
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function areas()
+    {
+        $data = \request()->all();
+        $parent_id = $data['parent_id'] ?? 0;
+        $result = Region::where('parent_id',$parent_id)->get();
+        return $this->success('地区',$result);
+    }
 }
