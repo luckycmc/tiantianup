@@ -284,4 +284,34 @@ class IndexController extends Controller
         $result = Region::where('parent_id',$parent_id)->get();
         return $this->success('地区',$result);
     }
+
+    /*
+ * 省市区列表
+ * */
+    public function dgtx_places()
+    {
+        $data = Region::all();
+        // foreach ($data as $item){
+        //     $item->value = $item->label;
+        // }
+        $region =  $this->getTree($data,0,1);
+        // $region_data = $this->removeEmptyFields($region);
+        return $this->success('成功',$region);
+    }
+
+    function getTree($data, $pId,$level = 1)
+    {
+        $tree = [];
+        foreach($data as $k => $v) {
+            if($v->parent_id == $pId) {
+                $v->children = $this->getTree($data, $v->id,$level +1);
+                if ($level == 3) {
+                    unset($v->children);
+                }
+                $tree[] = $v;
+                unset($data[$k]);
+            }
+        }
+        return $tree;
+    }
 }
