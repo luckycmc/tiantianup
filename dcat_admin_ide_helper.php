@@ -152,6 +152,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection teacher_cert
      * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
+     * @property Grid\Column|Collection data_status
      * @property Grid\Column|Collection out_trade_no
      * @property Grid\Column|Collection discount
      * @property Grid\Column|Collection pay_type
@@ -308,6 +309,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection teacher_cert(string $label = null)
      * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
+     * @method Grid\Column|Collection data_status(string $label = null)
      * @method Grid\Column|Collection out_trade_no(string $label = null)
      * @method Grid\Column|Collection discount(string $label = null)
      * @method Grid\Column|Collection pay_type(string $label = null)
@@ -469,6 +471,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection teacher_cert
      * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
+     * @property Show\Field|Collection data_status
      * @property Show\Field|Collection out_trade_no
      * @property Show\Field|Collection discount
      * @property Show\Field|Collection pay_type
@@ -625,6 +628,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection teacher_cert(string $label = null)
      * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
+     * @method Show\Field|Collection data_status(string $label = null)
      * @method Show\Field|Collection out_trade_no(string $label = null)
      * @method Show\Field|Collection discount(string $label = null)
      * @method Show\Field|Collection pay_type(string $label = null)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
+use App\Models\Grade;
 use App\Models\Region;
 use App\Models\RotateImage;
 use App\Models\User;
@@ -313,5 +314,15 @@ class IndexController extends Controller
             }
         }
         return $tree;
+    }
+
+    /**
+     * 年级
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_grade()
+    {
+        $grade = Grade::all();
+        return $this->success('年级',$grade);
     }
 }
