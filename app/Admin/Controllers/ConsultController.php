@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Repositories\Consult;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Models\Administrator;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 
@@ -61,7 +62,7 @@ class ConsultController extends AdminController
             $show->field('type');
             $show->field('content');
             $show->field('adder_id');
-            $show->field('editer_id');
+            $show->field('editor_id');
             $show->field('consult_time');
             $show->field('organ_id');
             $show->field('created_at');
@@ -78,16 +79,15 @@ class ConsultController extends AdminController
     {
         return Form::make(new Consult(), function (Form $form) {
             $form->display('id');
-            $form->text('username');
-            $form->text('mobile');
-            $form->text('type');
-            $form->select('method')->options();
-            $form->text('content');
-            $form->text('adder_id');
-            $form->text('editer_id');
-            $form->text('consult_time');
-            $form->text('organ_id');
-        
+            $form->text('username')->required();
+            $form->text('mobile')->required();
+            $form->select('type')->options([0 => '热线咨询',1 => '在线咨询'])->required();
+            $form->select('method')->options([0 => '咨询',1 => '投诉', 2 => '建议'])->required();
+            $form->text('content')->required();
+            $form->select('adder_id','添加人')->options('/api/admin_users')->required();
+            $form->select('editor_id','修改人')->options('/api/admin_users');
+            $form->datetime('consult_time')->required();
+
             $form->display('created_at');
             $form->display('updated_at');
         });
