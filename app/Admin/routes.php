@@ -25,5 +25,6 @@ Route::group([
     $router->resource('/teacher_info','TeacherInfoController');
     $router->resource('/teacher_verify','TeacherVerifyController');
     $router->resource('/consults','ConsultController');
+    $router->resource('/courses','CourseController');
 
 });

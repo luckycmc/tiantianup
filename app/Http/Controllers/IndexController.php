@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
+use App\Models\Education;
 use App\Models\Grade;
 use App\Models\Region;
 use App\Models\RotateImage;
@@ -324,5 +325,15 @@ class IndexController extends Controller
     {
         $grade = Grade::all();
         return $this->success('年级',$grade);
+    }
+
+    /**
+     * 获取学历
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_education()
+    {
+        $education = Education::all();
+        return $this->success('学历',$education);
     }
 }

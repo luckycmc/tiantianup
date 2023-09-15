@@ -43,6 +43,7 @@ class ConsultController extends AdminController
             });
             $grid->disableDeleteButton();
             $grid->disableViewButton();
+            $grid->export();
         });
     }
 
