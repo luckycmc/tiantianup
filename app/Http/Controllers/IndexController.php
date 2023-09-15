@@ -9,6 +9,7 @@ use App\Models\Education;
 use App\Models\Grade;
 use App\Models\Region;
 use App\Models\RotateImage;
+use App\Models\Subject;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -335,5 +336,15 @@ class IndexController extends Controller
     {
         $education = Education::all();
         return $this->success('学历',$education);
+    }
+
+    /**
+     * 获取科目
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_subject()
+    {
+        $subject = Subject::all();
+        return $this->success('科目',$subject);
     }
 }
