@@ -50,7 +50,7 @@ class UserController extends Controller
             'city_id.required' => '城市不能为空',
             'district_id.required' => '区县不能为空',
         ];
-        if ($role) {
+        if ($role == 1) {
             $rules['grade'] = 'required';
             $messages['grade.required'] = '年级不能为空';
         }
