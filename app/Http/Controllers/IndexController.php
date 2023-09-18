@@ -291,7 +291,7 @@ class IndexController extends Controller
         $province_id = $data['province_id'] ?? 0;
         // 查询省份
         $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
-        $result = $city->groupBy('initial')->orderBy('initial') // 按照 initial 字段进行分组
+        $result = $city->groupBy('initial') // 按照 initial 字段进行分组
         ->map(function ($items) {
             $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
             $id = $items->pluck('id')->toArray(); // 提取 id，转换为普通数组
