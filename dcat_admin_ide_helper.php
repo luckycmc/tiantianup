@@ -59,14 +59,14 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection amount
      * @property Grid\Column|Collection course_id
      * @property Grid\Column|Collection teacher_id
+     * @property Grid\Column|Collection method
      * @property Grid\Column|Collection adder_id
-     * @property Grid\Column|Collection editer_id
+     * @property Grid\Column|Collection editor_id
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
      * @property Grid\Column|Collection role
      * @property Grid\Column|Collection grade
      * @property Grid\Column|Collection cover_image
-     * @property Grid\Column|Collection method
      * @property Grid\Column|Collection subject
      * @property Grid\Column|Collection count_min
      * @property Grid\Column|Collection count_max
@@ -216,14 +216,14 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection amount(string $label = null)
      * @method Grid\Column|Collection course_id(string $label = null)
      * @method Grid\Column|Collection teacher_id(string $label = null)
+     * @method Grid\Column|Collection method(string $label = null)
      * @method Grid\Column|Collection adder_id(string $label = null)
-     * @method Grid\Column|Collection editer_id(string $label = null)
+     * @method Grid\Column|Collection editor_id(string $label = null)
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
      * @method Grid\Column|Collection role(string $label = null)
      * @method Grid\Column|Collection grade(string $label = null)
      * @method Grid\Column|Collection cover_image(string $label = null)
-     * @method Grid\Column|Collection method(string $label = null)
      * @method Grid\Column|Collection subject(string $label = null)
      * @method Grid\Column|Collection count_min(string $label = null)
      * @method Grid\Column|Collection count_max(string $label = null)
@@ -378,14 +378,14 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection amount
      * @property Show\Field|Collection course_id
      * @property Show\Field|Collection teacher_id
+     * @property Show\Field|Collection method
      * @property Show\Field|Collection adder_id
-     * @property Show\Field|Collection editer_id
+     * @property Show\Field|Collection editor_id
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
      * @property Show\Field|Collection role
      * @property Show\Field|Collection grade
      * @property Show\Field|Collection cover_image
-     * @property Show\Field|Collection method
      * @property Show\Field|Collection subject
      * @property Show\Field|Collection count_min
      * @property Show\Field|Collection count_max
@@ -535,14 +535,14 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection amount(string $label = null)
      * @method Show\Field|Collection course_id(string $label = null)
      * @method Show\Field|Collection teacher_id(string $label = null)
+     * @method Show\Field|Collection method(string $label = null)
      * @method Show\Field|Collection adder_id(string $label = null)
-     * @method Show\Field|Collection editer_id(string $label = null)
+     * @method Show\Field|Collection editor_id(string $label = null)
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
      * @method Show\Field|Collection role(string $label = null)
      * @method Show\Field|Collection grade(string $label = null)
      * @method Show\Field|Collection cover_image(string $label = null)
-     * @method Show\Field|Collection method(string $label = null)
      * @method Show\Field|Collection subject(string $label = null)
      * @method Show\Field|Collection count_min(string $label = null)
      * @method Show\Field|Collection count_max(string $label = null)

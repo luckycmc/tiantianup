@@ -7,9 +7,11 @@ use App\Models\Collect;
 use App\Models\Course;
 use App\Models\Education;
 use App\Models\Grade;
+use App\Models\OrganType;
 use App\Models\Region;
 use App\Models\RotateImage;
 use App\Models\Subject;
+use App\Models\TrianingType;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -346,5 +348,25 @@ class IndexController extends Controller
     {
         $subject = Subject::all();
         return $this->success('科目',$subject);
+    }
+
+    /**
+     * 获取机构类型
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_organ_type()
+    {
+        $type = OrganType::all();
+        return $this->success('机构类型',$type);
+    }
+
+    /**
+     * 获取辅导类型
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_training_type()
+    {
+        $type = TrianingType::all();
+        return $this->success('辅导类型',$type);
     }
 }
