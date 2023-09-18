@@ -361,7 +361,7 @@ class IndexController extends Controller
     }
 
     /**
-     * 获取辅导类型
+     * 获取培训类型
      * @return \Illuminate\Http\JsonResponse
      */
     public function get_training_type()
