@@ -46,11 +46,20 @@ class IndexController extends Controller
      */
     public function get_location()
     {
-        $data = \request()->all();
-        $id = $data['id'] ?? 0;
-        $type = $data['type'] ?? 1;
-        $result = Region::where(['parent_id' => $id,'region_type' => $type])->orderBy('initial')->get();
-        return $this->success('获取定位',$result);
+        $data_lat_lnt = request()->all();
+        $user = Auth::user();
+        $longitude = $data_lat_lnt['longitude']; // 经度
+        $latitude = $data_lat_lnt['latitude']; // 纬度
+        $key = 'a7e60771418acdb802aab4d206c080c3'; // 替换为您自己的API密钥
+        $url = "https://restapi.amap.com/v3/geocode/regeo?key={$key}&location={$longitude},{$latitude}";
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+        if ($data['status'] == 1 ) {
+            $city = $data['regeocode']['addressComponent'];
+            return $this->success('成功',$city);
+        } else {
+            return $this->error('失败，请重新加载');
+        }
     }
 
     /**
