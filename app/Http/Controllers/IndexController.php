@@ -279,6 +279,7 @@ class IndexController extends Controller
      */
     public function get_city()
     {
+        $data = \request()->all();
         $province_id = $data['province_id'] ?? 0;
         $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
         $result = $city->sortBy('initial')->groupBy('initial');
