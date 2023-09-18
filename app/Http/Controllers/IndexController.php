@@ -50,7 +50,7 @@ class IndexController extends Controller
         $user = Auth::user();
         $longitude = $data_lat_lnt['longitude']; // 经度
         $latitude = $data_lat_lnt['latitude']; // 纬度
-        $key = 'a7e60771418acdb802aab4d206c080c3'; // 替换为您自己的API密钥
+        $key = '4a81139b372ea849981ff499f53c6344'; // 替换为您自己的API密钥
         $url = "https://restapi.amap.com/v3/geocode/regeo?key={$key}&location={$longitude},{$latitude}";
         $response = file_get_contents($url);
         $data = json_decode($response, true);
