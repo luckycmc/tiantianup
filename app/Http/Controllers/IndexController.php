@@ -367,6 +367,6 @@ class IndexController extends Controller
     public function get_training_type()
     {
         $type = TrianingType::all();
-        return $this->success('辅导类型',$type);
+        return $this->success('培训类型',$type);
     }
 }
