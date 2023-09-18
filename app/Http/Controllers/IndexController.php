@@ -254,6 +254,13 @@ class IndexController extends Controller
      */
     public function get_province()
     {
+        $province = Region::where('region_type',1)->get();
+        $result = $province->sortBy('initial')->groupBy('initial');
+        return $this->success('省份',$result);
+    }
+
+    public function get_loc_province()
+    {
         $province = Region::where('region_type',1)->select('id','initial','region_name')->get();
         $result = $province->groupBy('initial') // 按照 initial 字段进行分组
         ->map(function ($items) {
@@ -262,7 +269,7 @@ class IndexController extends Controller
             $letter = $items->first()['initial']; // 获取 initial
             return ['data' => $data, 'id' => $id, 'letter' => $letter];
         })->sortBy('letter')
-        ->values(); // 重新索引结果数组的键值
+            ->values(); // 重新索引结果数组的键值
         return $this->success('省份',$result);
     }
 
@@ -271,6 +278,14 @@ class IndexController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function get_city()
+    {
+        $province_id = $data['province_id'] ?? 0;
+        $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
+        $result = $city->sortBy('initial')->groupBy('initial');
+        return $this->success('城市',$result);
+    }
+
+    public function get_loc_city()
     {
         $data = \request()->all();
         $province_id = $data['province_id'] ?? 0;
@@ -292,6 +307,16 @@ class IndexController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function get_district()
+    {
+        $data = \request()->all();
+        $city_id = $data['city_id'] ?? 0;
+        // 查询省份
+        $district = Region::where(['region_type' => 3,'parent_id' => $city_id])->get();
+        $result = $district->sortBy('initial')->groupBy('initial');
+        return $this->success('区县',$result);
+    }
+
+    public function get_loc_district()
     {
         $data = \request()->all();
         $city_id = $data['city_id'] ?? 0;
