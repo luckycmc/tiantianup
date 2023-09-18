@@ -254,8 +254,15 @@ class IndexController extends Controller
      */
     public function get_province()
     {
-        $province = Region::where('region_type',1)->get();
-        $result = $province->sortBy('initial')->groupBy('initial');
+        $province = Region::where('region_type',1)->select('id','initial','region_name')->get();
+        $result = $province->groupBy('initial') // 按照 initial 字段进行分组
+        ->map(function ($items) {
+            $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
+            $id = $items->pluck('id')->toArray(); // 提取 id，转换为普通数组
+            $letter = $items->first()['initial']; // 获取 initial
+            return ['data' => $data, 'id' => $id, 'letter' => $letter];
+        })
+        ->values(); // 重新索引结果数组的键值
         return $this->success('省份',$result);
     }
 
@@ -269,7 +276,14 @@ class IndexController extends Controller
         $province_id = $data['province_id'] ?? 0;
         // 查询省份
         $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
-        $result = $city->sortBy('initial')->groupBy('initial');
+        $result = $city->groupBy('initial') // 按照 initial 字段进行分组
+        ->map(function ($items) {
+            $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
+            $id = $items->pluck('id')->toArray(); // 提取 id，转换为普通数组
+            $letter = $items->first()['initial']; // 获取 initial
+            return ['data' => $data, 'id' => $id, 'letter' => $letter];
+        })
+            ->values(); // 重新索引结果数组的键值
         return $this->success('城市',$result);
     }
 
@@ -283,7 +297,14 @@ class IndexController extends Controller
         $city_id = $data['city_id'] ?? 0;
         // 查询省份
         $district = Region::where(['region_type' => 3,'parent_id' => $city_id])->get();
-        $result = $district->sortBy('initial')->groupBy('initial');
+        $result = $district->groupBy('initial') // 按照 initial 字段进行分组
+        ->map(function ($items) {
+            $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
+            $id = $items->pluck('id')->toArray(); // 提取 id，转换为普通数组
+            $letter = $items->first()['initial']; // 获取 initial
+            return ['data' => $data, 'id' => $id, 'letter' => $letter];
+        })
+            ->values(); // 重新索引结果数组的键值
         return $this->success('城市',$result);
     }
 
