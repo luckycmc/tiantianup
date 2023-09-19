@@ -373,8 +373,8 @@ class UserController extends Controller
                 $where[] = ['type','=',$data['type']];
             }
             if (isset($data['created_at'])) {
-                $where[] = ['created_at','>=',$data['created_at'][0]];
-                $where[] = ['created_at','<=',$data['created_at'][1]];
+                $where[] = ['created_at','>=',$data['created_at'].' 00:00:00'];
+                $where[] = ['created_at','<=',$data['created_at'].' 23:59:59'];
             }
             $result = Bill::where('user_id',$user->id)->where($where)->paginate($page_size);
         } else {
