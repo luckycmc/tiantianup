@@ -181,6 +181,8 @@ class IndexController extends Controller
         $user = Auth::user();
         // 是否收藏
         $result->has_collect = $user->has_collect_course($course_id);
+        // 总费用
+        $result->total_price = ($result->base_count * $result->base_price) + ($result->class_number - $result->base_count) * $result->improve_price;
         return $this->success('课程详情',$result);
     }
 
