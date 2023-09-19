@@ -190,6 +190,11 @@ class IndexController extends Controller
         $result->total_price = ($result->base_count * $result->base_price) + ($result->class_number - $result->base_count) * $result->improve_price;
         // 是否报名
         $result->is_entry = $user->has_entry_course($course_id);
+        if ($result->is_entry) {
+            $entry_info = UserCourse::where(['user_id' => $user->id, 'course_id' => $course_id])->first();
+            $entry_time = Carbon::parse($entry_info->created_at)->format('Y-m-d H:i:s');
+            $result->entry_time = $entry_time;
+        }
         return $this->success('课程详情',$result);
     }
 
