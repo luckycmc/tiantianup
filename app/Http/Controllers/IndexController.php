@@ -247,6 +247,8 @@ class IndexController extends Controller
         $user->entry = $user->user_courses()->count();
         // 未读消息
         $user->message = $user->messages()->where('status',0)->count();
+        // 联系人数量
+        $user->contact_count = $user->contacts->count();
         return $this->success('个人主页',$user);
     }
 

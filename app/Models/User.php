@@ -184,4 +184,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Region::class,'id','district_id');
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(UserContact::class,'user_id');
+    }
 }
