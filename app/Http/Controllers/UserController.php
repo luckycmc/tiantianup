@@ -344,7 +344,7 @@ class UserController extends Controller
         } else {
             $result = Collect::with(['course','course_organ'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
             foreach ($result as $v) {
-                $v->distance = calculate_distance($data['latitude'],$data['longitude'],$v->course_organ->latitude,$v->course_organ->longitude);
+                $v->distance = calculate_distance($latitude,$longitude,$v->course_organ->latitude,$v->course_organ->longitude);
             }
         }
 
