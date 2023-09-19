@@ -13,6 +13,7 @@ use App\Models\RotateImage;
 use App\Models\Subject;
 use App\Models\TrianingType;
 use App\Models\User;
+use App\Models\UserCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -152,8 +153,12 @@ class IndexController extends Controller
             $where[] = ['method','=',$data['method']];
         }
         $result = Course::with('organization')->where($where)->paginate($page_size);
+        // 当前用户
+        $user = Auth::user();
         foreach ($result as $v) {
             $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            // 是否已报名
+            $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
         }
         return $this->success('推荐课程列表',$result);
     }
