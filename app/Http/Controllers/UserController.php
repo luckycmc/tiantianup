@@ -152,6 +152,27 @@ class UserController extends Controller
     }
 
     /**
+     * 删除联系人
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_contact()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $contact = UserContact::find($id);
+        if (!$contact) {
+            return $this->error('联系人不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        if ($user->id !== $contact->user_id) {
+            return $this->error('这不是您的联系人，您无权删除');
+        }
+        $contact->delete();
+        return $this->success('删除成功');
+    }
+
+    /**
      * 家长添加学生
      * @return \Illuminate\Http\JsonResponse
      */
