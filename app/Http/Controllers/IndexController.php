@@ -188,6 +188,8 @@ class IndexController extends Controller
         $result->has_collect = $user->has_collect_course($course_id);
         // 总费用
         $result->total_price = ($result->base_count * $result->base_price) + ($result->class_number - $result->base_count) * $result->improve_price;
+        // 是否报名
+        $result->is_entry = $user->has_entry_course($course_id);
         return $this->success('课程详情',$result);
     }
 

@@ -104,6 +104,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->collects()->where('course_id', $course_id)->where('type', 2)->exists();
     }
 
+    // 是否报名课程
+    public function has_entry_course($course_id)
+    {
+        return $this->user_courses()->where('course_id', $course_id)->exists();
+    }
+
     // 是否收藏教师
     public function has_collect_teacher($teacher_id)
     {
