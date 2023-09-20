@@ -102,11 +102,5 @@ function create_qr_code ($user_id) {
     $file = "uploads/" . $user_id . ".jpg";
     file_put_contents($file, $result);
 
-    $upload_path = "qrcode/".$user_id.",jpg";
-    $disk = Storage::disk('cosv5');
-    dd(env('APP_URL').$file);
-    $path = $disk->put($upload_path, env('APP_URL').$file);
-    $url = $disk->url($path);
-    $url = explode('?',$url)[0];
-    // return $url;
+    return $file;
 }
