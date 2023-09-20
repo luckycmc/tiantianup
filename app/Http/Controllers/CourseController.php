@@ -60,6 +60,9 @@ class CourseController extends Controller
             $where[] = ['courses.price','>=',$data['filter_price'][0]];
             $where[] = ['courses.price','<=',$data['filter_price'][1]];
         }
+        if (isset($data['grade'])) {
+            $where[] = ['courses.grade','=',$data['grade']];
+        }
         if (isset($data['filter_distance'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance'][0]];
