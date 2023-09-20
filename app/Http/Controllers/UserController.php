@@ -426,6 +426,9 @@ class UserController extends Controller
             'status' => 0,
             'created_at' => Carbon::now()
         ];
+        if ($data['type'] == 3) {
+            $withdraw_data['bank'] = $data['bank'] ?? '';
+        }
         // 账单记录
         $bill_data = [
             'user_id' => $user->id,
