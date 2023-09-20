@@ -41,7 +41,7 @@ class CourseController extends Controller
             ) AS distance";
             $select_field = ['courses.*','organizations.name as organ_name',DB::raw($distance_expr)];
         }
-        $order = $data['order'] ? 'asc' : 'desc';
+        $order = $data['order'] ?? 'desc';
         // 筛选
         $where = [];
         if (isset($data['city_id'])) {

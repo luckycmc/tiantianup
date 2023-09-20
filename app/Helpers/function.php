@@ -97,12 +97,15 @@ function create_qr_code ($user_id) {
     ];
     // $request_data = json_encode($request_data,320);
     $url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token;
-    $result = Http::post($url, $request_data);
+    $result = Http::post($url, $request_data)->body();
     // dd($result->body());
+    $file = "uploads/" . $user_id . ".jpg";
+    file_put_contents($file, $result);
 
     $upload_path = "qrcode/".$user_id.",jpg";
     $disk = Storage::disk('cosv5');
-    $path = $disk->put($upload_path, $result);
+    dd(env('APP_URL').$file);
+    $path = $disk->put($upload_path, env('APP_URL').$file);
     $url = $disk->url($path);
     $url = explode('?',$url)[0];
     // return $url;
