@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 
@@ -709,8 +710,10 @@ class UserController extends Controller
         $latitude = $data['latitude'] ?? 0;
         $distance_min = $data['distance_min'] ?? 0;
         $distance_max = $data['distance_max'] ?? 0;
+        Log::info($longitude,$latitude,$distance_min,$distance_max);
         // 当前用户
         $user = Auth::user();
+        // $user = User::find(2);
         $where = [];
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
