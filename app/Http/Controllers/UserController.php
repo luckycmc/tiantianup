@@ -705,6 +705,8 @@ class UserController extends Controller
         $date_sort = $data['date_sort'] ?? 'desc';
         $entry_start_date = $data['entry_start_date'] ?? Carbon::createFromTimestamp(0)->format('Y-m-d');
         $entry_end_date = $data['entry_end_date'] ?? Carbon::now()->format('Y-m-d');
+        $longitude = $data['longtitude'] ?? 0;
+        $latitude = $data['latitutde'] ?? 0;
         // 当前用户
         $user = Auth::user();
         $where = [];
@@ -727,6 +729,7 @@ class UserController extends Controller
             $v->is_expire = Carbon::now() > $v->end_time ? 1 : 0;
             $v->entry_time = Carbon::parse($v->pivot->created_at)->format('Y-m-d H:i:s');
             $v->organization_name = $v->organization->name;
+            $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
         }
         return $this->success('我的报名',$course);
     }
