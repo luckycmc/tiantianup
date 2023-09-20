@@ -710,13 +710,8 @@ class UserController extends Controller
         $latitude = $data['latitude'] ?? 0;
         $distance_min = $data['distance_min'] ?? 0;
         $distance_max = $data['distance_max'] ?? 0;
-        Log::info('longitude: '.$longitude);
-        Log::info('latitude: '.$latitude);
-        Log::info('distance_min: '.$distance_min);
-        Log::info('distance_max: '.$distance_max);
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(2);
         $where = [];
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
