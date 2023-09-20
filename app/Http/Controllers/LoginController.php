@@ -79,6 +79,10 @@ class LoginController extends Controller
             $new_user->save();
             $is_user = $new_user;
         }
+        if (!$is_user->invite_qrcode) {
+            $qrcode = create_qr_code($is_user->id);
+            dd($qrcode);
+        }
         // 用户登录
         $token = JWTAuth::fromUser($is_user);
         //设置token

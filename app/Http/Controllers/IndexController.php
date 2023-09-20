@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
@@ -440,5 +441,15 @@ class IndexController extends Controller
     {
         $type = TrianingType::all();
         return $this->success('培训类型',$type);
+    }
+
+    /**
+     * 获取基本信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_base_information()
+    {
+        $result = BaseInformation::first();
+        return $this->success('基本信息',$result);
     }
 }

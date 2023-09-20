@@ -18,9 +18,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserController extends Controller
 {
@@ -744,5 +746,27 @@ class UserController extends Controller
             $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
         }
         return $this->success('我的报名',$course);
+    }
+
+    /**
+     * 邀请码
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function invite_code()
+    {
+        // 当前用户
+        $user = Auth::user();
+        $path = 'pages/login/index?id='.$user->id;
+        $access_token = get_access_token();
+        // dd($access_token);
+        $url = 'https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?access_token='.$access_token;
+        $result = Http::post($url,[
+            'path' => $path,
+            'width' => 300
+        ])->body();
+        /*dd($result);
+        $info = json_decode($result,true);
+        dd($info);*/
+        return $this->success('邀请码',$result);
     }
 }

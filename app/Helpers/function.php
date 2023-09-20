@@ -3,6 +3,8 @@
 use App\Models\Course;
 use App\Models\Region;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * 用户编号
@@ -75,4 +77,33 @@ function calculate_distance($lat1, $lon1, $lat2, $lon2) {
     $distance = round($radius * $c,2);
 
     return $distance;
+}
+
+function create_qr_code ($user_id) {
+    $app_id = env('WECHAT_MINI_PROGRAM_APPID');
+    $secret = env('WECHAT_MINI_PROGRAM_SECRET');
+    $url = 'https://api.weixin.qq.com/cgi-bin/token';
+    $token = Http::get($url,[
+        'grant_type' => 'client_credential',
+        'appid' => $app_id,
+        'secret' => $secret
+    ])->object()->access_token;
+    $path = 'pages/login/index';
+    $request_data = [
+        // 'page'  => $path,
+        "check_path" => true,
+        'env_version'=>'develop',  //release 正式版
+        'scene'=> $user_id,
+    ];
+    // $request_data = json_encode($request_data,320);
+    $url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token;
+    $result = Http::post($url, $request_data);
+    // dd($result->body());
+
+    $upload_path = "qrcode/".$user_id.",jpg";
+    $disk = Storage::disk('cosv5');
+    $path = $disk->put($upload_path, $result);
+    $url = $disk->url($path);
+    $url = explode('?',$url)[0];
+    // return $url;
 }
