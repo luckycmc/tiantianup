@@ -397,13 +397,11 @@ class UserController extends Controller
         $data = \request()->all();
         $rules = [
             'amount' => 'required|integer',
-            'username' => 'required',
             'account' => 'required'
         ];
         $messages = [
             'amount.required' => '金额不能为空',
             'amount.integer' => '金额只能为正整数',
-            'username.required' => '用户名不能为空',
             'account.required' => '账号不能为空'
         ];
         $validator = Validator::make($data,$rules,$messages);
