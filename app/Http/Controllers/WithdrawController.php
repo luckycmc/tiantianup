@@ -27,7 +27,7 @@ class WithdrawController extends Controller
         // 当前用户
         $user = Auth::user();
         // 查询记录
-        $result = Withdraw::where('user_id',$user->id)->where($where)->paginate($page_size);
+        $result = Withdraw::where('user_id',$user->id)->where($where)->orderByDesc('created_at')->paginate($page_size);
         return $this->success('提现列表',$result);
     }
 }
