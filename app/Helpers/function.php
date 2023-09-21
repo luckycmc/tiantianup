@@ -104,3 +104,15 @@ function create_qr_code ($user_id) {
 
     return $file;
 }
+
+function get_location ($longitude, $latitude) {
+    $key = '4a81139b372ea849981ff499f53c6344'; // 替换为您自己的API密钥
+    $url = "https://restapi.amap.com/v3/geocode/regeo?key={$key}&location={$longitude},{$latitude}";
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+    if ($data['status'] == 1 ) {
+         return $city = $data['regeocode']['addressComponent'];
+    } else {
+        return false;
+    }
+}

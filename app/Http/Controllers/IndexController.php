@@ -73,6 +73,14 @@ class IndexController extends Controller
         $data = \request()->all();
         $district_id = $data['district_id'] ?? 0;
         $page_size = $data['page_size'] ?? 10;
+        if (isset($data['longitude']) && isset($data['latitude'])) {
+            // 根据经纬度获取省市区
+            $location = get_location($data['longitude'],$data['latitude']);
+            if (!$location) {
+                return $this->error('定位出错');
+            }
+            $district_id = Region::where('code',$location['adcode'])->value('id');
+        }
         // 查询当前位置的所有推荐教师
         $teachers = User::with(['teacher_experience','teacher_info'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3])->paginate($page_size);
 
