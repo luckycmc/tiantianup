@@ -86,7 +86,7 @@ class OrganizationController extends Controller
         if (!$result) {
             return $this->error('生成订单失败');
         }
-        return $this->success('生成订单成功',compact('out_trade_no'));
+        return $this->success('生成订单成功',compact('out_trade_no','service_price'));
     }
 
     /**

@@ -54,4 +54,9 @@ class ParentController extends Controller
         }
         return $this->success('发布成功');
     }
+
+    public function course_list()
+    {
+        
+    }
 }
