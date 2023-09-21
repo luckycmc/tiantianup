@@ -72,6 +72,9 @@ class ParentController extends Controller
         $user = Auth::user();
         // 查询数据
         $result = ParentCourse::where(['user_id' => $user->id,'status' => $status])->orderByDesc('created_at')->paginate($page_size);
+        foreach ($result as $v) {
+            $v->class_time = json_decode($v->class_time,true);
+        }
         return $this->success('我的发布',$result);
     }
 }

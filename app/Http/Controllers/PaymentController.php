@@ -25,6 +25,8 @@ class PaymentController extends Controller
         }
         // 当前用户
         $user = Auth::user();
+        $order->pay_type = $pay_type;
+        $order->save();
         // 微信支付
         if ($pay_type == 1) {
             // 调起支付
@@ -55,7 +57,7 @@ class PaymentController extends Controller
                 'out_trade_no' => $out_trade_no,
                 'description' => '服务费',
                 'amount' => [
-                    'total' => $amount*100,
+                    'total' => $amount * 100,
                     'currency' => 'CNY',
                 ],
                 'payer' => [
