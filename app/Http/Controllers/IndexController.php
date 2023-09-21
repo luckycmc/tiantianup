@@ -135,6 +135,8 @@ class IndexController extends Controller
         $result->has_collect = $user->has_collect_teacher($id);
         // 教师风采
         $result->teacher_demeanor = $result->teacher_demeanor($id);
+        // 教师证书
+        $result->teacher_cert = json_decode($result->teacher_info->teacher_cert,true);
         return $this->success('教师详情',$result);
     }
 

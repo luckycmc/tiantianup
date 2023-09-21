@@ -20,4 +20,9 @@ class ParentController extends Controller
         $student_info = ParentStudent::where('user_id',$user->id)->get();
         return $this->success('我的学员',$student_info);
     }
+
+    public function create_course()
+    {
+        $data = \request()->all();
+    }
 }
