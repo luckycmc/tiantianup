@@ -769,4 +769,26 @@ class UserController extends Controller
         dd($info);*/
         return $this->success('邀请码',$result);
     }
+
+    /**
+     * 删除用户
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_student()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $info = ParentStudent::find($id);
+        if (!$info) {
+            return $this->error('学生不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        // 查询是否为当前家长的学生
+        if ($user->id !== $info->user_id) {
+            return $this->error('数据错误');
+        }
+        $info->delete();
+        return $this->success('删除成功');
+    }
 }
