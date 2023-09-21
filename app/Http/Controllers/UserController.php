@@ -13,6 +13,7 @@ use App\Models\TeacherInfo;
 use App\Models\TeacherTag;
 use App\Models\User;
 use App\Models\UserContact;
+use App\Models\UserTeacherOrder;
 use App\Models\Withdraw;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -790,5 +791,35 @@ class UserController extends Controller
         }
         $info->delete();
         return $this->success('删除成功');
+    }
+
+    /**
+     * 我的教师
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function my_teachers()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        // 当前用户
+        $user = Auth::user();
+        $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where('user_id',$user->id)->paginate($page_size);
+        foreach ($teachers as $teacher) {
+            $teaching_year = 0;
+            $subject = [];
+            foreach ($teacher->teacher_experience as $experience) {
+                $start_time = Carbon::parse($experience->start_time);
+                $end_time = Carbon::parse($experience->end_time);
+                $teaching_years = $start_time->diffInYears($end_time);
+                $teaching_year += $teaching_years;
+                // 课程
+                $subject[] = explode(',',$experience->subject);
+            }
+            $teacher->teaching_year = $teaching_year;
+            $teacher->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
+        }
+        $teachers->teaching_year = $teaching_year;
+        $teachers->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
+        return $this->success('我的教师',$teachers);
     }
 }
