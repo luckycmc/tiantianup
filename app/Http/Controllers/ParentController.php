@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ParentStudent;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ParentController extends Controller
 {
@@ -21,8 +24,33 @@ class ParentController extends Controller
         return $this->success('我的学员',$student_info);
     }
 
+    /**
+     * 发布需求
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create_course()
     {
         $data = \request()->all();
+        $rules = [];
+        $messages = [];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $user = Auth::user();
+        $data['user_id'] = $user->id;
+        $data['created_at'] = Carbon::now();
+        // 处理时间
+        if ($data['type'] == 2) {
+            $data['class_time'] = json_encode($data['class_time']);
+        }
+        // 保存数据
+        $result = DB::table('parent_courses')->insert($data);
+        if (!$result) {
+            return $this->error('发布失败');
+        }
+        return $this->success('发布成功');
     }
 }
