@@ -803,10 +803,10 @@ class UserController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
-        $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where('user_id',$user->id)->paginate($page_size);
+        $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where(['user_id' => $user->id,'status' => 1])->paginate($page_size);
+        $teaching_year = 0;
+        $subject = [];
         foreach ($teachers as $teacher) {
-            $teaching_year = 0;
-            $subject = [];
             foreach ($teacher->teacher_experience as $experience) {
                 $start_time = Carbon::parse($experience->start_time);
                 $end_time = Carbon::parse($experience->end_time);
