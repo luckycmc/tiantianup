@@ -89,7 +89,9 @@ class ParentController extends Controller
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
-        $course_info = ParentCourse::with('reviewer')->find($course_id);
+        $course_info = ParentCourse::with(['reviewer' => function ($query) {
+            return $query->select('id','name');
+        }])->find($course_id);
         if (!$course_info) {
             return $this->error('课程不存在');
         }
