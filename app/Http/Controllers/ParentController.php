@@ -42,8 +42,9 @@ class ParentController extends Controller
         $user = Auth::user();
         $data['user_id'] = $user->id;
         $data['created_at'] = Carbon::now();
+        $data['status'] = 0;
         // 处理时间
-        if ($data['type'] == 2) {
+        if ($data['class_type'] == 2) {
             $data['class_time'] = json_encode($data['class_time']);
         }
         // 保存数据
