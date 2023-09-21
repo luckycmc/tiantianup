@@ -11,7 +11,7 @@ use Yansongda\Pay\Pay;
 
 class CommonController extends Controller
 {
-    public function wechat_noify()
+    public function wechat_notify()
     {
         $config = config('pay');
         $pay = Pay::wechat($config);

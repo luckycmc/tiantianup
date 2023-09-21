@@ -136,7 +136,7 @@ class IndexController extends Controller
         // 教师风采
         $result->teacher_demeanor = $result->teacher_demeanor($id);
         // 教师证书
-        $result->teacher_cert = json_decode($result->teacher_info->teacher_cert,true);
+        $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         return $this->success('教师详情',$result);
     }
 

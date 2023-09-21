@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ParentCourse;
 use App\Models\ParentStudent;
+use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,15 +50,28 @@ class ParentController extends Controller
             $data['class_time'] = json_encode($data['class_time']);
         }
         // 保存数据
-        $result = DB::table('parent_courses')->insert($data);
-        if (!$result) {
+        $id = DB::table('parent_courses')->insertGetId($data);
+        if (!$id) {
             return $this->error('发布失败');
         }
+        $number = create_course_number($id);
+        DB::table('parent_courses')->where('id',$id)->update(['number' => $number]);
         return $this->success('发布成功');
     }
 
+    /**
+     * 我的发布
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function course_list()
     {
-        
+        $data = \request()->all();
+        $status = $data['status'] ?? 0;
+        $page_size = $data['page_size'] ?? 10;
+        // 当前用户
+        $user = Auth::user();
+        // 查询数据
+        $result = ParentCourse::where(['user_id' => $user->id,'status' => $status])->orderByDesc('created_at')->paginate($page_size);
+        return $this->success('我的发布',$result);
     }
 }

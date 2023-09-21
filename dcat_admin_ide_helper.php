@@ -56,6 +56,9 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection logo
      * @property Grid\Column|Collection poster
      * @property Grid\Column|Collection service_price
+     * @property Grid\Column|Collection invite_rule
+     * @property Grid\Column|Collection user_agreement
+     * @property Grid\Column|Collection privacy_policy
      * @property Grid\Column|Collection amount
      * @property Grid\Column|Collection course_id
      * @property Grid\Column|Collection teacher_id
@@ -117,12 +120,12 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection door_image
      * @property Grid\Column|Collection business_license
      * @property Grid\Column|Collection reviewer_id
-     * @property Grid\Column|Collection student_id
+     * @property Grid\Column|Collection gender
+     * @property Grid\Column|Collection student
      * @property Grid\Column|Collection class_time
      * @property Grid\Column|Collection class_price_min
      * @property Grid\Column|Collection class_price_max
      * @property Grid\Column|Collection notes
-     * @property Grid\Column|Collection gender
      * @property Grid\Column|Collection school
      * @property Grid\Column|Collection birthday
      * @property Grid\Column|Collection token
@@ -166,6 +169,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection has_teacher_cert
      * @property Grid\Column|Collection is_recommend
      * @property Grid\Column|Collection open_id
+     * @property Grid\Column|Collection invite_qrcode
+     * @property Grid\Column|Collection bank
      * @property Grid\Column|Collection account
      *
      * @method Grid\Column|Collection id(string $label = null)
@@ -213,6 +218,9 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection logo(string $label = null)
      * @method Grid\Column|Collection poster(string $label = null)
      * @method Grid\Column|Collection service_price(string $label = null)
+     * @method Grid\Column|Collection invite_rule(string $label = null)
+     * @method Grid\Column|Collection user_agreement(string $label = null)
+     * @method Grid\Column|Collection privacy_policy(string $label = null)
      * @method Grid\Column|Collection amount(string $label = null)
      * @method Grid\Column|Collection course_id(string $label = null)
      * @method Grid\Column|Collection teacher_id(string $label = null)
@@ -274,12 +282,12 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection door_image(string $label = null)
      * @method Grid\Column|Collection business_license(string $label = null)
      * @method Grid\Column|Collection reviewer_id(string $label = null)
-     * @method Grid\Column|Collection student_id(string $label = null)
+     * @method Grid\Column|Collection gender(string $label = null)
+     * @method Grid\Column|Collection student(string $label = null)
      * @method Grid\Column|Collection class_time(string $label = null)
      * @method Grid\Column|Collection class_price_min(string $label = null)
      * @method Grid\Column|Collection class_price_max(string $label = null)
      * @method Grid\Column|Collection notes(string $label = null)
-     * @method Grid\Column|Collection gender(string $label = null)
      * @method Grid\Column|Collection school(string $label = null)
      * @method Grid\Column|Collection birthday(string $label = null)
      * @method Grid\Column|Collection token(string $label = null)
@@ -323,6 +331,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection has_teacher_cert(string $label = null)
      * @method Grid\Column|Collection is_recommend(string $label = null)
      * @method Grid\Column|Collection open_id(string $label = null)
+     * @method Grid\Column|Collection invite_qrcode(string $label = null)
+     * @method Grid\Column|Collection bank(string $label = null)
      * @method Grid\Column|Collection account(string $label = null)
      */
     class Grid {}
@@ -375,6 +385,9 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection logo
      * @property Show\Field|Collection poster
      * @property Show\Field|Collection service_price
+     * @property Show\Field|Collection invite_rule
+     * @property Show\Field|Collection user_agreement
+     * @property Show\Field|Collection privacy_policy
      * @property Show\Field|Collection amount
      * @property Show\Field|Collection course_id
      * @property Show\Field|Collection teacher_id
@@ -436,12 +449,12 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection door_image
      * @property Show\Field|Collection business_license
      * @property Show\Field|Collection reviewer_id
-     * @property Show\Field|Collection student_id
+     * @property Show\Field|Collection gender
+     * @property Show\Field|Collection student
      * @property Show\Field|Collection class_time
      * @property Show\Field|Collection class_price_min
      * @property Show\Field|Collection class_price_max
      * @property Show\Field|Collection notes
-     * @property Show\Field|Collection gender
      * @property Show\Field|Collection school
      * @property Show\Field|Collection birthday
      * @property Show\Field|Collection token
@@ -485,6 +498,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection has_teacher_cert
      * @property Show\Field|Collection is_recommend
      * @property Show\Field|Collection open_id
+     * @property Show\Field|Collection invite_qrcode
+     * @property Show\Field|Collection bank
      * @property Show\Field|Collection account
      *
      * @method Show\Field|Collection id(string $label = null)
@@ -532,6 +547,9 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection logo(string $label = null)
      * @method Show\Field|Collection poster(string $label = null)
      * @method Show\Field|Collection service_price(string $label = null)
+     * @method Show\Field|Collection invite_rule(string $label = null)
+     * @method Show\Field|Collection user_agreement(string $label = null)
+     * @method Show\Field|Collection privacy_policy(string $label = null)
      * @method Show\Field|Collection amount(string $label = null)
      * @method Show\Field|Collection course_id(string $label = null)
      * @method Show\Field|Collection teacher_id(string $label = null)
@@ -593,12 +611,12 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection door_image(string $label = null)
      * @method Show\Field|Collection business_license(string $label = null)
      * @method Show\Field|Collection reviewer_id(string $label = null)
-     * @method Show\Field|Collection student_id(string $label = null)
+     * @method Show\Field|Collection gender(string $label = null)
+     * @method Show\Field|Collection student(string $label = null)
      * @method Show\Field|Collection class_time(string $label = null)
      * @method Show\Field|Collection class_price_min(string $label = null)
      * @method Show\Field|Collection class_price_max(string $label = null)
      * @method Show\Field|Collection notes(string $label = null)
-     * @method Show\Field|Collection gender(string $label = null)
      * @method Show\Field|Collection school(string $label = null)
      * @method Show\Field|Collection birthday(string $label = null)
      * @method Show\Field|Collection token(string $label = null)
@@ -642,6 +660,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection has_teacher_cert(string $label = null)
      * @method Show\Field|Collection is_recommend(string $label = null)
      * @method Show\Field|Collection open_id(string $label = null)
+     * @method Show\Field|Collection invite_qrcode(string $label = null)
+     * @method Show\Field|Collection bank(string $label = null)
      * @method Show\Field|Collection account(string $label = null)
      */
     class Show {}
