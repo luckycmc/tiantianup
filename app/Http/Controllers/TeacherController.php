@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,15 @@ class TeacherController extends Controller
     public function list()
     {
         $data = \request()->all();
+        $district_id = $data['district_id'] ?? 0;
+        if (isset($data['longitude']) && isset($data['latitude'])) {
+            // 根据经纬度获取省市区
+            $location = get_location($data['longitude'],$data['latitude']);
+            if (!$location) {
+                return $this->error('定位出错');
+            }
+            $district_id = Region::where('code',$location['adcode'])->value('id');
+        }
         // dd($data);
         $page_size = $data['page_size'] ?? 10;
         // 排序
@@ -49,6 +59,7 @@ class TeacherController extends Controller
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
+            ->where(['district_id' => $district_id])
             ->orderBy($sort_field,$order)
             ->select('users.*','teacher_info.highest_education','teacher_info.graduate_school','teacher_info.teaching_year','teacher_career.subject')
             ->paginate($page_size);

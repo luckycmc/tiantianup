@@ -89,13 +89,13 @@ class ParentController extends Controller
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
-        $course_info = Course::find($course_id);
+        $course_info = ParentCourse::with('reviewer')->find($course_id);
         if (!$course_info) {
             return $this->error('课程不存在');
         }
         if ($course_info->class_type == 2) {
             $course_info->class_time = json_decode($course_info->class_time,true);
         }
-        return $this->success('课程详情');
+        return $this->success('课程详情',$course_info);
     }
 }
