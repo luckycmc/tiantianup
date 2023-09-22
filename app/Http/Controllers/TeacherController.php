@@ -49,7 +49,7 @@ class TeacherController extends Controller
             $where[] = ['users.gender','=',$data['filter_gender']];
         }
         if (isset($data['filter_education'])) {
-            $where[] = ['teacher_info.education','=',$data['filter_education']];
+            $where[] = ['teacher_info.highest_education','=',$data['filter_education']];
         }
         if (isset($data['filter_teaching_year_min']) && isset($data['filter_teaching_year_max'])) {
             $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year_min']];
