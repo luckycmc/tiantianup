@@ -50,6 +50,7 @@ class ParentController extends Controller
             'subject.required' => '科目不能为空'
         ];
         $validator = Validator::make($data,$rules,$messages);
+        $id = $data['id'] ?? 0;
         if ($validator->fails()) {
             $errors = $validator->errors();
             return $this->error(implode(',',$errors->all()));
@@ -64,12 +65,18 @@ class ParentController extends Controller
             $data['class_time'] = json_encode($data['class_time']);
         }
         // 保存数据
-        $id = DB::table('parent_courses')->insertGetId($data);
-        if (!$id) {
+        $result = ParentCourse::updateOrCreate(['id' => $id],$data);
+        // $id = DB::table('parent_courses')->insertGetId($data);
+        if (!$result) {
             return $this->error('发布失败');
         }
-        $number = create_course_number($id);
-        DB::table('parent_courses')->where('id',$id)->update(['number' => $number]);
+        if (!$result->number) {
+            $number = create_course_number($result->id);
+            $result->number = $number;
+            $result->save();
+        }
+        /*$number = create_course_number($id);
+        DB::table('parent_courses')->where('id',$id)->update(['number' => $number]);*/
         return $this->success('发布成功');
     }
 

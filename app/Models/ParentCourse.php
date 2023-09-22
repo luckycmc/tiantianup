@@ -11,6 +11,7 @@ class ParentCourse extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'parent_courses';
+    protected $guarded = [];
 
     // 审核人
     public function reviewer()
