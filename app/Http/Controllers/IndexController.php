@@ -12,6 +12,8 @@ use App\Models\OrganType;
 use App\Models\Region;
 use App\Models\RotateImage;
 use App\Models\Subject;
+use App\Models\TeachingMethod;
+use App\Models\TeachingType;
 use App\Models\TrianingType;
 use App\Models\User;
 use App\Models\UserCourse;
@@ -461,5 +463,25 @@ class IndexController extends Controller
     {
         $result = BaseInformation::first();
         return $this->success('基本信息',$result);
+    }
+
+    /**
+     * 授课方式
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_teaching_method()
+    {
+        $methods = TeachingMethod::all();
+        return $this->success('授课方式',$methods);
+    }
+
+    /**
+     * 辅导类型
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_teaching_type()
+    {
+        $types = TeachingType::all();
+        return $this->success('辅导类型',$types);
     }
 }
