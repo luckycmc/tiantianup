@@ -44,8 +44,8 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         $where = [];
-        if (isset($data['city_id'])) {
-            $where[] = ['courses.city_id','=',$data['city_id']];
+        if (isset($data['district_id'])) {
+            $where[] = ['courses.district_id','=',$data['district_id']];
         }
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
@@ -56,9 +56,9 @@ class CourseController extends Controller
         if (isset($data['filter_subject'])) {
             $where[] = ['courses.subject','=',$data['filter_subject']];
         }
-        if (isset($data['filter_price'])) {
-            $where[] = ['courses.price','>=',$data['filter_price'][0]];
-            $where[] = ['courses.price','<=',$data['filter_price'][1]];
+        if (isset($data['filter_price_min']) && isset($data['filter_price_max'])) {
+            $where[] = ['courses.price','>=',$data['filter_price_min']];
+            $where[] = ['courses.price','<=',$data['filter_price_max']];
         }
         if (isset($data['grade'])) {
             $where[] = ['courses.grade','=',$data['grade']];
