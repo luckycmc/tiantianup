@@ -119,4 +119,19 @@ class ParentController extends Controller
         $course_info->delivery_count = DeliverLog::where(['course_id' => $course_id])->count();
         return $this->success('课程详情',$course_info);
     }
+
+    /**
+     * 选中教师
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function check_teacher()
+    {
+        $data = \request()->all();
+        $deliver_arr = $data['id'] ?? [];
+        $result = DeliverLog::whereIn('id',$deliver_arr)->update(['status' => 1]);
+        if (!$result) {
+            return $this->error('操作失败');
+        }
+        return $this->success('操作成功');
+    }
 }
