@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\DeliverLog;
 use App\Models\ParentCourse;
 use App\Models\ParentStudent;
 use App\Models\UserTeacherOrder;
@@ -107,15 +108,15 @@ class ParentController extends Controller
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
-        $course_info = ParentCourse::with(['reviewer' => function ($query) {
-            return $query->select('id','name');
-        }])->find($course_id);
+        $course_info = Course::find($course_id);
         if (!$course_info) {
             return $this->error('课程不存在');
         }
         if ($course_info->class_type == 2) {
             $course_info->class_time = json_decode($course_info->class_time,true);
         }
+        // 已投递教师人数
+        $course_info->delivery_count = DeliverLog::where(['course_id' => $course_id])->count();
         return $this->success('课程详情',$course_info);
     }
 }
