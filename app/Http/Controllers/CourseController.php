@@ -57,8 +57,8 @@ class CourseController extends Controller
             $where[] = ['courses.subject','=',$data['filter_subject']];
         }
         if (isset($data['filter_price_min']) && isset($data['filter_price_max'])) {
-            $where[] = ['courses.price','>=',$data['filter_price_min']];
-            $where[] = ['courses.price','<=',$data['filter_price_max']];
+            $where[] = ['courses.class_price','>=',$data['filter_price_min']];
+            $where[] = ['courses.class_price','<=',$data['filter_price_max']];
         }
         if (isset($data['grade'])) {
             $where[] = ['courses.grade','=',$data['grade']];
