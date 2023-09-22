@@ -45,12 +45,15 @@ class TeacherController extends Controller
         if (isset($data['filter_subject'])) {
             $where[] = ['teacher_career.object','like','%'.$data['filter_subject'].'%'];
         }
-        if (isset($data['gender'])) {
-            $where[] = ['users.gender','=',$data['gender']];
+        if (isset($data['filter_gender'])) {
+            $where[] = ['users.gender','=',$data['filter_gender']];
         }
-        if (isset($data['fillter_teaching_year'])) {
-            $where[] = ['teacher_info.teaching_year','>',$data['fillter_teaching_year'][0]];
-            $where[] = ['teacher_info.teaching_year','<',$data['fillter_teaching_year'][1]];
+        if (isset($data['filter_education'])) {
+            $where[] = ['teacher_info.education','=',$data['filter_education']];
+        }
+        if (isset($data['filter_teaching_year'])) {
+            $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year'][0]];
+            $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year'][1]];
         }
         // dd($where);
         if (isset($data['filter_is_auth'])) {

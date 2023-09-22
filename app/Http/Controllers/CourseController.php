@@ -45,7 +45,7 @@ class CourseController extends Controller
         // 筛选
         $where = [];
         if (isset($data['district_id'])) {
-            $where[] = ['courses.district_id','=',$data['district_id']];
+            $where[] = ['organizations.district_id','=',$data['district_id']];
         }
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
@@ -63,10 +63,10 @@ class CourseController extends Controller
         if (isset($data['grade'])) {
             $where[] = ['courses.grade','=',$data['grade']];
         }
-        if (isset($data['filter_distance'])) {
+        if (isset($data['filter_distance_min']) && isset($data['filter_price_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
-            $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance'][0]];
-            $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance'][1]];
+            $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
+            $where[] = [DB::raw($distance_expr),'<=',$data['filter_price_max']];
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
