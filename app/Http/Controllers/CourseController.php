@@ -68,13 +68,27 @@ class CourseController extends Controller
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
             $where[] = [DB::raw($distance_expr),'<=',$data['filter_price_max']];
         }
+        // 当前用户
+        $user = Auth::user();
+        if (isset($data['is_entry'])) {
+            $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
+            $course_arr = $user_courses->pluck('course_id')->toArray();
+            if ($data['is_entry'] == 1) {
+                $where[] = [function ($query) use ($course_arr) {
+                    $query->whereIn('courses.id',$course_arr);
+                }];
+            } else {
+                $where[] = [function ($query) use ($course_arr) {
+                    $query->whereNotIn('courses.id',$course_arr);
+                }];
+            }
+        }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
-        // 当前用户
-        $user = Auth::user();
+
         foreach ($result as $v) {
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
