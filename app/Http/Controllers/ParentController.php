@@ -66,7 +66,6 @@ class ParentController extends Controller
         }
         // 保存数据
         $result = ParentCourse::updateOrCreate(['id' => $id],$data);
-        // $id = DB::table('parent_courses')->insertGetId($data);
         if (!$result) {
             return $this->error('发布失败');
         }
@@ -75,8 +74,6 @@ class ParentController extends Controller
             $result->number = $number;
             $result->save();
         }
-        /*$number = create_course_number($id);
-        DB::table('parent_courses')->where('id',$id)->update(['number' => $number]);*/
         return $this->success('发布成功');
     }
 
