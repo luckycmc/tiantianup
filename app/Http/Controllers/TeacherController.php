@@ -51,9 +51,9 @@ class TeacherController extends Controller
         if (isset($data['filter_education'])) {
             $where[] = ['teacher_info.education','=',$data['filter_education']];
         }
-        if (isset($data['filter_teaching_year'])) {
-            $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year'][0]];
-            $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year'][1]];
+        if (isset($data['filter_teaching_year_min']) && isset($data['filter_teaching_year_max'])) {
+            $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year_min']];
+            $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year_max']];
         }
         // dd($where);
         if (isset($data['filter_is_auth'])) {
