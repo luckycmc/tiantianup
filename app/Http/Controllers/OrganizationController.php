@@ -248,6 +248,7 @@ class OrganizationController extends Controller
         $teacher_info = $course_info->users;
         foreach ($teacher_info as $v) {
             $v->subject = $course_info->subject;
+            $v->teacher_info = $v->teacher_info;
         }
         // 分页
         $result = new LengthAwarePaginator(
