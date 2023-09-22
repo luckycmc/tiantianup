@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseInformation;
 use App\Models\Course;
+use App\Models\DeliverLog;
 use App\Models\OrganPrivilege;
 use App\Models\OrganRole;
 use App\Models\OrganRolePrivilege;
@@ -249,6 +250,8 @@ class OrganizationController extends Controller
         foreach ($teacher_info as $v) {
             $v->subject = $course_info->subject;
             $v->teacher_info = $v->teacher_info;
+            // 是否被选中
+            $v->is_checked = DeliverLog::where(['user_id' => $v->id,'course_id' => $course_info->id])->value('is_checked');
         }
         // 分页
         $result = new LengthAwarePaginator(
