@@ -91,7 +91,7 @@ class ParentController extends Controller
         // 当前用户
         $user = Auth::user();
         // 查询数据
-        $result = ParentCourse::where(['user_id' => $user->id,'status' => $status])->orderByDesc('created_at')->paginate($page_size);
+        $result = Course::where(['user_id' => $user->id,'status' => $status])->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             if ($v->class_type == 2) {
                 $v->class_time = json_decode($v->class_time,true);
