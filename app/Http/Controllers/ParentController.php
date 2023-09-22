@@ -34,8 +34,21 @@ class ParentController extends Controller
     public function create_course()
     {
         $data = \request()->all();
-        $rules = [];
-        $messages = [];
+        $rules = [
+            'name' => 'required|string',
+            'student' => 'required|string',
+            'gender' => 'required|numeric',
+            'subject' => 'required'
+        ];
+        $messages = [
+            'name.required' => '名称不能为空',
+            'name.string' => '名称必须为字符串',
+            'student.required' => '学生不能为空',
+            'student.string' => '学生必须为字符串',
+            'gender.required' => '性别不能为空',
+            'gender.numeric' => '性别必须为数字',
+            'subject.required' => '科目不能为空'
+        ];
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $errors = $validator->errors();
