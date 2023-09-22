@@ -57,15 +57,16 @@ class ParentController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $data['user_id'] = $user->id;
+        $data['parent_id'] = $user->id;
         $data['created_at'] = Carbon::now();
         $data['status'] = 0;
+        $data['adder_role'] = 3;
         // 处理时间
         if ($data['class_type'] == 2) {
-            $data['class_time'] = json_encode($data['class_time']);
+            $data['class_date'] = json_encode($data['class_date']);
         }
         // 保存数据
-        $result = ParentCourse::updateOrCreate(['id' => $id],$data);
+        $result = Course::updateOrCreate(['id' => $id],$data);
         if (!$result) {
             return $this->error('发布失败');
         }
@@ -74,7 +75,7 @@ class ParentController extends Controller
             $result->number = $number;
             $result->save();
         }
-        return $this->success('发布成功');
+        return $this->success('操作成功');
     }
 
     /**

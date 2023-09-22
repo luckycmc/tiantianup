@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
 	use HasDateTimeFormatter;
+    protected $guarded = [];
 
     public function teaching_method()
     {
