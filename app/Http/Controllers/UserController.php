@@ -33,7 +33,7 @@ class UserController extends Controller
         $role = $data['role'] ?? 1;
         $rules = [
             'avatar' => 'required|url',
-            'nickname' => 'required|regex:/^[\p{Han}a-zA-Z]+$/u|max:10',
+            'nickname' => 'regex:/^[\p{Han}a-zA-Z]+$/u|max:10',
             'name' => 'required|regex:/^[\p{Han}a-zA-Z]+$/u|max:10',
             'gender' => 'required',
             'province_id' => 'required',
@@ -43,7 +43,6 @@ class UserController extends Controller
         $messages = [
             'avatar.required' => '头像不能为空',
             'avatar.url' => '头像格式错误',
-            'nickname.required' => '昵称不能为空',
             'nickname.regex' => '昵称只能为汉字或英文',
             'nickname.max' => '昵称最多为20个字符',
             'name.required' => '名称不能为空',
