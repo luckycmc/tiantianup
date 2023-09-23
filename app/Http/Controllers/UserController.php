@@ -570,7 +570,8 @@ class UserController extends Controller
         $auth_data = [
             'user_id' => $user->id,
             'id_card_front' => $data['id_card_front'],
-            'id_card_backend' => $data['id_card_backend']
+            'id_card_backend' => $data['id_card_backend'],
+            'picture' => $data['picture']
         ];
         $result = TeacherRealAuth::updateOrCreate(['user_id' => $user->id],$auth_data);
         if (!$result) {
