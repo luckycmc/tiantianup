@@ -130,7 +130,7 @@ class ParentController extends Controller
         $data = \request()->all();
         $deliver_arr = $data['id'] ?? [];
         Log::info('arr',$deliver_arr);
-        $result = DeliverLog::whereIn('id',$deliver_arr)->update(['status' => 1]);
+        $result = DeliverLog::whereIn('id',$deliver_arr)->update(['is_checked' => 1]);
         if (!$result) {
             return $this->error('操作失败');
         }
