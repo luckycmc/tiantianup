@@ -65,7 +65,7 @@ class UserController extends Controller
         $user = Auth::user();
         // 用户编号
         $data['number'] = create_user_number($data['city_id'],$user->id);
-        if (!$user->role != 3) {
+        if ($user->role != 3) {
             $data['age'] = Carbon::parse($data['birthday'])->diffInYears(Carbon::now());
         }
         $data['created_at'] = Carbon::now();
