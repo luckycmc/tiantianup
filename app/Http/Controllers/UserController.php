@@ -62,12 +62,14 @@ class UserController extends Controller
             $error = $validator->errors();
             return $this->error(implode(',',$error->all()));
         }
-        $user_id = Auth::id();
+        $user = Auth::user();
         // 用户编号
-        $data['number'] = create_user_number($data['city_id'],$user_id);
-        $data['age'] = Carbon::parse($data['birthday'])->diffInYears(Carbon::now());
+        $data['number'] = create_user_number($data['city_id'],$user->id);
+        if (!$user->role != 3) {
+            $data['age'] = Carbon::parse($data['birthday'])->diffInYears(Carbon::now());
+        }
         $data['created_at'] = Carbon::now();
-        $result = DB::table('users')->where('id',$user_id)->update($data);
+        $result = DB::table('users')->where('id',$user->id)->update($data);
         if (!$result) {
             return $this->error('更新失败');
         }
