@@ -244,6 +244,7 @@ class OrganizationController extends Controller
         foreach ($result as $v) {
             $v->teacher_info = $v->user->teacher_info;
             $v->subject = $v->course->subject;
+            $v->teacher_tags = $v->user->teacher_tags->pluck('tag');
         }
         return $this->success('投递教师列表',$result);
     }
