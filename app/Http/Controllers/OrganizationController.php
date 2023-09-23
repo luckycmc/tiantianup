@@ -239,27 +239,12 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
         $page_size = $data['page_size'] ?? 10;
-        $page = $data['page'] ?? 1;
-        // 查询课程信息
-        $course_info = Course::find($course_id);
-        if (!$course_info) {
-            return $this->error('课程不存在');
+        // 投递列表
+        $result = DeliverLog::with(['user'])->where('course_id',$course_id)->paginate($page_size);
+        foreach ($result as $v) {
+            $v->teacher_info = $v->user->teacher_info;
+            $v->subject = $v->course->subject;
         }
-        // 查询教师列表
-        $teacher_info = $course_info->users;
-        foreach ($teacher_info as $v) {
-            $v->subject = $course_info->subject;
-            $v->teacher_info = $v->teacher_info;
-            // 是否被选中
-            $v->is_checked = DeliverLog::where(['user_id' => $v->id,'course_id' => $course_info->id])->value('is_checked');
-        }
-        // 分页
-        $result = new LengthAwarePaginator(
-            $teacher_info->forPage($page,$page_size),
-            $teacher_info->count(),
-            $page_size,
-            $page
-        );
         return $this->success('投递教师列表',$result);
     }
 
