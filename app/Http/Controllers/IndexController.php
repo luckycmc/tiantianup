@@ -278,7 +278,10 @@ class IndexController extends Controller
         // 标签
         if ($user->role == 3) {
             $user->tags = $user->teacher_tags->pluck('tag');
-            $user->real_auth_status = $user->teacher_real_auth ? 3 : $user->teacher_real_auth->status;
+            $user->real_auth_status = $user->teacher_real_auth ? $user->teacher_real_auth->status : 3;
+            $user->cert_status = $user->teacher_cert ? $user->teacher_cert->status : 3;
+            $user->education_status = $user->teacher_education ? $user->teacher_education->status : 3;
+            $user->image_status = $user->teacher_image ? $user->teacher_image->status : 3;
         }
         return $this->success('个人主页',$user);
     }
