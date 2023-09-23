@@ -264,6 +264,7 @@ class IndexController extends Controller
     {
         // 当前用户
         $user = Auth::user();
+        $user = User::find(2);
         // 收益
         $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
         // 我的收藏
@@ -274,6 +275,10 @@ class IndexController extends Controller
         $user->message = $user->messages()->where('status',0)->count();
         // 联系人数量
         $user->contact_count = $user->contacts->count();
+        // 标签
+        if ($user->role == 3) {
+            $user->tags = $user->teacher_tags->pluck('tag');
+        }
         return $this->success('个人主页',$user);
     }
 
