@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ParentController extends Controller
@@ -128,6 +129,7 @@ class ParentController extends Controller
     {
         $data = \request()->all();
         $deliver_arr = $data['id'] ?? [];
+        Log::info('arr',$deliver_arr);
         $result = DeliverLog::whereIn('id',$deliver_arr)->update(['status' => 1]);
         if (!$result) {
             return $this->error('操作失败');
