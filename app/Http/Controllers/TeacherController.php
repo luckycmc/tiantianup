@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Region;
 use App\Models\TeacherCert;
 use App\Models\TeacherEducation;
+use App\Models\TeacherImage;
+use App\Models\TeacherRealAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,5 +114,21 @@ class TeacherController extends Controller
             return $this->error('提交失败');
         }
         return $this->success('提交成功');
+    }
+
+    /**
+     * 实名认证&教育经历&资格证书&教师风采
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_info()
+    {
+        $data = \request()->all();
+        $type = $data['type'] ?? 1;
+        // 当前用户
+        $user = Auth::user();
+        $arr = [new TeacherRealAuth(),new TeacherEducation(),new TeacherCert(),new TeacherImage()];
+        // 查询实名认证
+        $result = $arr[$type-1]::where('user_id',$user->id)->first();
+        return $this->success('教师信息',$result);
     }
 }
