@@ -195,4 +195,22 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserContact::class,'user_id');
     }
+
+    // 教师实名认证
+    public function teacher_real_auth()
+    {
+        return $this->hasOne(TeacherRealAuth::class,'user_id','id');
+    }
+
+    // 教师教育经历
+    public function teacher_education()
+    {
+        return $this->hasOne(TeacherEducation::class,'user_id','id');
+    }
+
+    // 教师资格证书
+    public function teacher_cert()
+    {
+        return $this->hasOne(TeacherCert::class,'user_id','id');
+    }
 }

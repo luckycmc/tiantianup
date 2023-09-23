@@ -264,7 +264,7 @@ class IndexController extends Controller
     {
         // 当前用户
         $user = Auth::user();
-        $user = User::find(2);
+        // $user = User::find(2);
         // 收益
         $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
         // 我的收藏
@@ -278,6 +278,7 @@ class IndexController extends Controller
         // 标签
         if ($user->role == 3) {
             $user->tags = $user->teacher_tags->pluck('tag');
+            $user->real_auth_status = $user->teacher_real_auth ? 3 : $user->teacher_real_auth->status;
         }
         return $this->success('个人主页',$user);
     }

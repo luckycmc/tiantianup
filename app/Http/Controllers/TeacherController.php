@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Region;
+use App\Models\TeacherCert;
+use App\Models\TeacherEducation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
 {
@@ -71,5 +75,42 @@ class TeacherController extends Controller
             $v->subject = explode(',',$v->subject);
         }
         return $this->success('教师列表',$result);
+    }
+
+    /**
+     * 证书
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_cert()
+    {
+        $data = \request()->all();
+        $rules = [
+            'teacher_cert' => 'required',
+            'other_cert' => 'required',
+            'honor_cert' => 'required'
+        ];
+        $messages = [
+            'teacher_cert.required' => '教师资格证不能为空',
+            'other_cert.required' => '其他证书不能为空',
+            'honor_cert.required' => '荣誉证书不能为空'
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+
+        // 当前用户
+        $user = Auth::user();
+        $education_data = [
+            'user_id' => $user->id,
+            'teacher_cert' => $data['teacher_cert'],
+            'honor_cert' => $data['honor_cert']
+        ];
+        $result = TeacherCert::updateOrCreate(['user_id' => $user->id],$education_data);
+        if (!$result) {
+            return $this->error('提交失败');
+        }
+        return $this->success('提交成功');
     }
 }

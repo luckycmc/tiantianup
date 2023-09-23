@@ -68,12 +68,16 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
      * @property Grid\Column|Collection role
+     * @property Grid\Column|Collection student
+     * @property Grid\Column|Collection gender
      * @property Grid\Column|Collection grade
      * @property Grid\Column|Collection cover_image
      * @property Grid\Column|Collection subject
      * @property Grid\Column|Collection count_min
      * @property Grid\Column|Collection count_max
      * @property Grid\Column|Collection class_number
+     * @property Grid\Column|Collection class_price_min
+     * @property Grid\Column|Collection class_price_max
      * @property Grid\Column|Collection class_price
      * @property Grid\Column|Collection duration
      * @property Grid\Column|Collection class_duration
@@ -87,6 +91,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection adder_role
      * @property Grid\Column|Collection class_commission
      * @property Grid\Column|Collection reviewer
+     * @property Grid\Column|Collection notes
      * @property Grid\Column|Collection reason
      * @property Grid\Column|Collection entry_number
      * @property Grid\Column|Collection wechat
@@ -95,6 +100,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection presale_header_id
      * @property Grid\Column|Collection aftersale_header_id
      * @property Grid\Column|Collection introduce
+     * @property Grid\Column|Collection is_checked
      * @property Grid\Column|Collection uuid
      * @property Grid\Column|Collection connection
      * @property Grid\Column|Collection queue
@@ -120,12 +126,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection door_image
      * @property Grid\Column|Collection business_license
      * @property Grid\Column|Collection reviewer_id
-     * @property Grid\Column|Collection gender
-     * @property Grid\Column|Collection student
      * @property Grid\Column|Collection class_time
-     * @property Grid\Column|Collection class_price_min
-     * @property Grid\Column|Collection class_price_max
-     * @property Grid\Column|Collection notes
+     * @property Grid\Column|Collection reject_reason
      * @property Grid\Column|Collection school
      * @property Grid\Column|Collection birthday
      * @property Grid\Column|Collection token
@@ -141,20 +143,23 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection show_platform
      * @property Grid\Column|Collection organization
      * @property Grid\Column|Collection teaching_type
-     * @property Grid\Column|Collection id_card_front
-     * @property Grid\Column|Collection id_card_backend
-     * @property Grid\Column|Collection real_name
-     * @property Grid\Column|Collection real_auth_reason
-     * @property Grid\Column|Collection picture
+     * @property Grid\Column|Collection teacher_cert
+     * @property Grid\Column|Collection other_cert
+     * @property Grid\Column|Collection honor_cert
      * @property Grid\Column|Collection highest_education
      * @property Grid\Column|Collection education_id
      * @property Grid\Column|Collection graduate_school
      * @property Grid\Column|Collection speciality
      * @property Grid\Column|Collection graduate_cert
      * @property Grid\Column|Collection diploma
-     * @property Grid\Column|Collection teacher_cert
+     * @property Grid\Column|Collection id_card_front
+     * @property Grid\Column|Collection id_card_backend
+     * @property Grid\Column|Collection real_name
+     * @property Grid\Column|Collection real_auth_reason
+     * @property Grid\Column|Collection picture
      * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
+     * @property Grid\Column|Collection real_auth_status
      * @property Grid\Column|Collection data_status
      * @property Grid\Column|Collection out_trade_no
      * @property Grid\Column|Collection discount
@@ -230,12 +235,16 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
      * @method Grid\Column|Collection role(string $label = null)
+     * @method Grid\Column|Collection student(string $label = null)
+     * @method Grid\Column|Collection gender(string $label = null)
      * @method Grid\Column|Collection grade(string $label = null)
      * @method Grid\Column|Collection cover_image(string $label = null)
      * @method Grid\Column|Collection subject(string $label = null)
      * @method Grid\Column|Collection count_min(string $label = null)
      * @method Grid\Column|Collection count_max(string $label = null)
      * @method Grid\Column|Collection class_number(string $label = null)
+     * @method Grid\Column|Collection class_price_min(string $label = null)
+     * @method Grid\Column|Collection class_price_max(string $label = null)
      * @method Grid\Column|Collection class_price(string $label = null)
      * @method Grid\Column|Collection duration(string $label = null)
      * @method Grid\Column|Collection class_duration(string $label = null)
@@ -249,6 +258,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection adder_role(string $label = null)
      * @method Grid\Column|Collection class_commission(string $label = null)
      * @method Grid\Column|Collection reviewer(string $label = null)
+     * @method Grid\Column|Collection notes(string $label = null)
      * @method Grid\Column|Collection reason(string $label = null)
      * @method Grid\Column|Collection entry_number(string $label = null)
      * @method Grid\Column|Collection wechat(string $label = null)
@@ -257,6 +267,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection presale_header_id(string $label = null)
      * @method Grid\Column|Collection aftersale_header_id(string $label = null)
      * @method Grid\Column|Collection introduce(string $label = null)
+     * @method Grid\Column|Collection is_checked(string $label = null)
      * @method Grid\Column|Collection uuid(string $label = null)
      * @method Grid\Column|Collection connection(string $label = null)
      * @method Grid\Column|Collection queue(string $label = null)
@@ -282,12 +293,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection door_image(string $label = null)
      * @method Grid\Column|Collection business_license(string $label = null)
      * @method Grid\Column|Collection reviewer_id(string $label = null)
-     * @method Grid\Column|Collection gender(string $label = null)
-     * @method Grid\Column|Collection student(string $label = null)
      * @method Grid\Column|Collection class_time(string $label = null)
-     * @method Grid\Column|Collection class_price_min(string $label = null)
-     * @method Grid\Column|Collection class_price_max(string $label = null)
-     * @method Grid\Column|Collection notes(string $label = null)
+     * @method Grid\Column|Collection reject_reason(string $label = null)
      * @method Grid\Column|Collection school(string $label = null)
      * @method Grid\Column|Collection birthday(string $label = null)
      * @method Grid\Column|Collection token(string $label = null)
@@ -303,20 +310,23 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection show_platform(string $label = null)
      * @method Grid\Column|Collection organization(string $label = null)
      * @method Grid\Column|Collection teaching_type(string $label = null)
-     * @method Grid\Column|Collection id_card_front(string $label = null)
-     * @method Grid\Column|Collection id_card_backend(string $label = null)
-     * @method Grid\Column|Collection real_name(string $label = null)
-     * @method Grid\Column|Collection real_auth_reason(string $label = null)
-     * @method Grid\Column|Collection picture(string $label = null)
+     * @method Grid\Column|Collection teacher_cert(string $label = null)
+     * @method Grid\Column|Collection other_cert(string $label = null)
+     * @method Grid\Column|Collection honor_cert(string $label = null)
      * @method Grid\Column|Collection highest_education(string $label = null)
      * @method Grid\Column|Collection education_id(string $label = null)
      * @method Grid\Column|Collection graduate_school(string $label = null)
      * @method Grid\Column|Collection speciality(string $label = null)
      * @method Grid\Column|Collection graduate_cert(string $label = null)
      * @method Grid\Column|Collection diploma(string $label = null)
-     * @method Grid\Column|Collection teacher_cert(string $label = null)
+     * @method Grid\Column|Collection id_card_front(string $label = null)
+     * @method Grid\Column|Collection id_card_backend(string $label = null)
+     * @method Grid\Column|Collection real_name(string $label = null)
+     * @method Grid\Column|Collection real_auth_reason(string $label = null)
+     * @method Grid\Column|Collection picture(string $label = null)
      * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
+     * @method Grid\Column|Collection real_auth_status(string $label = null)
      * @method Grid\Column|Collection data_status(string $label = null)
      * @method Grid\Column|Collection out_trade_no(string $label = null)
      * @method Grid\Column|Collection discount(string $label = null)
@@ -397,12 +407,16 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
      * @property Show\Field|Collection role
+     * @property Show\Field|Collection student
+     * @property Show\Field|Collection gender
      * @property Show\Field|Collection grade
      * @property Show\Field|Collection cover_image
      * @property Show\Field|Collection subject
      * @property Show\Field|Collection count_min
      * @property Show\Field|Collection count_max
      * @property Show\Field|Collection class_number
+     * @property Show\Field|Collection class_price_min
+     * @property Show\Field|Collection class_price_max
      * @property Show\Field|Collection class_price
      * @property Show\Field|Collection duration
      * @property Show\Field|Collection class_duration
@@ -416,6 +430,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection adder_role
      * @property Show\Field|Collection class_commission
      * @property Show\Field|Collection reviewer
+     * @property Show\Field|Collection notes
      * @property Show\Field|Collection reason
      * @property Show\Field|Collection entry_number
      * @property Show\Field|Collection wechat
@@ -424,6 +439,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection presale_header_id
      * @property Show\Field|Collection aftersale_header_id
      * @property Show\Field|Collection introduce
+     * @property Show\Field|Collection is_checked
      * @property Show\Field|Collection uuid
      * @property Show\Field|Collection connection
      * @property Show\Field|Collection queue
@@ -449,12 +465,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection door_image
      * @property Show\Field|Collection business_license
      * @property Show\Field|Collection reviewer_id
-     * @property Show\Field|Collection gender
-     * @property Show\Field|Collection student
      * @property Show\Field|Collection class_time
-     * @property Show\Field|Collection class_price_min
-     * @property Show\Field|Collection class_price_max
-     * @property Show\Field|Collection notes
+     * @property Show\Field|Collection reject_reason
      * @property Show\Field|Collection school
      * @property Show\Field|Collection birthday
      * @property Show\Field|Collection token
@@ -470,20 +482,23 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection show_platform
      * @property Show\Field|Collection organization
      * @property Show\Field|Collection teaching_type
-     * @property Show\Field|Collection id_card_front
-     * @property Show\Field|Collection id_card_backend
-     * @property Show\Field|Collection real_name
-     * @property Show\Field|Collection real_auth_reason
-     * @property Show\Field|Collection picture
+     * @property Show\Field|Collection teacher_cert
+     * @property Show\Field|Collection other_cert
+     * @property Show\Field|Collection honor_cert
      * @property Show\Field|Collection highest_education
      * @property Show\Field|Collection education_id
      * @property Show\Field|Collection graduate_school
      * @property Show\Field|Collection speciality
      * @property Show\Field|Collection graduate_cert
      * @property Show\Field|Collection diploma
-     * @property Show\Field|Collection teacher_cert
+     * @property Show\Field|Collection id_card_front
+     * @property Show\Field|Collection id_card_backend
+     * @property Show\Field|Collection real_name
+     * @property Show\Field|Collection real_auth_reason
+     * @property Show\Field|Collection picture
      * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
+     * @property Show\Field|Collection real_auth_status
      * @property Show\Field|Collection data_status
      * @property Show\Field|Collection out_trade_no
      * @property Show\Field|Collection discount
@@ -559,12 +574,16 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
      * @method Show\Field|Collection role(string $label = null)
+     * @method Show\Field|Collection student(string $label = null)
+     * @method Show\Field|Collection gender(string $label = null)
      * @method Show\Field|Collection grade(string $label = null)
      * @method Show\Field|Collection cover_image(string $label = null)
      * @method Show\Field|Collection subject(string $label = null)
      * @method Show\Field|Collection count_min(string $label = null)
      * @method Show\Field|Collection count_max(string $label = null)
      * @method Show\Field|Collection class_number(string $label = null)
+     * @method Show\Field|Collection class_price_min(string $label = null)
+     * @method Show\Field|Collection class_price_max(string $label = null)
      * @method Show\Field|Collection class_price(string $label = null)
      * @method Show\Field|Collection duration(string $label = null)
      * @method Show\Field|Collection class_duration(string $label = null)
@@ -578,6 +597,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection adder_role(string $label = null)
      * @method Show\Field|Collection class_commission(string $label = null)
      * @method Show\Field|Collection reviewer(string $label = null)
+     * @method Show\Field|Collection notes(string $label = null)
      * @method Show\Field|Collection reason(string $label = null)
      * @method Show\Field|Collection entry_number(string $label = null)
      * @method Show\Field|Collection wechat(string $label = null)
@@ -586,6 +606,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection presale_header_id(string $label = null)
      * @method Show\Field|Collection aftersale_header_id(string $label = null)
      * @method Show\Field|Collection introduce(string $label = null)
+     * @method Show\Field|Collection is_checked(string $label = null)
      * @method Show\Field|Collection uuid(string $label = null)
      * @method Show\Field|Collection connection(string $label = null)
      * @method Show\Field|Collection queue(string $label = null)
@@ -611,12 +632,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection door_image(string $label = null)
      * @method Show\Field|Collection business_license(string $label = null)
      * @method Show\Field|Collection reviewer_id(string $label = null)
-     * @method Show\Field|Collection gender(string $label = null)
-     * @method Show\Field|Collection student(string $label = null)
      * @method Show\Field|Collection class_time(string $label = null)
-     * @method Show\Field|Collection class_price_min(string $label = null)
-     * @method Show\Field|Collection class_price_max(string $label = null)
-     * @method Show\Field|Collection notes(string $label = null)
+     * @method Show\Field|Collection reject_reason(string $label = null)
      * @method Show\Field|Collection school(string $label = null)
      * @method Show\Field|Collection birthday(string $label = null)
      * @method Show\Field|Collection token(string $label = null)
@@ -632,20 +649,23 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection show_platform(string $label = null)
      * @method Show\Field|Collection organization(string $label = null)
      * @method Show\Field|Collection teaching_type(string $label = null)
-     * @method Show\Field|Collection id_card_front(string $label = null)
-     * @method Show\Field|Collection id_card_backend(string $label = null)
-     * @method Show\Field|Collection real_name(string $label = null)
-     * @method Show\Field|Collection real_auth_reason(string $label = null)
-     * @method Show\Field|Collection picture(string $label = null)
+     * @method Show\Field|Collection teacher_cert(string $label = null)
+     * @method Show\Field|Collection other_cert(string $label = null)
+     * @method Show\Field|Collection honor_cert(string $label = null)
      * @method Show\Field|Collection highest_education(string $label = null)
      * @method Show\Field|Collection education_id(string $label = null)
      * @method Show\Field|Collection graduate_school(string $label = null)
      * @method Show\Field|Collection speciality(string $label = null)
      * @method Show\Field|Collection graduate_cert(string $label = null)
      * @method Show\Field|Collection diploma(string $label = null)
-     * @method Show\Field|Collection teacher_cert(string $label = null)
+     * @method Show\Field|Collection id_card_front(string $label = null)
+     * @method Show\Field|Collection id_card_backend(string $label = null)
+     * @method Show\Field|Collection real_name(string $label = null)
+     * @method Show\Field|Collection real_auth_reason(string $label = null)
+     * @method Show\Field|Collection picture(string $label = null)
      * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
+     * @method Show\Field|Collection real_auth_status(string $label = null)
      * @method Show\Field|Collection data_status(string $label = null)
      * @method Show\Field|Collection out_trade_no(string $label = null)
      * @method Show\Field|Collection discount(string $label = null)

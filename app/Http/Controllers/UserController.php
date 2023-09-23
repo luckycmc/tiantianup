@@ -9,7 +9,9 @@ use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
+use App\Models\TeacherEducation;
 use App\Models\TeacherInfo;
+use App\Models\TeacherRealAuth;
 use App\Models\TeacherTag;
 use App\Models\User;
 use App\Models\UserContact;
@@ -570,7 +572,7 @@ class UserController extends Controller
             'id_card_front' => $data['id_card_front'],
             'id_card_backend' => $data['id_card_backend']
         ];
-        $result = TeacherInfo::updateOrCreate(['user_id' => $user->id],$auth_data);
+        $result = TeacherRealAuth::updateOrCreate(['user_id' => $user->id],$auth_data);
         if (!$result) {
             return $this->error('提交失败');
         }
@@ -642,10 +644,9 @@ class UserController extends Controller
             'graduate_school' => $data['graduate_school'],
             'speciality' => $data['speciality'],
             'graduate_cert' => $data['graduate_cert'],
-            'diploma' => $data['diploma'],
-            'teacher_cert' => $data['teacher_cert'] ?? '',
+            'diploma' => $data['diploma']
         ];
-        $result = TeacherInfo::updateOrCreate(['user_id' => $user->id],$education_data);
+        $result = TeacherEducation::updateOrCreate(['user_id' => $user->id],$education_data);
         if (!$result) {
             return $this->error('提交失败');
         }
