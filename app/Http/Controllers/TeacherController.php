@@ -275,14 +275,12 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
-        $teacher_id = $data['teacher_id'] ?? 0;
+        // 当前教师
+        $user = Auth::user();
         if (!Course::find($course_id)) {
             return $this->error('课程不存在');
         }
-        if (!User::find($teacher_id)) {
-            return $this->error('教师不存在');
-        }
-        $result = DeliverLog::where(['user_id' => $teacher_id,'course_id' => $course_id])->first();
+        $result = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id])->first();
         return $this->success('投递详情',$result);
     }
 }
