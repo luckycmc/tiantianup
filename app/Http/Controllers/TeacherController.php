@@ -162,7 +162,6 @@ class TeacherController extends Controller
             'type' => 2,
             'status' => 0
         ];
-        Log::info('data: ',$insert_data);
         $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
         if (!$result) {
             return $this->error('提交失败');
