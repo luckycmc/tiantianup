@@ -158,6 +158,7 @@ class TeacherController extends Controller
         $insert_data = [
             'user_id' => $user->id,
             'url' => implode(',',$data['url']),
+            'type' => 2,
             'status' => 0
         ];
         $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
