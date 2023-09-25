@@ -10,6 +10,7 @@ use App\Models\TeacherRealAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
@@ -161,6 +162,7 @@ class TeacherController extends Controller
             'type' => 2,
             'status' => 0
         ];
+        Log::info('data: ',$insert_data);
         $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
         if (!$result) {
             return $this->error('提交失败');
