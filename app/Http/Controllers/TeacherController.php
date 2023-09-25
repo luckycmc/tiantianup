@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Region;
 use App\Models\TeacherCert;
@@ -192,11 +193,42 @@ class TeacherController extends Controller
             if ($v->course->adder_role == 4) {
                 $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
                 $v->course->course_role = $v->course->adder_role;
+                $v->course->pay_status = $v->pay_status;
             }
         }
         $course = $result->map(function ($item) {
             return $item->course;
         });
         return $this->success('我的接单',$course);
+    }
+
+    public function course_list()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $sort_field = 'created_at';
+        $order = 'desc';
+        if (isset($data['sort_class_price'])) {
+            $sort_field = 'class_price';
+            $order = $data['sort_class_price'] == 0 ? 'desc' : 'asc';
+        }
+        if (isset($data['sort_distance'])) {
+            $sort_field = 'distance';
+            $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
+        }
+        $where = [];
+        if (isset($data['filter_type'])) {
+            $where[] = ['type','=',$data['filter_type']];
+        }
+        if (isset($data['subject'])) {
+            $where[] = ['subject','=',$data['subject']];
+        }
+        if (isset($data['subject'])) {
+            $where[] = ['subject','=',$data['subject']];
+        }
+
+
+        $result = Course::with('organization')->where($where)->where('role',1)->orderBy($sort_field,$order)->paginate($page_size);
+
     }
 }
