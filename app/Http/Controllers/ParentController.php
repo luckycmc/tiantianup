@@ -62,7 +62,7 @@ class ParentController extends Controller
         $data['parent_id'] = $user->id;
         $data['created_at'] = Carbon::now();
         $data['status'] = 0;
-        $data['adder_role'] = 3;
+        $data['adder_role'] = 2;
         // 处理时间
         if ($data['class_type'] == 2) {
             $data['class_date'] = json_encode($data['class_date']);

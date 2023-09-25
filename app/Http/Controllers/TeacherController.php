@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliverLog;
 use App\Models\Region;
 use App\Models\TeacherCert;
 use App\Models\TeacherEducation;
@@ -167,5 +168,35 @@ class TeacherController extends Controller
             return $this->error('提交失败');
         }
         return $this->success('提交成功');
+    }
+
+    /**
+     * 我的接单
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function my_courses()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $longitude = $data['longitude'] ?? 0;
+        $latitude = $data['latitude'] ?? 0;
+        // 当前用户
+        $user = Auth::user();
+        $where = [];
+        if (isset($data['status'])) {
+            $where[] = ['status','=',$data['status']];
+        }
+        $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
+        foreach ($result as $v) {
+            // 机构
+            if ($v->course->adder_role == 4) {
+                $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
+                $v->course->course_role = $v->course->adder_role;
+            }
+        }
+        $course = $result->map(function ($item) {
+            return $item->course;
+        });
+        return $this->success('我的接单',$course);
     }
 }
