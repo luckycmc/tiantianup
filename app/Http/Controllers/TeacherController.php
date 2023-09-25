@@ -12,6 +12,7 @@ use App\Models\TeacherRealAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -202,33 +203,67 @@ class TeacherController extends Controller
         return $this->success('我的接单',$course);
     }
 
+    /**
+     * 招学员列表
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function course_list()
     {
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
-        $sort_field = 'created_at';
+        $longitude = $data['longitude'] ?? 0;
+        $latitude = $data['latitude'] ?? 0;
+        // 当前用户
+        $user = Auth::user();
+        $sort_field = 'courses.created_at';
         $order = 'desc';
         if (isset($data['sort_class_price'])) {
-            $sort_field = 'class_price';
+            $sort_field = 'courses.class_price';
             $order = $data['sort_class_price'] == 0 ? 'desc' : 'asc';
         }
         if (isset($data['sort_distance'])) {
-            $sort_field = 'distance';
+            $sort_field = 'courses.distance';
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
         if (isset($data['filter_type'])) {
-            $where[] = ['type','=',$data['filter_type']];
+            $where[] = ['courses.type','=',$data['filter_type']];
         }
         if (isset($data['subject'])) {
-            $where[] = ['subject','=',$data['subject']];
+            $where[] = ['courses.subject','=',$data['subject']];
         }
-        if (isset($data['subject'])) {
-            $where[] = ['subject','=',$data['subject']];
+        if (isset($data['grade'])) {
+            $where[] = ['courses.grade','=',$data['grade']];
         }
-
-
-        $result = Course::with('organization')->where($where)->where('role',1)->orderBy($sort_field,$order)->paginate($page_size);
-
+        if (isset($data['filter_adder_role'])) {
+            $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
+        }
+        if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
+            $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
+            $where[] = ['courses.class_price','<=',$data['filter_class_price_max']];
+        }
+        if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
+            $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
+            $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
+            $where[] = [DB::raw($distance_expr),'<=',$data['filter_price_max']];
+        }
+        $delivery_arr = [];
+        $condition = '';
+        if (isset($data['filter_delivery_status'])) {
+            $delivery_arr = DeliverLog::where('user_id',$user->id)->pluck('course_id');
+            if ($data['filter_delivery_status'] == 0) {
+                // 未投递
+                $condition = "whereNotIn";
+            } else {
+                // 已投递
+                $condition = "whereIn";
+                $where[] = ['deliver_log.status','=',$data['filter_delivery_status']];
+            }
+        }
+        $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
+            ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
+            ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
+            ->where($where)->where('courses.role',1)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+        return $this->success('找学员列表',$result);
     }
 }
