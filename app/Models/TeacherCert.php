@@ -10,5 +10,7 @@ class TeacherCert extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'teacher_cert';
+
+    protected $guarded = [];
     
 }
