@@ -155,16 +155,14 @@ class TeacherController extends Controller
 
         // 当前用户
         $user = Auth::user();
-        foreach ($data['url'] as $v) {
-            $insert_data = [
-                'user_id' => $user->id,
-                'url' => $v,
-                'status' => 0
-            ];
-            $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
-            if (!$result) {
-                return $this->error('提交失败');
-            }
+        $insert_data = [
+            'user_id' => $user->id,
+            'url' => implode(',',$data['url']),
+            'status' => 0
+        ];
+        $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
+        if (!$result) {
+            return $this->error('提交失败');
         }
         return $this->success('提交成功');
     }
