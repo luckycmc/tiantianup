@@ -217,6 +217,6 @@ class User extends Authenticatable implements JWTSubject
     // 教师风采
     public function teacher_image()
     {
-        return $this->hasOne(TeacherImage::class,'user_id','id')->where('type',1);
+        return $this->hasOne(TeacherImage::class,'user_id','id')->where('type',2);
     }
 }
