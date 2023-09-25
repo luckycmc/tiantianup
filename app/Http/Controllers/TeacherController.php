@@ -266,4 +266,23 @@ class TeacherController extends Controller
             ->where($where)->where('courses.role',1)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         return $this->success('找学员列表',$result);
     }
+
+    /**
+     * 投递详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deliver_detail()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        $teacher_id = $data['teacher_id'] ?? 0;
+        if (!Course::find($course_id)) {
+            return $this->error('课程不存在');
+        }
+        if (!User::find($teacher_id)) {
+            return $this->error('教师不存在');
+        }
+        $result = DeliverLog::where(['user_id' => $teacher_id,'course_id' => $course_id])->first();
+        return $this->success('投递详情',$result);
+    }
 }
