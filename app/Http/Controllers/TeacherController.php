@@ -108,7 +108,8 @@ class TeacherController extends Controller
             'user_id' => $user->id,
             'teacher_cert' => implode(',',$data['teacher_cert']),
             'other_cert' => implode(',',$data['other_cert']),
-            'honor_cert' => implode(',',$data['honor_cert'])
+            'honor_cert' => implode(',',$data['honor_cert']),
+            'status' => 0
         ];
         $result = TeacherCert::updateOrCreate(['user_id' => $user->id],$education_data);
         if (!$result) {
