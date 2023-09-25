@@ -158,7 +158,8 @@ class TeacherController extends Controller
         foreach ($data['url'] as $v) {
             $insert_data = [
                 'user_id' => $user->id,
-                'url' => $v
+                'url' => $v,
+                'status' => 0
             ];
             $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
             if (!$result) {
