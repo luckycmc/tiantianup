@@ -10,5 +10,6 @@ class TeacherImage extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'teacher_images';
+    protected $guarded = [];
     
 }

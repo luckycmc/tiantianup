@@ -133,4 +133,38 @@ class TeacherController extends Controller
         $result = $arr[$type-1]::where('user_id',$user->id)->first();
         return $this->success('教师信息',$result);
     }
+
+    /**
+     * 更新教师风采
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_teacher_images()
+    {
+        $data = \request()->all();
+        $rules = [
+            'url' => 'required',
+        ];
+        $messages = [
+            'url.required' => '教师风采不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+
+        // 当前用户
+        $user = Auth::user();
+        foreach ($data['url'] as $v) {
+            $insert_data = [
+                'user_id' => $user->id,
+                'url' => $v
+            ];
+            $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
+            if (!$result) {
+                return $this->error('提交失败');
+            }
+        }
+        return $this->success('提交成功');
+    }
 }
