@@ -645,7 +645,8 @@ class UserController extends Controller
             'graduate_school' => $data['graduate_school'],
             'speciality' => $data['speciality'],
             'graduate_cert' => $data['graduate_cert'],
-            'diploma' => $data['diploma']
+            'diploma' => $data['diploma'],
+            'status' => 0
         ];
         $result = TeacherEducation::updateOrCreate(['user_id' => $user->id],$education_data);
         if (!$result) {
