@@ -250,8 +250,6 @@ class TeacherController extends Controller
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
             $where[] = [DB::raw($distance_expr),'<=',$data['filter_price_max']];
         }
-        $delivery_arr = [];
-        $condition = '';
         if (isset($data['filter_delivery_status'])) {
             $delivery_arr = DeliverLog::where('user_id',$user->id)->pluck('course_id');
             if ($data['filter_delivery_status'] == 0) {
@@ -262,11 +260,17 @@ class TeacherController extends Controller
                 $condition = "whereIn";
                 $where[] = ['deliver_log.status','=',$data['filter_delivery_status']];
             }
+            $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
+                ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
+                ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
+                ->where($where)->where('courses.role',1)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+        } else {
+            $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
+                ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
+                ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
+                ->where($where)->where('courses.role',1)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
-        $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
-            ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
-            ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
-            ->where($where)->where('courses.role',1)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
