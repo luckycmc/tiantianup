@@ -267,6 +267,11 @@ class TeacherController extends Controller
             ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
             ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
             ->where($where)->where('courses.role',1)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+        foreach ($result as $v) {
+            if ($v->adder_role == 4) {
+                $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
+            }
+        }
         return $this->success('找学员列表',$result);
     }
 
