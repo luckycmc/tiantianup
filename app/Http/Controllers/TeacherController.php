@@ -229,6 +229,9 @@ class TeacherController extends Controller
         if (isset($data['filter_type'])) {
             $where[] = ['courses.type','=',$data['filter_type']];
         }
+        if (isset($data['filter_method'])) {
+            $where[] = ['courses.method','=',$data['filter_method']];
+        }
         if (isset($data['subject'])) {
             $where[] = ['courses.subject','=',$data['subject']];
         }
