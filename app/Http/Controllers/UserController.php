@@ -535,6 +535,7 @@ class UserController extends Controller
             'image' => $data['image'] ?? '',
             'created_at' => Carbon::now()
         ];
+        Log::info('data: ',$data);
         // 保存数据
         $result = DeliverLog::updateOrCreate(['user_id' => $user->id,'course_id' => $data['course_id']],$deliver_data);
         if (!$result) {
