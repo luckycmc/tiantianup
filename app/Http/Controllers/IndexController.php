@@ -6,6 +6,7 @@ use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
+use App\Models\DeliverLog;
 use App\Models\Education;
 use App\Models\Grade;
 use App\Models\OrganType;
@@ -201,8 +202,15 @@ class IndexController extends Controller
         $result->has_collect = $user->has_collect_course($course_id);
         // 总费用
         $result->total_price = ($result->base_count * $result->base_price) + ($result->class_number - $result->base_count) * $result->improve_price;
-        // 是否报名
-        $result->is_entry = $user->has_entry_course($course_id);
+        if (in_array($user->role,[1,2])) {
+            // 是否报名
+            $result->is_entry = $user->has_entry_course($course_id);
+        }
+        if ($user->role == 3) {
+            // 是否投递
+            $result->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id])->exists();
+        }
+
         if ($result->is_entry) {
             $entry_info = UserCourse::where(['user_id' => $user->id, 'course_id' => $course_id])->first();
             $entry_time = Carbon::parse($entry_info->created_at)->format('Y-m-d H:i:s');
