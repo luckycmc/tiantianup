@@ -10,5 +10,6 @@ class TeacherCourseOrder extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'teacher_course_orders';
+    protected $guarded = [];
     
 }

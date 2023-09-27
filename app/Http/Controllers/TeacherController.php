@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Region;
 use App\Models\TeacherCert;
+use App\Models\TeacherCourseOrder;
 use App\Models\TeacherEducation;
 use App\Models\TeacherImage;
 use App\Models\TeacherRealAuth;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -294,5 +297,34 @@ class TeacherController extends Controller
         }
         $result = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id])->first();
         return $this->success('投递详情',$result);
+    }
+
+    /**
+     * 创建课程订单
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create_course_order()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        if (!Course::find($course_id)) {
+            return $this->error('需求不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        $out_trade_no = app('snowflake')->id();
+        $insert_data = [
+            'user_id' => $user->id,
+            'course_id' => $course_id,
+            'out_trade_no' => $out_trade_no,
+            'amount' => BaseInformation::value('service_price'),
+            'status' => 0,
+            'created_at' => Carbon::now()
+        ];
+        $result = TeacherCourseOrder::updateOrCreate(['out_trade_no' => $out_trade_no],$insert_data);
+        if (!$result) {
+            return $this->error('操作失败');
+        }
+        return $this->success('创建成功',$out_trade_no);
     }
 }
