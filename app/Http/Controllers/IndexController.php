@@ -191,13 +191,13 @@ class IndexController extends Controller
         // 距离
         if ($result->adder_role = 4) {
             $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
+            $province = $result->organization->province->region_name;
+            $city = $result->organization->city->region_name;
+            $district = $result->organization->district->region_name;
+            $address = $result->organization->address;
+            // 地址
+            $result->address = $province.$city.$district.$address;
         }
-        $province = $result->organization->province->region_name;
-        $city = $result->organization->city->region_name;
-        $district = $result->organization->district->region_name;
-        $address = $result->organization->address;
-        // 地址
-        $result->address = $province.$city.$district.$address;
         // 当前用户
         $user = Auth::user();
         // 是否收藏
