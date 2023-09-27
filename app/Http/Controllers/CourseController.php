@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\TeacherCourseOrder;
 use App\Models\User;
 use App\Models\UserCourse;
 use Carbon\Carbon;
@@ -88,6 +89,17 @@ class CourseController extends Controller
         }
         if (isset($data['is_platform'])) {
             $where[] = ['courses.adder_role','=',0];
+            if (isset($data['is_show'])) {
+                $order_arr = TeacherCourseOrder::where(['user_id' => $user->id])->pluck('course_id');
+                if ($data['is_show'] == 1) {
+                    $where[] = [function ($query) use ($order_arr) {
+                        $query->whereIn('courses.id',$order_arr);
+                    }];
+                }
+            }
+            if (isset($data['district'])) {
+                $where[] = ['courses.district','=',$data['district']];
+            }
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
