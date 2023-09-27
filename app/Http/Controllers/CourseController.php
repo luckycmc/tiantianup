@@ -97,8 +97,21 @@ class CourseController extends Controller
                     }];
                 }
             }
+            if (isset($data['province'])) {
+                $where[] = ['courses.province','=',$data['province']];
+            }
+            if (isset($data['city'])) {
+                $where[] = ['courses.city','=',$data['city']];
+            }
             if (isset($data['district'])) {
                 $where[] = ['courses.district','=',$data['district']];
+            }
+            if (isset($data['gender'])) {
+                $where[] = ['courses.gender','=',$data['gender']];
+            }
+            if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
+                $where[] = ['courses.created_at','>=',$data['created_at_start']];
+                $where[] = ['courses.created_at','<=',$data['created_at_end']];
             }
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')

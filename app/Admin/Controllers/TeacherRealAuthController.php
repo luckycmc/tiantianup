@@ -20,11 +20,11 @@ class TeacherRealAuthController extends AdminController
         return Grid::make(new TeacherRealAuth(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('user_id');
-            $grid->column('id_card_front');
-            $grid->column('id_card_backend');
+            $grid->column('id_card_front')->image('',60,60);
+            $grid->column('id_card_backend')->image('',60,60);
             $grid->column('real_name');
             $grid->column('id_card_no');
-            $grid->column('status');
+            $grid->column('status','审核状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $grid->column('reason');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -52,7 +52,7 @@ class TeacherRealAuthController extends AdminController
             $show->field('id_card_backend');
             $show->field('real_name');
             $show->field('id_card_no');
-            $show->field('status');
+            $show->field('status','审核状态');
             $show->field('reason');
             $show->field('created_at');
             $show->field('updated_at');
@@ -68,12 +68,12 @@ class TeacherRealAuthController extends AdminController
     {
         return Form::make(new TeacherRealAuth(), function (Form $form) {
             $form->display('id');
-            $form->text('user_id');
-            $form->text('id_card_front');
-            $form->text('id_card_backend');
+            $form->display('user_id');
+            $form->image('id_card_front')->saveFullUrl();
+            $form->image('id_card_backend')->saveFullUrl();
             $form->text('real_name');
             $form->text('id_card_no');
-            $form->text('status');
+            $form->select('status','审核状态')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $form->text('reason');
         
             $form->display('created_at');
