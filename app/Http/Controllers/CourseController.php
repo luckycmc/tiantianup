@@ -87,7 +87,7 @@ class CourseController extends Controller
             $where[] = ['courses.role','=',3];
         }
         if (isset($data['is_platform'])) {
-            $where[] = ['courses.adder_role','=',3];
+            $where[] = ['courses.adder_role','=',0];
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
