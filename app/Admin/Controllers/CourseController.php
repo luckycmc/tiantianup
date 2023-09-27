@@ -7,6 +7,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Http\Request;
 
 class CourseController extends AdminController
 {
@@ -17,6 +18,9 @@ class CourseController extends AdminController
      */
     protected function grid()
     {
+        $request = new Request();
+        $role = $request->all();
+        dd($role);
         return Grid::make(new Course(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('organ_id');
