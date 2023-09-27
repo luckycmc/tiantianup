@@ -46,4 +46,10 @@ class Course extends Model
     {
         return $this->hasMany(DeliverLog::class,'course_id');
     }
+
+    // 教师接单
+    public function teacher_course()
+    {
+        return $this->belongsToMany(User::class,'teacher_course_orders','course_id','user_id');
+    }
 }

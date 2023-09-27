@@ -101,6 +101,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection aftersale_header_id
      * @property Grid\Column|Collection introduce
      * @property Grid\Column|Collection is_checked
+     * @property Grid\Column|Collection out_trade_no
+     * @property Grid\Column|Collection pay_status
      * @property Grid\Column|Collection uuid
      * @property Grid\Column|Collection connection
      * @property Grid\Column|Collection queue
@@ -159,9 +161,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection picture
      * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
-     * @property Grid\Column|Collection real_auth_status
      * @property Grid\Column|Collection data_status
-     * @property Grid\Column|Collection out_trade_no
      * @property Grid\Column|Collection discount
      * @property Grid\Column|Collection pay_type
      * @property Grid\Column|Collection nickname
@@ -268,6 +268,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection aftersale_header_id(string $label = null)
      * @method Grid\Column|Collection introduce(string $label = null)
      * @method Grid\Column|Collection is_checked(string $label = null)
+     * @method Grid\Column|Collection out_trade_no(string $label = null)
+     * @method Grid\Column|Collection pay_status(string $label = null)
      * @method Grid\Column|Collection uuid(string $label = null)
      * @method Grid\Column|Collection connection(string $label = null)
      * @method Grid\Column|Collection queue(string $label = null)
@@ -326,9 +328,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection picture(string $label = null)
      * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
-     * @method Grid\Column|Collection real_auth_status(string $label = null)
      * @method Grid\Column|Collection data_status(string $label = null)
-     * @method Grid\Column|Collection out_trade_no(string $label = null)
      * @method Grid\Column|Collection discount(string $label = null)
      * @method Grid\Column|Collection pay_type(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
@@ -440,6 +440,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection aftersale_header_id
      * @property Show\Field|Collection introduce
      * @property Show\Field|Collection is_checked
+     * @property Show\Field|Collection out_trade_no
+     * @property Show\Field|Collection pay_status
      * @property Show\Field|Collection uuid
      * @property Show\Field|Collection connection
      * @property Show\Field|Collection queue
@@ -498,9 +500,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection picture
      * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
-     * @property Show\Field|Collection real_auth_status
      * @property Show\Field|Collection data_status
-     * @property Show\Field|Collection out_trade_no
      * @property Show\Field|Collection discount
      * @property Show\Field|Collection pay_type
      * @property Show\Field|Collection nickname
@@ -607,6 +607,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection aftersale_header_id(string $label = null)
      * @method Show\Field|Collection introduce(string $label = null)
      * @method Show\Field|Collection is_checked(string $label = null)
+     * @method Show\Field|Collection out_trade_no(string $label = null)
+     * @method Show\Field|Collection pay_status(string $label = null)
      * @method Show\Field|Collection uuid(string $label = null)
      * @method Show\Field|Collection connection(string $label = null)
      * @method Show\Field|Collection queue(string $label = null)
@@ -665,9 +667,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection picture(string $label = null)
      * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
-     * @method Show\Field|Collection real_auth_status(string $label = null)
      * @method Show\Field|Collection data_status(string $label = null)
-     * @method Show\Field|Collection out_trade_no(string $label = null)
      * @method Show\Field|Collection discount(string $label = null)
      * @method Show\Field|Collection pay_type(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)

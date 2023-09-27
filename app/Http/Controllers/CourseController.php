@@ -83,6 +83,12 @@ class CourseController extends Controller
                 }];
             }
         }
+        if ($user->role == 3) {
+            $where[] = ['courses.role','=',3];
+        }
+        if (isset($data['is_platform'])) {
+            $where[] = ['courses.adder_role','=',3];
+        }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
@@ -93,6 +99,10 @@ class CourseController extends Controller
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
             $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
+            if ($v->adder_role == 0) {
+                // 是否查看
+                $v->is_show = $v->teacher_course->where('status',1)->isNotEmpty();
+            }
         }
         return $this->success('课程列表',$result);
     }
