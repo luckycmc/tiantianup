@@ -18,6 +18,7 @@ class TeacherImageController extends AdminController
     protected function grid()
     {
         return Grid::make(new TeacherImage(), function (Grid $grid) {
+            $grid->model()->where('type',2);
             $grid->column('id')->sortable();
             $grid->column('user_id');
             $grid->column('url');

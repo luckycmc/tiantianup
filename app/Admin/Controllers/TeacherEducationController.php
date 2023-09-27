@@ -19,14 +19,13 @@ class TeacherEducationController extends AdminController
     {
         return Grid::make(new TeacherEducation(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('user_id');
+            $grid->column('user.name','教师姓名');
             $grid->column('highest_education');
-            $grid->column('education_id');
             $grid->column('graduate_school');
             $grid->column('speciality');
-            $grid->column('graduate_cert');
-            $grid->column('diploma');
-            $grid->column('status');
+            $grid->column('graduate_cert')->image('',60,60);
+            $grid->column('diploma')->image('',60,60);
+            $grid->column('status')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -50,7 +49,6 @@ class TeacherEducationController extends AdminController
             $show->field('id');
             $show->field('user_id');
             $show->field('highest_education');
-            $show->field('education_id');
             $show->field('graduate_school');
             $show->field('speciality');
             $show->field('graduate_cert');
@@ -68,11 +66,10 @@ class TeacherEducationController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new TeacherEducation(), function (Form $form) {
+        return Form::make(new TeacherEducation(['user']), function (Form $form) {
             $form->display('id');
-            $form->text('user_id');
+            $form->text('user.name');
             $form->text('highest_education');
-            $form->text('education_id');
             $form->text('graduate_school');
             $form->text('speciality');
             $form->text('graduate_cert');

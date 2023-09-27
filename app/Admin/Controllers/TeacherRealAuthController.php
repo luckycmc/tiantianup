@@ -29,9 +29,6 @@ class TeacherRealAuthController extends AdminController
             $grid->column('reason');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
-            $grid->actions(function (Grid\Displayers\Actions $actions) {
-                $actions->append(new RejectRealAuth());
-            });
         });
     }
 

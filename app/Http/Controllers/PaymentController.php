@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TeacherCourseOrder;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Illuminate\Http\Request;
@@ -18,8 +19,14 @@ class PaymentController extends Controller
         $data = \request()->all();
         $out_trade_no = $data['out_trade_no'] ?? '';
         $pay_type = $data['pay_type'] ?? 1;
+        $role = $data['role'] ?? 0;
+        if ($role == 3) {
+            $object = new TeacherCourseOrder();
+        } else {
+            $object = new UserTeacherOrder();
+        }
         // 查询订单
-        $order = UserTeacherOrder::where('out_trade_no',$out_trade_no)->first();
+        $order = $object::where('out_trade_no',$out_trade_no)->first();
         if (!$order) {
             return $this->error('订单不存在');
         }

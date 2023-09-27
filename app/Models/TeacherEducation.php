@@ -12,5 +12,10 @@ class TeacherEducation extends Model
     protected $table = 'teacher_education';
 
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
 }
