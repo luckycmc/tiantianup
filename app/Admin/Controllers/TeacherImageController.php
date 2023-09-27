@@ -22,6 +22,8 @@ class TeacherImageController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('user.name','教师名称');
             $grid->column('url')->image('',60,60);
+            $grid->column('status','状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
+            $grid->column('reason','拒绝原因');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -45,6 +47,8 @@ class TeacherImageController extends AdminController
             $show->field('id');
             $show->field('user.name','教师姓名');
             $show->field('url')->image('',60,60);
+            $show->field('status','状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
+            $show->field('reason','拒绝原因');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -62,7 +66,9 @@ class TeacherImageController extends AdminController
             $form->text('user_id');
             $form->image('url')->saveFullUrl();
             $form->hidden('type')->default(0);
-        
+            $form->select('status')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
+            $form->text('reason','拒绝原因');
+
             $form->display('created_at');
             $form->display('updated_at');
         });

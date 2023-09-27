@@ -17,7 +17,7 @@ class TeacherEducationController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new TeacherEducation(), function (Grid $grid) {
+        return Grid::make(new TeacherEducation(['user']), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('user.name','教师姓名');
             $grid->column('highest_education');
@@ -25,7 +25,7 @@ class TeacherEducationController extends AdminController
             $grid->column('speciality');
             $grid->column('graduate_cert')->image('',60,60);
             $grid->column('diploma')->image('',60,60);
-            $grid->column('status')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
+            $grid->column('status','状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -68,13 +68,13 @@ class TeacherEducationController extends AdminController
     {
         return Form::make(new TeacherEducation(['user']), function (Form $form) {
             $form->display('id');
-            $form->text('user.name');
+            $form->display('user.name');
             $form->text('highest_education');
             $form->text('graduate_school');
             $form->text('speciality');
-            $form->text('graduate_cert');
-            $form->text('diploma');
-            $form->text('status');
+            $form->image('graduate_cert')->saveFullUrl();
+            $form->image('diploma')->saveFullUrl();
+            $form->select('status')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
         
             $form->display('created_at');
             $form->display('updated_at');
