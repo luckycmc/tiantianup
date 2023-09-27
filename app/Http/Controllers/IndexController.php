@@ -189,7 +189,9 @@ class IndexController extends Controller
         $latitude = $data['latitude'] ?? 0;
         $result = Course::with('organization')->find($course_id);
         // 距离
-        $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
+        if ($result->adder_role = 4) {
+            $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
+        }
         $province = $result->organization->province->region_name;
         $city = $result->organization->city->region_name;
         $district = $result->organization->district->region_name;
