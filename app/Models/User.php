@@ -219,4 +219,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(TeacherImage::class,'user_id','id')->where('type',2);
     }
+
+    // 学生
+    public function student()
+    {
+        return $this->hasMany(ParentStudent::class);
+    }
 }

@@ -6,13 +6,17 @@ use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\ParentCourse;
 use App\Models\ParentStudent;
+use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\JWT;
 
 class ParentController extends Controller
 {
@@ -135,5 +139,48 @@ class ParentController extends Controller
             return $this->error('操作失败');
         }
         return $this->success('操作成功');
+    }
+
+    /**
+     * 切换角色
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function change_role()
+    {
+        // 当前用户
+        $user = Auth::user();
+        if (!in_array($user->role,[1,2])) {
+            return $this->error('您不能切换身份');
+        }
+        // 家长有多个学生时不能切换
+        if ($user->role == 2 && $user->student->count() > 0) {
+            return $this->error('您不能切换身份');
+        }
+        // 判读当前用户是否存在其他账号
+        $account = User::where('number',$user->number)->get();
+        $role = $user->role == 1 ? 2 : 1;
+        if (count($account) > 1) {
+            // 查询另外一个账号id
+            $other_id = $account->pluck('id')->reject(function ($item) use ($user) {
+                return $item == $user->id;
+            })->pop();
+            $other_user = User::find($other_id);
+            // 用户登录
+            $token = JWTAuth::fromUser($other_user);
+            //设置token
+            Redis::set('TOKEN:'.$other_id,$token);
+            $is_new = 0;
+            return $this->success('切换成功',compact('token','is_new','role'));
+        }
+        // 不存在其他账号，重新注册
+        $new_user = new User();
+        $new_user->role = $role;
+        $new_user->number = $user->number;
+        $new_user->save();
+        $token = JWTAuth::fromUser($new_user);
+        // 设置token
+        Redis::set('TOKEN:'.$new_user->id,$token);
+        $is_new = 1;
+        return $this->success('切换成功',compact('token','is_new','role'));
     }
 }

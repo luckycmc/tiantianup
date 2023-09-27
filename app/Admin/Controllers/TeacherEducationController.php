@@ -45,14 +45,14 @@ class TeacherEducationController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new TeacherEducation(), function (Show $show) {
+        return Show::make($id, new TeacherEducation(['user']), function (Show $show) {
             $show->field('id');
-            $show->field('user_id');
+            $show->field('user.name','教师姓名');
             $show->field('highest_education');
             $show->field('graduate_school');
             $show->field('speciality');
-            $show->field('graduate_cert');
-            $show->field('diploma');
+            $show->field('graduate_cert')->image('',60,60);
+            $show->field('diploma')->image('',60,60);
             $show->field('status');
             $show->field('created_at');
             $show->field('updated_at');
