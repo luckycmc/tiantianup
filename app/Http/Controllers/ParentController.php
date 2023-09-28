@@ -96,9 +96,7 @@ class ParentController extends Controller
         // 查询数据
         $result = Course::where(['parent_id' => $user->id,'status' => $status])->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
-            if ($v->class_type == 2) {
-                $v->class_time = json_decode($v->class_time,true);
-            }
+            $v->class_time = json_decode($v->class_date,true);
         }
         return $this->success('我的发布',$result);
     }
