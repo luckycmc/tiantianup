@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class OrganizationController extends Controller
@@ -118,6 +119,7 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $data['organ_id'] = $user->id;
         $data['created_at'] = Carbon::now();
+        Log::info('data: ',$data);
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
             return $this->error('提交失败');
