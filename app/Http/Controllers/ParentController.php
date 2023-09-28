@@ -114,7 +114,7 @@ class ParentController extends Controller
         if (!$course_info) {
             return $this->error('课程不存在');
         }
-        $course_info->class_time = json_decode($course_info->class_time,true);
+        $course_info->class_time = json_decode($course_info->class_date,true);
         // 已投递教师人数
         $course_info->delivery_count = DeliverLog::where(['course_id' => $course_id])->count();
         return $this->success('课程详情',$course_info);
