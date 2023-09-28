@@ -93,7 +93,7 @@ class ParentController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(2);
+        // $user = User::find(2);
         // 查询数据
         $result = Course::where(['parent_id' => $user->id,'status' => $status,'adder_role' => 2])->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
