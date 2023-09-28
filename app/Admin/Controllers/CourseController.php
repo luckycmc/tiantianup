@@ -18,9 +18,6 @@ class CourseController extends AdminController
      */
     protected function grid()
     {
-        $request = new Request();
-        $role = $request->all();
-        dd($role);
         return Grid::make(new Course(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('organ_id');

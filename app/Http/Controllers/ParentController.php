@@ -68,9 +68,7 @@ class ParentController extends Controller
         $data['status'] = 0;
         $data['adder_role'] = 2;
         // 处理时间
-        if ($data['class_type'] == 2) {
-            $data['class_date'] = json_encode($data['class_date']);
-        }
+        $data['class_date'] = json_encode($data['class_date']);
         // 保存数据
         $result = Course::updateOrCreate(['id' => $id],$data);
         if (!$result) {
