@@ -167,7 +167,7 @@ class OrganizationController extends Controller
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];
         }
-        $result = DB::table('courses')->where(['organ_id' =>$user->id,'role' => $role])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
+        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
         return $this->success('需求列表',$result);
     }
 

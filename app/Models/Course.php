@@ -52,4 +52,9 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class,'teacher_course_orders','course_id','user_id');
     }
+
+    public function adder()
+    {
+        return $this->belongsTo(User::class,'adder_id','id');
+    }
 }
