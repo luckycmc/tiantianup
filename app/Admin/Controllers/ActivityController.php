@@ -18,19 +18,15 @@ class ActivityController extends AdminController
     protected function grid()
     {
         return Grid::make(new Activity(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('name');
-            $grid->column('image');
-            $grid->column('object');
-            $grid->column('type');
-            $grid->column('description');
-            $grid->column('reward');
-            $grid->column('introduction');
+            $grid->column('id','活动id')->sortable();
+            $grid->column('name','活动名称');
+            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中']);
             $grid->column('start_time');
             $grid->column('end_time');
-            $grid->column('status');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('object','活动对象');
+            $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
+            $grid->column('adder.name','创建人');
+            $grid->column('created_at','创建时间');
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');

@@ -22,7 +22,9 @@ class ActivityController extends Controller
         $user = Auth::user();
         // 用户角色
         $role = $user->role;
-        $result = DB::table('activities')->whereRaw("FIND_IN_SET($role,object)")->where('status',$status)->paginate($page_size);
+        $role_arr = ['','学生','家长','教师','机构'];
+        $role_str = $role_arr[$role];
+        $result = DB::table('activities')->whereRaw("FIND_IN_SET('$role_str',object)")->where('status',$status)->paginate($page_size);
         return $this->success('活动列表',$result);
     }
 
