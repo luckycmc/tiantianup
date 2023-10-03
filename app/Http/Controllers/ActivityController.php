@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
@@ -21,14 +22,7 @@ class ActivityController extends Controller
         $user = Auth::user();
         // 用户角色
         $role = $user->role;
-        if (in_array($role,[1,2])) {
-            $object = 1;
-        } else if ($role == 3) {
-            $object = 2;
-        } else {
-            $object = 3;
-        }
-        $result = Activity::where(['status' => $status,'object' => 0])->orWhere(['status' => $status,'object' => $object])->paginate($page_size);
+        $result = DB::table('activities')->whereRaw("FIND_IN_SET($role,object)")->where('status',$status)->paginate($page_size);
         return $this->success('活动列表',$result);
     }
 

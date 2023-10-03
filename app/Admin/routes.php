@@ -29,5 +29,6 @@ Route::group([
     $router->resource('/consults','ConsultController');
     $router->resource('/teacher_course','TeacherCourseController');
     $router->resource('/student_course','StudentCourseController');
+    $router->resource('/intermediary_course','IntermediaryCourseController');
 
 });
