@@ -18,15 +18,15 @@ class WithdrawController extends AdminController
     protected function grid()
     {
         return Grid::make(new Withdraw(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('user_id');
-            $grid->column('amount');
-            $grid->column('type');
-            $grid->column('username');
+            $grid->column('id','提现id')->sortable();
+            $grid->column('username','用户名');
+            $grid->column('role','用户类型')->using([1 => '学生',2 => '家长',3 => '教师',4 => '机构']);
+            $grid->column('type','提现类型')->using([1 => '支付宝',2 => '微信', 3 => '银行卡']);
             $grid->column('mobile');
-            $grid->column('status');
-            $grid->column('reason');
-            $grid->column('created_at');
+            $grid->column('status','状态')->using([0 => '审核中',1 => '审核未通过', 2 => '打款中', 3 => '已打款']);
+            $grid->column('amount');
+            $grid->column('account');
+            $grid->column('created_at','申请时间');
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {

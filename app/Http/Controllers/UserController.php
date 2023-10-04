@@ -423,6 +423,7 @@ class UserController extends Controller
         // 提现记录
         $withdraw_data = [
             'user_id' => $user->id,
+            'role' => $user->role,
             'amount' => $data['amount'],
             'type' => $data['type'],
             'username' => $data['username'],

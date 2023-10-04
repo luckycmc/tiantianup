@@ -31,5 +31,6 @@ Route::group([
     $router->resource('/student_course','StudentCourseController');
     $router->resource('/intermediary_course','IntermediaryCourseController');
     $router->resource('/activities','ActivityController');
+    $router->resource('/withdraw','WithdrawController');
 
 });

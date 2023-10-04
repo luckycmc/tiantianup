@@ -120,6 +120,7 @@ class OrganizationController extends Controller
         $data['organ_id'] = $user->id;
         $data['created_at'] = Carbon::now();
         $data['class_date'] = json_encode($data['class_date']);
+        $data['adder_role'] = 4;
         Log::info('data: ',$data);
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
@@ -140,6 +141,7 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $sort = $data['sort'] ?? 'desc';
         $page_size = $data['page_size'] ?? 10;
+        $status = $data['status'];
         // 当前用户
         $user = Auth::user();
         // 角色
@@ -167,7 +169,7 @@ class OrganizationController extends Controller
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];
         }
-        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
+        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
         return $this->success('需求列表',$result);
     }
 
@@ -250,6 +252,14 @@ class OrganizationController extends Controller
             $v->teacher_tags = $v->user->teacher_tags->pluck('tag');
         }
         return $this->success('投递教师列表',$result);
+    }
+
+    public function entry_students()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        $page_size = $data['page_size'] ?? 10;
+
     }
 
     /**
