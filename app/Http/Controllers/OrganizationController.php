@@ -9,6 +9,7 @@ use App\Models\OrganPrivilege;
 use App\Models\OrganRole;
 use App\Models\OrganRolePrivilege;
 use App\Models\User;
+use App\Models\UserCourse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -254,12 +255,20 @@ class OrganizationController extends Controller
         return $this->success('投递教师列表',$result);
     }
 
+    /**
+     * 报名学生列表
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function entry_students()
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
         $page_size = $data['page_size'] ?? 10;
-
+        // 投递列表
+        $result = User::whereHas('student_course', function ($query) use ($course_id) {
+            $query->where('course_id', $course_id);
+        })->paginate($page_size);
+        return $this->success('报名学生列表',$result);
     }
 
     /**
