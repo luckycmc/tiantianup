@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use function PHPUnit\Framework\isFalse;
 
 class OrganizationController extends Controller
 {
@@ -452,7 +453,7 @@ class OrganizationController extends Controller
         if (!$role_info) {
             return $this->error('角色不存在');
         }
-        if ($role_info->users->count() > 0) {
+        if (isset($role_info->users) && $role_info->users->count() > 0) {
             return $this->error('请先移除角色下的所有用户');
         }
         // 删除角色

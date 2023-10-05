@@ -18,13 +18,19 @@ class TeacherCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Course(['organization']), function (Grid $grid) {
+        return Grid::make(new Course(['organization','adder']), function (Grid $grid) {
             $grid->model()->where('role',3);
             $grid->column('id')->sortable();
-            $grid->column('organization','发布者');
+            $grid->column('organization.name','发布者');
             $grid->column('name');
+            $grid->column('type','辅导类型');
             $grid->column('subject','科目');
-            $grid->column('type');
+            $grid->column('grade','年级');
+            $grid->column('region','省市区')->display(function () {
+                return $this->province.$this->city.$this->district;
+            });
+            $grid->column('adder.name');
+
             $grid->column('method');
 
             $grid->column('count');
