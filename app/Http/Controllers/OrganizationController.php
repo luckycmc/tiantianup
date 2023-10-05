@@ -498,6 +498,7 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $user_id = $data['user_id'] ?? 0;
         $type = $data['type'] ?? 0;
+        Log::info('type: '.$type);
         $user_info = User::find($user_id);
         // 当前用户
         $user = Auth::user();
