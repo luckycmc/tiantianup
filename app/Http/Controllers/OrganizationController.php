@@ -319,6 +319,16 @@ class OrganizationController extends Controller
     }
 
     /**
+     * 获取角色
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_roles()
+    {
+        $result = OrganRole::all();
+        return $this->success('角色',$result);
+    }
+
+    /**
      * 角色详情
      * @return \Illuminate\Http\JsonResponse
      */

@@ -18,7 +18,7 @@ class OrganRole extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class, 'role_id', 'user_id');
+        return $this->belongsTo(User::class, 'role_id', 'id');
     }
     
 }
