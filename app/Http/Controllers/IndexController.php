@@ -170,7 +170,9 @@ class IndexController extends Controller
         // 当前用户
         $user = Auth::user();
         foreach ($result as $v) {
-            $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            if ($user->role == 4) {
+                $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            }
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
         }

@@ -97,7 +97,7 @@ class TeacherCourseController extends AdminController
             $form->text('max_price');
             $form->text('introduction');
             $form->text('adder_id');
-            $form->text('status');
+            $form->select('status')->options([0 => '待审核',1 => '已通过',3 => '已拒绝']);
             $form->text('reviewer_id');
             $form->text('reason');
         
