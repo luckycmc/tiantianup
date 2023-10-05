@@ -29,25 +29,8 @@ class TeacherCourseController extends AdminController
             $grid->column('region','省市区')->display(function () {
                 return $this->province.$this->city.$this->district;
             });
-            $grid->column('adder.name');
-
-            $grid->column('method');
-
-            $grid->column('count');
-            $grid->column('class_price');
-            $grid->column('duration');
-            $grid->column('class_duration');
-            $grid->column('base_count');
-            $grid->column('base_price');
-            $grid->column('improve_price');
-            $grid->column('max_price');
-            $grid->column('introduction');
-            $grid->column('adder_id');
-            $grid->column('status');
-            $grid->column('reviewer_id');
-            $grid->column('reason');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('adder.name','创建人');
+            $grid->column('created_at','创建时间');
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
