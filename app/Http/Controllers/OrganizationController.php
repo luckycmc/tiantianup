@@ -8,8 +8,10 @@ use App\Models\DeliverLog;
 use App\Models\OrganPrivilege;
 use App\Models\OrganRole;
 use App\Models\OrganRolePrivilege;
+use App\Models\Region;
 use App\Models\User;
 use App\Models\UserCourse;
+use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -572,5 +574,69 @@ class OrganizationController extends Controller
             return $this->error('操作失败');
         }
         return $this->success('操作成功');
+    }
+
+    public function teachers()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $district_id = $data['district_id'] ?? 0;
+        if (isset($data['longitude']) && isset($data['latitude'])) {
+            // 根据经纬度获取省市区
+            $location = get_location($data['longitude'],$data['latitude']);
+            if (!$location) {
+                return $this->error('定位出错');
+            }
+            $district_id = Region::where('code',$location['adcode'])->value('id');
+        }
+        // 当前机构
+        $user = Auth::user();
+        // 机构购买的教师
+        $teacher_ids = UserTeacherOrder::where('user_id',$user->id)->distinct()->pluck('teacher_id');
+        // 排序
+        $order = $data['order'] ?? 'desc';
+        $sort_field = 'users.age';
+        if (isset($data['sort_teaching_year'])) {
+            $sort_field = 'teacher_info.teaching_year';
+        } elseif (isset($data['sort_education'])) {
+            $sort_field = 'teacher_info.education_id';
+        }
+        // 筛选
+        $where = [];
+        if (isset($data['city_id'])) {
+            $where[] = ['users.city_id','=',$data['city_id']];
+        }
+        if (isset($data['filter_object'])) {
+            $where[] = ['teacher_career.object','like','%'.$data['filter_object'].'%'];
+        }
+        if (isset($data['filter_subject'])) {
+            $where[] = ['teacher_career.object','like','%'.$data['filter_subject'].'%'];
+        }
+        if (isset($data['filter_gender'])) {
+            $where[] = ['users.gender','=',$data['filter_gender']];
+        }
+        if (isset($data['filter_education'])) {
+            $where[] = ['teacher_info.highest_education','=',$data['filter_education']];
+        }
+        if (isset($data['filter_teaching_year_min']) && isset($data['filter_teaching_year_max'])) {
+            $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year_min']];
+            $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year_max']];
+        }
+        if (isset($data['filter_is_auth'])) {
+            $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
+        }
+        $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+            ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
+            ->where($where)
+            // ->where(['district_id' => $district_id])
+            ->whereIn('users.id',$teacher_ids)
+            ->orderBy($sort_field,$order)
+            ->select('users.*','teacher_info.highest_education','teacher_info.graduate_school','teacher_info.teaching_year','teacher_career.subject')
+            ->paginate($page_size);
+        foreach ($result as $v) {
+            // 科目
+            $v->subject = explode(',',$v->subject);
+        }
+        return $this->success('教师列表',$result);
     }
 }
