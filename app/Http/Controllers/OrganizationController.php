@@ -576,6 +576,10 @@ class OrganizationController extends Controller
         return $this->success('操作成功');
     }
 
+    /**
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function teachers()
     {
         $data = \request()->all();
@@ -623,7 +627,7 @@ class OrganizationController extends Controller
             $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year_max']];
         }
         if (isset($data['filter_is_auth'])) {
-            $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
+            $where[] = ['users.is_real_auth','=',$data['filter_is_auth']];
         }
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
