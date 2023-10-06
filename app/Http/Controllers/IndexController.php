@@ -225,6 +225,7 @@ class IndexController extends Controller
             $entry_time = Carbon::parse($entry_info->created_at)->format('Y-m-d H:i:s');
             $result->entry_time = $entry_time;
         }
+        $result->class_date = json_decode($result->class_date,true);
         return $this->success('课程详情',$result);
     }
 
