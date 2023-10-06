@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Education;
 use App\Models\Grade;
+use App\Models\Notice;
 use App\Models\OrganType;
 use App\Models\Region;
 use App\Models\RotateImage;
@@ -504,5 +505,19 @@ class IndexController extends Controller
     {
         $types = TeachingType::all();
         return $this->success('辅导类型',$types);
+    }
+
+    /**
+     * 获取公告
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_notice()
+    {
+        // 当前用户
+        $user = Auth::user();
+        $role = $user->role;
+        // 查询公告
+        $notice = Notice::whereRaw("FIND_IN_SET('$role',object)")->where('status',1)->orderByDesc('created_at')->limit(1)->get();
+        return $this->success('公告',$notice);
     }
 }
