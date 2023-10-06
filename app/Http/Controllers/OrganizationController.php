@@ -145,7 +145,7 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $sort = $data['sort'] ?? 'desc';
         $page_size = $data['page_size'] ?? 10;
-        $status = $data['status'];
+        $status = $data['status'] ?? 0;
         // 当前用户
         $user = Auth::user();
         // 角色
@@ -173,7 +173,7 @@ class OrganizationController extends Controller
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];
         }
-        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
+        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status,'adder_id' => $user->id])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
         return $this->success('需求列表',$result);
     }
 
