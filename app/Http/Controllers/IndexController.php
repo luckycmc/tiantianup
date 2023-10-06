@@ -14,6 +14,7 @@ use App\Models\OrganType;
 use App\Models\Region;
 use App\Models\RotateImage;
 use App\Models\Subject;
+use App\Models\TeacherCourseOrder;
 use App\Models\TeachingMethod;
 use App\Models\TeachingType;
 use App\Models\TrianingType;
@@ -218,6 +219,11 @@ class IndexController extends Controller
         if ($user->role == 3) {
             // 是否投递
             $result->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id])->exists();
+            // 课程信息
+            $course_info = Course::find($course_id);
+            if ($course_info->adder_role == 0) {
+                $result->is_show = TeacherCourseOrder::where(['user_id' => $user->id,'course_id' => $course_id,'status' => 1])->exists();
+            }
         }
 
         if ($result->is_entry) {
