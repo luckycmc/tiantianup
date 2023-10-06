@@ -512,4 +512,23 @@ class IndexController extends Controller
         $notice = Notice::whereRaw("FIND_IN_SET('$role',object)")->where('status',1)->orderByDesc('created_at')->limit(1)->get();
         return $this->success('公告',$notice);
     }
+
+    /**
+     * 上传文件
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upload()
+    {
+        $data = request()->all();
+        $file = request()->file('file');
+        $pathname = $data['pathname'] ?? 'user';
+
+        $disk = Storage::disk('cosv5');
+        $upload_path = 'upload/imgs/'.$pathname.'/' . date("Ym/d", time());
+        //将图片上传到OSS中，并返回图片路径信息 值如:imgs/1234.jpeg
+        $path = $disk->put($upload_path, $file);
+        $url = $disk->url($path);
+        $url = explode('?',$url)[0];
+        return $this->success('上传成功',compact('url'));
+    }
 }
