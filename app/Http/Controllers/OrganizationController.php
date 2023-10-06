@@ -198,6 +198,7 @@ class OrganizationController extends Controller
             // 查询投递人数
             $course_info->deliver_count = $course_info->deliver->count();
         }
+        $course_info->class_date = json_decode($course_info->class_date,true);
         return $this->success('课程详情',$course_info);
     }
 
