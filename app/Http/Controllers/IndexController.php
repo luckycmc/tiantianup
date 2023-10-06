@@ -179,6 +179,7 @@ class IndexController extends Controller
             }
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+            $v->class_date = json_decode($v->class_date,true);
         }
         return $this->success('推荐课程列表',$result);
     }
