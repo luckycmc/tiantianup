@@ -167,7 +167,10 @@ class IndexController extends Controller
         if (isset($data['method'])) {
             $where[] = ['method','=',$data['method']];
         }
-        $result = Course::with('organization')->where($where)->where('adder_role','!=',3)->paginate($page_size);
+        if (isset($data['district'])) {
+            $where[] = ['district','=',$data['district']];
+        }
+        $result = Course::with('organization')->where($where)->where('adder_role','!=',3)->where('status',1)->paginate($page_size);
         // 当前用户
         $user = Auth::user();
         foreach ($result as $v) {
