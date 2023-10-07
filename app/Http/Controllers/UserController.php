@@ -356,6 +356,7 @@ class UserController extends Controller
                 $course_info = Course::find($v->course->id);
                 if ($course_info->adder_role == 4) {
                     $v->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
+                    $v->course_organ = $v->course->organization;
                 }
             }
         }
