@@ -98,10 +98,10 @@ function create_qr_code ($user_id) {
     $url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token;
     $result = Http::post($url, $request_data)->body();
     // dd($result->body());
-    $file = "/qr_code/" . $user_id . ".jpg";
+    $file = "qr_code/" . $user_id . ".jpg";
     file_put_contents($file, $result);
 
-    return $file;
+    return '/'.$file;
 }
 
 function get_location ($longitude, $latitude) {
