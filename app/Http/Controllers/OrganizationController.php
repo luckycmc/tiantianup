@@ -148,7 +148,7 @@ class OrganizationController extends Controller
         $status = $data['status'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(33);
+        // $user = User::find(33);
         // 角色
         $role = $data['role'] ?? 3;
         // 排序条件
