@@ -89,16 +89,16 @@ function create_qr_code ($user_id) {
     ])->object()->access_token;
     $path = 'pages/login/index';
     $request_data = [
-        // 'page'  => $path,
+        'page'  => $path,
         "check_path" => true,
         'env_version'=>'develop',  //release 正式版
-        'scene'=> $user_id,
+        'scene'=> 'parent_id='.$user_id,
     ];
     // $request_data = json_encode($request_data,320);
     $url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token;
     $result = Http::post($url, $request_data)->body();
     // dd($result->body());
-    $file = "uploads/" . $user_id . ".jpg";
+    $file = "qr_code/" . $user_id . ".jpg";
     file_put_contents($file, $result);
 
     return $file;
