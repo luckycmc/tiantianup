@@ -115,3 +115,15 @@ function get_location ($longitude, $latitude) {
         return false;
     }
 }
+
+function get_access_token () {
+    $param = [
+        'appid' => env('WECHAT_MINI_PROGRAM_APPID'),
+        'secret' => env('WECHAT_MINI_PROGRAM_SECRET'),
+        'grant_type' => 'client_credential'
+    ];
+    $url = 'https://api.weixin.qq.com/cgi-bin/token';
+    $result = Http::get($url,$param);
+    $info = json_decode($result->body(),true);
+    return $info['access_token'];
+}
