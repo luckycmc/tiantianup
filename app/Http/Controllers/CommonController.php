@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseInformation;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Illuminate\Http\Request;
@@ -43,5 +44,15 @@ class CommonController extends Controller
         } catch (Exception $e) {
             Log::info($data);
         }
+    }
+
+    /**
+     * 获取基本信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_base_information()
+    {
+        $result = BaseInformation::first();
+        return $this->success('基本信息',$result);
     }
 }

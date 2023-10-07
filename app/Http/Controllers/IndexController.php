@@ -470,16 +470,6 @@ class IndexController extends Controller
     }
 
     /**
-     * 获取基本信息
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function get_base_information()
-    {
-        $result = BaseInformation::first();
-        return $this->success('基本信息',$result);
-    }
-
-    /**
      * 授课方式
      * @return \Illuminate\Http\JsonResponse
      */
