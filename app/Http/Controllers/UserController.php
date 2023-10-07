@@ -773,7 +773,7 @@ class UserController extends Controller
             $access_token = get_access_token();
             $request_data = [
                 'page' => 'pages/login/index',
-                'scene' =>  $user->id,
+                'scene' =>  'parent_id='.$user->id,
                 'check_path' => true,
                 'env_version' => 'trial'
             ];
