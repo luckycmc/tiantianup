@@ -37,6 +37,7 @@ class TeacherController extends Controller
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
         }
+        Log::info('district_id: '.$district_id);
         // dd($data);
         $page_size = $data['page_size'] ?? 10;
         // 排序
