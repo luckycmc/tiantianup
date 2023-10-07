@@ -784,7 +784,7 @@ class UserController extends Controller
 
             $file = public_path()."/qr_code/".$user->id.".jpg";
             file_put_contents($file, $result);
-            return $this->success('邀请码',env('app_url').$file_name);
+            return $this->success('邀请码',env('APP_URL').$file_name);
         }
         return $this->success('邀请码',env('APP_URL').$file_name);
     }
