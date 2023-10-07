@@ -148,6 +148,7 @@ class OrganizationController extends Controller
         $status = $data['status'] ?? 0;
         // 当前用户
         $user = Auth::user();
+        $user = User::find(33);
         // 角色
         $role = $data['role'] ?? 3;
         // 排序条件
@@ -167,7 +168,7 @@ class OrganizationController extends Controller
             $where[] = ['subject','=',$data['subject']];
         }
         if (isset($data['type'])) {
-            $where[] = ['type','=','type'];
+            $where[] = ['type','=',$data['type']];
         }
         if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
             $where[] = ['created_at','>','created_at_start'];
