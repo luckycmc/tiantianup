@@ -244,8 +244,8 @@ class TeacherController extends Controller
         if (isset($data['filter_adder_role'])) {
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
-        if (isset($data['district_id'])) {
-            $where[] = ['courses.district_id','=',$data['district_id']];
+        if (isset($data['district'])) {
+            $where[] = ['courses.district','=',$data['district']];
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
