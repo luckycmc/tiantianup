@@ -556,6 +556,7 @@ class UserController extends Controller
             'image' => $data['image'] ?? '',
             'out_trade_no' => $out_trade_no,
             'pay_status' => 0,
+            'amount' => 0.01,
             'created_at' => Carbon::now()
         ];
         Log::info('data: ',$data);
