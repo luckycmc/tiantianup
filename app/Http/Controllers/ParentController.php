@@ -137,6 +137,24 @@ class ParentController extends Controller
     }
 
     /**
+     * 是否能切换身份
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function can_change_role()
+    {
+        // 当前用户
+        $user = Auth::user();
+        if (!in_array($user->role,[1,2])) {
+            return $this->error('您不能切换身份');
+        }
+        // 家长有多个学生时不能切换
+        if ($user->role == 2 && $user->student->count() > 0) {
+            return $this->error('您不能切换身份');
+        }
+        return $this->success('可以切换');
+    }
+
+    /**
      * 切换角色
      * @return \Illuminate\Http\JsonResponse
      */
