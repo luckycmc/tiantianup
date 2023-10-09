@@ -21,12 +21,12 @@ class PaymentController extends Controller
         $out_trade_no = $data['out_trade_no'] ?? '';
         $pay_type = $data['pay_type'] ?? 1;
         $role = $data['role'] ?? 0;
+        $pay_config = 'default';
         if ($role == 3) {
             $object = new DeliverLog();
-            $config = 'teacher';
+            $pay_config = 'teacher';
         } else {
             $object = new UserTeacherOrder();
-            $config = 'user';
         }
         // 查询订单
         $order = $object::where('out_trade_no',$out_trade_no)->first();
@@ -50,9 +50,8 @@ class PaymentController extends Controller
                 'payer' => [
                     'openid' => $user->open_id,
                 ],
-                '_config' => $config,
+                '_config' => $pay_config,
             ];
-            // dd($pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
         } else if ($pay_type == 2) {
             // 组合支付
