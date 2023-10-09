@@ -49,6 +49,7 @@ class LoginController extends Controller
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
         $is_role = $is_user->role ?? 0;
+        Log::info('is_role: '.$is_role);
         return $this->success('登录成功',compact('token','user_id','is_role'));
     }
 
