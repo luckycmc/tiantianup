@@ -171,6 +171,7 @@ class ParentController extends Controller
         }
         // 判读当前用户是否存在其他账号
         $account = User::where('number',$user->number)->get();
+        Log::info('account: '.count($account));
         $role = $user->role == 1 ? 2 : 1;
         if (count($account) > 1) {
             // 查询另外一个账号id
