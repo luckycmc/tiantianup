@@ -545,6 +545,7 @@ class UserController extends Controller
         }
         // 当前用户
         $user = Auth::user();
+        $out_trade_no = app('snowflake')->id();
         // 查看是否已投递
         $deliver_data = [
             'user_id' => $user->id,
@@ -552,6 +553,8 @@ class UserController extends Controller
             'status' => 0,
             'introduce' => '个人介绍',
             'image' => $data['image'] ?? '',
+            'out_trade_no' => $out_trade_no,
+            'pay_status' => 0,
             'created_at' => Carbon::now()
         ];
         Log::info('data: ',$data);
