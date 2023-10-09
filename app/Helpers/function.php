@@ -92,7 +92,7 @@ function create_qr_code ($user_id) {
         'page'  => $path,
         "check_path" => true,
         'env_version'=>'develop',  //release 正式版
-        'scene'=> 'parent_id='.$user_id,
+        'scene'=> $user_id,
     ];
     // $request_data = json_encode($request_data,320);
     $url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token;
