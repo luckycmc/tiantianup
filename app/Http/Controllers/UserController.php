@@ -74,10 +74,12 @@ class UserController extends Controller
         }
         if ($user->role == 4) {
             // 机构信息
-            $organization = Organization::where('user_id',$user->id)->get();
+            $organization = Organization::where('user_id',$user->id)->first();
             $organization->latitude = $data['latitude'] ?? '';
             $organization->longitude = $data['longitude'] ?? '';
-            $organization->save();
+            $organization->update();
+            unset($data['latitude']);
+            unset($data['longitude']);
         }
         $data['created_at'] = Carbon::now();
         $result = DB::table('users')->where('id',$user->id)->update($data);

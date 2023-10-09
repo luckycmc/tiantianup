@@ -152,13 +152,11 @@ class IndexController extends Controller
         if (isset($data['district'])) {
             $where[] = ['district','=',$data['district']];
         }
-        $result = Course::with('organization')->where($where)->where('adder_role','!=',3)->where('status',1)->paginate($page_size);
+        $result = Course::with('organization')->where($where)->where('adder_role',4)->where('status',1)->paginate($page_size);
         // 当前用户
         $user = Auth::user();
         foreach ($result as $v) {
-            if ($user->role == 4) {
-                $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
-            }
+            $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
             $v->class_date = json_decode($v->class_date,true);
