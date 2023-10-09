@@ -551,7 +551,7 @@ class UserController extends Controller
             'user_id' => $user->id,
             'course_id' => $data['course_id'],
             'status' => 0,
-            'introduce' => '个人介绍',
+            'introduce' => $data['introduce'],
             'image' => $data['image'] ?? '',
             'out_trade_no' => $out_trade_no,
             'pay_status' => 0,
