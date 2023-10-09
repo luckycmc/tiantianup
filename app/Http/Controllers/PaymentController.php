@@ -23,8 +23,10 @@ class PaymentController extends Controller
         $role = $data['role'] ?? 0;
         if ($role == 3) {
             $object = new DeliverLog();
+            $config = 'teacher';
         } else {
             $object = new UserTeacherOrder();
+            $config = 'user';
         }
         // 查询订单
         $order = $object::where('out_trade_no',$out_trade_no)->first();
@@ -47,7 +49,8 @@ class PaymentController extends Controller
                 ],
                 'payer' => [
                     'openid' => $user->open_id,
-                ]
+                ],
+                '_config' => $config,
             ];
             // dd($pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
