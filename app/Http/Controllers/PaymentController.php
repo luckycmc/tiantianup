@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliverLog;
 use App\Models\TeacherCourseOrder;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
@@ -21,7 +22,7 @@ class PaymentController extends Controller
         $pay_type = $data['pay_type'] ?? 1;
         $role = $data['role'] ?? 0;
         if ($role == 3) {
-            $object = new TeacherCourseOrder();
+            $object = new DeliverLog();
         } else {
             $object = new UserTeacherOrder();
         }

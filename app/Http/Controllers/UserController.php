@@ -10,6 +10,7 @@ use App\Models\DeliverLog;
 use App\Models\Organization;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
+use App\Models\TeacherCourseOrder;
 use App\Models\TeacherEducation;
 use App\Models\TeacherInfo;
 use App\Models\TeacherRealAuth;
