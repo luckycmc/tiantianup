@@ -117,6 +117,7 @@ class CourseController extends Controller
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
+            ->where('courses.status','=',1)
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
 
