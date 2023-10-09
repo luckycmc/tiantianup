@@ -48,8 +48,8 @@ class LoginController extends Controller
         $user_id = $is_user->id;
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
-        $is_role = isset($is_user->role) ? 1 : 0;
-        return $this->success('登录成功',compact('token','user_id','is_role'));
+        $role = $is_user->role ?? 0;
+        return $this->success('登录成功',compact('token','user_id','role'));
     }
 
     public function mobile_login()
@@ -91,8 +91,8 @@ class LoginController extends Controller
         $token = JWTAuth::fromUser($is_user);
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
-        $is_role = isset($is_user->role) ? 1 : 0;
-        return $this->success('登录成功',compact('token','is_role'));
+        $role = $is_user->role ?? 0;
+        return $this->success('登录成功',compact('token','role'));
     }
 
     /**
