@@ -121,7 +121,7 @@ class OrganizationController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $data['organ_id'] = $user->id;
+        $data['organ_id'] = $user->organization->id;
         $data['created_at'] = Carbon::now();
         $data['class_date'] = json_encode($data['class_date']);
         $data['adder_role'] = 4;
