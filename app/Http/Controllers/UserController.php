@@ -7,6 +7,7 @@ use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\Organization;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
 use App\Models\TeacherEducation;
@@ -70,6 +71,13 @@ class UserController extends Controller
         $data['number'] = create_user_number($data['city_id'],$user->id);
         if ($user->role != 3) {
             $data['age'] = Carbon::parse($data['birthday'])->diffInYears(Carbon::now());
+        }
+        if ($user->role == 4) {
+            // 机构信息
+            $organization = Organization::where('user_id',$user->id)->get();
+            $organization->latitude = $data['latitude'] ?? '';
+            $organization->longitude = $data['longitude'] ?? '';
+            $organization->save();
         }
         $data['created_at'] = Carbon::now();
         $result = DB::table('users')->where('id',$user->id)->update($data);
