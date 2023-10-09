@@ -274,6 +274,9 @@ class IndexController extends Controller
         $user->collection = $user->collects()->count();
         // 我的报名
         $user->entry = $user->user_courses()->count();
+        if ($user->role == 3) {
+            $user->entry = $user->deliver_log()->count();
+        }
         // 未读消息
         $user->message = $user->messages()->where('status',0)->count();
         // 联系人数量
