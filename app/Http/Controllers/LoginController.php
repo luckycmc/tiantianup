@@ -29,7 +29,7 @@ class LoginController extends Controller
         $code = $data['code'] ?? '';
         $app = Factory::miniProgram($config);
         $session =$app->auth->session($code);
-        Log::info('session: ',$session);
+        Log::info('parent_id: '.$data['parent_id']);
         if (!isset($session['session_key'])) {
             return $this->error('登陆失败');
         }
