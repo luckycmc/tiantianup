@@ -299,7 +299,10 @@ class TeacherController extends Controller
         if (!Course::find($course_id)) {
             return $this->error('课程不存在');
         }
-        $result = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id])->first();
+        $result = DeliverLog::with('course')->where(['user_id' => $user->id,'course_id' => $course_id])->first();
+        if ($result->pay_status == 1) {
+            $result->mobile = $result->course->adder->mobile;
+        }
         return $this->success('投递详情',$result);
     }
 
