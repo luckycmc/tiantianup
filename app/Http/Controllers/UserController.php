@@ -786,7 +786,7 @@ class UserController extends Controller
             file_put_contents($file, $result);
             // 保存
             $user->invite_qrcode = env('APP_URL').$file_name;
-            $user->save();
+            $user->update();
             return $this->success('邀请码',env('APP_URL').$file_name);
         }
         return $this->success('邀请码',env('APP_URL').$file_name);
