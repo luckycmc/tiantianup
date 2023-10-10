@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Yansongda\Pay\Pay;
 use function PHPUnit\Framework\isFalse;
 
 class OrganizationController extends Controller
@@ -661,15 +662,33 @@ class OrganizationController extends Controller
 
     public function batch_pay()
     {
+        $config = config('pay');
         $data = \request()->all();
         $out_trade_no_arr = $data['out_trade_no'] ?? [];
         $total_out_trade_no = app('out_trade_no')->id();
         $total_amount = 0;
         foreach ($out_trade_no_arr as $v) {
-            $order_info = Course::where('out_trade_no',$v)->get();
+            $order_info = UserCourse::where('out_trade_no',$v)->get();
             $order_info->total_out_trade_no = $total_out_trade_no;
             $total_amount += $order_info->amount;
             $order_info->update();
         }
+        // 当前用户
+        $user = Auth::user();
+        // 调起支付
+        $pay_data = [
+            'out_trade_no' => $total_out_trade_no,
+            'description' => '服务费',
+            'amount' => [
+                'total' => $total_amount,
+                'currency' => 'CNY',
+            ],
+            'payer' => [
+                'openid' => $user->open_id,
+            ],
+            '_config' => 'organization',
+        ];
+        $result = Pay::wechat($config)->mini($pay_data);
+        return $this->success('调起支付',compact('result'));
     }
 }

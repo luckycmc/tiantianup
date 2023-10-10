@@ -6,6 +6,7 @@ use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\User;
+use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -77,6 +78,29 @@ class CommonController extends Controller
                 $course = Course::find($order->course_id);
                 $course->status = 2;
                 $course->update();
+            }
+        } catch (Exception $e) {
+            Log::info($data);
+        }
+    }
+
+    public function organ_wechat_notify()
+    {
+        $config = config('pay');
+        $pay = Pay::wechat($config);
+        try {
+            $data = $pay->callback(); // 是的，验签就这么简单！
+            $info = $data['resource']['ciphertext'];
+            if ($info['trade_state'] == 'SUCCESS') {
+                // 查询订单
+                $orders = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->first();
+                foreach ($orders as $order) {
+                    $order->pay_status = 1;
+                    $order->save();
+                }
+                // 修改支付状态
+                $order->pay_status = 1;
+                $order->save();
             }
         } catch (Exception $e) {
             Log::info($data);
