@@ -276,9 +276,12 @@ class OrganizationController extends Controller
         $course_id = $data['course_id'] ?? 0;
         $page_size = $data['page_size'] ?? 10;
         // 投递列表
-        $result = User::whereHas('student_course', function ($query) use ($course_id) {
+        $result = User::with('student_course')->whereHas('student_course', function ($query) use ($course_id) {
             $query->where('course_id', $course_id);
         })->paginate($page_size);
+        foreach ($result as $v) {
+            $v->pay_status = UserCourse::where(['user_id' => $v->id,'course_id' => $v->student_course[0]['course_id']])->value('status');
+        }
         // 支付总人数
         $payed_total = $result->filter(function ($item) {
             return $item['status'] == 1;
