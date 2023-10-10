@@ -98,9 +98,6 @@ class CommonController extends Controller
                     $order->pay_status = 1;
                     $order->save();
                 }
-                // 修改支付状态
-                $order->pay_status = 1;
-                $order->save();
             }
         } catch (Exception $e) {
             Log::info($data);
