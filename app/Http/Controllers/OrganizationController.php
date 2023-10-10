@@ -40,6 +40,7 @@ class OrganizationController extends Controller
         // 当前用户
         $user = Auth::user();
         $user->role = $data['role'] ?? 4;
+        $user->update();
         unset($data['role']);
         // 存入机构
         $data['created_at'] = Carbon::now();
