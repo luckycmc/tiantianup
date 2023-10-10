@@ -20,29 +20,22 @@ class StudentCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Course(), function (Grid $grid) {
+        return Grid::make(new Course('organization'), function (Grid $grid) {
             $grid->model()->where('role',1);
             $grid->column('id')->sortable();
-            $grid->column('organ_id');
-            $grid->column('name');
-            $grid->column('type');
-            $grid->column('method');
-            $grid->column('subject');
-            $grid->column('count');
-            $grid->column('class_price');
-            $grid->column('duration');
-            $grid->column('class_duration');
-            $grid->column('base_count');
-            $grid->column('base_price');
-            $grid->column('improve_price');
-            $grid->column('max_price');
-            $grid->column('introduction');
-            $grid->column('adder_id');
-            $grid->column('status')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);
-            $grid->column('reviewer_id');
-            $grid->column('reason');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('organization.name','机构名称');
+            $grid->column('name','课程名称');
+            $grid->column('type','辅导类型');
+            $grid->column('method','上课方式');
+            $grid->column('subject','科目');
+            $grid->column('grade','年级');
+            $grid->column('region','省市区')->display(function () {
+                return $this->organization->province->region_name.$this->organization->city->region_name.$this->organization->district->region_name;
+            });
+            $grid->column('organization.name','创建人');
+            $grid->column('status','状态')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);
+            $grid->column('reason','拒绝原因');
+            $grid->column('created_at','创建时间');
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
