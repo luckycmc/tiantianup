@@ -64,6 +64,7 @@ class ParentController extends Controller
         // 当前用户
         $user = Auth::user();
         $data['parent_id'] = $user->id;
+        $data['role'] = 3;
         $data['created_at'] = Carbon::now();
         $data['status'] = 0;
         $data['adder_role'] = 2;
