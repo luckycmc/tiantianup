@@ -129,6 +129,7 @@ class OrganizationController extends Controller
         $data['class_date'] = json_encode($data['class_date']);
         $data['adder_role'] = 4;
         $data['adder_id'] = $user->id;
+        $data['end_time'] = $data['end_time'];
         Log::info('data: ',$data);
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
@@ -191,7 +192,7 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
         // 查询是否存在
-        $course_info = Course::with('users')->find($course_id);
+        $course_info = Course::with('organization')->find($course_id);
         if (!$course_info) {
             return $this->error('课程不存在');
         }
