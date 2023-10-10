@@ -55,6 +55,7 @@ class LoginController extends Controller
 
     public function mobile_login()
     {
+        $config = config('wechat.mini_program.default');
         $data = \request()->all();
         $rules = [
             'mobile' => 'required|phone_number',
@@ -75,11 +76,22 @@ class LoginController extends Controller
         if(!$sendcode || $sendcode!=$data['code']) return $this->error('验证码不正确');
         // 查询用户是否存在
         $is_user = User::where('mobile',$data['mobile'])->first();
+        // 获取open_id
+        $open_id = '';
+        if (isset($data['wx_code'])) {
+            $app = Factory::miniProgram($config);
+            $session =$app->auth->session($data['wx_code']);
+            if (!isset($session['session_key'])) {
+                return $this->error('登陆失败');
+            }
+            $open_id = $session['openid'];
+        }
         if (!$is_user) {
             // 注册新用户
             $new_user = new User();
             $new_user->mobile = $data['mobile'];
             $new_user->parent_id = $data['parent_id'] ?? null;
+            $new_user->open_id = $open_id;
             $new_user->save();
             $is_user = $new_user;
         }
