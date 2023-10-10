@@ -199,4 +199,23 @@ class ParentController extends Controller
         $is_new = 1;
         return $this->success('切换成功',compact('token','is_new','role'));
     }
+
+    /**
+     * 获取被选中的教师
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deliver_teachers()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        $page_size = $data['page_size'] ?? 10;
+        // 投递列表
+        $result = DeliverLog::with(['user'])->where(['course_id' => $course_id,'is_checked' => 1,'pay_status' => 1])->paginate($page_size);
+        foreach ($result as $v) {
+            $v->teacher_info = $v->user->teacher_info;
+            $v->subject = $v->course->subject;
+            $v->teacher_tags = $v->user->teacher_tags->pluck('tag');
+        }
+        return $this->success('投递教师列表',$result);
+    }
 }
