@@ -2,6 +2,7 @@
 
 namespace App\Admin\Forms;
 
+use App\Models\Course;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
@@ -18,14 +19,16 @@ class RefuseCourse extends Form implements LazyRenderable
      */
     public function handle(array $input)
     {
-        dd($input);
-        // dump($input);
-
-        // return $this->response()->error('Your error message.');
+        $id = $this->payload['id'] ?? null;
+        $reason = $input['reason'] ?? '';
+        $course_info = Course::find($id);
+        $course_info->status = 3;
+        $course_info->reason = $reason;
+        $course_info->update();
 
         return $this
 				->response()
-				->success('Processed successfully.')
+				->success('操作成功')
 				->refresh();
     }
 
@@ -34,7 +37,7 @@ class RefuseCourse extends Form implements LazyRenderable
      */
     public function form()
     {
-        $this->text('reason')->required();
+        $this->text('reason','拒绝原因')->required();
     }
 
     /**

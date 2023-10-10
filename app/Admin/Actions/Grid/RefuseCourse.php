@@ -9,6 +9,7 @@ use Dcat\Admin\Widgets\Modal;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use App\Admin\Forms\RefuseCourse as RefuseCourseForm;
 
 class RefuseCourse extends RowAction
 {
@@ -20,7 +21,7 @@ class RefuseCourse extends RowAction
     public function render()
     {
         // 实例化表单类并传递自定义参数
-        $form = \App\Admin\Forms\RefuseCourse::make()->payload(['id' => $this->getKey()]);
+        $form = RefuseCourseForm::make()->payload(['id' => $this->getKey()]);
 
         return Modal::make()
             ->lg()

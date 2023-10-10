@@ -30,19 +30,11 @@ class VerifyCourse extends RowAction
         $course_info = Course::find($course_id);
         $course_info->status = 1;
         $course_info->update();
-        $redirect = '/';
-        if ($course_info->adder_role == 0) {
-            $redirect = '/intermediary_course';
-        } else if ($course_info->role == 1 && $course_info->adder_role !== 0) {
-            $redirect = '/student_course';
-        } else if ($course_info->role == 3 && $course_info->adder_role !== 0) {
-            $redirect = '/teacher_course';
-        }
 
 
         return $this->response()
             ->success('操作成功')
-            ->redirect($redirect);
+            ->refresh();
     }
 
     /**
