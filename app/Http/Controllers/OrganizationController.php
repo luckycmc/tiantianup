@@ -284,7 +284,7 @@ class OrganizationController extends Controller
         }
         // 支付总人数
         $payed_total = $result->filter(function ($item) {
-            return $item['status'] == 1;
+            return $item['pay_status'] == 1;
         })->count();
         return $this->success('报名学生列表',compact('result','payed_total'));
     }
