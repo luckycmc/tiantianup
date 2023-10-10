@@ -658,4 +658,13 @@ class OrganizationController extends Controller
         }
         return $this->success('教师列表',$result);
     }
+
+    public function batch_pay()
+    {
+        $data = \request()->all();
+        $orders = $data['orders'] ?? [];
+        foreach ($orders as $v) {
+            $order_info = '';
+        }
+    }
 }
