@@ -21,7 +21,7 @@ class Message extends Model
         $model->content = $content;
         $model->platform = $platform;
         $model->status = 0;
-        $where = ['user_id' => $user_id,'from_uid' => $from_user_id,'status' => 0];
+        $where = ['user_id' => $user_id,'from_user_id' => $from_user_id,'status' => 0];
         if (!DB::table('messages')->where($where)->exists()) {
             $model->save();
         }
