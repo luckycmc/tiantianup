@@ -20,6 +20,7 @@ use App\Models\TeachingType;
 use App\Models\TrianingType;
 use App\Models\User;
 use App\Models\UserCourse;
+use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,11 +98,17 @@ class IndexController extends Controller
     {
         $data = \request()->all();
         $id = $data['teacher_id'];
-        Log::info('id:'.$id);
         $result = User::with(['teacher_experience','teacher_info','teacher_tags'])->where(['id' => $id])->first();
         if (!$result) {
             return $this->error('教师不存在');
         }
+        // 当前用户
+        $user = Auth::user();
+        $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 0])->exists();
+        if (!$is_buy) {
+            $result->forget('mobile');
+        }
+        // 判断当前用户是否能查看
         $teaching_year = 0;
         $subject = [];
         $object = [];
@@ -118,8 +125,6 @@ class IndexController extends Controller
         $result->teaching_year = $teaching_year;
         $result->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
         $result->object = array_values(array_unique(array_reduce($object,'array_merge',[])));
-        // 当前用户
-        $user = Auth::user();
         // 是否收藏
         $result->has_collect = $user->has_collect_teacher($id);
         // 教师风采
