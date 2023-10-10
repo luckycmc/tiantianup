@@ -205,6 +205,7 @@ class OrganizationController extends Controller
             $course_info->deliver_count = $course_info->deliver->count();
         }
         $course_info->class_date = json_decode($course_info->class_date,true);
+        $course_info->total_price = $course_info->class_price * $course_info->class_number;
         return $this->success('课程详情',$course_info);
     }
 
