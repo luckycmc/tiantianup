@@ -33,6 +33,9 @@ class PaymentController extends Controller
         if (!$order) {
             return $this->error('订单不存在');
         }
+        if ($order->status == 2) {
+            return $this->error('该订单已关闭');
+        }
         // 当前用户
         $user = Auth::user();
         $order->pay_type = $pay_type;

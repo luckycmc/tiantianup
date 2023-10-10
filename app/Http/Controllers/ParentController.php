@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\Message;
 use App\Models\ParentCourse;
 use App\Models\ParentStudent;
 use App\Models\User;
@@ -133,6 +134,12 @@ class ParentController extends Controller
         $result = DeliverLog::whereIn('id',$deliver_arr)->update(['is_checked' => 1]);
         if (!$result) {
             return $this->error('操作失败');
+        }
+        // 当前用户
+        $user = Auth::user();
+        // 给选中的教师发送提醒
+        foreach ($deliver_arr as $v) {
+            (new Message())->saveMessage($v,$user->id,'选中信息','您被选中了',0);
         }
         return $this->success('操作成功');
     }

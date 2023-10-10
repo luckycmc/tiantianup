@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseInformation;
+use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
@@ -51,12 +52,9 @@ class CommonController extends Controller
     {
         $config = config('pay');
         $pay = Pay::wechat($config);
-        Log::info('bb');
         try {
             $data = $pay->callback(); // 是的，验签就这么简单！
-            Log::info('Log: '.$data);
             $info = $data['resource']['ciphertext'];
-            Log::info('info',$info);
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
@@ -75,6 +73,10 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
+                // 关闭订单
+                $course = Course::find($order->course_id);
+                $course->status = 2;
+                $course->update();
             }
         } catch (Exception $e) {
             Log::info($data);
