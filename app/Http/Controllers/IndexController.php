@@ -106,7 +106,7 @@ class IndexController extends Controller
         $user = Auth::user();
         $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 0])->exists();
         if (!$is_buy) {
-            $result->forget('mobile');
+            $result->mobile = null;
         }
         // 判断当前用户是否能查看
         $teaching_year = 0;
