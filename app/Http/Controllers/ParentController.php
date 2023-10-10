@@ -139,7 +139,8 @@ class ParentController extends Controller
         $user = Auth::user();
         // 给选中的教师发送提醒
         foreach ($deliver_arr as $v) {
-            (new Message())->saveMessage($v->user_id,$user->id,'选中信息','您被选中了',0);
+            $user_id = DeliverLog::where('id',$v)->value('user_id');
+            (new Message())->saveMessage($user_id,$user->id,'选中信息','您被选中了',0);
         }
         return $this->success('操作成功');
     }
