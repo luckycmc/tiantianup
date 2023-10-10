@@ -662,9 +662,14 @@ class OrganizationController extends Controller
     public function batch_pay()
     {
         $data = \request()->all();
-        $orders = $data['orders'] ?? [];
-        foreach ($orders as $v) {
-            $order_info = '';
+        $out_trade_no_arr = $data['out_trade_no'] ?? [];
+        $total_out_trade_no = app('out_trade_no')->id();
+        $total_amount = 0;
+        foreach ($out_trade_no_arr as $v) {
+            $order_info = Course::where('out_trade_no',$v)->get();
+            $order_info->total_out_trade_no = $total_out_trade_no;
+            $total_amount += $order_info->amount;
+            $order_info->update();
         }
     }
 }
