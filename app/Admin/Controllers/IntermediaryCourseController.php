@@ -96,9 +96,9 @@ class IntermediaryCourseController extends AdminController
     {
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
-            $form->text('organ_id');
-            $form->text('name');
-            $form->text('type');
+            $form->text('subject');
+            $form->text('grade');
+            $form->radio('gender')->options();
             $form->text('method');
             $form->text('subject');
             $form->text('count');
