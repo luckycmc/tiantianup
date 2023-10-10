@@ -53,6 +53,11 @@ class LoginController extends Controller
         return $this->success('登录成功',compact('token','user_id','is_role'));
     }
 
+    /**
+     * 手机号登录
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
     public function mobile_login()
     {
         $config = config('wechat.mini_program.default');
