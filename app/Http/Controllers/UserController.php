@@ -745,7 +745,7 @@ class UserController extends Controller
         $distance_max = $data['distance_max'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(1);
+        // $user = User::find(1);
         $where = [];
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
