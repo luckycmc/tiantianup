@@ -198,7 +198,7 @@ class IndexController extends Controller
         // 是否收藏
         $result->has_collect = $user->has_collect_course($course_id);
         // 总费用
-        $result->total_price = ($result->base_count * $result->base_price) + ($result->class_number - $result->base_count) * $result->improve_price;
+        $result->total_price = $result->class_price * $result->class_number;
         if (in_array($user->role,[1,2])) {
             // 是否报名
             $result->is_entry = $user->has_entry_course($course_id);
