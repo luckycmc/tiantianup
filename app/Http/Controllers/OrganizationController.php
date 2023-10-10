@@ -128,6 +128,7 @@ class OrganizationController extends Controller
         $data['created_at'] = Carbon::now();
         $data['class_date'] = json_encode($data['class_date']);
         $data['adder_role'] = 4;
+        $data['adder_id'] = $user->id;
         Log::info('data: ',$data);
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {

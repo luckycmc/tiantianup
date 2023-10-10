@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseCourse;
+use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -36,7 +38,7 @@ class StudentCourseController extends AdminController
             $grid->column('max_price');
             $grid->column('introduction');
             $grid->column('adder_id');
-            $grid->column('status');
+            $grid->column('status')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);
             $grid->column('reviewer_id');
             $grid->column('reason');
             $grid->column('created_at');
@@ -45,6 +47,13 @@ class StudentCourseController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyCourse());
+                    $actions->append(new RefuseCourse());
+                }
             });
         });
     }

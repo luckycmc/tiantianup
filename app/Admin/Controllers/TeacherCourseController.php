@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -36,6 +37,7 @@ class TeacherCourseController extends AdminController
                 $filter->equal('id');
         
             });
+            $grid->actions(new VerifyCourse());
         });
     }
 
