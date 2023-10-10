@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseCourse;
+use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -40,6 +42,13 @@ class IntermediaryCourseController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyCourse());
+                    $actions->append(new RefuseCourse());
+                }
             });
         });
     }
