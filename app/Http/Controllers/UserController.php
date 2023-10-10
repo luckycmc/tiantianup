@@ -563,6 +563,7 @@ class UserController extends Controller
         // 保存数据
         $result = DeliverLog::updateOrCreate(['user_id' => $user->id,'course_id' => $data['course_id']],$deliver_data);
         $course_info->deliver_number += 1;
+        $course_info->update();
         if (!$result) {
             return $this->error('投递失败');
         }
