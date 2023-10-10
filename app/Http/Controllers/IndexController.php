@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class IndexController extends Controller
@@ -66,6 +67,7 @@ class IndexController extends Controller
                 return $this->error('定位出错');
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
+            Log::info('district_id: '.$district_id);
         }
         // 查询当前位置的所有推荐教师
         $teachers = User::with(['teacher_experience','teacher_info'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3])->paginate($page_size);
