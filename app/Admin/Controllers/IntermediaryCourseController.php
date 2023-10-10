@@ -5,6 +5,8 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\RefuseCourse;
 use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
+use App\Models\Region;
+use Carbon\Carbon;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -96,25 +98,34 @@ class IntermediaryCourseController extends AdminController
     {
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
-            $form->text('subject');
-            $form->text('grade');
-            $form->radio('gender')->options();
-            $form->text('method');
-            $form->text('subject');
-            $form->text('count');
-            $form->text('class_price');
-            $form->text('duration');
-            $form->text('class_duration');
-            $form->text('base_count');
-            $form->text('base_price');
-            $form->text('improve_price');
-            $form->text('max_price');
-            $form->text('introduction');
-            $form->text('adder_id');
-            $form->text('status');
-            $form->text('reviewer_id');
-            $form->text('reason');
-        
+            $form->text('subject','科目');
+            $form->text('grade','年级');
+            $form->radio('gender','性别')->options([0 => '女',1 => '男']);
+            $form->datetimeRange('class_date_start','class_date_end','上课时间');
+            $form->select('province','省')->options('/api/city')->load('city','/api/city');
+            $form->select('city','市')->options('/api/city')->load('district','/api/city');
+            $form->select('district','区')->options('/api/city');
+            $form->text('address','上课地点');
+            $form->number('class_duration','上课时长');
+            $form->number('class_price','费用');
+            $form->text('requirement','要求');
+            $form->text('detail','详情');
+            $form->number('valid_time','有效期');
+            $form->text('qq_account','QQ号');
+            $form->text('wechat_account','微信号');
+            $form->mobile('mobile','手机号');
+            $form->text('contact','联系人');
+            $form->hidden('adder_role')->default(0);
+            $form->saving(function (Form $form) {
+                $form->class_date = json_encode([$form->class_date_start,$form->class_date_end]);
+                $form->deleteInput('class_date_start');
+                $form->deleteInput('class_date_end');
+                $form->end_time = Carbon::now()->addDays($form->valid_time);
+                $form->province = Region::where('id', $form->province)->value('region_name');
+                $form->city = Region::where('id', $form->city)->value('region_name');
+                $form->district = Region::where('id', $form->district)->value('region_name');
+            });
+
             $form->display('created_at');
             $form->display('updated_at');
         });
