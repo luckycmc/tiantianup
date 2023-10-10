@@ -745,6 +745,7 @@ class UserController extends Controller
         $distance_max = $data['distance_max'] ?? 0;
         // 当前用户
         $user = Auth::user();
+        $user = User::find(1);
         $where = [];
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
@@ -760,15 +761,20 @@ class UserController extends Controller
             $where[] = ['class_price','<=',$data['class_price_max']];
         }
         // 查询我报名的课程
-        $course = $user->user_courses()->where($where)->whereHas('organization',function ($query) use ($longitude,$latitude,$distance_min,$distance_max) {
-            $query->select(['id', 'name'])
-                ->selectRaw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) *
+        if (isset($data['latitude']) && isset($data['longitude'])) {
+            $course = $user->user_courses()->where($where)->whereHas('organization',function ($query) use ($longitude,$latitude,$distance_min,$distance_max) {
+                $query->select(['id', 'name'])
+                    ->selectRaw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) *
                     cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) *
                     sin(radians(latitude)))) AS distance")
-                ->having('distance', '>=', $distance_min)
-                ->having('distance', '<=', $distance_max)
-                ->orderBy('distance', 'asc');
-        })->wherePivotBetween('created_at',[$entry_start_date." 00:00:00",$entry_end_date." 23:59:59"])->orderByPivot('created_at',$date_sort)->paginate($page_size);
+                    ->having('distance', '>=', $distance_min)
+                    ->having('distance', '<=', $distance_max)
+                    ->orderBy('distance', 'asc');
+            })->wherePivotBetween('created_at',[$entry_start_date." 00:00:00",$entry_end_date." 23:59:59"])->orderByPivot('created_at',$date_sort)->paginate($page_size);
+        } else {
+            $course = $user->user_courses()->where($where)->wherePivotBetween('created_at',[$entry_start_date." 00:00:00",$entry_end_date." 23:59:59"])->orderByPivot('created_at',$date_sort)->paginate($page_size);
+        }
+
         foreach ($course as $v) {
             $v->is_expire = Carbon::now() > $v->end_time ? 1 : 0;
             $v->entry_time = Carbon::parse($v->pivot->created_at)->format('Y-m-d H:i:s');
