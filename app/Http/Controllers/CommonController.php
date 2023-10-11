@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\OrganRole;
 use App\Models\User;
 use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
@@ -120,5 +121,15 @@ class CommonController extends Controller
     {
         $result = BaseInformation::first();
         return $this->success('基本信息',$result);
+    }
+
+    /**
+     * 获取角色
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_roles()
+    {
+        $result = OrganRole::all();
+        return $this->success('角色',$result);
     }
 }
