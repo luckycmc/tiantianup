@@ -264,16 +264,20 @@ class UserController extends Controller
         } else {
             if (isset($data['teacher_cert'])) {
                 $cert_data['teacher_cert'] =  is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : $data['teacher_cert'];
+                unset($data['teacher_cert']);
             }
             if (isset($data['other_cert'])) {
                 $cert_data['other_cert'] =  is_array($data['other_cert']) ? json_encode($data['other_cert']) : $data['other_cert'];
+                unset($data['other_cert']);
             }
             if (isset($data['honor_cert'])) {
                 $cert_data['honor_cert'] =  is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : $data['honor_cert'];
+                unset($data['honor_cert']);
             }
             Log::info('cert_data: ',$cert_data);
             $data['created_at'] = Carbon::now();
             $result = DB::table('teacher_info')->insert($data);
+            $cert_data['user_id'] = $user_id;
             DB::table('teacher_cert')->insert($cert_data);
         }
         if (!$result) {
