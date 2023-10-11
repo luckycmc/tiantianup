@@ -741,7 +741,7 @@ class OrganizationController extends Controller
         // 余额
         $balance = $user->withdraw_balance;
         if ($order->amount < $balance) {
-            $order->pay_status = 1;
+            $order->status = 1;
             $user->withdraw_balance -= $order->amount;
             $order->update();
             $user->update();
