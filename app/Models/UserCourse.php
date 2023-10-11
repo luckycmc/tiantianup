@@ -10,6 +10,7 @@ class UserCourse extends Model
 {
 	use HasDateTimeFormatter;
     protected $table = 'user_courses';
+    protected $guarded = 1;
 
     public function user()
     {
