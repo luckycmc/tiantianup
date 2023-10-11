@@ -586,7 +586,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     *
+     * 教师管理
      * @return \Illuminate\Http\JsonResponse
      */
     public function teachers()
