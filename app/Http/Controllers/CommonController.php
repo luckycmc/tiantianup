@@ -99,11 +99,10 @@ class CommonController extends Controller
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
                     $order->pay_status = 1;
                     $order->update();
-
                 } else {
                     foreach ($orders as $order) {
                         $order->pay_status = 1;
-                        $order->save();
+                        $order->update();
                     }
                 }
             }
