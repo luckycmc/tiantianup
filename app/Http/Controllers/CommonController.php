@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\Organization;
 use App\Models\OrganRole;
 use App\Models\User;
 use App\Models\UserCourse;
@@ -131,5 +132,22 @@ class CommonController extends Controller
     {
         $result = OrganRole::all();
         return $this->success('角色',$result);
+    }
+
+    /**
+     * 获取机构名称
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_organ_name()
+    {
+        $data = \request()->all();
+        $parent_id = $data['parent_id'] ?? 0;
+        $user = User::find($parent_id);
+        if (!$user) {
+            return $this->error('邀请人不存在');
+        }
+        // 获取机构名称
+        $organ_name = Organization::where('user_id',$parent_id)->value('name');
+        return $this->success('机构名称',compact('organ_name'));
     }
 }
