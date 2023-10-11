@@ -201,6 +201,8 @@ class LoginController extends Controller
         $member->parent_id = $parent_id;
         $member->organ_role_id = $organ_role_id;
         $member->open_id = $open_id;
+        $member->mobile = $data['mobile'] ?? null;
+        $member->name = $data['name'] ?? null;
         $member->save();
         // 用户登录
         $token = JWTAuth::fromUser($member);
