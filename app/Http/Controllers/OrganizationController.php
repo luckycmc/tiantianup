@@ -677,7 +677,9 @@ class OrganizationController extends Controller
         // 当前用户
         $user = Auth::user();
         if ($total_amount < $user->balance) {
-            UserCourse::whereIn('out_trade_no',$out_trade_no_arr)->update(['status' => 1]);
+            foreach ($out_trade_no_arr as $v) {
+                UserCourse::where('out_trade_no',$v)->update(['status' => 1]);
+            }
             $user->withdraw_balance -= $total_amount;
             $user->update();
             $result = '余额支付';
