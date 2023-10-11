@@ -12,7 +12,7 @@ class Message extends Model
 {
 	use HasDateTimeFormatter;
 
-    public function saveMessage($user_id,$from_user_id,$name,$content,$platform)
+    public function saveMessage($user_id,$from_user_id,$name,$content,$platform,$type)
     {
         $model = new self();
         $model->user_id = $user_id;
@@ -21,6 +21,7 @@ class Message extends Model
         $model->content = $content;
         $model->send_platform = $platform;
         $model->status = 0;
+        $model->type = $type;
         $where = ['user_id' => $user_id,'from_user_id' => $from_user_id,'status' => 0];
         if (!DB::table('messages')->where($where)->exists()) {
             $model->save();
