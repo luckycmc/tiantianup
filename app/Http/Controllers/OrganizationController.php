@@ -676,21 +676,28 @@ class OrganizationController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        // 调起支付
-        $pay_data = [
-            'out_trade_no' => $total_out_trade_no,
-            'description' => '服务费',
-            'amount' => [
-                'total' => $total_amount * 100,
-                'currency' => 'CNY',
-            ],
-            'payer' => [
-                'openid' => $user->open_id,
-            ],
-            '_config' => 'organization',
-        ];
-        // dd($pay_data);
-        $result = Pay::wechat($config)->mini($pay_data);
+        if ($total_amount < $user->balance) {
+            UserCourse::whereIn('out_trade_no',$out_trade_no_arr)->update(['status' => 1]);
+            $user->withdraw_balance -= $total_amount;
+            $user->update();
+            $result = '余额支付';
+        } else {
+            // 调起支付
+            $pay_data = [
+                'out_trade_no' => $total_out_trade_no,
+                'description' => '服务费',
+                'amount' => [
+                    'total' => $total_amount * 100,
+                    'currency' => 'CNY',
+                ],
+                'payer' => [
+                    'openid' => $user->open_id,
+                ],
+                '_config' => 'organization',
+            ];
+            // dd($pay_data);
+            $result = Pay::wechat($config)->mini($pay_data);
+        }
         return $this->success('调起支付',compact('result'));
     }
 
