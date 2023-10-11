@@ -92,6 +92,7 @@ class CommonController extends Controller
         try {
             $data = $pay->callback(); // 是的，验签就这么简单！
             $info = $data['resource']['ciphertext'];
+            Log::info('info: ',$info);
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $orders = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->first();
