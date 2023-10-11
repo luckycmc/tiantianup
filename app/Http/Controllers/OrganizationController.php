@@ -707,19 +707,17 @@ class OrganizationController extends Controller
     {
         $data = \request()->all();
         $amount = 0;
-        $role = $data['role'] ?? 1;
-        $obj = $role == 1 ? new UserCourse() : new DeliverLog();
         // 当前用户
         $user = Auth::user();
         // 余额
         $balance = $user->withdraw_balance;
         if (is_array($data['out_trade_no'])) {
             foreach ($data['out_trade_no'] as $v ){
-                $order = $obj::where('out_trade_no',$v)->first();
+                $order = UserCourse::where('out_trade_no',$v)->first();
                 $amount += $order->amount;
             }
         } else {
-            $order = $obj::where('out_trade_no',$data['out_trade_no'])->first();
+            $order = UserCourse::where('out_trade_no',$data['out_trade_no'])->first();
             $amount = $order->amount;
         }
         $actual_amount = max(($amount - $balance), 0);
@@ -735,14 +733,8 @@ class OrganizationController extends Controller
         $config = config('pay');
         $data = \request()->all();
         $out_trade_no = $data['out_trade_no'] ?? '';
-        $role = $data['role'] ?? 1;
-        if ($role == 1) {
-            $obj = new UserCourse();
-        } else {
-            $obj = new DeliverLog();
-        }
         // 查询订单
-        $order = $obj::where('out_trade_no',$out_trade_no)->first();
+        $order = UserCourse::where('out_trade_no',$out_trade_no)->first();
         if (!$order) {
             return $this->error('订单不存在');
         }
