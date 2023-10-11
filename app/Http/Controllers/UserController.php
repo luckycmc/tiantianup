@@ -256,22 +256,24 @@ class UserController extends Controller
         $data = \request()->all();
         $user_id = Auth::id();
         $data['user_id'] = $user_id;
+        $cert_data = [];
         // 查询是否存在
         if (TeacherInfo::where('user_id',$user_id)->exists()) {
             $data['updated_at'] = Carbon::now();
             $result = DB::table('teacher_info')->where('user_id',$user_id)->update($data);
         } else {
             if (isset($data['teacher_cert'])) {
-                $data['teacher_cert'] =  is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : $data['teacher_cert'];
+                $cert_data['teacher_cert'] =  is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : $data['teacher_cert'];
             }
             if (isset($data['other_cert'])) {
-                $data['other_cert'] =  is_array($data['other_cert']) ? json_encode($data['other_cert']) : $data['other_cert'];
+                $cert_data['other_cert'] =  is_array($data['other_cert']) ? json_encode($data['other_cert']) : $data['other_cert'];
             }
             if (isset($data['honor_cert'])) {
-                $data['honor_cert'] =  is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : $data['honor_cert'];
+                $cert_data['honor_cert'] =  is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : $data['honor_cert'];
             }
             $data['created_at'] = Carbon::now();
             $result = DB::table('teacher_info')->insert($data);
+            DB::table('teacher_cert')->insert($cert_data);
         }
         if (!$result) {
             return $this->error('提交失败');
