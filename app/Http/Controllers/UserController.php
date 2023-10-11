@@ -10,6 +10,7 @@ use App\Models\DeliverLog;
 use App\Models\Organization;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
+use App\Models\TeacherCert;
 use App\Models\TeacherCourseOrder;
 use App\Models\TeacherEducation;
 use App\Models\TeacherInfo;
@@ -255,10 +256,32 @@ class UserController extends Controller
     {
         $data = \request()->all();
         $user_id = Auth::id();
-        $data['user_id'] = $user_id;
-        $cert_data = [];
+        $cert_data = [
+            'user_id' => $user_id,
+            'teacher_cert' => is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : json_encode([$data['teacher_cert']]),
+            'other_cert' => is_array($data['other_cert']) ? json_encode($data['other_cert']) : json_encode([$data['other_cert']]),
+            'honor_cert' => is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : json_encode([$data['honor_cert']]),
+        ];
+        $info_data = [
+            'user_id' => $user_id,
+            'id_card_front' => $data['id_card_front'] ?? '',
+            'id_card_backend' => $data['id_card_backend'] ?? '',
+            'picture' => $data['picture'],
+        ];
+        $education_data = [
+            'user_id' => $user_id,
+            'highest_education' => $data['highest_education'],
+            'education_id' => $data['education_id'],
+            'graduate_school' => $data['graduate_school'],
+            'speciality' => $data['speciality'],
+            'graduate_cert' => $data['graduate_cert'],
+            'diploma' => $data['diploma'],
+        ];
+        TeacherInfo::updateOrCreate(['user_id' => $user_id],$info_data);
+        TeacherEducation::updateOrCreate(['user_id' => $user_id],$education_data);
+        TeacherCert::updateOrCreate(['user_id' => $user_id],$cert_data);
         // 查询是否存在
-        if (TeacherInfo::where('user_id',$user_id)->exists()) {
+        /*if (TeacherInfo::where('user_id',$user_id)->exists()) {
             $data['updated_at'] = Carbon::now();
             $result = DB::table('teacher_info')->where('user_id',$user_id)->update($data);
         } else {
@@ -279,10 +302,10 @@ class UserController extends Controller
             $result = DB::table('teacher_info')->insert($data);
             $cert_data['user_id'] = $user_id;
             DB::table('teacher_cert')->insert($cert_data);
-        }
-        if (!$result) {
+        }*/
+        /*if (!$result) {
             return $this->error('提交失败');
-        }
+        }*/
         return $this->success('提交成功');
     }
 
