@@ -76,7 +76,7 @@ class TeacherController extends Controller
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
-            ->where(['user.district_id' => $district_id,'user.role' => 3])
+            ->where(['users.district_id' => $district_id,'users.role' => 3])
             ->orderBy($sort_field,$order)
             ->select('users.*','teacher_info.highest_education','teacher_info.graduate_school','teacher_info.teaching_year','teacher_career.subject')
             ->paginate($page_size);
