@@ -86,19 +86,15 @@ class CommonController extends Controller
 
     public function organ_wechat_notify()
     {
-        Log::info('aaa');
         $config = config('pay');
         $pay = Pay::wechat($config);
         try {
             $data = $pay->callback(); // 是的，验签就这么简单！
             $info = $data['resource']['ciphertext'];
-            Log::info('info: ',$info);
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $orders = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->first();
-                Log::info('orders: ',$orders->toArray());
                 if (empty($orders)) {
-                    Log::info('nnn');
                     // 单个支付
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
                     $order->status = 1;
