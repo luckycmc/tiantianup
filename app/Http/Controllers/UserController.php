@@ -153,7 +153,11 @@ class UserController extends Controller
         }*/
         $data['user_id'] = Auth::id();
         $data['created_at'] = Carbon::now();
-        $result = UserContact::updateOrCreate(['user_id' => $user_id,'relation' => $data['relation']],$data);
+        if (isset($data['id'])) {
+            $result = UserContact::where('id',$data['id'])->update($data);
+        } else {
+            $result = UserContact::create($data);
+        }
         // $result = DB::table('user_contacts')->insert($data);
         if (!$result) {
             return $this->error('操作失败');
