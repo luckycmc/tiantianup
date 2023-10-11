@@ -171,7 +171,7 @@ class TeacherController extends Controller
         $user = Auth::user();
         $insert_data = [
             'user_id' => $user->id,
-            'url' => implode(',',$data['url']),
+            'url' => is_array($data['url']) ? json_encode($data['url']) : json_encode([$data['url']]),
             'type' => 2,
             'status' => 0
         ];
