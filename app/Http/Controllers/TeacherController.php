@@ -147,7 +147,7 @@ class TeacherController extends Controller
         }
         if ($type == 4) {
             if ($result) {
-                $result->url = json_encode($result->url,true);
+                $result->url = json_decode($result->url,true);
             }
         }
         return $this->success('教师信息',$result);
