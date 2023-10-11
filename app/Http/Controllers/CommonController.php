@@ -97,11 +97,11 @@ class CommonController extends Controller
                 if (empty($orders)) {
                     // 单个支付
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
-                    $order->pay_status = 1;
+                    $order->status = 1;
                     $order->update();
                 } else {
                     foreach ($orders as $order) {
-                        $order->pay_status = 1;
+                        $order->status = 1;
                         $order->update();
                     }
                 }
