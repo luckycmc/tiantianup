@@ -285,7 +285,7 @@ class TeacherController extends Controller
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
-                ->where($where)->where('courses.role',3)->orderBy($sort_field,$order)->distinct()->ddSql()->paginate($page_size);
+                ->where($where)->where('courses.role',3)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
 
         foreach ($result as $v) {
