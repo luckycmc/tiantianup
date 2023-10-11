@@ -108,7 +108,7 @@ return [
             // 必填-商户公钥证书路径
             'mch_public_cert_path' => public_path().'/cert/apiclient_cert.pem',
             // 必填
-            'notify_url' => env('APP_URL').'/api/common/organ_notify',
+            'notify_url' => env('APP_URL').'/api/common/organ_wechat_notify',
             // 选填-公众号 的 app_id
             'mp_app_id' => '',
             // 选填-小程序 的 app_id
