@@ -146,7 +146,7 @@ class TeacherController extends Controller
             $result->honor_cert = json_decode($result->honor_cert,true);
         }
         if ($type == 4) {
-            $result->url = json_decode($result->url,true);
+            $result->url = isset($result->url) ? json_decode($result->url,true) : [];
         }
         return $this->success('教师信息',$result);
     }
