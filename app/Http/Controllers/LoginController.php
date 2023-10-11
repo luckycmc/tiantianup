@@ -168,4 +168,45 @@ class LoginController extends Controller
         $data = \request()->all();
         $code = $data['code'] ?? '';
     }
+
+    /**
+     * 邀请机构成员
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function invite_member()
+    {
+        $config = config('wechat.mini_program.default');
+        $data = \request()->all();
+        $organ_role_id = $data['organ_role_id'] ?? 1;
+        $parent_id = $data['parent_id'] ?? 0;
+        // 查询上级id
+        $user = User::find($parent_id);
+        if (!$user) {
+            return $this->error('邀请人不存在');
+        }
+        // 获取open_id
+        $open_id = '';
+        if (isset($data['wx_code'])) {
+            $app = Factory::miniProgram($config);
+            $session = $app->auth->session($data['wx_code']);
+            if (!isset($session['session_key'])) {
+                return $this->error('登陆失败');
+            }
+            $open_id = $session['openid'];
+        }
+        // 注册新用户
+        $member = new User();
+        $member->role = 4;
+        $member->parent_id = $parent_id;
+        $member->organ_role_id = $organ_role_id;
+        $member->open_id = $open_id;
+        $member->save();
+        // 用户登录
+        $token = JWTAuth::fromUser($member);
+        //设置token
+        Redis::set('TOKEN:'.$member->id,$token);
+        $is_role = $member->role ?? 0;
+        return $this->success('登录成功',compact('token','is_role'));
+    }
 }
