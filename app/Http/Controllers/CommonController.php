@@ -94,9 +94,23 @@ class CommonController extends Controller
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $orders = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->first();
-                foreach ($orders as $order) {
-                    $order->pay_status = 1;
-                    $order->save();
+                if (empty($orders)) {
+                    // 单个支付
+                    $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
+                    if (empty($order)) {
+                        $deliver_order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
+                        $deliver_order->pay_status = 1;
+                        $deliver_order->update();
+                    } else {
+                        $order->pay_status = 1;
+                        $order->update();
+                    }
+
+                } else {
+                    foreach ($orders as $order) {
+                        $order->pay_status = 1;
+                        $order->save();
+                    }
                 }
             }
         } catch (Exception $e) {

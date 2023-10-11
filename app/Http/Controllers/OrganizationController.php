@@ -283,10 +283,8 @@ class OrganizationController extends Controller
         })->paginate($page_size);
         foreach ($result as $v) {
             $user_course = UserCourse::where(['user_id' => $v->id,'course_id' => $v->student_course[0]['id']])->first();
-            if (!empty($user_course)) {
-                $v->pay_status = $user_course->status;
-                $v->out_trade_no = $user_course->out_trade_no;
-            }
+            $v->pay_status = $user_course->status;
+            $v->out_trade_no = $user_course->out_trade_no;
         }
         // 支付总人数
         $payed_total = $result->filter(function ($item) {
@@ -698,6 +696,83 @@ class OrganizationController extends Controller
             '_config' => 'organization',
         ];
         $result = Pay::wechat($config)->mini($pay_data);
+        return $this->success('调起支付',compact('result'));
+    }
+
+    /**
+     * 获取金额
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_total_amount()
+    {
+        $data = \request()->all();
+        $amount = 0;
+        // 当前用户
+        $user = Auth::user();
+        // 余额
+        $balance = $user->withdraw_balance;
+        if (is_array($data['out_trade_no'])) {
+            foreach ($data['out_trade_no'] as $v ){
+                $order = UserCourse::where('out_trade_no',$v)->first();
+                $amount += $order->amount;
+            }
+        } else {
+            $order = UserCourse::where('out_trade_no',$data['out_trade_no'])->first();
+            $amount = $order->amount;
+        }
+        $actual_amount = max(($amount - $balance), 0);
+        return $this->success('获取金额',compact('balance',$actual_amount));
+    }
+
+    /**
+     * 单个支付
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function pay()
+    {
+        $config = config('pay');
+        $data = \request()->all();
+        $out_trade_no = $data['out_trade_no'] ?? '';
+        $role = $data['role'] ?? 1;
+        if ($role == 1) {
+            $obj = new UserCourse();
+        } else {
+            $obj = new DeliverLog();
+        }
+        // 查询订单
+        $order = $obj::where('out_trade_no',$out_trade_no)->first();
+        if (!$order) {
+            return $this->error('订单不存在');
+        }
+        if ($order->status == 2) {
+            return $this->error('该订单已关闭');
+        }
+        // 当前用户
+        $user = Auth::user();
+        // 余额
+        $balance = $user->withdraw_balance;
+        if ($order->amount < $balance) {
+            $order->pay_status = 1;
+            $user->withdraw_balance -= $order->amount;
+            $order->update();
+            $user->update();
+            $result = '余额支付';
+        } else {
+            // 调起支付
+            $pay_data = [
+                'out_trade_no' => $out_trade_no,
+                'description' => '服务费',
+                'amount' => [
+                    'total' => ($order->amount - $balance) * 100,
+                    'currency' => 'CNY',
+                ],
+                'payer' => [
+                    'openid' => $user->open_id,
+                ],
+                '_config' => 'organization',
+            ];
+            $result = Pay::wechat($config)->mini($pay_data);
+        }
         return $this->success('调起支付',compact('result'));
     }
 }
