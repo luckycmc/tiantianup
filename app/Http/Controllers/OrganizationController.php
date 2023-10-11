@@ -638,6 +638,9 @@ class OrganizationController extends Controller
         if (isset($data['filter_is_auth'])) {
             $where[] = ['users.is_real_auth','=',$data['filter_is_auth']];
         }
+        if (isset($data['keyword'])) {
+            $where[] = ['users.name','like','%'.$data['keyword'].'%'];
+        }
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
