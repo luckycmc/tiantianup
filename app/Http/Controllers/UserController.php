@@ -624,7 +624,7 @@ class UserController extends Controller
             'id_card_backend' => $data['id_card_backend'],
             'picture' => $data['picture']
         ];
-        $result = TeacherRealAuth::updateOrCreate(['user_id' => $user->id],$auth_data);
+        $result = TeacherInfo::updateOrCreate(['user_id' => $user->id],$auth_data);
         if (!$result) {
             return $this->error('提交失败');
         }
