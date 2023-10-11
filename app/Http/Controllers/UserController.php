@@ -271,6 +271,7 @@ class UserController extends Controller
             if (isset($data['honor_cert'])) {
                 $cert_data['honor_cert'] =  is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : $data['honor_cert'];
             }
+            Log::info('cert_data: ',$cert_data);
             $data['created_at'] = Carbon::now();
             $result = DB::table('teacher_info')->insert($data);
             DB::table('teacher_cert')->insert($cert_data);
