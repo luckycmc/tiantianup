@@ -115,9 +115,9 @@ class TeacherController extends Controller
         $user = Auth::user();
         $education_data = [
             'user_id' => $user->id,
-            'teacher_cert' => implode(',',$data['teacher_cert']),
-            'other_cert' => implode(',',$data['other_cert']),
-            'honor_cert' => implode(',',$data['honor_cert']),
+            'teacher_cert' => is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : json_encode([$data['teacher_cert']]),
+            'other_cert' => is_array($data['other_cert']) ? json_encode($data['other_cert']) : json_encode([$data['other_cert']]),
+            'honor_cert' => is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : json_encode([$data['honor_cert']]),
             'status' => 0
         ];
         $result = TeacherCert::updateOrCreate(['user_id' => $user->id],$education_data);
