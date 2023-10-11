@@ -282,7 +282,11 @@ class OrganizationController extends Controller
             $query->where('course_id', $course_id);
         })->paginate($page_size);
         foreach ($result as $v) {
-            $v->pay_status = UserCourse::where(['user_id' => $v->id,'course_id' => $v->student_course[0]['course_id']])->value('status');
+            $user_course = UserCourse::where(['user_id' => $v->id,'course_id' => $v->student_course[0]['id']])->first();
+            if (!empty($user_course)) {
+                $v->pay_status = $user_course->status;
+                $v->out_trade_no = $user_course->out_trade_no;
+            }
         }
         // 支付总人数
         $payed_total = $result->filter(function ($item) {
@@ -661,6 +665,10 @@ class OrganizationController extends Controller
         return $this->success('教师列表',$result);
     }
 
+    /**
+     * 批量支付
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function batch_pay()
     {
         $config = config('pay');
