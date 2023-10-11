@@ -86,6 +86,7 @@ class CommonController extends Controller
 
     public function organ_wechat_notify()
     {
+        Log::info('aaa');
         $config = config('pay');
         $pay = Pay::wechat($config);
         try {
@@ -94,13 +95,16 @@ class CommonController extends Controller
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $orders = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->first();
+                Log::info('orders: ',$orders->toArray());
                 if (empty($orders)) {
+                    Log::info('nnn');
                     // 单个支付
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
                     $order->status = 1;
                     $order->update();
                 } else {
-                    foreach ($orders as $order) {
+                    $order_arr = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->get();
+                    foreach ($order_arr as $order) {
                         $order->status = 1;
                         $order->update();
                     }
