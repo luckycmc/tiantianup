@@ -160,9 +160,9 @@ class IndexController extends Controller
         if (isset($data['district'])) {
             $where[] = ['district','=',$data['district']];
         }
-        $result = Course::with('organization')->where($where)->where('adder_role',4)->where('status',1)->paginate($page_size);
         // 当前用户
         $user = Auth::user();
+        $result = Course::with('organization')->where($where)->where(['status' => 1,'role' => $user->role,'adder_role' => 4])->paginate($page_size);
         foreach ($result as $v) {
             $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
             // 是否已报名
