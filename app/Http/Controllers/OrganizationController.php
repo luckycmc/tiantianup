@@ -433,7 +433,7 @@ class OrganizationController extends Controller
             $role_data = [
                 'name' => $data['name'],
                 'description' => $data['description'],
-                'updated_at' => Carbon::now()
+                'created_at' => Carbon::now()
             ];
             $id = DB::table('organ_roles')->insertGetId($role_data);
         }
