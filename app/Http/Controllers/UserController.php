@@ -261,6 +261,9 @@ class UserController extends Controller
             $data['updated_at'] = Carbon::now();
             $result = DB::table('teacher_info')->where('user_id',$user_id)->update($data);
         } else {
+            $data['teacher_cert'] = json_encode($data['teacher_cert']);
+            $data['other_cert'] = json_encode($data['other_cert']);
+            $data['honor_cert'] = json_encode($data['honor_cert']);
             $data['created_at'] = Carbon::now();
             $result = DB::table('teacher_info')->insert($data);
         }
