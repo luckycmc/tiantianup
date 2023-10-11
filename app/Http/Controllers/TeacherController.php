@@ -140,6 +140,11 @@ class TeacherController extends Controller
         $arr = [new TeacherInfo(),new TeacherEducation(),new TeacherCert(),new TeacherImage()];
         // 查询实名认证
         $result = $arr[$type-1]::where('user_id',$user->id)->first();
+        if ($type == 3) {
+            $result->teacher_cert = json_decode($result->teacher_cert,true);
+            $result->other_cert = json_decode($result->other_cert,true);
+            $result->honor_cert = json_decode($result->honor_cert,true);
+        }
         return $this->success('教师信息',$result);
     }
 
