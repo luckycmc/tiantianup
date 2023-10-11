@@ -622,7 +622,8 @@ class UserController extends Controller
             'user_id' => $user->id,
             'id_card_front' => $data['id_card_front'],
             'id_card_backend' => $data['id_card_backend'],
-            'picture' => $data['picture']
+            'picture' => $data['picture'],
+            'status' => 0
         ];
         $result = TeacherInfo::updateOrCreate(['user_id' => $user->id],$auth_data);
         if (!$result) {
