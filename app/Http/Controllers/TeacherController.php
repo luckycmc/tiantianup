@@ -228,6 +228,7 @@ class TeacherController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
+        $user = User::find(7);
         $sort_field = 'courses.created_at';
         $order = 'desc';
         if (isset($data['sort_class_price'])) {
@@ -264,7 +265,7 @@ class TeacherController extends Controller
         if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
-            $where[] = [DB::raw($distance_expr),'<=',$data['filter_price_max']];
+            $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
         if (isset($data['filter_delivery_status'])) {
             $delivery_arr = DeliverLog::where('user_id',$user->id)->pluck('course_id');
@@ -279,12 +280,12 @@ class TeacherController extends Controller
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
-                ->where($where)->where('courses.role',1)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+                ->where($where)->where('courses.role',3)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         } else {
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
-                ->where($where)->where('courses.role',1)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+                ->where($where)->where('courses.role',3)->orderBy($sort_field,$order)->distinct()->ddSql()->paginate($page_size);
         }
 
         foreach ($result as $v) {
