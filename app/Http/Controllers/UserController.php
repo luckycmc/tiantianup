@@ -256,56 +256,37 @@ class UserController extends Controller
     {
         $data = \request()->all();
         $user_id = Auth::id();
-        $cert_data = [
-            'user_id' => $user_id,
-            'teacher_cert' =>  isset($data['teacher_cert']) ? (is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : json_encode([$data['teacher_cert']])) : '',
-            'other_cert' => isset($data['other_cert']) ? (is_array($data['other_cert']) ? json_encode($data['other_cert']) : json_encode([$data['other_cert']])) : '',
-            'honor_cert' => isset($data['honor_cert']) ? (is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : json_encode([$data['honor_cert']])) : '',
-        ];
-        $info_data = [
-            'user_id' => $user_id,
-            'id_card_front' => $data['id_card_front'] ?? '',
-            'id_card_backend' => $data['id_card_backend'] ?? '',
-            'picture' => $data['picture'] ?? '',
-        ];
-        $education_data = [
-            'user_id' => $user_id,
-            'highest_education' => $data['highest_education'] ?? '',
-            'education_id' => $data['education_id'] ?? '',
-            'graduate_school' => $data['graduate_school'] ?? '',
-            'speciality' => $data['speciality'] ?? '',
-            'graduate_cert' => $data['graduate_cert'] ?? '',
-            'diploma' => $data['diploma'] ?? '',
-        ];
-        TeacherInfo::updateOrCreate(['user_id' => $user_id],$info_data);
-        TeacherEducation::updateOrCreate(['user_id' => $user_id],$education_data);
-        TeacherCert::updateOrCreate(['user_id' => $user_id],$cert_data);
-        // 查询是否存在
-        /*if (TeacherInfo::where('user_id',$user_id)->exists()) {
-            $data['updated_at'] = Carbon::now();
-            $result = DB::table('teacher_info')->where('user_id',$user_id)->update($data);
-        } else {
-            if (isset($data['teacher_cert'])) {
-                $cert_data['teacher_cert'] =  is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : $data['teacher_cert'];
-                unset($data['teacher_cert']);
-            }
-            if (isset($data['other_cert'])) {
-                $cert_data['other_cert'] =  is_array($data['other_cert']) ? json_encode($data['other_cert']) : $data['other_cert'];
-                unset($data['other_cert']);
-            }
-            if (isset($data['honor_cert'])) {
-                $cert_data['honor_cert'] =  is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : $data['honor_cert'];
-                unset($data['honor_cert']);
-            }
-            Log::info('cert_data: ',$cert_data);
-            $data['created_at'] = Carbon::now();
-            $result = DB::table('teacher_info')->insert($data);
-            $cert_data['user_id'] = $user_id;
-            DB::table('teacher_cert')->insert($cert_data);
-        }*/
-        /*if (!$result) {
-            return $this->error('提交失败');
-        }*/
+        if (isset($data['info'])) {
+            $info_data = [
+                'user_id' => $user_id,
+                'id_card_front' => $data['info']['id_card_front'] ?? '',
+                'id_card_backend' => $data['info']['id_card_backend'] ?? '',
+                'picture' => $data['info']['picture'] ?? '',
+            ];
+            TeacherInfo::updateOrCreate(['user_id' => $user_id],$info_data);
+        }
+
+        if (isset($data['education'])) {
+            $education_data = [
+                'user_id' => $user_id,
+                'highest_education' => $data['education']['highest_education'] ?? '',
+                'graduate_school' => $data['education']['graduate_school'] ?? '',
+                'speciality' => $data['education']['speciality'] ?? '',
+                'graduate_cert' => $data['education']['graduate_cert'] ?? '',
+                'diploma' => $data['education']['diploma'] ?? '',
+            ];
+            TeacherEducation::updateOrCreate(['user_id' => $user_id],$education_data);
+        }
+
+        if (isset($data['cert'])) {
+            $cert_data = [
+                'user_id' => $user_id,
+                'teacher_cert' =>  is_array($data['cert']['teacher_cert']) ? json_encode($data['cert']['teacher_cert']) : json_encode([$data['cert']['teacher_cert']]),
+                'other_cert' => is_array($data['cert']['other_cert']) ? json_encode($data['cert']['other_cert']) : json_encode([$data['cert']['other_cert']]),
+                'honor_cert' => is_array($data['cert']['honor_cert']) ? json_encode($data['cert']['honor_cert']) : json_encode([$data['cert']['honor_cert']]),
+            ];
+            TeacherCert::updateOrCreate(['user_id' => $user_id],$cert_data);
+        }
         return $this->success('提交成功');
     }
 
