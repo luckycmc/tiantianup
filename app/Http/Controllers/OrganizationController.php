@@ -721,7 +721,7 @@ class OrganizationController extends Controller
             $amount = $order->amount;
         }
         $actual_amount = max(($amount - $balance), 0);
-        return $this->success('获取金额',compact('balance',$actual_amount));
+        return $this->success('获取金额',compact('balance','actual_amount','amount'));
     }
 
     /**
