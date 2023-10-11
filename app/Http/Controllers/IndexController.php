@@ -280,6 +280,7 @@ class IndexController extends Controller
     {
         // 当前用户
         $user = Auth::user();
+        // $user = User::find(6);
         // 收益
         $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
         // 我的收藏

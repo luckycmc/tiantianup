@@ -10,6 +10,7 @@ use App\Models\TeacherCert;
 use App\Models\TeacherCourseOrder;
 use App\Models\TeacherEducation;
 use App\Models\TeacherImage;
+use App\Models\TeacherInfo;
 use App\Models\TeacherRealAuth;
 use App\Models\User;
 use Carbon\Carbon;
@@ -136,7 +137,7 @@ class TeacherController extends Controller
         $type = $data['type'] ?? 1;
         // 当前用户
         $user = Auth::user();
-        $arr = [new TeacherRealAuth(),new TeacherEducation(),new TeacherCert(),new TeacherImage()];
+        $arr = [new TeacherInfo(),new TeacherEducation(),new TeacherCert(),new TeacherImage()];
         // 查询实名认证
         $result = $arr[$type-1]::where('user_id',$user->id)->first();
         return $this->success('教师信息',$result);
