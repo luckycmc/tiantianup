@@ -199,7 +199,7 @@ class User extends Authenticatable implements JWTSubject
     // 教师实名认证
     public function teacher_real_auth()
     {
-        return $this->hasOne(TeacherRealAuth::class,'user_id','id');
+        return $this->hasOne(TeacherInfo::class,'user_id','id');
     }
 
     // 教师教育经历
