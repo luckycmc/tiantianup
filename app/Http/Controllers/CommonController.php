@@ -97,14 +97,8 @@ class CommonController extends Controller
                 if (empty($orders)) {
                     // 单个支付
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
-                    if (empty($order)) {
-                        $deliver_order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
-                        $deliver_order->pay_status = 1;
-                        $deliver_order->update();
-                    } else {
-                        $order->pay_status = 1;
-                        $order->update();
-                    }
+                    $order->pay_status = 1;
+                    $order->update();
 
                 } else {
                     foreach ($orders as $order) {
