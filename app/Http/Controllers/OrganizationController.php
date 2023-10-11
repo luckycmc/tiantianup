@@ -672,10 +672,10 @@ class OrganizationController extends Controller
         $config = config('pay');
         $data = \request()->all();
         $out_trade_no_arr = $data['out_trade_no'] ?? [];
-        $total_out_trade_no = app('out_trade_no')->id();
+        $total_out_trade_no = app('snowflake')->id();
         $total_amount = 0;
         foreach ($out_trade_no_arr as $v) {
-            $order_info = UserCourse::where('out_trade_no',$v)->get();
+            $order_info = UserCourse::where('out_trade_no',$v)->first();
             $order_info->total_out_trade_no = $total_out_trade_no;
             $total_amount += $order_info->amount;
             $order_info->update();
@@ -687,7 +687,7 @@ class OrganizationController extends Controller
             'out_trade_no' => $total_out_trade_no,
             'description' => '服务费',
             'amount' => [
-                'total' => $total_amount,
+                'total' => $total_amount * 100,
                 'currency' => 'CNY',
             ],
             'payer' => [
@@ -695,6 +695,7 @@ class OrganizationController extends Controller
             ],
             '_config' => 'organization',
         ];
+        // dd($pay_data);
         $result = Pay::wechat($config)->mini($pay_data);
         return $this->success('调起支付',compact('result'));
     }
