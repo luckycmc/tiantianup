@@ -258,24 +258,24 @@ class UserController extends Controller
         $user_id = Auth::id();
         $cert_data = [
             'user_id' => $user_id,
-            'teacher_cert' => is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : json_encode([$data['teacher_cert']]),
-            'other_cert' => is_array($data['other_cert']) ? json_encode($data['other_cert']) : json_encode([$data['other_cert']]),
-            'honor_cert' => is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : json_encode([$data['honor_cert']]),
+            'teacher_cert' =>  isset($data['teacher_cert']) ? (is_array($data['teacher_cert']) ? json_encode($data['teacher_cert']) : json_encode([$data['teacher_cert']])) : '',
+            'other_cert' => isset($data['other_cert']) ? (is_array($data['other_cert']) ? json_encode($data['other_cert']) : json_encode([$data['other_cert']])) : '',
+            'honor_cert' => isset($data['honor_cert']) ? (is_array($data['honor_cert']) ? json_encode($data['honor_cert']) : json_encode([$data['honor_cert']])) : '',
         ];
         $info_data = [
             'user_id' => $user_id,
             'id_card_front' => $data['id_card_front'] ?? '',
             'id_card_backend' => $data['id_card_backend'] ?? '',
-            'picture' => $data['picture'],
+            'picture' => $data['picture'] ?? '',
         ];
         $education_data = [
             'user_id' => $user_id,
-            'highest_education' => $data['highest_education'],
-            'education_id' => $data['education_id'],
-            'graduate_school' => $data['graduate_school'],
-            'speciality' => $data['speciality'],
-            'graduate_cert' => $data['graduate_cert'],
-            'diploma' => $data['diploma'],
+            'highest_education' => $data['highest_education'] ?? '',
+            'education_id' => $data['education_id'] ?? '',
+            'graduate_school' => $data['graduate_school'] ?? '',
+            'speciality' => $data['speciality'] ?? '',
+            'graduate_cert' => $data['graduate_cert'] ?? '',
+            'diploma' => $data['diploma'] ?? '',
         ];
         TeacherInfo::updateOrCreate(['user_id' => $user_id],$info_data);
         TeacherEducation::updateOrCreate(['user_id' => $user_id],$education_data);
