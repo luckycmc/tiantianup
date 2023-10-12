@@ -28,7 +28,7 @@ class CourseController extends Controller
         $select_field = ['courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude'];
         if (isset($data['sort_price'])) {
             $sort_field = 'courses.class_price';
-        } else if (isset($data['sort_distance']) || isset($data['filter_distance'])) {
+        } else if (isset($data['sort_distance'])) {
             $sort_field = 'distance';
             $distance_expr = "
             (
@@ -130,7 +130,7 @@ class CourseController extends Controller
         foreach ($result as $v) {
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
-            $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
+            $v->distance = round($v->distance,2);
             if ($v->adder_role == 0) {
                 // 是否查看
                 $v->is_show = $v->teacher_course->where('status',1)->isNotEmpty();
