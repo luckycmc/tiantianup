@@ -157,7 +157,7 @@ class ParentController extends Controller
             return $this->error('您不能切换身份');
         }
         // 家长有多个学生时不能切换
-        if ($user->role == 2 && $user->student->count() > 0) {
+        if ($user->role == 2 && $user->student->count() > 1) {
             return $this->error('您不能切换身份');
         }
         return $this->success('可以切换');
