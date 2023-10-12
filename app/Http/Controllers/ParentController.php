@@ -181,6 +181,7 @@ class ParentController extends Controller
         // 判读当前用户是否存在其他账号
         $account = User::where('number',$user->number)->get();
         $role = $user->role == 1 ? 2 : 1;
+        $is_new = 1;
         if (count($account) > 1) {
             // 查询另外一个账号id
             $other_id = $account->pluck('id')->reject(function ($item) use ($user) {
@@ -191,7 +192,9 @@ class ParentController extends Controller
             $token = JWTAuth::fromUser($other_user);
             //设置token
             Redis::set('TOKEN:'.$other_id,$token);
-            $is_new = 0;
+            if ($other_user->mobile) {
+                $is_new = 0;
+            }
             return $this->success('切换成功',compact('token','is_new','role'));
         }
         // 不存在其他账号，重新注册
@@ -203,7 +206,6 @@ class ParentController extends Controller
         $token = JWTAuth::fromUser($new_user);
         // 设置token
         Redis::set('TOKEN:'.$new_user->id,$token);
-        $is_new = 1;
         return $this->success('切换成功',compact('token','is_new','role'));
     }
 
