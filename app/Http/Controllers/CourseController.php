@@ -90,7 +90,7 @@ class CourseController extends Controller
         if ($user->role == 1) {
             $where[] = ['courses.role','=',1];
         }
-        if ($user->role == 2) {
+        if ($user->role == 2 && !isset($data['is_platform'])) {
             $where[] = ['courses.adder_role','=',4];
         }
         if (isset($data['is_platform'])) {
