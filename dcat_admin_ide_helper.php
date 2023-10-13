@@ -52,14 +52,14 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection remember_token
      * @property Grid\Column|Collection last_login_time
      * @property Grid\Column|Collection content
-     * @property Grid\Column|Collection user_image
-     * @property Grid\Column|Collection teacher_image
+     * @property Grid\Column|Collection adder
+     * @property Grid\Column|Collection editor
+     * @property Grid\Column|Collection url
      * @property Grid\Column|Collection logo
-     * @property Grid\Column|Collection poster
-     * @property Grid\Column|Collection service_price
-     * @property Grid\Column|Collection invite_rule
+     * @property Grid\Column|Collection login_bg
+     * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection user_agreement
-     * @property Grid\Column|Collection privacy_policy
+     * @property Grid\Column|Collection is_show_full
      * @property Grid\Column|Collection amount
      * @property Grid\Column|Collection course_id
      * @property Grid\Column|Collection teacher_id
@@ -68,6 +68,11 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
      * @property Grid\Column|Collection role
+     * @property Grid\Column|Collection latest_end_time
+     * @property Grid\Column|Collection course_end
+     * @property Grid\Column|Collection deal_pay
+     * @property Grid\Column|Collection confirm_course
+     * @property Grid\Column|Collection is_can_look
      * @property Grid\Column|Collection student
      * @property Grid\Column|Collection gender
      * @property Grid\Column|Collection grade
@@ -94,13 +99,15 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection notes
      * @property Grid\Column|Collection reason
      * @property Grid\Column|Collection entry_number
+     * @property Grid\Column|Collection deliver_number
      * @property Grid\Column|Collection province
      * @property Grid\Column|Collection city
      * @property Grid\Column|Collection district
      * @property Grid\Column|Collection address
-     * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection qq_account
+     * @property Grid\Column|Collection wechat_account
      * @property Grid\Column|Collection requirement
+     * @property Grid\Column|Collection valid_time
      * @property Grid\Column|Collection buyer_count
      * @property Grid\Column|Collection visit_count
      * @property Grid\Column|Collection wechat
@@ -110,6 +117,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection introduce
      * @property Grid\Column|Collection is_checked
      * @property Grid\Column|Collection out_trade_no
+     * @property Grid\Column|Collection pay_type
      * @property Grid\Column|Collection pay_status
      * @property Grid\Column|Collection uuid
      * @property Grid\Column|Collection connection
@@ -117,9 +125,9 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection payload
      * @property Grid\Column|Collection exception
      * @property Grid\Column|Collection failed_at
+     * @property Grid\Column|Collection from_user_id
      * @property Grid\Column|Collection send_platform
      * @property Grid\Column|Collection author
-     * @property Grid\Column|Collection url
      * @property Grid\Column|Collection privilege
      * @property Grid\Column|Collection privilege_id
      * @property Grid\Column|Collection update_at
@@ -150,7 +158,20 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection is_last
      * @property Grid\Column|Collection show_platform
      * @property Grid\Column|Collection price
-     * @property Grid\Column|Collection adder
+     * @property Grid\Column|Collection parent_bg
+     * @property Grid\Column|Collection student_bg
+     * @property Grid\Column|Collection teacher_bg
+     * @property Grid\Column|Collection organ_bg
+     * @property Grid\Column|Collection share_post
+     * @property Grid\Column|Collection invite_register_bg
+     * @property Grid\Column|Collection teacher_detail_top_bg
+     * @property Grid\Column|Collection invite_organ_confirm_bg
+     * @property Grid\Column|Collection invite_teacher_confirm_bg
+     * @property Grid\Column|Collection intermediary_bg
+     * @property Grid\Column|Collection action
+     * @property Grid\Column|Collection site_message
+     * @property Grid\Column|Collection text_message
+     * @property Grid\Column|Collection official_account
      * @property Grid\Column|Collection organization
      * @property Grid\Column|Collection teaching_type
      * @property Grid\Column|Collection teacher_cert
@@ -170,9 +191,9 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection education_reason
      * @property Grid\Column|Collection teaching_year
      * @property Grid\Column|Collection data_status
+     * @property Grid\Column|Collection total_out_trade_no
      * @property Grid\Column|Collection student_id
      * @property Grid\Column|Collection discount
-     * @property Grid\Column|Collection pay_type
      * @property Grid\Column|Collection nickname
      * @property Grid\Column|Collection organ_role_id
      * @property Grid\Column|Collection age
@@ -228,14 +249,14 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection remember_token(string $label = null)
      * @method Grid\Column|Collection last_login_time(string $label = null)
      * @method Grid\Column|Collection content(string $label = null)
-     * @method Grid\Column|Collection user_image(string $label = null)
-     * @method Grid\Column|Collection teacher_image(string $label = null)
+     * @method Grid\Column|Collection adder(string $label = null)
+     * @method Grid\Column|Collection editor(string $label = null)
+     * @method Grid\Column|Collection url(string $label = null)
      * @method Grid\Column|Collection logo(string $label = null)
-     * @method Grid\Column|Collection poster(string $label = null)
-     * @method Grid\Column|Collection service_price(string $label = null)
-     * @method Grid\Column|Collection invite_rule(string $label = null)
+     * @method Grid\Column|Collection login_bg(string $label = null)
+     * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection user_agreement(string $label = null)
-     * @method Grid\Column|Collection privacy_policy(string $label = null)
+     * @method Grid\Column|Collection is_show_full(string $label = null)
      * @method Grid\Column|Collection amount(string $label = null)
      * @method Grid\Column|Collection course_id(string $label = null)
      * @method Grid\Column|Collection teacher_id(string $label = null)
@@ -244,6 +265,11 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
      * @method Grid\Column|Collection role(string $label = null)
+     * @method Grid\Column|Collection latest_end_time(string $label = null)
+     * @method Grid\Column|Collection course_end(string $label = null)
+     * @method Grid\Column|Collection deal_pay(string $label = null)
+     * @method Grid\Column|Collection confirm_course(string $label = null)
+     * @method Grid\Column|Collection is_can_look(string $label = null)
      * @method Grid\Column|Collection student(string $label = null)
      * @method Grid\Column|Collection gender(string $label = null)
      * @method Grid\Column|Collection grade(string $label = null)
@@ -270,13 +296,15 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection notes(string $label = null)
      * @method Grid\Column|Collection reason(string $label = null)
      * @method Grid\Column|Collection entry_number(string $label = null)
+     * @method Grid\Column|Collection deliver_number(string $label = null)
      * @method Grid\Column|Collection province(string $label = null)
      * @method Grid\Column|Collection city(string $label = null)
      * @method Grid\Column|Collection district(string $label = null)
      * @method Grid\Column|Collection address(string $label = null)
-     * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection qq_account(string $label = null)
+     * @method Grid\Column|Collection wechat_account(string $label = null)
      * @method Grid\Column|Collection requirement(string $label = null)
+     * @method Grid\Column|Collection valid_time(string $label = null)
      * @method Grid\Column|Collection buyer_count(string $label = null)
      * @method Grid\Column|Collection visit_count(string $label = null)
      * @method Grid\Column|Collection wechat(string $label = null)
@@ -286,6 +314,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection introduce(string $label = null)
      * @method Grid\Column|Collection is_checked(string $label = null)
      * @method Grid\Column|Collection out_trade_no(string $label = null)
+     * @method Grid\Column|Collection pay_type(string $label = null)
      * @method Grid\Column|Collection pay_status(string $label = null)
      * @method Grid\Column|Collection uuid(string $label = null)
      * @method Grid\Column|Collection connection(string $label = null)
@@ -293,9 +322,9 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection payload(string $label = null)
      * @method Grid\Column|Collection exception(string $label = null)
      * @method Grid\Column|Collection failed_at(string $label = null)
+     * @method Grid\Column|Collection from_user_id(string $label = null)
      * @method Grid\Column|Collection send_platform(string $label = null)
      * @method Grid\Column|Collection author(string $label = null)
-     * @method Grid\Column|Collection url(string $label = null)
      * @method Grid\Column|Collection privilege(string $label = null)
      * @method Grid\Column|Collection privilege_id(string $label = null)
      * @method Grid\Column|Collection update_at(string $label = null)
@@ -326,7 +355,20 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection is_last(string $label = null)
      * @method Grid\Column|Collection show_platform(string $label = null)
      * @method Grid\Column|Collection price(string $label = null)
-     * @method Grid\Column|Collection adder(string $label = null)
+     * @method Grid\Column|Collection parent_bg(string $label = null)
+     * @method Grid\Column|Collection student_bg(string $label = null)
+     * @method Grid\Column|Collection teacher_bg(string $label = null)
+     * @method Grid\Column|Collection organ_bg(string $label = null)
+     * @method Grid\Column|Collection share_post(string $label = null)
+     * @method Grid\Column|Collection invite_register_bg(string $label = null)
+     * @method Grid\Column|Collection teacher_detail_top_bg(string $label = null)
+     * @method Grid\Column|Collection invite_organ_confirm_bg(string $label = null)
+     * @method Grid\Column|Collection invite_teacher_confirm_bg(string $label = null)
+     * @method Grid\Column|Collection intermediary_bg(string $label = null)
+     * @method Grid\Column|Collection action(string $label = null)
+     * @method Grid\Column|Collection site_message(string $label = null)
+     * @method Grid\Column|Collection text_message(string $label = null)
+     * @method Grid\Column|Collection official_account(string $label = null)
      * @method Grid\Column|Collection organization(string $label = null)
      * @method Grid\Column|Collection teaching_type(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
@@ -346,9 +388,9 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection education_reason(string $label = null)
      * @method Grid\Column|Collection teaching_year(string $label = null)
      * @method Grid\Column|Collection data_status(string $label = null)
+     * @method Grid\Column|Collection total_out_trade_no(string $label = null)
      * @method Grid\Column|Collection student_id(string $label = null)
      * @method Grid\Column|Collection discount(string $label = null)
-     * @method Grid\Column|Collection pay_type(string $label = null)
      * @method Grid\Column|Collection nickname(string $label = null)
      * @method Grid\Column|Collection organ_role_id(string $label = null)
      * @method Grid\Column|Collection age(string $label = null)
@@ -409,14 +451,14 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection remember_token
      * @property Show\Field|Collection last_login_time
      * @property Show\Field|Collection content
-     * @property Show\Field|Collection user_image
-     * @property Show\Field|Collection teacher_image
+     * @property Show\Field|Collection adder
+     * @property Show\Field|Collection editor
+     * @property Show\Field|Collection url
      * @property Show\Field|Collection logo
-     * @property Show\Field|Collection poster
-     * @property Show\Field|Collection service_price
-     * @property Show\Field|Collection invite_rule
+     * @property Show\Field|Collection login_bg
+     * @property Show\Field|Collection contact
      * @property Show\Field|Collection user_agreement
-     * @property Show\Field|Collection privacy_policy
+     * @property Show\Field|Collection is_show_full
      * @property Show\Field|Collection amount
      * @property Show\Field|Collection course_id
      * @property Show\Field|Collection teacher_id
@@ -425,6 +467,11 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
      * @property Show\Field|Collection role
+     * @property Show\Field|Collection latest_end_time
+     * @property Show\Field|Collection course_end
+     * @property Show\Field|Collection deal_pay
+     * @property Show\Field|Collection confirm_course
+     * @property Show\Field|Collection is_can_look
      * @property Show\Field|Collection student
      * @property Show\Field|Collection gender
      * @property Show\Field|Collection grade
@@ -451,13 +498,15 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection notes
      * @property Show\Field|Collection reason
      * @property Show\Field|Collection entry_number
+     * @property Show\Field|Collection deliver_number
      * @property Show\Field|Collection province
      * @property Show\Field|Collection city
      * @property Show\Field|Collection district
      * @property Show\Field|Collection address
-     * @property Show\Field|Collection contact
      * @property Show\Field|Collection qq_account
+     * @property Show\Field|Collection wechat_account
      * @property Show\Field|Collection requirement
+     * @property Show\Field|Collection valid_time
      * @property Show\Field|Collection buyer_count
      * @property Show\Field|Collection visit_count
      * @property Show\Field|Collection wechat
@@ -467,6 +516,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection introduce
      * @property Show\Field|Collection is_checked
      * @property Show\Field|Collection out_trade_no
+     * @property Show\Field|Collection pay_type
      * @property Show\Field|Collection pay_status
      * @property Show\Field|Collection uuid
      * @property Show\Field|Collection connection
@@ -474,9 +524,9 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection payload
      * @property Show\Field|Collection exception
      * @property Show\Field|Collection failed_at
+     * @property Show\Field|Collection from_user_id
      * @property Show\Field|Collection send_platform
      * @property Show\Field|Collection author
-     * @property Show\Field|Collection url
      * @property Show\Field|Collection privilege
      * @property Show\Field|Collection privilege_id
      * @property Show\Field|Collection update_at
@@ -507,7 +557,20 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection is_last
      * @property Show\Field|Collection show_platform
      * @property Show\Field|Collection price
-     * @property Show\Field|Collection adder
+     * @property Show\Field|Collection parent_bg
+     * @property Show\Field|Collection student_bg
+     * @property Show\Field|Collection teacher_bg
+     * @property Show\Field|Collection organ_bg
+     * @property Show\Field|Collection share_post
+     * @property Show\Field|Collection invite_register_bg
+     * @property Show\Field|Collection teacher_detail_top_bg
+     * @property Show\Field|Collection invite_organ_confirm_bg
+     * @property Show\Field|Collection invite_teacher_confirm_bg
+     * @property Show\Field|Collection intermediary_bg
+     * @property Show\Field|Collection action
+     * @property Show\Field|Collection site_message
+     * @property Show\Field|Collection text_message
+     * @property Show\Field|Collection official_account
      * @property Show\Field|Collection organization
      * @property Show\Field|Collection teaching_type
      * @property Show\Field|Collection teacher_cert
@@ -527,9 +590,9 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection education_reason
      * @property Show\Field|Collection teaching_year
      * @property Show\Field|Collection data_status
+     * @property Show\Field|Collection total_out_trade_no
      * @property Show\Field|Collection student_id
      * @property Show\Field|Collection discount
-     * @property Show\Field|Collection pay_type
      * @property Show\Field|Collection nickname
      * @property Show\Field|Collection organ_role_id
      * @property Show\Field|Collection age
@@ -585,14 +648,14 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection remember_token(string $label = null)
      * @method Show\Field|Collection last_login_time(string $label = null)
      * @method Show\Field|Collection content(string $label = null)
-     * @method Show\Field|Collection user_image(string $label = null)
-     * @method Show\Field|Collection teacher_image(string $label = null)
+     * @method Show\Field|Collection adder(string $label = null)
+     * @method Show\Field|Collection editor(string $label = null)
+     * @method Show\Field|Collection url(string $label = null)
      * @method Show\Field|Collection logo(string $label = null)
-     * @method Show\Field|Collection poster(string $label = null)
-     * @method Show\Field|Collection service_price(string $label = null)
-     * @method Show\Field|Collection invite_rule(string $label = null)
+     * @method Show\Field|Collection login_bg(string $label = null)
+     * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection user_agreement(string $label = null)
-     * @method Show\Field|Collection privacy_policy(string $label = null)
+     * @method Show\Field|Collection is_show_full(string $label = null)
      * @method Show\Field|Collection amount(string $label = null)
      * @method Show\Field|Collection course_id(string $label = null)
      * @method Show\Field|Collection teacher_id(string $label = null)
@@ -601,6 +664,11 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
      * @method Show\Field|Collection role(string $label = null)
+     * @method Show\Field|Collection latest_end_time(string $label = null)
+     * @method Show\Field|Collection course_end(string $label = null)
+     * @method Show\Field|Collection deal_pay(string $label = null)
+     * @method Show\Field|Collection confirm_course(string $label = null)
+     * @method Show\Field|Collection is_can_look(string $label = null)
      * @method Show\Field|Collection student(string $label = null)
      * @method Show\Field|Collection gender(string $label = null)
      * @method Show\Field|Collection grade(string $label = null)
@@ -627,13 +695,15 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection notes(string $label = null)
      * @method Show\Field|Collection reason(string $label = null)
      * @method Show\Field|Collection entry_number(string $label = null)
+     * @method Show\Field|Collection deliver_number(string $label = null)
      * @method Show\Field|Collection province(string $label = null)
      * @method Show\Field|Collection city(string $label = null)
      * @method Show\Field|Collection district(string $label = null)
      * @method Show\Field|Collection address(string $label = null)
-     * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection qq_account(string $label = null)
+     * @method Show\Field|Collection wechat_account(string $label = null)
      * @method Show\Field|Collection requirement(string $label = null)
+     * @method Show\Field|Collection valid_time(string $label = null)
      * @method Show\Field|Collection buyer_count(string $label = null)
      * @method Show\Field|Collection visit_count(string $label = null)
      * @method Show\Field|Collection wechat(string $label = null)
@@ -643,6 +713,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection introduce(string $label = null)
      * @method Show\Field|Collection is_checked(string $label = null)
      * @method Show\Field|Collection out_trade_no(string $label = null)
+     * @method Show\Field|Collection pay_type(string $label = null)
      * @method Show\Field|Collection pay_status(string $label = null)
      * @method Show\Field|Collection uuid(string $label = null)
      * @method Show\Field|Collection connection(string $label = null)
@@ -650,9 +721,9 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection payload(string $label = null)
      * @method Show\Field|Collection exception(string $label = null)
      * @method Show\Field|Collection failed_at(string $label = null)
+     * @method Show\Field|Collection from_user_id(string $label = null)
      * @method Show\Field|Collection send_platform(string $label = null)
      * @method Show\Field|Collection author(string $label = null)
-     * @method Show\Field|Collection url(string $label = null)
      * @method Show\Field|Collection privilege(string $label = null)
      * @method Show\Field|Collection privilege_id(string $label = null)
      * @method Show\Field|Collection update_at(string $label = null)
@@ -683,7 +754,20 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection is_last(string $label = null)
      * @method Show\Field|Collection show_platform(string $label = null)
      * @method Show\Field|Collection price(string $label = null)
-     * @method Show\Field|Collection adder(string $label = null)
+     * @method Show\Field|Collection parent_bg(string $label = null)
+     * @method Show\Field|Collection student_bg(string $label = null)
+     * @method Show\Field|Collection teacher_bg(string $label = null)
+     * @method Show\Field|Collection organ_bg(string $label = null)
+     * @method Show\Field|Collection share_post(string $label = null)
+     * @method Show\Field|Collection invite_register_bg(string $label = null)
+     * @method Show\Field|Collection teacher_detail_top_bg(string $label = null)
+     * @method Show\Field|Collection invite_organ_confirm_bg(string $label = null)
+     * @method Show\Field|Collection invite_teacher_confirm_bg(string $label = null)
+     * @method Show\Field|Collection intermediary_bg(string $label = null)
+     * @method Show\Field|Collection action(string $label = null)
+     * @method Show\Field|Collection site_message(string $label = null)
+     * @method Show\Field|Collection text_message(string $label = null)
+     * @method Show\Field|Collection official_account(string $label = null)
      * @method Show\Field|Collection organization(string $label = null)
      * @method Show\Field|Collection teaching_type(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
@@ -703,9 +787,9 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection education_reason(string $label = null)
      * @method Show\Field|Collection teaching_year(string $label = null)
      * @method Show\Field|Collection data_status(string $label = null)
+     * @method Show\Field|Collection total_out_trade_no(string $label = null)
      * @method Show\Field|Collection student_id(string $label = null)
      * @method Show\Field|Collection discount(string $label = null)
-     * @method Show\Field|Collection pay_type(string $label = null)
      * @method Show\Field|Collection nickname(string $label = null)
      * @method Show\Field|Collection organ_role_id(string $label = null)
      * @method Show\Field|Collection age(string $label = null)

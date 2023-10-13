@@ -30,7 +30,25 @@ Route::group([
     $router->resource('/teacher_course','TeacherCourseController');
     $router->resource('/student_course','StudentCourseController');
     $router->resource('/intermediary_course','IntermediaryCourseController');
-    $router->resource('/activities','ActivityController');
     $router->resource('/withdraw','WithdrawController');
-
+    $router->resource('/invite_new_activity','WithdrawController');
+    $router->resource('/teacher_register_activity','WithdrawController');
+    $router->resource('/deal_activity','WithdrawController');
+    $router->resource('/bill','BillController');
+    $router->resource('/user_course','UserCourseController');
+    $router->resource('/teacher_deal','TeacherDealServicePriceController');
+    $router->resource('/look_teacher','LookTeacherServicePriceController');
+    $router->resource('/entry','EntryServicePriceController');
+    $router->resource('/course_contact','CourseContactServicePriceController');
+    $router->resource('/base_information','BaseInformationController');
+    $router->resource('/system_images','SystemImageController');
+    $router->resource('/banner','BannerController');
+    $router->resource('/agreement','AgreementController');
+    $router->resource('/constant','ConstantController');
+    $router->resource('/system_message','SystemMessageController');
+    $router->resource('/notice','NoticeController');
+    $router->resource('/region','RegionController');
+    $router->resource('/student_course_setting','StudentCourseSettingController');
+    $router->resource('/teacher_course_setting','TeacherCourseSettingController');
+    $router->resource('/platform_message','PlatformMessageController');
 });
