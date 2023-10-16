@@ -104,10 +104,6 @@ class IndexController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 0])->exists();
-        if (!$is_buy) {
-            $result->mobile = null;
-        }
         // 判断当前用户是否能查看
         $teaching_year = 0;
         $subject = [];
@@ -132,7 +128,11 @@ class IndexController extends Controller
         // 教师证书
         $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         // 判断当前机构是否购买
-        $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
+        if ($user->role == 2) {
+            $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->exists();
+        } else {
+            $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 0])->exists();
+        }
         if (!$is_buy) {
             $result->mobile = null;
         }
