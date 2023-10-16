@@ -45,7 +45,7 @@ class TeacherController extends Controller
         if (isset($data['sort_teaching_year'])) {
             $sort_field = 'teacher_info.teaching_year';
         } elseif (isset($data['sort_education'])) {
-            $sort_field = 'teacher_info.education_id';
+            $sort_field = 'teacher_education.education_id';
         }
         // 筛选
         $where = [];
@@ -62,7 +62,7 @@ class TeacherController extends Controller
             $where[] = ['users.gender','=',$data['filter_gender']];
         }
         if (isset($data['filter_education'])) {
-            $where[] = ['teacher_info.highest_education','=',$data['filter_education']];
+            $where[] = ['teacher_education.highest_education','=',$data['filter_education']];
         }
         if (isset($data['filter_teaching_year_min']) && isset($data['filter_teaching_year_max'])) {
             $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year_min']];
