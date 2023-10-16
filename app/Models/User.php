@@ -138,6 +138,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(DeliverLog::class,'user_id');
     }
 
+    public function user_teacher_orders()
+    {
+        return $this->hasMany(UserTeacherOrder::class,'user_id');
+    }
+
     // 消息
     public function messages()
     {

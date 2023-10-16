@@ -13,6 +13,7 @@ use App\Models\TeacherImage;
 use App\Models\TeacherInfo;
 use App\Models\TeacherRealAuth;
 use App\Models\User;
+use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,8 @@ class TeacherController extends Controller
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
         }
+        // 当前用户
+        $user = Auth::user();
         $page_size = $data['page_size'] ?? 10;
         // 排序
         $order = $data['order'] ?? 'desc';
@@ -82,7 +85,11 @@ class TeacherController extends Controller
         foreach ($result as $v) {
             // 科目
             $v->subject = explode(',',$v->subject);
-            $v->is_pay = $v->deliver_log()->where('pay_status',1)->exists();
+            if ($user->role == 2) {
+                $v->is_pay = $v->deliver_log()->where('pay_status',1)->exists();
+            } else {
+                $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
+            }
         }
         return $this->success('教师列表',$result);
     }
