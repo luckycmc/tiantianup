@@ -137,7 +137,7 @@ class IndexController extends Controller
         if ($user->role == 2) {
             $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->exists();
         } else {
-            $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 0])->exists();
+            $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
         }
         if (!$is_buy) {
             $result->mobile = null;
