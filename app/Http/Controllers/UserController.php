@@ -569,11 +569,13 @@ class UserController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
+        $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
         // 查看是否已投递
         $deliver_data = [
             'user_id' => $user->id,
             'course_id' => $data['course_id'],
             'status' => 0,
+            $adder_field => $course_info->adder_id,
             'introduce' => $data['introduce'] ?? '',
             'image' => $data['image'] ?? '',
             'out_trade_no' => $out_trade_no,
@@ -872,7 +874,12 @@ class UserController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
-        $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where(['user_id' => $user->id,'status' => 1])->paginate($page_size);
+        if ($user->role == 2) {
+            $teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail'])->where(['parent_id' => $user->id,'pay_status' => 1])->paginate($page_size);
+        } else {
+            $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where(['user_id' => $user->id,'status' => 1])->paginate($page_size);
+        }
+
         $teaching_year = 0;
         $subject = [];
         foreach ($teachers as $teacher) {
