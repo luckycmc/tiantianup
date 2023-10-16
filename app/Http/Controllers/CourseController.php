@@ -87,7 +87,7 @@ class CourseController extends Controller
         if ($user->role == 3) {
             $where[] = ['courses.role','=',3];
         }
-        if ($user->role == 1  || $user->role == 3) {
+        if ($user->role == 1  || $user->role == 2) {
             $where[] = ['courses.role','=',1];
         }
         if ($user->role == 2 && !isset($data['is_platform'])) {
