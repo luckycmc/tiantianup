@@ -623,6 +623,9 @@ class OrganizationController extends Controller
         if (isset($data['city_id'])) {
             $where[] = ['users.city_id','=',$data['city_id']];
         }
+        if (isset($data['name'])) {
+            $where[] = ['users.name','like','%'.$data['name'].'%'];
+        }
         if (isset($data['filter_object'])) {
             $where[] = ['teacher_career.object','like','%'.$data['filter_object'].'%'];
         }
