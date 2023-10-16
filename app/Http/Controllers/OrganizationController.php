@@ -81,7 +81,8 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
         // 查询服务费
-        $service_price = BaseInformation::value('service_price');
+        // $service_price = BaseInformation::value('service_price');
+        $service_price = 0.01;
         $order_data = [
             'user_id' => $user->id,
             'role' => 4,
