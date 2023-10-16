@@ -23,7 +23,7 @@ class Message extends Model
         $model->send_platform = $platform;
         $model->status = 0;
         $model->type = $type;
-        $where = ['user_id' => $user_id,'from_user_id' => $from_user_id,'status' => 0];
+        $where = ['user_id' => $user_id,'from_user_id' => $from_user_id,'type' => $type,'course_id' => $course_id,'status' => 0];
         if (!DB::table('messages')->where($where)->exists()) {
             $model->save();
         }
