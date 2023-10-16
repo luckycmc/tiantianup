@@ -266,6 +266,7 @@ class OrganizationController extends Controller
             $v->teacher_education = $v->user->teacher_education;
             $v->subject = $v->course->subject;
             $v->teacher_tags = $v->user->teacher_tags->pluck('tag');
+            $v->deliver_detail = $v->user->deliver_log;
         }
         return $this->success('投递教师列表',$result);
     }
