@@ -646,12 +646,13 @@ class OrganizationController extends Controller
             $where[] = ['users.name','like','%'.$data['keyword'].'%'];
         }
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+            ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
             // ->where(['district_id' => $district_id])
             ->whereIn('users.id',$teacher_ids)
             ->orderBy($sort_field,$order)
-            ->select('users.*','teacher_info.highest_education','teacher_info.graduate_school','teacher_info.teaching_year','teacher_career.subject')
+            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject')
             ->paginate($page_size);
         foreach ($result as $v) {
             // 科目
