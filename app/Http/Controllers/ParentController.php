@@ -102,7 +102,9 @@ class ParentController extends Controller
             $v->class_time = json_decode($v->class_date,true);
             if ($v->status == 1) {
                 $deliver_info = $v->deliver()->first();
-                $v->course_status = $deliver_info->status;
+                if ($deliver_info) {
+                    $v->course_status = $deliver_info->status;
+                }
             }
         }
         return $this->success('我的发布',$result);
