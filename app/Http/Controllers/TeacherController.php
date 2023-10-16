@@ -230,7 +230,7 @@ class TeacherController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(7);
+        // $user = User::find(7);
         $sort_field = 'courses.created_at';
         $order = 'desc';
         if (isset($data['sort_class_price'])) {
@@ -238,7 +238,7 @@ class TeacherController extends Controller
             $order = $data['sort_class_price'] == 0 ? 'desc' : 'asc';
         }
         if (isset($data['sort_distance'])) {
-            $sort_field = 'courses.distance';
+            $sort_field = 'distance';
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
@@ -281,12 +281,12 @@ class TeacherController extends Controller
             }
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
-                ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
+                ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(latitude))) AS distance'))
                 ->where($where)->where('courses.role',3)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         } else {
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
-                ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude')
+                ->select('courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(latitude))) AS distance'))
                 ->where($where)->where('courses.role',3)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
 
