@@ -44,10 +44,6 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
-                // 更新课程状态
-                $course = Course::find($order->course_id);
-                $course->course_status = 4;
-                $course->update();
             }
         } catch (Exception $e) {
             Log::info($data);
@@ -64,6 +60,8 @@ class CommonController extends Controller
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
+                // 已授权
+                $order->status = 4;
                 // 查询支付类型
                 if ($order->pay_type == 1) {
                     // 微信支付
@@ -79,10 +77,6 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
-                // 已授权
-                $course = Course::find($order->course_id);
-                $course->course_status = 4;
-                $course->update();
             }
         } catch (Exception $e) {
             Log::info($data);

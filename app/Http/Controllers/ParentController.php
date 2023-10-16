@@ -101,6 +101,8 @@ class ParentController extends Controller
         $result = Course::where(['parent_id' => $user->id,'status' => $status,'adder_role' => 2])->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             $v->class_time = json_decode($v->class_date,true);
+            $deliver_info =$v->deliver()->where('pay_status',1)->first();
+            $v->course_status = $deliver_info->status;
         }
         return $this->success('我的发布',$result);
     }

@@ -132,7 +132,7 @@ class IndexController extends Controller
         // 教师证书
         $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         // 判断当前机构是否购买
-        $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'course_status' => 4])->exists();
+        $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
         if (!$is_buy) {
             $result->mobile = null;
         }
