@@ -72,11 +72,12 @@ class TeacherController extends Controller
             $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
         }
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+            ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
             ->where(['users.district_id' => $district_id,'users.role' => 3])
             ->orderBy($sort_field,$order)
-            ->select('users.*','teacher_info.highest_education','teacher_info.graduate_school','teacher_info.teaching_year','teacher_career.subject')
+            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject')
             ->paginate($page_size);
         foreach ($result as $v) {
             // 科目

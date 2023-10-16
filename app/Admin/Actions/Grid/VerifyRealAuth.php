@@ -4,6 +4,7 @@ namespace App\Admin\Actions\Grid;
 
 use App\Admin\Forms\VerifyRealAuth as VerifyRealAuthForm;
 use App\Models\TeacherInfo;
+use App\Models\User;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Traits\HasPermissions;
@@ -44,6 +45,8 @@ class VerifyRealAuth extends RowAction
         $teacher_info = TeacherInfo::find($teacher_id);
         $teacher_info->status = 1;
         $teacher_info->update();
+
+        $user_info = User::find($teacher_id);
 
         return $this->response()
             ->success('操作成功')
