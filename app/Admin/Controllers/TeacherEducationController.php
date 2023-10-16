@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseEducation;
+use App\Admin\Actions\Grid\VerifyEducation;
 use App\Admin\Repositories\TeacherEducation;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -32,6 +34,13 @@ class TeacherEducationController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyEducation());
+                    $actions->append(new RefuseEducation());
+                }
             });
         });
     }

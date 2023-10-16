@@ -229,7 +229,6 @@ class TeacherController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(7);
         $sort_field = 'courses.created_at';
         $order = 'desc';
         if (isset($data['sort_class_price'])) {

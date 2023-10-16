@@ -2,6 +2,7 @@
 
 namespace App\Admin\Forms;
 
+use App\Models\TeacherEducation;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
@@ -20,10 +21,10 @@ class RefuseEducation extends Form  implements LazyRenderable
     {
         $id = $this->payload['id'] ?? null;
         $reason = $input['reason'] ?? '';
-        $course_info = Course::find($id);
-        $course_info->status = 3;
-        $course_info->reason = $reason;
-        $course_info->update();
+        $teacher_info = TeacherEducation::find($id);
+        $teacher_info->status = 2;
+        $teacher_info->reason = $reason;
+        $teacher_info->update();
 
         return $this
             ->response()
