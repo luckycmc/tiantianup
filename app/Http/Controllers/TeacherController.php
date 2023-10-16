@@ -214,6 +214,11 @@ class TeacherController extends Controller
         $course = $result->map(function ($item) {
             return $item->course;
         });
+        if (isset($data['name'])) {
+            $course = $course->filter(function ($user) use ($data) {
+                return str_contains(strtolower($user['name']), strtolower($data['name']));
+            });
+        }
         return $this->success('我的接单',$course);
     }
 
