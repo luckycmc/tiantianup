@@ -219,6 +219,8 @@ class IndexController extends Controller
         if ($user->role == 3) {
             // 是否投递
             $result->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id])->exists();
+            // 是否支付
+            $result->is_pay = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id,'pay_status' => 1])->exists();
             // 课程信息
             $course_info = Course::find($course_id);
             if ($course_info->adder_role == 0) {
