@@ -46,7 +46,7 @@ class CommonController extends Controller
                 }
                 // 更新课程状态
                 $course = Course::find($order->course_id);
-                $course->status = 2;
+                $course->course_status = 4;
                 $course->update();
             }
         } catch (Exception $e) {
@@ -79,9 +79,9 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
-                // 关闭订单
+                // 已授权
                 $course = Course::find($order->course_id);
-                $course->status = 2;
+                $course->course_status = 4;
                 $course->update();
             }
         } catch (Exception $e) {
