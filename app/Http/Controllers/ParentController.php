@@ -145,7 +145,8 @@ class ParentController extends Controller
         // 给选中的教师发送提醒
         foreach ($deliver_arr as $v) {
             $user_id = DeliverLog::where('id',$v)->value('user_id');
-            (new Message())->saveMessage($user_id,$user->id,'选中信息','您被选中了',0,2);
+            $course_id = DeliverLog::where('user_id',$v)->value('course_id');
+            (new Message())->saveMessage($user_id,$user->id,'选中信息','您被选中了',$course_id,0,2);
         }
         return $this->success('操作成功');
     }

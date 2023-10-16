@@ -12,13 +12,14 @@ class Message extends Model
 {
 	use HasDateTimeFormatter;
 
-    public function saveMessage($user_id,$from_user_id,$name,$content,$platform,$type)
+    public function saveMessage($user_id,$from_user_id,$name,$content,$course_id,$platform,$type)
     {
         $model = new self();
         $model->user_id = $user_id;
         $model->from_user_id = $from_user_id;
         $model->name = $name;
         $model->content = $content;
+        $model->course_id = $course_id ?? null;
         $model->send_platform = $platform;
         $model->status = 0;
         $model->type = $type;
