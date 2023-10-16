@@ -292,6 +292,7 @@ class TeacherController extends Controller
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
             }
+            $v->is_deliver = $user->deliver_log()->where('course_id',$v->id)->exists();
         }
         return $this->success('找学员列表',$result);
     }
