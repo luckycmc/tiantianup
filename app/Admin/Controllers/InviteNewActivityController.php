@@ -22,8 +22,8 @@ class InviteNewActivityController extends AdminController
             $grid->column('id','活动id')->sortable();
             $grid->column('name','活动名称');
             $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中']);
-            $grid->column('start_time');
-            $grid->column('end_time');
+            $grid->column('start_time','开始时间');
+            $grid->column('end_time','结束时间');
             $grid->column('object','活动对象');
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
@@ -72,15 +72,15 @@ class InviteNewActivityController extends AdminController
         return Form::make(new Activity(), function (Form $form) {
             $form->display('id');
             $form->text('name');
-            $form->text('image');
-            $form->text('object');
-            $form->text('type');
-            $form->text('description');
+            $form->image('image','图片')->saveFullUrl();
+            $form->text('object','对象');
+            $form->display('type','类型')->default(1);
+            $form->text('description','介绍');
             $form->text('reward');
             $form->text('introduction');
-            $form->text('start_time');
-            $form->text('end_time');
-            $form->text('status');
+            $form->text('start_time','开始时间');
+            $form->text('end_time','结束时间');
+            $form->select('status')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);
         
             $form->display('created_at');
             $form->display('updated_at');

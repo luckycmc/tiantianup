@@ -33,7 +33,7 @@ class PaymentController extends Controller
         if (!$order) {
             return $this->error('订单不存在');
         }
-        if ($order->status == 2) {
+        if ($order->status == 5) {
             return $this->error('该订单已关闭');
         }
         // 当前用户

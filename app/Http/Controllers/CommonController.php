@@ -21,7 +21,6 @@ class CommonController extends Controller
     {
         $config = config('pay');
         $pay = Pay::wechat($config);
-        Log::info('aa');
         try {
             $data = $pay->callback(); // 是的，验签就这么简单！
             Log::info('Log: '.$data);
@@ -45,6 +44,10 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
+                // 更新课程状态
+                $course = Course::find($order->course_id);
+                $course->status = 2;
+                $course->update();
             }
         } catch (Exception $e) {
             Log::info($data);

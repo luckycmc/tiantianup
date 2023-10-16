@@ -31,9 +31,9 @@ Route::group([
     $router->resource('/student_course','StudentCourseController');
     $router->resource('/intermediary_course','IntermediaryCourseController');
     $router->resource('/withdraw','WithdrawController');
-    $router->resource('/invite_new_activity','WithdrawController');
-    $router->resource('/teacher_register_activity','WithdrawController');
-    $router->resource('/deal_activity','WithdrawController');
+    $router->resource('/invite_new_activity','InviteNewActivityController');
+    $router->resource('/teacher_register_activity','TeacherRegisterActivityController');
+    $router->resource('/deal_activity','DealActivityController');
     $router->resource('/bill','BillController');
     $router->resource('/user_course','UserCourseController');
     $router->resource('/teacher_deal','TeacherDealServicePriceController');
