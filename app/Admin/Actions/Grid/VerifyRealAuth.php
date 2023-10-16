@@ -47,6 +47,8 @@ class VerifyRealAuth extends RowAction
         $teacher_info->update();
 
         $user_info = User::find($teacher_id);
+        $user_info->is_real_auth = 1;
+        $user_info->save();
 
         return $this->response()
             ->success('操作成功')

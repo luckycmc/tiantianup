@@ -263,6 +263,7 @@ class OrganizationController extends Controller
         $result = DeliverLog::with(['user'])->where('course_id',$course_id)->paginate($page_size);
         foreach ($result as $v) {
             $v->teacher_info = $v->user->teacher_info;
+            $v->teacher_education = $v->user->teacher_education;
             $v->subject = $v->course->subject;
             $v->teacher_tags = $v->user->teacher_tags->pluck('tag');
         }
