@@ -7,7 +7,7 @@ use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
 
-class RefuseRealAuth extends Form implements LazyRenderable
+class VerifyRealAuth extends Form implements LazyRenderable
 {
     use LazyWidget;
     /**
@@ -20,10 +20,12 @@ class RefuseRealAuth extends Form implements LazyRenderable
     public function handle(array $input)
     {
         $id = $this->payload['id'] ?? null;
-        $reason = $input['reason'] ?? '';
+        $id_card_no = $input['id_card_no'] ?? '';
+        $real_name = $input['real_name'] ?? '';
         $teacher_info = TeacherInfo::find($id);
-        $teacher_info->status = 3;
-        $teacher_info->reason = $reason;
+        $teacher_info->status = 1;
+        $teacher_info->id_card_no = $id_card_no;
+        $teacher_info->real_name = $real_name;
         $teacher_info->update();
 
         return $this
@@ -37,7 +39,8 @@ class RefuseRealAuth extends Form implements LazyRenderable
      */
     public function form()
     {
-        $this->text('reason','拒绝原因')->required();
+        $this->text('id_card_no','身份证号')->required();
+        $this->text('real_name','真实姓名')->required();
     }
 
     /**
@@ -48,7 +51,8 @@ class RefuseRealAuth extends Form implements LazyRenderable
     public function default()
     {
         return [
-            'reason'  => '',
+            'id_card_no'  => '',
+            'real_name' => '',
         ];
     }
 }

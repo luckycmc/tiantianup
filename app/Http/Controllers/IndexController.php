@@ -142,6 +142,8 @@ class IndexController extends Controller
         if (!$is_buy) {
             $result->mobile = null;
         }
+        // 投递详情
+        $result->deliver_detail = $result->deliver_log;
         return $this->success('教师详情',$result);
     }
 

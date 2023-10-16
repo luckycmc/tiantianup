@@ -2,10 +2,12 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Admin\Forms\VerifyRealAuth as VerifyRealAuthForm;
 use App\Models\TeacherInfo;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Traits\HasPermissions;
+use Dcat\Admin\Widgets\Modal;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -16,6 +18,18 @@ class VerifyRealAuth extends RowAction
      * @return string
      */
 	protected $title = '通过';
+
+    public function render()
+    {
+        // 实例化表单类并传递自定义参数
+        $form = VerifyRealAuthForm::make()->payload(['id' => $this->getKey()]);
+
+        return Modal::make()
+            ->lg()
+            ->title($this->title)
+            ->body($form)
+            ->button($this->title);
+    }
 
     /**
      * Handle the action request.
@@ -29,7 +43,7 @@ class VerifyRealAuth extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherInfo::find($teacher_id);
         $teacher_info->status = 1;
-        $teacher_id->update();
+        $teacher_info->update();
 
         return $this->response()
             ->success('操作成功')
