@@ -98,7 +98,7 @@ class IndexController extends Controller
     {
         $data = \request()->all();
         $id = $data['teacher_id'];
-        $result = User::with(['teacher_experience','teacher_info','teacher_tags'])->where(['id' => $id])->first();
+        $result = User::with(['teacher_experience','teacher_info','teacher_tags','teacher_cert','teacher_education'])->where(['id' => $id])->first();
         if (!$result) {
             return $this->error('教师不存在');
         }
@@ -125,8 +125,11 @@ class IndexController extends Controller
         $result->has_collect = $user->has_collect_teacher($id);
         // 教师风采
         $result->teacher_demeanor = $result->teacher_demeanor($id);
+        foreach ($result->teacher_demeanor as $v) {
+            $v->url = json_decode($v->url);
+        }
         // 教师证书
-        $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
+        // $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         // 判断当前机构是否购买
         if ($user->role == 2) {
             $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->exists();

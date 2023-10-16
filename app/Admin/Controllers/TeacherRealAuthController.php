@@ -2,7 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseRealAuth;
 use App\Admin\Actions\Grid\RejectRealAuth;
+use App\Admin\Actions\Grid\VerifyRealAuth;
+use App\Admin\Repositories\TeacherInfo;
 use App\Admin\Repositories\TeacherRealAuth;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -18,9 +21,9 @@ class TeacherRealAuthController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new TeacherRealAuth(['user']), function (Grid $grid) {
+        return Grid::make(new TeacherInfo('teacher'), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('user.name','教师姓名');
+            $grid->column('teacher.name','教师姓名');
             $grid->column('id_card_front')->image('',60,60);
             $grid->column('id_card_backend')->image('',60,60);
             $grid->column('real_name');
@@ -29,6 +32,13 @@ class TeacherRealAuthController extends AdminController
             $grid->column('reason');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyRealAuth());
+                    $actions->append(new RefuseRealAuth());
+                }
+            });
         });
     }
 

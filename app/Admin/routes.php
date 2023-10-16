@@ -23,7 +23,7 @@ Route::group([
     });
     $router->resource('/organization','OrganizationController');
     $router->resource('/teacher_info','TeacherInfoController');
-    $router->resource('/teacher_real_auth','TeacherInfoController');
+    $router->resource('/teacher_real_auth','TeacherRealAuthController');
     $router->resource('/teacher_image','TeacherImageController');
     $router->resource('/teacher_education','TeacherEducationController');
     $router->resource('/consults','ConsultController');
