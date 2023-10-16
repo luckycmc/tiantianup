@@ -38,8 +38,6 @@ class TeacherController extends Controller
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
         }
-        Log::info('district_id: '.$district_id);
-        // dd($data);
         $page_size = $data['page_size'] ?? 10;
         // 排序
         $order = $data['order'] ?? 'desc';
@@ -70,7 +68,6 @@ class TeacherController extends Controller
             $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year_min']];
             $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year_max']];
         }
-        // dd($where);
         if (isset($data['filter_is_auth'])) {
             $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
         }
@@ -84,6 +81,7 @@ class TeacherController extends Controller
         foreach ($result as $v) {
             // 科目
             $v->subject = explode(',',$v->subject);
+            $v->is_pay = $v->deliver_log()->where('pay_status',1)->exists();
         }
         return $this->success('教师列表',$result);
     }
