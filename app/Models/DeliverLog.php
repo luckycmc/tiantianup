@@ -27,6 +27,11 @@ class DeliverLog extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+    public function teacher_education()
+    {
+        return $this->hasMany(TeacherEducation::class,'user_id','user_id');
+    }
+
     public function teacher_experience()
     {
         return $this->hasMany(TeacherCareer::class,'user_id','user_id');

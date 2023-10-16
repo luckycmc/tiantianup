@@ -875,7 +875,7 @@ class UserController extends Controller
         // 当前用户
         $user = Auth::user();
         if ($user->role == 2) {
-            $teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail'])->where(['parent_id' => $user->id,'pay_status' => 1])->paginate($page_size);
+            $teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['parent_id' => $user->id,'pay_status' => 1])->paginate($page_size);
         } else {
             $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where(['user_id' => $user->id,'status' => 1])->paginate($page_size);
         }
