@@ -218,6 +218,9 @@ class OrganizationController extends Controller
             })->first();
             $course_info->teacher_name = $delivers->user->name;
             $course_info->teacher_mobile = $delivers->user->mobile;
+        } else {
+            $course_info->teacher_name = null;
+            $course_info->teacher_mobile = null;
         }
         return $this->success('课程详情',$course_info);
     }
