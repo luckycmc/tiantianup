@@ -347,7 +347,8 @@ class TeacherController extends Controller
             'user_id' => $user->id,
             'course_id' => $course_id,
             'out_trade_no' => $out_trade_no,
-            'amount' => BaseInformation::value('service_price'),
+            // 'amount' => BaseInformation::value('service_price'),
+            'amount' => 0.01,
             'status' => 0,
             'created_at' => Carbon::now()
         ];
