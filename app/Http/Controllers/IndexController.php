@@ -129,9 +129,11 @@ class IndexController extends Controller
             $v->url = json_decode($v->url,true);
         }
         // 教师证书
-        $result->teacher_cert->teacher_cert = json_decode($result->teacher_cert->teacher_cert,true);
-        $result->teacher_cert->other_cert = json_decode($result->teacher_cert->other_cert,true);
-        $result->teacher_cert->honor_cert = json_decode($result->teacher_cert->honor_cert,true);
+        if (isset($result->teacher_cert)) {
+            $result->teacher_cert->teacher_cert = json_decode($result->teacher_cert->teacher_cert,true);
+            $result->teacher_cert->other_cert = json_decode($result->teacher_cert->other_cert,true);
+            $result->teacher_cert->honor_cert = json_decode($result->teacher_cert->honor_cert,true);
+        }
         // $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         // 判断当前机构是否购买
         if (in_array($user->role,[2,4])) {
