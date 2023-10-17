@@ -11,7 +11,7 @@ class Activity extends Model
 	use HasDateTimeFormatter;
 
     // 奖励
-    public function reward()
+    public function rewards()
     {
         return $this->hasOne(ActiveReward::class,'active_id','id');
     }

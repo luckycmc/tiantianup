@@ -17,30 +17,16 @@ class UserController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new User('organization'), function (Grid $grid) {
-            $grid->model()->where(['role' => 4,'status' => 0]);
+        return Grid::make(new User(['province','city','district']), function (Grid $grid) {
+            $grid->model()->whereIn('role',[1,2]);
             $grid->column('number','ID');
-            $grid->column('organization.name','机构名称');
-            $grid->column('gender');
+            $grid->column('name');
+            $grid->column('role');
             $grid->column('mobile');
-            $grid->column('birthday');
-            $grid->column('age');
-            $grid->column('province_id');
-            $grid->column('city_id');
-            $grid->column('district_id');
-            $grid->column('address');
-            $grid->column('school');
-            $grid->column('grade');
-            $grid->column('introduction');
-            $grid->column('total_income');
-            $grid->column('withdraw_balance');
-            $grid->column('status');
-            $grid->column('is_real_auth');
-            $grid->column('is_education');
-            $grid->column('has_teacher_cert');
-            $grid->column('is_recommend');
-            $grid->column('open_id');
-            $grid->column('created_at');
+            $grid->column('region','省市区')->display(function () {
+                return $this->province->region_name.$this->city->region_name.$this->district->region_name;
+            });
+            $grid->column('created_at','注册时间');
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {

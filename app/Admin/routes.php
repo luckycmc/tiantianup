@@ -22,6 +22,7 @@ Route::group([
         $router->get('/education', 'EducationController@list');
     });
     $router->resource('/organization','OrganizationController');
+    $router->resource('/user','UserController');
     $router->resource('/teacher_info','TeacherInfoController');
     $router->resource('/teacher_real_auth','TeacherRealAuthController');
     $router->resource('/teacher_image','TeacherImageController');

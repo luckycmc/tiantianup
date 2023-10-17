@@ -36,7 +36,7 @@ class ActivityController extends Controller
     {
         $data = \request()->all();
         $id = $data['id'] ?? 0;
-        $result = Activity::with('reward')->find($id);
+        $result = Activity::with('rewards')->find($id);
         if (!$result) {
             return $this->error('活动不存在');
         }

@@ -24,7 +24,13 @@ class InviteNewActivityController extends AdminController
             $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中']);
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
-            $grid->column('object','活动对象');
+            $grid->column('object','活动对象')->display(function ($object) {
+                $arr = json_decode($object,true);
+                if (count($arr) == 4) {
+                    return '全部';
+                }
+                return implode(',',json_decode($object,true));
+            });
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
             $grid->column('created_at','创建时间');
@@ -72,15 +78,19 @@ class InviteNewActivityController extends AdminController
         return Form::make(new Activity(), function (Form $form) {
             $form->display('id');
             $form->text('name');
-            $form->image('image','图片')->saveFullUrl();
-            $form->text('object','对象');
-            $form->display('type','类型')->default(1);
+            $form->image('image','图片')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });
+            $form->checkbox('object','对象')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
+                return json_encode($value,JSON_UNESCAPED_UNICODE);
+            })->canCheckAll();
+            $form->hidden('type','类型')->default(1);
             $form->text('description','介绍');
-            $form->text('reward');
-            $form->text('introduction');
-            $form->text('start_time','开始时间');
-            $form->text('end_time','结束时间');
-            $form->select('status')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);
+            $form->text('reward','奖励');
+            $form->text('introduction','介绍');
+            $form->dateRange('start_time','end_time','活动时间');
+            $form->select('status','状态')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);
         
             $form->display('created_at');
             $form->display('updated_at');
