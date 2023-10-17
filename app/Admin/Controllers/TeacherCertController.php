@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseCert;
+use App\Admin\Actions\Grid\VerifyCert;
 use App\Admin\Repositories\TeacherCert;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -20,16 +22,31 @@ class TeacherCertController extends AdminController
         return Grid::make(new TeacherCert(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('teacher_id');
-            $grid->column('teacher_cert');
-            $grid->column('other_cert');
-            $grid->column('honor_cert');
-            $grid->column('status');
+            $grid->column('teacher_cert')->display(function ($teacher_cert) {
+                return json_decode($teacher_cert,true);
+            })->image('',60,60);
+            $grid->column('other_cert')->display(function ($other_cert) {
+                return json_decode($other_cert,true);
+            })->image('',60,60);
+            $grid->column('honor_cert')->display(function ($honor_cert) {
+                return json_decode($honor_cert,true);
+            })->image('',60,60);
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
+            $grid->column('reason','拒绝原因');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyCert());
+                    $actions->append(new RefuseCert());
+                }
             });
         });
     }

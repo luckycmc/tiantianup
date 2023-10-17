@@ -2,6 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\PayWithdraw;
+use App\Admin\Actions\Grid\RefuseWithdraw;
+use App\Admin\Actions\Grid\VerifyWithdraw;
 use App\Admin\Repositories\Withdraw;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -32,6 +35,16 @@ class WithdrawController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyWithdraw());
+                    $actions->append(new RefuseWithdraw());
+                }
+                if ($status == 2) {
+                    $actions->append(new PayWithdraw());
+                }
             });
         });
     }
