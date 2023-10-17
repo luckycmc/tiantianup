@@ -2,12 +2,12 @@
 
 namespace App\Admin\Forms;
 
-use App\Models\TeacherImage;
+use App\Models\TeacherCert;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
 
-class RefuseImage extends Form implements LazyRenderable
+class RefuseCert extends Form implements LazyRenderable
 {
     use LazyWidget;
     /**
@@ -21,7 +21,7 @@ class RefuseImage extends Form implements LazyRenderable
     {
         $id = $this->payload['id'] ?? null;
         $reason = $input['reason'] ?? '';
-        $teacher_info = TeacherImage::find($id);
+        $teacher_info = TeacherCert::find($id);
         $teacher_info->status = 2;
         $teacher_info->reason = $reason;
         $teacher_info->update();

@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseImage;
+use App\Admin\Actions\Grid\VerifyImage;
 use App\Admin\Repositories\TeacherImage;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -30,6 +32,13 @@ class TeacherImageController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyImage());
+                    $actions->append(new RefuseImage());
+                }
             });
         });
     }
