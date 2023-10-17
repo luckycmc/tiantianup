@@ -119,6 +119,8 @@ class CourseController extends Controller
                 $where[] = ['courses.created_at','>=',$data['created_at_start']];
                 $where[] = ['courses.created_at','<=',$data['created_at_end']];
             }
+        } else {
+            $where[] = ['courses.adder_role','!=',0];
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
