@@ -210,6 +210,15 @@ class OrganizationController extends Controller
         }
         $course_info->class_date = json_decode($course_info->class_date,true);
         $course_info->total_price = $course_info->class_price * $course_info->class_number;
+        if (in_array($course_info->course_status,[4,5])) {
+            $delivers = $course_info->deliver->filter(function ($item) {
+                if ($item->pay_status == 1) {
+                    return $item;
+                }
+            })->first();
+            $course_info->teacher_name = $delivers->user->name;
+            $course_info->teacher_mobile = $delivers->user->mobile;
+        }
         return $this->success('课程详情',$course_info);
     }
 

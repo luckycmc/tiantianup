@@ -60,6 +60,7 @@ class CommonController extends Controller
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
+                $course = Course::find($order->course_id);
                 // 已授权
                 $order->status = 4;
                 // 查询支付类型
@@ -77,6 +78,7 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
+                $course->course_status = 4;
             }
         } catch (Exception $e) {
             Log::info($data);
