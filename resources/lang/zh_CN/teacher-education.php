@@ -12,7 +12,7 @@ return [
         'speciality' => '专业',
         'graduate_cert' => '毕业证书',
         'diploma' => '学位证书',
-        'status' => '状态0为待审核1为通过2为拒绝',
+        'status' => '状态',
     ],
     'options' => [
     ],

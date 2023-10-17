@@ -9,7 +9,7 @@ return [
         'course_id' => '课程id',
         'introduce' => '个人介绍',
         'image' => '资料',
-        'status' => '状态0为待审核1为通过2为拒绝',
+        'status' => '状态',
     ],
     'options' => [
     ],

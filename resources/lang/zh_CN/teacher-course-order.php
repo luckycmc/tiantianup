@@ -8,7 +8,7 @@ return [
         'user_id' => '教师id',
         'course_id' => 'course_id',
         'out_trade_no' => 'out_trade_no',
-        'status' => '0待支付1已支付',
+        'status' => '状态',
     ],
     'options' => [
     ],

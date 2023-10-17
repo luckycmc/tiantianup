@@ -6,7 +6,7 @@ return [
     ],
     'fields' => [
         'price' => 'price',
-        'type' => '类型1为教师成交2为查看教师3为报名4为需求联系',
+        'type' => '类型',
         'start_time' => '开始时间',
         'end_time' => '结束时间',
         'province' => '省',

@@ -5,7 +5,7 @@ return [
         'course-setting' => 'CourseSetting',
     ],
     'fields' => [
-        'role' => '1为学生3为教师',
+        'role' => '角色',
         'end_time' => '截止日期天数',
         'latest_end_time' => '最晚截止日期',
         'course_end' => '需求到期',
