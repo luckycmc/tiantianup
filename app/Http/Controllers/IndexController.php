@@ -135,7 +135,9 @@ class IndexController extends Controller
         // $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         // 判断当前机构是否购买
         if (in_array($user->role,[2,4])) {
-            $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->exists();
+            $courses = Course::where('adder_id',$user->id)->select('id')->get();
+            $ids = $courses->pluck('id')->toArray();
+            $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->whereIn('course_id',$ids)->exists();
         } else {
             $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
         }
