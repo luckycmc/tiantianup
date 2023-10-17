@@ -25,11 +25,10 @@ class TeacherRegisterActivityController extends AdminController
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
             $grid->column('object','活动对象')->display(function ($object) {
-                $arr = json_decode($object,true);
+                $arr = implode($object);
                 if (count($arr) == 4) {
                     return '全部';
                 }
-                return implode(',',json_decode($object,true));
             });
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
@@ -83,7 +82,7 @@ class TeacherRegisterActivityController extends AdminController
                 return $arr[0];
             });
             $form->checkbox('object','对象')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
-                return json_encode($value,JSON_UNESCAPED_UNICODE);
+                return implode(',',$value);
             })->canCheckAll();
             $form->hidden('type','类型')->default(2);
             $form->text('description','介绍');

@@ -29,7 +29,7 @@ class DealActivityController extends AdminController
                 if (count($arr) == 4) {
                     return '全部';
                 }
-                return implode(',',json_decode($object,true));
+                return explode(',',$object);
             });
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
@@ -79,11 +79,11 @@ class DealActivityController extends AdminController
             $form->display('id');
             $form->text('name');
             $form->image('image','图片')->saveFullUrl()->saving(function ($value) {
-                $arr = explode('?',$value);
+                $arr = implode('?',$value);
                 return $arr[0];
             });
             $form->checkbox('object','对象')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
-                return json_encode($value,JSON_UNESCAPED_UNICODE);
+                return explode(',',$value);
             })->canCheckAll();
             $form->hidden('type','类型')->default(3);
             $form->text('description','介绍');
