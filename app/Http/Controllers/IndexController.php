@@ -226,7 +226,7 @@ class IndexController extends Controller
             // 课程信息
             $course_info = Course::find($course_id);
             if ($course_info->adder_role == 0) {
-                $result->is_show = TeacherCourseOrder::where(['user_id' => $user->id,'course_id' => $course_id,'status' => 1])->exists();
+                $result->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id,'pay_status' => 1])->exists();
             }
         }
 
