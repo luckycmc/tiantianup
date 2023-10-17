@@ -116,6 +116,7 @@ class IntermediaryCourseController extends AdminController
             $form->mobile('mobile','手机号');
             $form->text('contact','联系人');
             $form->hidden('adder_role')->default(0);
+            $form->hidden('role')->default(3);
             $form->saving(function (Form $form) {
                 $form->class_date = json_encode([$form->class_date_start,$form->class_date_end]);
                 $form->deleteInput('class_date_start');
