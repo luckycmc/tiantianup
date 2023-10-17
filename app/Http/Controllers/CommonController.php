@@ -79,6 +79,7 @@ class CommonController extends Controller
                     $order->save();
                 }
                 $course->course_status = 4;
+                $course->update();
             }
         } catch (Exception $e) {
             Log::info($data);
