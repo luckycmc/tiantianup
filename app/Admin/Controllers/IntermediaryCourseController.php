@@ -118,7 +118,6 @@ class IntermediaryCourseController extends AdminController
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
             $form->saving(function (Form $form) {
-                dd($form->class_date_start,$form->class_date_end);
                 $form->class_date = json_encode([$form->class_date_start,$form->class_date_end]);
                 $form->deleteInput('class_date_start');
                 $form->deleteInput('class_date_end');
@@ -126,6 +125,7 @@ class IntermediaryCourseController extends AdminController
                 $form->province = Region::where('id', $form->province)->value('region_name');
                 $form->city = Region::where('id', $form->city)->value('region_name');
                 $form->district = Region::where('id', $form->district)->value('region_name');
+
             });
 
             $form->display('created_at');

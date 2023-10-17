@@ -26,7 +26,6 @@ class BaseInformationController extends AdminController
             $grid->column('teacher_image');
             $grid->column('logo');
             $grid->column('poster');
-            $grid->column('service_price');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -55,7 +54,6 @@ class BaseInformationController extends AdminController
             $show->field('teacher_image');
             $show->field('logo');
             $show->field('poster');
-            $show->field('service_price');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -77,8 +75,6 @@ class BaseInformationController extends AdminController
             $form->text('teacher_image');
             $form->text('logo');
             $form->text('poster');
-            $form->text('service_price');
-        
             $form->display('created_at');
             $form->display('updated_at');
         });
