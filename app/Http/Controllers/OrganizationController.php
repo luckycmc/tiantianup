@@ -807,6 +807,7 @@ class OrganizationController extends Controller
         $organization->province_name = $user->organization->province->region_name;
         $organization->city_name = $user->organization->city->region_name;
         $organization->ditrict_name = $user->organization->district->region_name;
+        $organization->images = $user->organization->images;
         return $this->success('机构信息',$organization);
     }
 }

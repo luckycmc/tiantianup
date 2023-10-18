@@ -111,6 +111,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection valid_time
      * @property Grid\Column|Collection buyer_count
      * @property Grid\Column|Collection visit_count
+     * @property Grid\Column|Collection class_date_start
+     * @property Grid\Column|Collection class_date_end
      * @property Grid\Column|Collection wechat
      * @property Grid\Column|Collection tag
      * @property Grid\Column|Collection presale_header_id
@@ -173,6 +175,9 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection site_message
      * @property Grid\Column|Collection text_message
      * @property Grid\Column|Collection official_account
+     * @property Grid\Column|Collection site_open
+     * @property Grid\Column|Collection text_open
+     * @property Grid\Column|Collection official_open
      * @property Grid\Column|Collection organization
      * @property Grid\Column|Collection teaching_type
      * @property Grid\Column|Collection teacher_cert
@@ -309,6 +314,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection valid_time(string $label = null)
      * @method Grid\Column|Collection buyer_count(string $label = null)
      * @method Grid\Column|Collection visit_count(string $label = null)
+     * @method Grid\Column|Collection class_date_start(string $label = null)
+     * @method Grid\Column|Collection class_date_end(string $label = null)
      * @method Grid\Column|Collection wechat(string $label = null)
      * @method Grid\Column|Collection tag(string $label = null)
      * @method Grid\Column|Collection presale_header_id(string $label = null)
@@ -371,6 +378,9 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection site_message(string $label = null)
      * @method Grid\Column|Collection text_message(string $label = null)
      * @method Grid\Column|Collection official_account(string $label = null)
+     * @method Grid\Column|Collection site_open(string $label = null)
+     * @method Grid\Column|Collection text_open(string $label = null)
+     * @method Grid\Column|Collection official_open(string $label = null)
      * @method Grid\Column|Collection organization(string $label = null)
      * @method Grid\Column|Collection teaching_type(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
@@ -512,6 +522,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection valid_time
      * @property Show\Field|Collection buyer_count
      * @property Show\Field|Collection visit_count
+     * @property Show\Field|Collection class_date_start
+     * @property Show\Field|Collection class_date_end
      * @property Show\Field|Collection wechat
      * @property Show\Field|Collection tag
      * @property Show\Field|Collection presale_header_id
@@ -574,6 +586,9 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection site_message
      * @property Show\Field|Collection text_message
      * @property Show\Field|Collection official_account
+     * @property Show\Field|Collection site_open
+     * @property Show\Field|Collection text_open
+     * @property Show\Field|Collection official_open
      * @property Show\Field|Collection organization
      * @property Show\Field|Collection teaching_type
      * @property Show\Field|Collection teacher_cert
@@ -710,6 +725,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection valid_time(string $label = null)
      * @method Show\Field|Collection buyer_count(string $label = null)
      * @method Show\Field|Collection visit_count(string $label = null)
+     * @method Show\Field|Collection class_date_start(string $label = null)
+     * @method Show\Field|Collection class_date_end(string $label = null)
      * @method Show\Field|Collection wechat(string $label = null)
      * @method Show\Field|Collection tag(string $label = null)
      * @method Show\Field|Collection presale_header_id(string $label = null)
@@ -772,6 +789,9 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection site_message(string $label = null)
      * @method Show\Field|Collection text_message(string $label = null)
      * @method Show\Field|Collection official_account(string $label = null)
+     * @method Show\Field|Collection site_open(string $label = null)
+     * @method Show\Field|Collection text_open(string $label = null)
+     * @method Show\Field|Collection official_open(string $label = null)
      * @method Show\Field|Collection organization(string $label = null)
      * @method Show\Field|Collection teaching_type(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
