@@ -793,4 +793,20 @@ class OrganizationController extends Controller
         }
         return $this->success('调起支付',compact('result'));
     }
+
+    /**
+     * 机构信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function info()
+    {
+        // 当前用户
+        $user = Auth::user();
+        // 机构信息
+        $organization = $user->organization;
+        $organization->province_name = $user->organization->province->region_name;
+        $organization->city_name = $user->organization->city->region_name;
+        $organization->ditrict_name = $user->organization->district->region_name;
+        return $this->success('机构信息',$organization);
+    }
 }
