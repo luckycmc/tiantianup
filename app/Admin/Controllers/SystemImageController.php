@@ -19,17 +19,17 @@ class SystemImageController extends AdminController
     {
         return Grid::make(new SystemImage(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('login_bg');
-            $grid->column('parent_bg');
-            $grid->column('student_bg');
-            $grid->column('teacher_bg');
-            $grid->column('organ_bg');
-            $grid->column('share_post');
-            $grid->column('invite_register_bg');
-            $grid->column('teacher_detail_top_bg');
-            $grid->column('invite_organ_confirm_bg');
-            $grid->column('invite_teacher_confirm_bg');
-            $grid->column('intermediary_bg');
+            $grid->column('login_bg')->image('',60,60);
+            $grid->column('parent_bg')->image('',60,60);
+            $grid->column('student_bg')->image('',60,60);
+            $grid->column('teacher_bg')->image('',60,60);
+            $grid->column('organ_bg')->image('',60,60);
+            $grid->column('share_post')->image('',60,60);
+            $grid->column('invite_register_bg')->image('',60,60);
+            $grid->column('teacher_detail_top_bg')->image('',60,60);
+            $grid->column('invite_organ_confirm_bg')->image('',60,60);
+            $grid->column('invite_teacher_confirm_bg')->image('',60,60);
+            $grid->column('intermediary_bg')->image('',60,60);
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -72,17 +72,50 @@ class SystemImageController extends AdminController
     {
         return Form::make(new SystemImage(), function (Form $form) {
             $form->display('id');
-            $form->text('login_bg');
-            $form->text('parent_bg');
-            $form->text('student_bg');
-            $form->text('teacher_bg');
-            $form->text('organ_bg');
-            $form->text('share_post');
-            $form->text('invite_register_bg');
-            $form->text('teacher_detail_top_bg');
-            $form->text('invite_organ_confirm_bg');
-            $form->text('invite_teacher_confirm_bg');
-            $form->text('intermediary_bg');
+            $form->image('login_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });
+            $form->image('parent_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('student_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('teacher_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('organ_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('share_post')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('invite_register_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('teacher_detail_top_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('invite_organ_confirm_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('invite_teacher_confirm_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
+            $form->image('intermediary_bg')->saveFullUrl()->saving(function ($value) {
+                $arr = explode('?',$value);
+                return $arr[0];
+            });;
         });
     }
 }
