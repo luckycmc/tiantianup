@@ -89,6 +89,14 @@ class CommonController extends Controller
                 }
                 $course->course_status = 4;
                 $course->update();
+                // 保存日志
+                $log_data = [
+                    'user_id' => $user->id,
+                    'amount' => $order->amount,
+                    'type' => 4,
+                    'created_at' => Carbon::now()
+                ];
+                DB::table('bills')->insert($log_data);
             }
         } catch (Exception $e) {
             Log::info($data);
