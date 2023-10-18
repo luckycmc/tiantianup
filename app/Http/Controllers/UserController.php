@@ -7,6 +7,7 @@ use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\Message;
 use App\Models\Organization;
 use App\Models\ParentStudent;
 use App\Models\TeacherCareer;
@@ -897,5 +898,27 @@ class UserController extends Controller
         $teachers->teaching_year = $teaching_year;
         $teachers->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
         return $this->success('我的教师',$teachers);
+    }
+
+    /**
+     * 消息已读
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function read_message()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $message = Message::find($id);
+        if (!$message) {
+            return $this->error('消息不存在');
+        }
+        // 当前用户
+        $user = Auth::user();
+        if ($message->user_id !== $user->id) {
+            return $this->error('数据错误');
+        }
+        $message->status = 1;
+        $message->update();
+        return $this->success('消息已读');
     }
 }
