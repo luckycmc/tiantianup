@@ -136,7 +136,7 @@ class LoginController extends Controller
             return $this->error($error->all());
         }
         $code = mt_rand(1000,9999);
-        /*$easySms = new EasySms($config);
+        $easySms = new EasySms($config);
         try {
             $number = new PhoneNumber($data['mobile']);
             $easySms->send($number,[
@@ -144,7 +144,7 @@ class LoginController extends Controller
             ]);
         } catch (Exception|NoGatewayAvailableException $exception) {
             return $this->error($exception->getResults());
-        }*/
+        }
         Redis::setex($mobile,300,$code);
         return $this->success('发送成功',$code);
     }
