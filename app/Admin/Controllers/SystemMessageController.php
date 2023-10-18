@@ -21,9 +21,9 @@ class SystemMessageController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('name');
             $grid->column('action');
-            $grid->column('site_message');
-            $grid->column('text_message');
-            $grid->column('official_account');
+            $grid->column('site_message')->radio([0 => '关', 1 => '开']);
+            $grid->column('text_message')->radio([0 => '关', 1 => '开']);
+            $grid->column('official_account')->radio([0 => '关', 1 => '开']);
             $grid->column('object');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -68,11 +68,11 @@ class SystemMessageController extends AdminController
             $form->display('id');
             $form->text('name');
             $form->text('action');
-            $form->text('site_message');
-            $form->text('text_message');
-            $form->text('official_account');
+            $form->radio('site_message')->options([0 => '关', 1 => '开']);
+            $form->radio('text_message')->options([0 => '关', 1 => '开']);
+            $form->radio('official_account')->options([0 => '关', 1 => '开']);
             $form->text('object');
-        
+
             $form->display('created_at');
             $form->display('updated_at');
         });
