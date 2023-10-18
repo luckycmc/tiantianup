@@ -92,7 +92,7 @@ class CommonController extends Controller
                 // 保存日志
                 $log_data = [
                     'user_id' => $user->id,
-                    'amount' => $order->amount,
+                    'amount' => '-'.$order->amount,
                     'type' => 4,
                     'created_at' => Carbon::now()
                 ];
