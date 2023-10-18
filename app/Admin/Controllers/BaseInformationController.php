@@ -22,8 +22,6 @@ class BaseInformationController extends AdminController
             $grid->column('name');
             $grid->column('introduction');
             $grid->column('mobile');
-            $grid->column('user_image');
-            $grid->column('teacher_image');
             $grid->column('logo');
             $grid->column('poster');
             $grid->column('created_at');
@@ -50,8 +48,6 @@ class BaseInformationController extends AdminController
             $show->field('name');
             $show->field('introduction');
             $show->field('mobile');
-            $show->field('user_image');
-            $show->field('teacher_image');
             $show->field('logo');
             $show->field('poster');
             $show->field('created_at');
@@ -71,9 +67,7 @@ class BaseInformationController extends AdminController
             $form->text('name');
             $form->text('introduction');
             $form->text('mobile');
-            $form->text('user_image');
-            $form->text('teacher_image');
-            $form->text('logo');
+            $form->image('logo')->saveFullUrl();
             $form->text('poster');
             $form->display('created_at');
             $form->display('updated_at');
