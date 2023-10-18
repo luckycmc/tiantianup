@@ -72,6 +72,8 @@ class CommonController extends Controller
                 $course = Course::find($order->course_id);
                 // 已授权
                 $order->status = 4;
+                // 查询用户
+                $user = User::find($order->user_id);
                 // 查询支付类型
                 if ($order->pay_type == 1) {
                     // 微信支付
@@ -81,8 +83,6 @@ class CommonController extends Controller
                 } else if ($order->pay_type == 2) {
                     // 组合支付
                     $order->pay_status = 1;
-                    // 查询用户
-                    $user = User::find($order->user_id);
                     $user->withdraw_balance = $user->withdraw_balance - $order->discount;
                     $user->save();
                     $order->save();
