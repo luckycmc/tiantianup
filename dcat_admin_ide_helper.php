@@ -95,6 +95,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection max_price
      * @property Grid\Column|Collection adder_role
      * @property Grid\Column|Collection class_commission
+     * @property Grid\Column|Collection course_status
      * @property Grid\Column|Collection reviewer
      * @property Grid\Column|Collection notes
      * @property Grid\Column|Collection reason
@@ -292,6 +293,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection max_price(string $label = null)
      * @method Grid\Column|Collection adder_role(string $label = null)
      * @method Grid\Column|Collection class_commission(string $label = null)
+     * @method Grid\Column|Collection course_status(string $label = null)
      * @method Grid\Column|Collection reviewer(string $label = null)
      * @method Grid\Column|Collection notes(string $label = null)
      * @method Grid\Column|Collection reason(string $label = null)
@@ -494,6 +496,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection max_price
      * @property Show\Field|Collection adder_role
      * @property Show\Field|Collection class_commission
+     * @property Show\Field|Collection course_status
      * @property Show\Field|Collection reviewer
      * @property Show\Field|Collection notes
      * @property Show\Field|Collection reason
@@ -691,6 +694,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection max_price(string $label = null)
      * @method Show\Field|Collection adder_role(string $label = null)
      * @method Show\Field|Collection class_commission(string $label = null)
+     * @method Show\Field|Collection course_status(string $label = null)
      * @method Show\Field|Collection reviewer(string $label = null)
      * @method Show\Field|Collection notes(string $label = null)
      * @method Show\Field|Collection reason(string $label = null)
