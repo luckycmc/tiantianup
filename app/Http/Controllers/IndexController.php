@@ -140,6 +140,9 @@ class IndexController extends Controller
             $courses = Course::where('adder_id',$user->id)->select('id')->get();
             $ids = $courses->pluck('id')->toArray();
             $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->whereIn('course_id',$ids)->exists();
+            if (!$is_buy) {
+                $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
+            }
         } else {
             $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
         }
