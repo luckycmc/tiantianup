@@ -117,15 +117,16 @@ class IntermediaryCourseController extends AdminController
             $form->text('contact','联系人');
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
+            $form->hidden('class_date');
+            $form->hidden('end_time');
             $form->saving(function (Form $form) {
-                $form->class_date = json_encode([$form->class_date_start,$form->class_date_end]);
+                $form->class_date = $form->class_date_start.'-'.$form->class_date_end;
                 $form->deleteInput('class_date_start');
                 $form->deleteInput('class_date_end');
                 $form->end_time = Carbon::now()->addDays($form->valid_time);
                 $form->province = Region::where('id', $form->province)->value('region_name');
                 $form->city = Region::where('id', $form->city)->value('region_name');
                 $form->district = Region::where('id', $form->district)->value('region_name');
-
             });
 
             $form->display('created_at');
