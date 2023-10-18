@@ -316,9 +316,11 @@ class IndexController extends Controller
             $user->education_status = $user->teacher_education ? $user->teacher_education->status : 3;
             $user->image_status = $user->teacher_image ? $user->teacher_image->status : 3;
         }
-        $user->province_name = $user->province->region_name;
-        $user->city_name = $user->city->region_name;
-        $user->district_name = $user->district->region_name;
+        if ($user->role !== 2) {
+            $user->province_name = $user->province->region_name;
+            $user->city_name = $user->city->region_name;
+            $user->district_name = $user->district->region_name;
+        }
         return $this->success('个人主页',$user);
     }
 

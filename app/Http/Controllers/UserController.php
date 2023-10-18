@@ -379,7 +379,7 @@ class UserController extends Controller
         $user = Auth::user();
         // $user = User::find(33);
         if ($type == 1) {
-            $result = Collect::with(['teacher','teacher_info','teacher_career'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
+            $result = Collect::with(['teacher','teacher_info','teacher_career','teacher_education'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
             foreach ($result as $v) {
                 $subject = [];
                 foreach ($v->teacher_career as $vv) {

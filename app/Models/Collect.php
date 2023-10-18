@@ -34,6 +34,11 @@ class Collect extends Model
         return $this->belongsTo(TeacherInfo::class, 'teacher_id', 'user_id');
     }
 
+    public function teacher_education()
+    {
+        return $this->belongsTo(TeacherEducation::class,'teacher_id','user_id');
+    }
+
     // 教师经历
     public function teacher_career()
     {
