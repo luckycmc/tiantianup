@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseInformation;
+use App\Models\Bill;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Organization;
@@ -10,7 +11,9 @@ use App\Models\OrganRole;
 use App\Models\User;
 use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yansongda\Pay\Exception\Exception;
 use Yansongda\Pay\Pay;
@@ -23,9 +26,7 @@ class CommonController extends Controller
         $pay = Pay::wechat($config);
         try {
             $data = $pay->callback(); // 是的，验签就这么简单！
-            Log::info('Log: '.$data);
             $info = $data['resource']['ciphertext'];
-            Log::info('info',$info);
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $order = UserTeacherOrder::where('out_trade_no',$info['out_trade_no'])->first();
@@ -44,6 +45,14 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
+                // 保存日志
+                $log_data = [
+                    'user_id' => $user->id,
+                    'amount' => $order->amount,
+                    'type' => 4,
+                    'created_at' => Carbon::now()
+                ];
+                DB::table('bills')->insert($log_data);
             }
         } catch (Exception $e) {
             Log::info($data);
