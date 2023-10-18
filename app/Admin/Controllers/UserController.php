@@ -24,7 +24,9 @@ class UserController extends AdminController
             $grid->column('role');
             $grid->column('mobile');
             $grid->column('region','省市区')->display(function () {
-                return $this->province->region_name.$this->city->region_name.$this->district->region_name;
+                if (isset($this->province)) {
+                    return $this->province->region_name.$this->city->region_name.$this->district->region_name;
+                }
             });
             $grid->column('created_at','注册时间');
             $grid->column('updated_at')->sortable();
