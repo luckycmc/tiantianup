@@ -24,6 +24,7 @@ use App\Models\Withdraw;
 use Carbon\Carbon;
 use EasyWeChat;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -873,10 +874,20 @@ class UserController extends Controller
     {
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
+        $page = $data['page'] ?? 1;
         // 当前用户
         $user = Auth::user();
         if ($user->role == 2) {
-            $teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['parent_id' => $user->id,'pay_status' => 1])->paginate($page_size);
+            $deliver_teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['parent_id' => $user->id,'pay_status' => 1])->get();
+            $buy_teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['user_id' => $user->id,'status' => 1])->get();
+            $merge_teachers = $deliver_teachers->merge($buy_teachers);
+            $teachers = new LengthAwarePaginator(
+                $merge_teachers->forPage($page, $page_size),
+                $merge_teachers->count(),
+                $page_size,
+                $page,
+                ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            );
         } else {
             $teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail'])->where(['user_id' => $user->id,'status' => 1])->paginate($page_size);
         }

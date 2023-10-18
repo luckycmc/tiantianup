@@ -27,5 +27,10 @@ class UserTeacherOrder extends Model
     {
         return $this->hasOne(TeacherInfo::class,'user_id','teacher_id');
     }
+
+    public function teacher_education()
+    {
+        return $this->belongsTo(TeacherEducation::class,'teacher_id');
+    }
     
 }
