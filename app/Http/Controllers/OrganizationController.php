@@ -804,10 +804,10 @@ class OrganizationController extends Controller
         $user = Auth::user();
         // 机构信息
         $organization = $user->organization;
-        $organization->province_name = $user->organization->province->region_name;
-        $organization->city_name = $user->organization->city->region_name;
-        $organization->ditrict_name = $user->organization->district->region_name;
-        $organization->images = $user->organization->images;
+        $organization->province_name = $organization->province->region_name;
+        $organization->city_name = $organization->city->region_name;
+        $organization->ditrict_name = $organization->district->region_name;
+        $organization->images = $organization->image_info->pluck('url');
         return $this->success('机构信息',$organization);
     }
 }

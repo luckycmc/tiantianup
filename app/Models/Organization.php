@@ -36,7 +36,7 @@ class Organization extends Model
         return $this->hasOne(Administrator::class,'id','reviewer_id');
     }
 
-    public function images()
+    public function image_info()
     {
         return $this->hasMany(OrganImage::class,'organ_id');
     }
