@@ -87,6 +87,9 @@ class TeacherController extends Controller
             $v->subject = explode(',',$v->subject);
             if ($user->role == 2) {
                 $v->is_pay = $v->deliver_log()->where('pay_status',1)->exists();
+                if (!$v->is_pay) {
+                    $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
+                }
             } else {
                 $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
             }
