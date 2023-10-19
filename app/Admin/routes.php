@@ -36,6 +36,7 @@ Route::group([
     $router->resource('/invite_new_activity','InviteNewActivityController');
     $router->resource('/teacher_register_activity','TeacherRegisterActivityController');
     $router->resource('/deal_activity','DealActivityController');
+    $router->resource('/activity','ActivityController');
     $router->resource('/bill','BillController');
     $router->resource('/user_course','UserCourseController');
     $router->resource('/teacher_deal','TeacherDealServicePriceController');

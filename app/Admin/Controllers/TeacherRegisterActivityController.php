@@ -24,12 +24,7 @@ class TeacherRegisterActivityController extends AdminController
             $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中']);
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
-            $grid->column('object','活动对象')->display(function ($object) {
-                $arr = implode($object);
-                if (count($arr) == 4) {
-                    return '全部';
-                }
-            });
+            $grid->column('object','活动对象');
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
             $grid->column('created_at','创建时间');
@@ -81,12 +76,13 @@ class TeacherRegisterActivityController extends AdminController
                 $arr = explode('?',$value);
                 return $arr[0];
             });
-            $form->checkbox('object','对象')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
-                return implode(',',$value);
-            })->canCheckAll();
+            $form->radio('object','对象')->options(['教师' => '教师'])->default('教师');
             $form->hidden('type','类型')->default(2);
-            $form->text('description','介绍');
-            $form->text('reward','奖励');
+            $form->text('description','活动描述');
+            $form->number('teacher_real_auth_reward','实名认证奖励');
+            $form->number('teacher_cert_reward','资格证书奖励');
+            $form->number('teacher_career_reward','教学经历奖励');
+            $form->number('teacher_image_reward','教师风采/客户见证奖励');
             $form->text('introduction','介绍');
             $form->dateRange('start_time','end_time','活动时间');
             $form->select('status','状态')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);

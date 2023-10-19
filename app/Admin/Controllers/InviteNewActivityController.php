@@ -21,7 +21,7 @@ class InviteNewActivityController extends AdminController
             $grid->model()->where('type',1);
             $grid->column('id','活动id')->sortable();
             $grid->column('name','活动名称');
-            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中']);
+            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核']);
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
             $grid->column('object','活动对象')->display(function ($object) {
@@ -29,6 +29,7 @@ class InviteNewActivityController extends AdminController
                 if (count($arr) == 4) {
                     return '全部';
                 }
+                return $object;
             });
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
@@ -83,13 +84,32 @@ class InviteNewActivityController extends AdminController
             });
             $form->checkbox('object','对象')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
                 return implode(',',$value);
-            })->canCheckAll();
+            })->canCheckAll()->when(['教师'],function (Form $form) {
+                $form->radio('teacher_reward_type','教师奖励类型')->options(['现金' => '现金']);
+                $form->number('teacher_first_reward','一级邀请人奖励');
+                $form->number('teacher_second_reward','二级邀请人奖励');
+                $form->number('teacher_new_reward','新用户奖励');
+            })->when(['家长'],function (Form $form) {
+                $form->radio('parent_reward_type','家长奖励类型')->options(['现金' => '现金', '优惠券' => '优惠券']);
+                $form->number('parent_first_reward','一级邀请人奖励');
+                $form->number('parent_second_reward','二级邀请人奖励');
+                $form->number('parent_new_reward','新用户奖励');
+            })->when(['学生'],function (Form $form) {
+                $form->radio('student_reward_type','学生奖励类型')->options(['现金' => '现金', '优惠券' => '优惠券']);
+                $form->number('student_first_reward','一级邀请人奖励');
+                $form->number('student_second_reward','二级邀请人奖励');
+                $form->number('student_new_reward','新用户奖励');
+            })->when(['机构'],function (Form $form) {
+                $form->radio('teacher_reward_type','机构奖励类型')->options(['现金' => '现金']);
+                $form->number('organ_first_reward','一级邀请人奖励');
+                $form->number('organ_second_reward','二级邀请人奖励');
+                $form->number('organ_new_reward','新用户奖励');
+            });
             $form->hidden('type','类型')->default(1);
-            $form->text('description','介绍');
-            $form->text('reward','奖励');
-            $form->text('introduction','介绍');
+            $form->text('description','描述');
+            $form->text('introduction','发放说明');
             $form->dateRange('start_time','end_time','活动时间');
-            $form->select('status','状态')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);
+            $form->select('status','状态')->options([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核']);
         
             $form->display('created_at');
             $form->display('updated_at');

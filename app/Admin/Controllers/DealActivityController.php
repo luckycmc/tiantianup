@@ -25,11 +25,11 @@ class DealActivityController extends AdminController
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
             $grid->column('object','活动对象')->display(function ($object) {
-                $arr = json_decode($object,true);
+                $arr = explode($object,true);
                 if (count($arr) == 4) {
                     return '全部';
                 }
-                return explode(',',$object);
+                return $object;
             });
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
@@ -79,15 +79,23 @@ class DealActivityController extends AdminController
             $form->display('id');
             $form->text('name');
             $form->image('image','图片')->saveFullUrl()->saving(function ($value) {
-                $arr = implode('?',$value);
+                $arr = explode('?',$value);
                 return $arr[0];
             });
-            $form->checkbox('object','对象')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
-                return explode(',',$value);
-            })->canCheckAll();
+            $form->checkbox('object','对象')->options(['家长' => '家长', '教师' => '教师', '机构' => '机构'])->saving(function ($value) {
+                return implode(',',$value);
+            })->canCheckAll()->when(['教师'],function (Form $form) {
+                $form->radio('teacher_deal_reward_type','教师奖励类型')->options(['现金' => '现金'])->default('现金');
+                $form->number('deal_teacher_reward','奖励额度');
+            })->when(['家长'],function (Form $form) {
+                $form->radio('parent_deal_reward_type','家长奖励类型')->options(['现金' => '现金'])->default('现金');
+                $form->number('parent_deal_reward','奖励额度');
+            })->when(['机构'],function (Form $form) {
+                $form->radio('organ_deal_reward_type','机构奖励类型')->options(['现金' => '现金'])->default('现金');
+                $form->number('organ_deal_reward','奖励额度');
+            });
             $form->hidden('type','类型')->default(3);
-            $form->text('description','介绍');
-            $form->text('reward','奖励');
+            $form->text('description','描述');
             $form->text('introduction','介绍');
             $form->dateRange('start_time','end_time','活动时间');
             $form->select('status','状态')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);

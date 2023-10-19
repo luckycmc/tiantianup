@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Repositories\Activity;
 use App\Models\Course;
 use App\Models\Region;
 use Carbon\Carbon;
@@ -126,4 +127,38 @@ function get_access_token () {
     $result = Http::get($url,$param);
     $info = json_decode($result->body(),true);
     return $info['access_token'];
+}
+
+// 获取活动奖励
+function get_reward($type,$role) {
+    $word_arr = ['','学生','家长','教师','机构'];
+    $role_word = $word_arr['role'];
+    switch ($type) {
+        case 1:
+            // 邀新活动
+            $arr = ['','student_','parent_','teacher_','organ_'];
+            $prefix = $arr[$role];
+            $first_field = $prefix.'first_reward';
+            $second_field = $prefix.'second_reward';
+            $new_field = $prefix.'new_reward';
+            $type_field = $prefix.'reward_type';
+            // 查询奖励
+            $reward = Activity::where(['type' => 1,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select($first_field,$second_field,$new_field,$type_field)->first();
+            break;
+        case 2:
+            // 教师注册
+            $reward = Activity::where(['type' => 2,'status' => 1])->select('teacher_real_auth_reward','teacher_cert_reward','teacher_career_reward','teacher_image_reward')->first();
+            break;
+        case 3:
+        default:
+            // 成交活动
+            $deal_arr = ['','','parent_','teacher_','organ_'];
+            $deal_prefix = $deal_arr[$role];
+            $deal_reward = $deal_prefix.'deal_reward';
+            $deal_type_field = $deal_prefix.'deal_reward_type';
+            // 查询奖励
+            $reward = Activity::where(['type' => 2,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select($deal_reward,$deal_type_field)->first();
+            break;
+    }
+    return $reward;
 }
