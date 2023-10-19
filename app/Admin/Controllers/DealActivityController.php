@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\DisableActivity;
+use App\Admin\Actions\Grid\UnDisableActivity;
 use App\Admin\Repositories\Activity;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -21,7 +23,7 @@ class DealActivityController extends AdminController
             $grid->model()->where('type',3);
             $grid->column('id','活动id')->sortable();
             $grid->column('name','活动名称');
-            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中']);
+            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核', 5 => '禁用']);
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
             $grid->column('object','活动对象')->display(function ($object) {
@@ -38,6 +40,14 @@ class DealActivityController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
 
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status !== 5) {
+                    $actions->append(new DisableActivity());
+                } else {
+                    $actions->append(new UnDisableActivity());
+                }
             });
         });
     }
@@ -98,7 +108,7 @@ class DealActivityController extends AdminController
             $form->text('description','描述');
             $form->text('introduction','介绍');
             $form->dateRange('start_time','end_time','活动时间');
-            $form->select('status','状态')->options([0 => '已结束',1 => '进行中', 2 => '待开始', 3 => '已拒绝']);
+            $form->select('status','状态')->options([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核', 5 => '禁用']);
 
             $form->display('created_at');
             $form->display('updated_at');

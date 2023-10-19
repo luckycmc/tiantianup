@@ -23,7 +23,7 @@ class ActivityController extends AdminController
         return Grid::make(new Activity(), function (Grid $grid) {
             $grid->column('id','活动id')->sortable();
             $grid->column('name','活动名称');
-            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核']);
+            $grid->column('status','活动状态')->using([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核', 5 => '已禁用']);
             $grid->column('start_time');
             $grid->column('end_time');
             $grid->column('object','活动对象')->display(function ($object) {
@@ -62,7 +62,7 @@ class ActivityController extends AdminController
             $show->field('object');
             $show->field('type')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $show->field('description');
-            $info = \App\Models\Activity::find($id)->select('type','object')->first();
+            $info = \App\Models\Activity::where('id',$id)->select('type','object')->first();
             $type = $info->type;
             $object = $info->object;
             if ($type == 1) {
@@ -90,11 +90,29 @@ class ActivityController extends AdminController
                     $show->field('organ_second_reward');
                     $show->field('organ_new_reward');
                 }
+            } else if ($type == 2) {
+                $show->field('teacher_real_auth_reward');
+                $show->field('teacher_cert_reward');
+                $show->field('teacher_career_reward');
+                $show->field('teacher_image_reward');
+            } else {
+                if (Str::contains($object,'家长')) {
+                    $show->field('parent_deal_reward_type');
+                    $show->field('parent_deal_reward');
+                }
+                if (Str::contains($object,'教师')) {
+                    $show->field('teacher_deal_reward_type');
+                    $show->field('deal_teacher_reward');
+                }
+                if (Str::contains($object,'机构')) {
+                    $show->field('organ_deal_reward_type');
+                    $show->field('organ_deal_reward');
+                }
             }
             $show->field('introduction');
             $show->field('start_time');
             $show->field('end_time');
-            $show->field('status')->using([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核']);
+            $show->field('status')->using([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核', 5 => '已禁用']);
             $show->field('created_at');
             $show->field('updated_at');
             $show->disableDeleteButton();
