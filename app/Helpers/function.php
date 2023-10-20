@@ -3,6 +3,7 @@
 use App\Admin\Repositories\Activity;
 use App\Models\Course;
 use App\Models\Region;
+use App\Models\ServicePrice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -161,4 +162,14 @@ function get_reward($type,$role) {
             break;
     }
     return $reward;
+}
+
+// 获取服务费
+function get_service_price($type,$region) {
+    $today = Carbon::now()->toDateString();
+    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->whereRaw("FIND_IN_SET('$region',region)")->orderByDesc('created_at')->first();
+    if (!$info) {
+        return 0;
+    }
+    return $info->price;
 }
