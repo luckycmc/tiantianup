@@ -25,9 +25,7 @@ class TeacherDealServicePriceController extends AdminController
             $grid->column('price','服务费');
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
-            $grid->column('region','地区')->display(function () {
-                return $this->province.$this->city.$this->district;
-            });
+            $grid->column('region','地区');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -70,23 +68,22 @@ class TeacherDealServicePriceController extends AdminController
     protected function form()
     {
         return Form::make(new ServicePrice(), function (Form $form) {
+            $model = new Area();
             $form->display('id');
             $form->text('price','服务费');
             $form->hidden('type')->default(1);
             $form->dateRange('start_time','end_time','有效期');
             $form->tree('region','执行地区')
-                ->nodes(Area::get()->toArray())
+                ->nodes($model->get()->toArray())
+                ->exceptParentNode()
                 ->setIdColumn('id')
                 ->setTitleColumn('region_name')
-                ->setParentColumn('parent_id')
                 ->saving(function ($v) {
                     $name = [];
                     foreach ($v as $vv) {
-                        $info = Area::find($vv);
-                        if ($info->region_type )
-                            $name[] = Area::where('id',$vv)->value('region_name');
+                        $name[] = Area::where('id',$vv)->value('region_name');
                     }
-                    return json_encode($name,JSON_UNESCAPED_UNICODE);
+                    return implode(',',$name);
                 });
             $form->text('adder','添加人');
         

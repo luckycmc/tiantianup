@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\ServicePrice;
+use App\Models\Area;
 use App\Models\Region;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -24,9 +25,7 @@ class CourseContactServicePriceController extends AdminController
             $grid->column('price','服务费');
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
-            $grid->column('region','地区')->display(function () {
-                return $this->province.$this->city.$this->district;
-            });
+            $grid->column('region','地区');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -69,21 +68,25 @@ class CourseContactServicePriceController extends AdminController
     protected function form()
     {
         return Form::make(new ServicePrice(), function (Form $form) {
+            $model = new Area();
             $form->display('id');
             $form->text('price','服务费');
-            $form->hidden('type')->default(3);
+            $form->hidden('type')->default(4);
             $form->dateRange('start_time','end_time','有效期');
-            $form->select('province','省')->options('/api/city')->load('city','/api/city')->saving(function ($value) {
-                return Region::where('id',$value)->value('region_name');
-            });
-            $form->select('city','市')->options('/api/city')->load('district','/api/city')->saving(function ($value) {
-                return Region::where('id',$value)->value('region_name');
-            });
-            $form->select('district','区')->options('/api/city')->saving(function ($value) {
-                return Region::where('id',$value)->value('region_name');
-            });
+            $form->tree('region','执行地区')
+                ->nodes($model->get()->toArray())
+                ->exceptParentNode()
+                ->setIdColumn('id')
+                ->setTitleColumn('region_name')
+                ->saving(function ($v) {
+                    $name = [];
+                    foreach ($v as $vv) {
+                        $name[] = Area::where('id',$vv)->value('region_name');
+                    }
+                    return implode(',',$name);
+                });
             $form->text('adder','添加人');
-        
+
             $form->display('created_at');
             $form->display('updated_at');
         });
