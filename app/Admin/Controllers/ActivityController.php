@@ -38,7 +38,20 @@ class ActivityController extends AdminController
             $grid->column('created_at','创建时间');
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                $filter->like('name');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+                    // dd($start,$end);
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
             });
             $grid->disableCreateButton();
             $grid->disableDeleteButton();
