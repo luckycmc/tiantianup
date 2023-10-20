@@ -32,8 +32,23 @@ class TeacherRegisterActivityController extends AdminController
             $grid->column('created_at','创建时间');
 
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                $filter->like('name');
+                $filter->equal('status','状态')->select([
+                    0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核', 5 => '禁用'
+                ]);
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+                    // dd($start,$end);
 
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -42,6 +57,13 @@ class TeacherRegisterActivityController extends AdminController
                 } else {
                     $actions->append(new UnDisableActivity());
                 }
+            });
+            $grid->export()->rows(function ($rows) {
+                foreach ($rows as $index => &$row) {
+                    $arr = ['已结束','进行中','待开始','已拒绝','待审核','禁用'];
+                    $row['status'] = $arr[$row['status']];
+                }
+                return $rows;
             });
         });
     }

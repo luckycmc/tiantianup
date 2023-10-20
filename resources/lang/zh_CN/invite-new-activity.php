@@ -1,8 +1,8 @@
 <?php 
 return [
     'labels' => [
-        'Activity' => '活动',
-        'activity' => '活动',
+        'InviteNewActivity' => '邀新活动',
+        'activity' => '邀新活动',
     ],
     'fields' => [
         'name' => '名称',

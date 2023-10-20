@@ -1,8 +1,8 @@
 <?php 
 return [
     'labels' => [
-        'ActiveReward' => 'ActiveReward',
-        'active-reward' => 'ActiveReward',
+        'ActiveReward' => '活动奖励',
+        'active-reward' => '活动奖励',
     ],
     'fields' => [
         'active_id' => '活动id',
