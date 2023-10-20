@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'Bill' => 'Bill',
+        'Bill' => '服务费收支明细',
         'bill' => 'Bill',
     ],
     'fields' => [

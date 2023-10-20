@@ -18,6 +18,7 @@ class BillController extends AdminController
     protected function grid()
     {
         return Grid::make(new Bill('user'), function (Grid $grid) {
+            $grid->model()->whereIn('type',[4,5]);
             $grid->column('id')->sortable();
             $grid->column('user.name','用户姓名');
             $grid->column('amount');
@@ -28,7 +29,22 @@ class BillController extends AdminController
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                $filter->like('username');
+                $filter->equal('role','用户类型')->select([
+                    1 => '学生',2 => '家长',3 => '教师',4 => '机构'
+                ]);
+                $filter->whereBetween('updated_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('updated_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('updated_at', '<=', $end);
+                    }
+                })->datetime();
         
             });
         });

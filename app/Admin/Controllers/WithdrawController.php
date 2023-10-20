@@ -28,13 +28,28 @@ class WithdrawController extends AdminController
             $grid->column('mobile');
             $grid->column('status','状态')->using([0 => '审核中',1 => '审核未通过', 2 => '打款中', 3 => '已打款']);
             $grid->column('amount');
-            $grid->column('account');
+            $grid->column('account','账号');
             $grid->column('created_at','申请时间');
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->like('username');
+                $filter->like('mobile','手机号');
+                $filter->equal('role','用户类型')->select([
+                    1 => '学生',2 => '家长',3 => '教师',4 => '机构'
+                ]);
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -45,6 +60,13 @@ class WithdrawController extends AdminController
                 if ($status == 2) {
                     $actions->append(new PayWithdraw());
                 }
+            });
+            $grid->export()->rows(function ($rows) {
+                foreach ($rows as $index => &$row) {
+                    $arr = ['审核中','审核未通过','打款中','已打款'];
+                    $row['status'] = $arr[$row['status']];
+                }
+                return $rows;
             });
         });
     }

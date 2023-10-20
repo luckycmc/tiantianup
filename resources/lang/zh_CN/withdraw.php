@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'Withdraw' => 'Withdraw',
+        'Withdraw' => '提现',
         'withdraw' => 'Withdraw',
     ],
     'fields' => [

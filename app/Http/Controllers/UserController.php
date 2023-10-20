@@ -469,6 +469,7 @@ class UserController extends Controller
         $withdraw_data = [
             'user_id' => $user->id,
             'role' => $user->role,
+            'mobile' => $data['mobile'] ?? '',
             'amount' => $data['amount'],
             'type' => $data['type'],
             'username' => $data['username'],
