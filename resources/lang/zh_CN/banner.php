@@ -5,10 +5,11 @@ return [
         'banner' => 'Banner',
     ],
     'fields' => [
-        'url' => 'url',
+        'url' => '图片',
         'object' => '展示端',
         'adder' => '添加人',
         'editor' => '修改人',
+        'link' => '链接',
     ],
     'options' => [
     ],
