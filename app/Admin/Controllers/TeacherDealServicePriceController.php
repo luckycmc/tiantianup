@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\ServicePrice;
+use App\Models\Area;
 use App\Models\Region;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -73,15 +74,20 @@ class TeacherDealServicePriceController extends AdminController
             $form->text('price','服务费');
             $form->hidden('type')->default(1);
             $form->dateRange('start_time','end_time','有效期');
-            $form->select('province','省')->options('/api/city')->load('city','/api/city')->saving(function ($value) {
-                return Region::where('id',$value)->value('region_name');
-            });
-            $form->select('city','市')->options('/api/city')->load('district','/api/city')->saving(function ($value) {
-                return Region::where('id',$value)->value('region_name');
-            });
-            $form->select('district','区')->options('/api/city')->saving(function ($value) {
-                return Region::where('id',$value)->value('region_name');
-            });
+            $form->tree('region','执行地区')
+                ->nodes(Area::get()->toArray())
+                ->setIdColumn('id')
+                ->setTitleColumn('region_name')
+                ->setParentColumn('parent_id')
+                ->saving(function ($v) {
+                    $name = [];
+                    foreach ($v as $vv) {
+                        $info = Area::find($vv);
+                        if ($info->region_type )
+                            $name[] = Area::where('id',$vv)->value('region_name');
+                    }
+                    return json_encode($name,JSON_UNESCAPED_UNICODE);
+                });
             $form->text('adder','添加人');
         
             $form->display('created_at');

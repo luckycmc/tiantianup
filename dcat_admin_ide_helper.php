@@ -26,7 +26,35 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection start_time
      * @property Grid\Column|Collection end_time
      * @property Grid\Column|Collection status
-     * @property Grid\Column|Collection adder_id
+     * @property Grid\Column|Collection teacher_reward_type
+     * @property Grid\Column|Collection teacher_first_reward
+     * @property Grid\Column|Collection teacher_second_reward
+     * @property Grid\Column|Collection teacher_new_reward
+     * @property Grid\Column|Collection parent_reward_type
+     * @property Grid\Column|Collection parent_first_reward
+     * @property Grid\Column|Collection parent_second_reward
+     * @property Grid\Column|Collection parent_new_reward
+     * @property Grid\Column|Collection student_reward_type
+     * @property Grid\Column|Collection student_first_reward
+     * @property Grid\Column|Collection student_second_reward
+     * @property Grid\Column|Collection student_new_reward
+     * @property Grid\Column|Collection organ_reward_type
+     * @property Grid\Column|Collection organ_first_reward
+     * @property Grid\Column|Collection organ_second_reward
+     * @property Grid\Column|Collection organ_new_reward
+     * @property Grid\Column|Collection teacher_real_auth_reward
+     * @property Grid\Column|Collection teacher_cert_reward
+     * @property Grid\Column|Collection teacher_career_reward
+     * @property Grid\Column|Collection teacher_image_reward
+     * @property Grid\Column|Collection teacher_deal_reward_type
+     * @property Grid\Column|Collection deal_teacher_reward
+     * @property Grid\Column|Collection parent_deal_reward_type
+     * @property Grid\Column|Collection parent_deal_reward
+     * @property Grid\Column|Collection organ_deal_reward_type
+     * @property Grid\Column|Collection organ_deal_reward
+     * @property Grid\Column|Collection adder
+     * @property Grid\Column|Collection reason
+     * @property Grid\Column|Collection is_disabled
      * @property Grid\Column|Collection version
      * @property Grid\Column|Collection detail
      * @property Grid\Column|Collection is_enabled
@@ -52,8 +80,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection remember_token
      * @property Grid\Column|Collection last_login_time
      * @property Grid\Column|Collection content
-     * @property Grid\Column|Collection adder
      * @property Grid\Column|Collection editor
+     * @property Grid\Column|Collection initial
      * @property Grid\Column|Collection url
      * @property Grid\Column|Collection logo
      * @property Grid\Column|Collection login_bg
@@ -64,6 +92,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection course_id
      * @property Grid\Column|Collection teacher_id
      * @property Grid\Column|Collection method
+     * @property Grid\Column|Collection adder_id
      * @property Grid\Column|Collection editor_id
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
@@ -98,7 +127,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection course_status
      * @property Grid\Column|Collection reviewer
      * @property Grid\Column|Collection notes
-     * @property Grid\Column|Collection reason
      * @property Grid\Column|Collection entry_number
      * @property Grid\Column|Collection deliver_number
      * @property Grid\Column|Collection province
@@ -156,11 +184,11 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection last_used_at
      * @property Grid\Column|Collection region_name
      * @property Grid\Column|Collection code
-     * @property Grid\Column|Collection initial
      * @property Grid\Column|Collection region_type
      * @property Grid\Column|Collection is_last
      * @property Grid\Column|Collection show_platform
      * @property Grid\Column|Collection price
+     * @property Grid\Column|Collection region
      * @property Grid\Column|Collection parent_bg
      * @property Grid\Column|Collection student_bg
      * @property Grid\Column|Collection teacher_bg
@@ -175,9 +203,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection site_message
      * @property Grid\Column|Collection text_message
      * @property Grid\Column|Collection official_account
-     * @property Grid\Column|Collection site_open
-     * @property Grid\Column|Collection text_open
-     * @property Grid\Column|Collection official_open
      * @property Grid\Column|Collection organization
      * @property Grid\Column|Collection teaching_type
      * @property Grid\Column|Collection teacher_cert
@@ -229,7 +254,35 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection start_time(string $label = null)
      * @method Grid\Column|Collection end_time(string $label = null)
      * @method Grid\Column|Collection status(string $label = null)
-     * @method Grid\Column|Collection adder_id(string $label = null)
+     * @method Grid\Column|Collection teacher_reward_type(string $label = null)
+     * @method Grid\Column|Collection teacher_first_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_second_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_new_reward(string $label = null)
+     * @method Grid\Column|Collection parent_reward_type(string $label = null)
+     * @method Grid\Column|Collection parent_first_reward(string $label = null)
+     * @method Grid\Column|Collection parent_second_reward(string $label = null)
+     * @method Grid\Column|Collection parent_new_reward(string $label = null)
+     * @method Grid\Column|Collection student_reward_type(string $label = null)
+     * @method Grid\Column|Collection student_first_reward(string $label = null)
+     * @method Grid\Column|Collection student_second_reward(string $label = null)
+     * @method Grid\Column|Collection student_new_reward(string $label = null)
+     * @method Grid\Column|Collection organ_reward_type(string $label = null)
+     * @method Grid\Column|Collection organ_first_reward(string $label = null)
+     * @method Grid\Column|Collection organ_second_reward(string $label = null)
+     * @method Grid\Column|Collection organ_new_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_real_auth_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_cert_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_career_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_image_reward(string $label = null)
+     * @method Grid\Column|Collection teacher_deal_reward_type(string $label = null)
+     * @method Grid\Column|Collection deal_teacher_reward(string $label = null)
+     * @method Grid\Column|Collection parent_deal_reward_type(string $label = null)
+     * @method Grid\Column|Collection parent_deal_reward(string $label = null)
+     * @method Grid\Column|Collection organ_deal_reward_type(string $label = null)
+     * @method Grid\Column|Collection organ_deal_reward(string $label = null)
+     * @method Grid\Column|Collection adder(string $label = null)
+     * @method Grid\Column|Collection reason(string $label = null)
+     * @method Grid\Column|Collection is_disabled(string $label = null)
      * @method Grid\Column|Collection version(string $label = null)
      * @method Grid\Column|Collection detail(string $label = null)
      * @method Grid\Column|Collection is_enabled(string $label = null)
@@ -255,8 +308,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection remember_token(string $label = null)
      * @method Grid\Column|Collection last_login_time(string $label = null)
      * @method Grid\Column|Collection content(string $label = null)
-     * @method Grid\Column|Collection adder(string $label = null)
      * @method Grid\Column|Collection editor(string $label = null)
+     * @method Grid\Column|Collection initial(string $label = null)
      * @method Grid\Column|Collection url(string $label = null)
      * @method Grid\Column|Collection logo(string $label = null)
      * @method Grid\Column|Collection login_bg(string $label = null)
@@ -267,6 +320,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection course_id(string $label = null)
      * @method Grid\Column|Collection teacher_id(string $label = null)
      * @method Grid\Column|Collection method(string $label = null)
+     * @method Grid\Column|Collection adder_id(string $label = null)
      * @method Grid\Column|Collection editor_id(string $label = null)
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
@@ -301,7 +355,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection course_status(string $label = null)
      * @method Grid\Column|Collection reviewer(string $label = null)
      * @method Grid\Column|Collection notes(string $label = null)
-     * @method Grid\Column|Collection reason(string $label = null)
      * @method Grid\Column|Collection entry_number(string $label = null)
      * @method Grid\Column|Collection deliver_number(string $label = null)
      * @method Grid\Column|Collection province(string $label = null)
@@ -359,11 +412,11 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection last_used_at(string $label = null)
      * @method Grid\Column|Collection region_name(string $label = null)
      * @method Grid\Column|Collection code(string $label = null)
-     * @method Grid\Column|Collection initial(string $label = null)
      * @method Grid\Column|Collection region_type(string $label = null)
      * @method Grid\Column|Collection is_last(string $label = null)
      * @method Grid\Column|Collection show_platform(string $label = null)
      * @method Grid\Column|Collection price(string $label = null)
+     * @method Grid\Column|Collection region(string $label = null)
      * @method Grid\Column|Collection parent_bg(string $label = null)
      * @method Grid\Column|Collection student_bg(string $label = null)
      * @method Grid\Column|Collection teacher_bg(string $label = null)
@@ -378,9 +431,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection site_message(string $label = null)
      * @method Grid\Column|Collection text_message(string $label = null)
      * @method Grid\Column|Collection official_account(string $label = null)
-     * @method Grid\Column|Collection site_open(string $label = null)
-     * @method Grid\Column|Collection text_open(string $label = null)
-     * @method Grid\Column|Collection official_open(string $label = null)
      * @method Grid\Column|Collection organization(string $label = null)
      * @method Grid\Column|Collection teaching_type(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
@@ -437,7 +487,35 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection start_time
      * @property Show\Field|Collection end_time
      * @property Show\Field|Collection status
-     * @property Show\Field|Collection adder_id
+     * @property Show\Field|Collection teacher_reward_type
+     * @property Show\Field|Collection teacher_first_reward
+     * @property Show\Field|Collection teacher_second_reward
+     * @property Show\Field|Collection teacher_new_reward
+     * @property Show\Field|Collection parent_reward_type
+     * @property Show\Field|Collection parent_first_reward
+     * @property Show\Field|Collection parent_second_reward
+     * @property Show\Field|Collection parent_new_reward
+     * @property Show\Field|Collection student_reward_type
+     * @property Show\Field|Collection student_first_reward
+     * @property Show\Field|Collection student_second_reward
+     * @property Show\Field|Collection student_new_reward
+     * @property Show\Field|Collection organ_reward_type
+     * @property Show\Field|Collection organ_first_reward
+     * @property Show\Field|Collection organ_second_reward
+     * @property Show\Field|Collection organ_new_reward
+     * @property Show\Field|Collection teacher_real_auth_reward
+     * @property Show\Field|Collection teacher_cert_reward
+     * @property Show\Field|Collection teacher_career_reward
+     * @property Show\Field|Collection teacher_image_reward
+     * @property Show\Field|Collection teacher_deal_reward_type
+     * @property Show\Field|Collection deal_teacher_reward
+     * @property Show\Field|Collection parent_deal_reward_type
+     * @property Show\Field|Collection parent_deal_reward
+     * @property Show\Field|Collection organ_deal_reward_type
+     * @property Show\Field|Collection organ_deal_reward
+     * @property Show\Field|Collection adder
+     * @property Show\Field|Collection reason
+     * @property Show\Field|Collection is_disabled
      * @property Show\Field|Collection version
      * @property Show\Field|Collection detail
      * @property Show\Field|Collection is_enabled
@@ -463,8 +541,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection remember_token
      * @property Show\Field|Collection last_login_time
      * @property Show\Field|Collection content
-     * @property Show\Field|Collection adder
      * @property Show\Field|Collection editor
+     * @property Show\Field|Collection initial
      * @property Show\Field|Collection url
      * @property Show\Field|Collection logo
      * @property Show\Field|Collection login_bg
@@ -475,6 +553,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection course_id
      * @property Show\Field|Collection teacher_id
      * @property Show\Field|Collection method
+     * @property Show\Field|Collection adder_id
      * @property Show\Field|Collection editor_id
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
@@ -509,7 +588,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection course_status
      * @property Show\Field|Collection reviewer
      * @property Show\Field|Collection notes
-     * @property Show\Field|Collection reason
      * @property Show\Field|Collection entry_number
      * @property Show\Field|Collection deliver_number
      * @property Show\Field|Collection province
@@ -567,11 +645,11 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection last_used_at
      * @property Show\Field|Collection region_name
      * @property Show\Field|Collection code
-     * @property Show\Field|Collection initial
      * @property Show\Field|Collection region_type
      * @property Show\Field|Collection is_last
      * @property Show\Field|Collection show_platform
      * @property Show\Field|Collection price
+     * @property Show\Field|Collection region
      * @property Show\Field|Collection parent_bg
      * @property Show\Field|Collection student_bg
      * @property Show\Field|Collection teacher_bg
@@ -586,9 +664,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection site_message
      * @property Show\Field|Collection text_message
      * @property Show\Field|Collection official_account
-     * @property Show\Field|Collection site_open
-     * @property Show\Field|Collection text_open
-     * @property Show\Field|Collection official_open
      * @property Show\Field|Collection organization
      * @property Show\Field|Collection teaching_type
      * @property Show\Field|Collection teacher_cert
@@ -640,7 +715,35 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection start_time(string $label = null)
      * @method Show\Field|Collection end_time(string $label = null)
      * @method Show\Field|Collection status(string $label = null)
-     * @method Show\Field|Collection adder_id(string $label = null)
+     * @method Show\Field|Collection teacher_reward_type(string $label = null)
+     * @method Show\Field|Collection teacher_first_reward(string $label = null)
+     * @method Show\Field|Collection teacher_second_reward(string $label = null)
+     * @method Show\Field|Collection teacher_new_reward(string $label = null)
+     * @method Show\Field|Collection parent_reward_type(string $label = null)
+     * @method Show\Field|Collection parent_first_reward(string $label = null)
+     * @method Show\Field|Collection parent_second_reward(string $label = null)
+     * @method Show\Field|Collection parent_new_reward(string $label = null)
+     * @method Show\Field|Collection student_reward_type(string $label = null)
+     * @method Show\Field|Collection student_first_reward(string $label = null)
+     * @method Show\Field|Collection student_second_reward(string $label = null)
+     * @method Show\Field|Collection student_new_reward(string $label = null)
+     * @method Show\Field|Collection organ_reward_type(string $label = null)
+     * @method Show\Field|Collection organ_first_reward(string $label = null)
+     * @method Show\Field|Collection organ_second_reward(string $label = null)
+     * @method Show\Field|Collection organ_new_reward(string $label = null)
+     * @method Show\Field|Collection teacher_real_auth_reward(string $label = null)
+     * @method Show\Field|Collection teacher_cert_reward(string $label = null)
+     * @method Show\Field|Collection teacher_career_reward(string $label = null)
+     * @method Show\Field|Collection teacher_image_reward(string $label = null)
+     * @method Show\Field|Collection teacher_deal_reward_type(string $label = null)
+     * @method Show\Field|Collection deal_teacher_reward(string $label = null)
+     * @method Show\Field|Collection parent_deal_reward_type(string $label = null)
+     * @method Show\Field|Collection parent_deal_reward(string $label = null)
+     * @method Show\Field|Collection organ_deal_reward_type(string $label = null)
+     * @method Show\Field|Collection organ_deal_reward(string $label = null)
+     * @method Show\Field|Collection adder(string $label = null)
+     * @method Show\Field|Collection reason(string $label = null)
+     * @method Show\Field|Collection is_disabled(string $label = null)
      * @method Show\Field|Collection version(string $label = null)
      * @method Show\Field|Collection detail(string $label = null)
      * @method Show\Field|Collection is_enabled(string $label = null)
@@ -666,8 +769,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection remember_token(string $label = null)
      * @method Show\Field|Collection last_login_time(string $label = null)
      * @method Show\Field|Collection content(string $label = null)
-     * @method Show\Field|Collection adder(string $label = null)
      * @method Show\Field|Collection editor(string $label = null)
+     * @method Show\Field|Collection initial(string $label = null)
      * @method Show\Field|Collection url(string $label = null)
      * @method Show\Field|Collection logo(string $label = null)
      * @method Show\Field|Collection login_bg(string $label = null)
@@ -678,6 +781,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection course_id(string $label = null)
      * @method Show\Field|Collection teacher_id(string $label = null)
      * @method Show\Field|Collection method(string $label = null)
+     * @method Show\Field|Collection adder_id(string $label = null)
      * @method Show\Field|Collection editor_id(string $label = null)
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
@@ -712,7 +816,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection course_status(string $label = null)
      * @method Show\Field|Collection reviewer(string $label = null)
      * @method Show\Field|Collection notes(string $label = null)
-     * @method Show\Field|Collection reason(string $label = null)
      * @method Show\Field|Collection entry_number(string $label = null)
      * @method Show\Field|Collection deliver_number(string $label = null)
      * @method Show\Field|Collection province(string $label = null)
@@ -770,11 +873,11 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection last_used_at(string $label = null)
      * @method Show\Field|Collection region_name(string $label = null)
      * @method Show\Field|Collection code(string $label = null)
-     * @method Show\Field|Collection initial(string $label = null)
      * @method Show\Field|Collection region_type(string $label = null)
      * @method Show\Field|Collection is_last(string $label = null)
      * @method Show\Field|Collection show_platform(string $label = null)
      * @method Show\Field|Collection price(string $label = null)
+     * @method Show\Field|Collection region(string $label = null)
      * @method Show\Field|Collection parent_bg(string $label = null)
      * @method Show\Field|Collection student_bg(string $label = null)
      * @method Show\Field|Collection teacher_bg(string $label = null)
@@ -789,9 +892,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection site_message(string $label = null)
      * @method Show\Field|Collection text_message(string $label = null)
      * @method Show\Field|Collection official_account(string $label = null)
-     * @method Show\Field|Collection site_open(string $label = null)
-     * @method Show\Field|Collection text_open(string $label = null)
-     * @method Show\Field|Collection official_open(string $label = null)
      * @method Show\Field|Collection organization(string $label = null)
      * @method Show\Field|Collection teaching_type(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
