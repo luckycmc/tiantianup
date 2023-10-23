@@ -28,6 +28,7 @@ Route::group([
     $router->resource('/teacher_image','TeacherImageController');
     $router->resource('/teacher_education','TeacherEducationController');
     $router->resource('/teacher_cert','TeacherCertController');
+    $router->resource('/teacher_career','TeacherCareerController');
     $router->resource('/consults','ConsultController');
     $router->resource('/teacher_course','TeacherCourseController');
     $router->resource('/student_course','StudentCourseController');

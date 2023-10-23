@@ -12,5 +12,10 @@ class TeacherCert extends Model
     protected $table = 'teacher_cert';
 
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
 }

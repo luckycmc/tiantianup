@@ -2,7 +2,7 @@
 
 namespace App\Admin\Actions\Grid;
 
-use App\Models\TeacherCert;
+use App\Models\TeacherCareer;
 use App\Models\User;
 use Carbon\Carbon;
 use Dcat\Admin\Actions\Response;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class VerifyCert extends RowAction
+class VerifyCareer extends RowAction
 {
     /**
      * @return string
@@ -30,7 +30,7 @@ class VerifyCert extends RowAction
     public function handle(Request $request)
     {
         $teacher_id = $this->getKey();
-        $teacher_info = TeacherCert::find($teacher_id);
+        $teacher_info = TeacherCareer::find($teacher_id);
         $teacher_info->status = 1;
         // 查询奖励
         $reward = get_reward(2,3);
@@ -41,8 +41,8 @@ class VerifyCert extends RowAction
         $bill_log = [
             'user_id' => $teacher_info->user_id,
             'amount' => $amount,
-            'type' => 7,
-            'description' => '证书审核通过',
+            'type' => 9,
+            'description' => '教学经历审核通过',
             'created_at' => Carbon::now()
         ];
         // 保存日志

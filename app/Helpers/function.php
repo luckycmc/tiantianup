@@ -1,6 +1,6 @@
 <?php
 
-use App\Admin\Repositories\Activity;
+use App\Models\Activity;
 use App\Models\Course;
 use App\Models\Region;
 use App\Models\ServicePrice;
@@ -133,7 +133,7 @@ function get_access_token () {
 // 获取活动奖励
 function get_reward($type,$role) {
     $word_arr = ['','学生','家长','教师','机构'];
-    $role_word = $word_arr['role'];
+    $role_word = $word_arr[$role];
     switch ($type) {
         case 1:
             // 邀新活动

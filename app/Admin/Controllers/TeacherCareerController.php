@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseCareer;
+use App\Admin\Actions\Grid\VerifyCareer;
 use App\Admin\Repositories\TeacherCareer;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -17,21 +19,29 @@ class TeacherCareerController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new TeacherCareer(), function (Grid $grid) {
+        return Grid::make(new TeacherCareer('teacher'), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('user_id');
+            $grid->column('teacher.name','教师姓名');
             $grid->column('organization');
             $grid->column('subject');
             $grid->column('object');
             $grid->column('teaching_type');
             $grid->column('start_time');
             $grid->column('end_time');
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyCareer());
+                    $actions->append(new RefuseCareer());
+                }
             });
         });
     }

@@ -2,13 +2,16 @@
 
 namespace App\Admin\Actions\Grid;
 
-use App\Admin\Repositories\TeacherImage;
+use App\Models\TeacherImage;
+use App\Models\User;
+use Carbon\Carbon;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Traits\HasPermissions;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VerifyImage extends RowAction
 {
@@ -29,7 +32,25 @@ class VerifyImage extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherImage::find($teacher_id);
         $teacher_info->status = 1;
-        $teacher_info->update();
+        // 查询奖励
+        $reward = get_reward(2,3);
+        $amount = $reward->teacher_real_auth_reward;
+        $user = User::find($teacher_info->user_id);
+        $user->withdraw_balance += $amount;
+        $user->total_income += $amount;
+        $bill_log = [
+            'user_id' => $teacher_info->user_id,
+            'amount' => $amount,
+            'type' => 8,
+            'description' => '教师风采审核通过',
+            'created_at' => Carbon::now()
+        ];
+        // 保存日志
+        DB::transaction(function () use ($bill_log,$teacher_info,$user) {
+            $teacher_info->update();
+            $user->update();
+            DB::table('bills')->insert($bill_log);
+        });
 
         return $this->response()
             ->success('操作成功')

@@ -23,7 +23,9 @@ class TeacherImageController extends AdminController
             $grid->model()->where('type',2);
             $grid->column('id')->sortable();
             $grid->column('user.name','教师名称');
-            $grid->column('url')->image('',60,60);
+            $grid->column('url','图片')->display(function ($url) {
+                return json_decode($url,true);
+            })->image('',60,60);
             $grid->column('status','状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $grid->column('reason','拒绝原因');
             $grid->column('created_at');

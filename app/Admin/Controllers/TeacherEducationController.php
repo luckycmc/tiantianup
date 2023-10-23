@@ -81,8 +81,14 @@ class TeacherEducationController extends AdminController
             $form->text('highest_education');
             $form->text('graduate_school');
             $form->text('speciality');
-            $form->image('graduate_cert')->saveFullUrl();
-            $form->image('diploma')->saveFullUrl();
+            $form->image('graduate_cert')->saveFullUrl()->saving(function ($graduate_cert) {
+                $arr = explode('?',$graduate_cert);
+                return $arr[0];
+            });
+            $form->image('diploma')->saveFullUrl()->saving(function ($diploma) {
+                $arr = explode('?',$diploma);
+                return $arr[0];
+            });
             $form->select('status')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
         
             $form->display('created_at');

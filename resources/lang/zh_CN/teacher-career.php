@@ -12,6 +12,7 @@ return [
         'teaching_type' => '上课方式',
         'start_time' => '开始时间',
         'end_time' => '结束时间',
+        'status' => '状态'
     ],
     'options' => [
     ],
