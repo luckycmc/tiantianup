@@ -20,12 +20,10 @@ class StudentCourseSettingController extends AdminController
         return Grid::make(new CourseSetting(), function (Grid $grid) {
             $grid->model()->where('role',1);
             $grid->column('id')->sortable();
-            $grid->column('role');
             $grid->column('end_time');
             $grid->column('latest_end_time');
             $grid->column('course_end');
             $grid->column('deal_pay');
-            $grid->column('confirm_course');
             $grid->column('is_can_look');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -48,7 +46,6 @@ class StudentCourseSettingController extends AdminController
     {
         return Show::make($id, new CourseSetting(), function (Show $show) {
             $show->field('id');
-            $show->field('role');
             $show->field('end_time');
             $show->field('latest_end_time');
             $show->field('course_end');
@@ -69,13 +66,12 @@ class StudentCourseSettingController extends AdminController
     {
         return Form::make(new CourseSetting(), function (Form $form) {
             $form->display('id');
-            $form->text('role');
-            $form->text('end_time');
-            $form->text('latest_end_time');
-            $form->text('course_end');
-            $form->text('deal_pay');
-            $form->text('confirm_course');
-            $form->text('is_can_look');
+            $form->hidden('role')->default(1);
+            $form->number('end_time');
+            $form->number('latest_end_time');
+            $form->number('course_end');
+            $form->number('deal_pay');
+            $form->radio('is_can_look')->options([0 => '否', 1 => '是']);
         
             $form->display('created_at');
             $form->display('updated_at');
