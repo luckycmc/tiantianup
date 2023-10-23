@@ -22,7 +22,7 @@ class PlatformMessageController extends AdminController
             $grid->column('name');
             $grid->column('content');
             $grid->column('send_platform');
-            $grid->column('status');
+            $grid->column('status')->using([0 => '未读', 1 => '已读']);
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -30,6 +30,10 @@ class PlatformMessageController extends AdminController
                 $filter->equal('id');
         
             });
+            $grid->disableEditButton();
+            $grid->disableCreateButton();
+            $grid->disableDeleteButton();
+            $grid->export();
         });
     }
 
@@ -47,7 +51,7 @@ class PlatformMessageController extends AdminController
             $show->field('name');
             $show->field('content');
             $show->field('send_platform');
-            $show->field('status');
+            $show->field('status')->as([0 => '未读', 1 => '已读']);
             $show->field('created_at');
             $show->field('updated_at');
         });
