@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeamController;
@@ -40,6 +41,11 @@ $api->version('v1', function ($api) {
     });
     $api->group(['prefix'=>'common'],function ($api){
         $api->any('{action}', function (Request $request, CommonController $index, $action) {
+            return $index->$action($request);
+        });
+    });
+    $api->group(['prefix'=>'system'],function ($api){
+        $api->any('{action}', function (Request $request, SystemController $index, $action) {
             return $index->$action($request);
         });
     });
