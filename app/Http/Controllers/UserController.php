@@ -10,6 +10,7 @@ use App\Models\DeliverLog;
 use App\Models\Message;
 use App\Models\Organization;
 use App\Models\ParentStudent;
+use App\Models\PlatformMessage;
 use App\Models\TeacherCareer;
 use App\Models\TeacherCert;
 use App\Models\TeacherCourseOrder;
@@ -632,6 +633,8 @@ class UserController extends Controller
         if (!$result) {
             return $this->error('提交失败');
         }
+        // 给平台发送消息
+        (new PlatformMessage())->saveMessage('教师实名认证',$user->name.'教师实名认证','教师端');
         return $this->success('提交成功');
     }
 

@@ -17,7 +17,7 @@ class PlatformMessage extends Model
         $model = new self();
         $model->name = $name;
         $model->content = $content;
-        $model->platform = $platform;
+        $model->send_platform = $platform;
         $model->save();
     }
     
