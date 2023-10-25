@@ -71,7 +71,9 @@ class VerifyCert extends RowAction
         }
         if (SystemMessage::where('action',6)->value('official_account') == 1) {
             // 推送公众号消息
-
+            if (!isset($user->official_open_id)) {
+                get_official_openid($user->union_id);
+            }
         }
         // 保存日志
         DB::transaction(function () use ($bill_log,$teacher_info,$user) {

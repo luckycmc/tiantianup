@@ -174,6 +174,7 @@ class CommonController extends Controller
         $data = [
             'content' => 'test'
         ];
-        send_official_message($open_id,json_encode($data));
+        get_user_list();
+        // send_official_message($open_id,json_encode($data));
     }
 }

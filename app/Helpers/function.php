@@ -4,6 +4,7 @@ use App\Models\Activity;
 use App\Models\Course;
 use App\Models\Region;
 use App\Models\ServicePrice;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -194,4 +195,27 @@ function send_official_message($openid,$data) {
     ];
     $result = Http::post($url,$post_data);
     dd($result->body());
+}
+
+function get_official_openid($union_id) {
+    $access_token = get_official_access_token();
+    $url = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token='.$access_token.'&next_openid=';
+    $result = Http::get($url)->body();
+    $arr = json_decode($result,true);
+    $openid_arr = $arr['data']['openid'];
+    $open_id = '';
+    foreach ($openid_arr as $v) {
+        $union_url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$v.'&lang=zh_CN';
+        $union_result = Http::get($union_url)->body();
+        $array = json_decode($union_result,true);
+        $user_union_id = $array['union_id'];
+        // 查询数据库
+        if ($union_id == $user_union_id) {
+            $user = User::where('union_id', $user_union_id)->first();
+            $user->official_open_id = $v;
+            $user->update();
+            $open_id = $v;
+        }
+    }
+    return $open_id;
 }

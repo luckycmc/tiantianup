@@ -27,6 +27,7 @@ class LoginController extends Controller
         $config = config('wechat.mini_program.default');
         $data = \request()->all();
         $code = $data['code'] ?? '';
+        $union_id = $data['union_id'] ?? 0;
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
         Log::info('session: ',$session);
@@ -38,6 +39,7 @@ class LoginController extends Controller
         if (!$is_user) {
             $new_user = new User();
             $new_user->open_id = $session['openid'];
+            $new_user->union_id = $union_id;
             $new_user->parent_id = $data['parent_id'] ?? null;
             $new_user->save();
             $is_user = $new_user;
