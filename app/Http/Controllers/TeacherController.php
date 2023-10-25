@@ -340,14 +340,20 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
-        if (!Course::find($course_id)) {
+        $course_info = Course::find($course_id);
+        if (!$course_info) {
             return $this->error('需求不存在');
         }
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
         $user_city = Region::find($user->city_id)->value('region_name');
-        $amount = get_service_price(1,$user_city);
+        if ($course_info->adder_role == 0) {
+            $type = 4;
+        } else {
+            $type = 3;
+        }
+        $amount = get_service_price($type,$user_city);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
