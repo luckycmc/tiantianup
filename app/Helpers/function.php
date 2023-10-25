@@ -173,3 +173,13 @@ function get_service_price($type,$region) {
     }
     return $info->price;
 }
+
+function get_official_access_token() {
+    $appid = env();
+    $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET';
+}
+
+function send_official_message() {
+    $access_token = '';
+    $url = 'https://api.weixin.qq.com/cgi-bin/message/subscribe/bizsend?access_token=';
+}

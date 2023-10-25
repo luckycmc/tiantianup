@@ -2,10 +2,17 @@
 
 namespace App\Admin\Forms;
 
+use App\Models\Message;
+use App\Models\SystemMessage;
 use App\Models\TeacherCert;
+use App\Models\User;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 
 class RefuseCert extends Form implements LazyRenderable
 {
@@ -19,12 +26,31 @@ class RefuseCert extends Form implements LazyRenderable
      */
     public function handle(array $input)
     {
+        $config = config('services.sms');
         $id = $this->payload['id'] ?? null;
         $reason = $input['reason'] ?? '';
         $teacher_info = TeacherCert::find($id);
         $teacher_info->status = 2;
         $teacher_info->reason = $reason;
         $teacher_info->update();
+        // 发送通知
+        if (SystemMessage::where('action',6)->value('site_message') == 1) {
+            (new Message())->saveMessage($teacher_info->user_id,0,'资格证书','资格证书审核失败','',0,3);
+        }
+        if (SystemMessage::where('action',6)->value('text_message') == 1) {
+            $text = '资格证书';
+            // 发送短信
+            $easySms = new EasySms($config);
+            $user = User::find($teacher_info->user_id);
+            try {
+                $number = new PhoneNumber($user->mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】很抱歉，您的".$text."未通过审核",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
+        }
 
         return $this
             ->response()

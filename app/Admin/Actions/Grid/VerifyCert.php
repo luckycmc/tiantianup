@@ -2,6 +2,8 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Models\Message;
+use App\Models\SystemMessage;
 use App\Models\TeacherCert;
 use App\Models\User;
 use Carbon\Carbon;
@@ -12,6 +14,10 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 
 class VerifyCert extends RowAction
 {
@@ -29,6 +35,7 @@ class VerifyCert extends RowAction
      */
     public function handle(Request $request)
     {
+        $config = config('services.sms');
         $teacher_id = $this->getKey();
         $teacher_info = TeacherCert::find($teacher_id);
         $teacher_info->status = 1;
@@ -45,6 +52,23 @@ class VerifyCert extends RowAction
             'description' => '证书审核通过',
             'created_at' => Carbon::now()
         ];
+        // 发送通知
+        if (SystemMessage::where('action',6)->value('site_message') == 1) {
+            (new Message())->saveMessage($teacher_info->user_id,0,'资格证书','资格证书审核通过',0,0,3);
+        }
+        if (SystemMessage::where('action',6)->value('text_message') == 1) {
+            $text = '资格证书';
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($user->mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】恭喜您，您的".$text."已通过审核",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
+        }
         // 保存日志
         DB::transaction(function () use ($bill_log,$teacher_info,$user) {
             $teacher_info->update();
