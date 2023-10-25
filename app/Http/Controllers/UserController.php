@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin\Repositories\SystemMessage;
 use App\Models\Activity;
 use App\Models\Bill;
 use App\Models\Collect;
@@ -634,7 +635,9 @@ class UserController extends Controller
             return $this->error('提交失败');
         }
         // 给平台发送消息
-        (new PlatformMessage())->saveMessage('教师实名认证',$user->name.'教师实名认证','教师端');
+        if (SystemMessage::where('action','教师资格证更新')->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('教师实名认证',$user->name.'教师实名认证','教师端');
+        }
         return $this->success('提交成功');
     }
 
