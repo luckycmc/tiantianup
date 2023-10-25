@@ -28,12 +28,17 @@ class LoginController extends Controller
         $data = \request()->all();
         $code = $data['code'] ?? '';
         $union_id = $data['union_id'] ?? 0;
+        $iv = $data['iv'];
+        $encryptData = $data['encryptedData'];
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
+
         Log::info('session: ',$session);
         if (!isset($session['session_key'])) {
             return $this->error('登陆失败');
         }
+        $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptData);
+        Log::info('decryptedData: '.$decryptedData);
         // 判断用户是否存在
         $is_user = User::where(['open_id' => $session['openid']])->first();
         if (!$is_user) {
