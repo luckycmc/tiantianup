@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Message;
+use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\TeacherCourseOrder;
 use App\Models\User;
@@ -163,12 +164,14 @@ class CourseController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
+        $user_city = Region::find($user->city_id)->value('region_name');
+        $amount = get_service_price(4, $user_city);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
             'role' => $user->role,
             'out_trade_no' => $out_trade_no,
-            'amount' => 0.01,
+            'amount' => $amount,
             'status' => 0,
             'created_at' => Carbon::now()
         ];

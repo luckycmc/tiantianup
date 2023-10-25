@@ -87,9 +87,9 @@ class OrganizationController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
+        $user_city = Region::find($user->city_id)->value('region_name');
         // 查询服务费
-        // $service_price = BaseInformation::value('service_price');
-        $service_price = 0.01;
+        $service_price = get_service_price(2,$user_city);
         $order_data = [
             'user_id' => $user->id,
             'role' => 4,

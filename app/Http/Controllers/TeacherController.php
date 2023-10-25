@@ -346,12 +346,14 @@ class TeacherController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
+        $user_city = Region::find($user->city_id)->value('region_name');
+        $amount = get_service_price(1,$user_city);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
             'out_trade_no' => $out_trade_no,
             // 'amount' => BaseInformation::value('service_price'),
-            'amount' => 0.01,
+            'amount' => $amount,
             'pay_status' => 0,
             'created_at' => Carbon::now()
         ];

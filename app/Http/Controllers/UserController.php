@@ -11,6 +11,7 @@ use App\Models\Message;
 use App\Models\Organization;
 use App\Models\ParentStudent;
 use App\Models\PlatformMessage;
+use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\TeacherCareer;
 use App\Models\TeacherCert;
@@ -598,6 +599,9 @@ class UserController extends Controller
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
         $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
+        // 金额
+        $user_city = Region::find($user->city_id)->value('region_name');
+        $amount = get_service_price(1,$user_city);
         // 查看是否已投递
         $deliver_data = [
             'user_id' => $user->id,
@@ -608,7 +612,7 @@ class UserController extends Controller
             'image' => $data['image'] ?? '',
             'out_trade_no' => $out_trade_no,
             'pay_status' => 0,
-            'amount' => 0.01,
+            'amount' => $amount,
             'created_at' => Carbon::now()
         ];
         // 保存数据
