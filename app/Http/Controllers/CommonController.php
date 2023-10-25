@@ -167,4 +167,13 @@ class CommonController extends Controller
         $organ_name = Organization::where('user_id',$parent_id)->value('name');
         return $this->success('机构名称',compact('organ_name'));
     }
+
+    public function test_official_push()
+    {
+        $open_id = 'o163o4hYbLPE_r8_QJKY5Qj0sMy8';
+        $data = [
+            'content' => 'test'
+        ];
+        send_official_message($open_id,json_encode($data));
+    }
 }

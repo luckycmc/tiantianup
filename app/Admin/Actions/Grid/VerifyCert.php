@@ -69,6 +69,10 @@ class VerifyCert extends RowAction
                 return $this->error($exception->getResults());
             }
         }
+        if (SystemMessage::where('action',6)->value('official_account') == 1) {
+            // 推送公众号消息
+
+        }
         // 保存日志
         DB::transaction(function () use ($bill_log,$teacher_info,$user) {
             $teacher_info->update();

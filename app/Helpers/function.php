@@ -175,11 +175,23 @@ function get_service_price($type,$region) {
 }
 
 function get_official_access_token() {
-    $appid = env();
-    $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET';
+    $appid = env('WECHAT_OFFICIAL_APPID');
+    $secret = env('WECHAT_OFFICIAL_SECRET');
+    $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$appid.'&secret='.$secret;
+    $result = Http::get($url);
+    $arr = json_decode($result->body(),true);
+    return $arr['access_token'];
 }
 
-function send_official_message() {
-    $access_token = '';
-    $url = 'https://api.weixin.qq.com/cgi-bin/message/subscribe/bizsend?access_token=';
+function send_official_message($openid,$data) {
+    $access_token = get_official_access_token();
+    $url = 'https://api.weixin.qq.com/cgi-bin/message/subscribe/bizsend?access_token='.$access_token;
+    $post_data = [
+        'touser' => $openid,
+        'template_id' => 'QmZZLk04SbpweF_vIr71BMnR1_B6xeJMP-dehoBZTx0',
+        'appid' => env('WECHAT_MINI_PROGRAM_APPID'),
+        'data' => $data
+    ];
+    $result = Http::post($url,$post_data);
+    dd($result->body());
 }

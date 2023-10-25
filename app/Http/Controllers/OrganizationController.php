@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\Message;
 use App\Models\OrganPrivilege;
 use App\Models\OrganRole;
 use App\Models\OrganRolePrivilege;
+use App\Models\PlatformMessage;
 use App\Models\Region;
+use App\Models\SystemMessage;
 use App\Models\User;
 use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
@@ -19,6 +22,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 use Yansongda\Pay\Pay;
 use function PHPUnit\Framework\isFalse;
 
@@ -107,6 +114,7 @@ class OrganizationController extends Controller
      */
     public function create_course()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'name' => 'required',
@@ -142,6 +150,27 @@ class OrganizationController extends Controller
         $course_info = Course::find($id);
         $course_info->number = create_course_number($id);
         $course_info->save();
+        // 发送通知
+        if (SystemMessage::where('action',7)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('发布需求','发布需求','机构端');
+        }
+        if (SystemMessage::where('action',7)->value('text_message') == 1) {
+            $mobile = SystemMessage::where('action',6)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】有新发布的需求",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
+        }
+        if (SystemMessage::where('action',7)->value('official_account') == 1) {
+            // 推送公众号消息
+            send_official_message();
+        }
         return $this->success('提交成功');
     }
 
