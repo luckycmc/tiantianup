@@ -7,6 +7,7 @@ use App\Models\DeliverLog;
 use App\Models\Message;
 use App\Models\ParentCourse;
 use App\Models\ParentStudent;
+use App\Models\SystemMessage;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\JWT;
 
@@ -134,6 +139,7 @@ class ParentController extends Controller
      */
     public function check_teacher()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $deliver_arr = $data['id'] ?? [];
         $result = DeliverLog::whereIn('id',$deliver_arr)->update(['is_checked' => 1,'status' => 1]);
@@ -146,7 +152,23 @@ class ParentController extends Controller
         foreach ($deliver_arr as $v) {
             $user_id = DeliverLog::where('id',$v)->value('user_id');
             $course_id = DeliverLog::where('id',$v)->value('course_id');
-            (new Message())->saveMessage($user_id,$user->id,'选中信息','您被选中了',$course_id,0,2);
+            // 发送通知
+            if (SystemMessage::where('action',10)->value('site_message') == 1) {
+                (new Message())->saveMessage($user_id,$user->id,'选中信息','您被选中了',$course_id,0,2);
+            }
+            if (SystemMessage::where('action',10)->value('text_message') == 1) {
+                $text = '投递';
+                // 发送短信
+                $easySms = new EasySms($config);
+                try {
+                    $number = new PhoneNumber($user->mobile);
+                    $easySms->send($number,[
+                        'content'  => "【添添向尚】恭喜您，您的".$text."被选中",
+                    ]);
+                } catch (Exception|NoGatewayAvailableException $exception) {
+                    return $this->error($exception->getResults());
+                }
+            }
         }
         return $this->success('操作成功');
     }

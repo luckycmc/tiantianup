@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Message;
+use App\Models\SystemMessage;
 use App\Models\TeacherCourseOrder;
 use App\Models\User;
 use App\Models\UserCourse;
@@ -10,6 +12,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 
 class CourseController extends Controller
 {
@@ -147,6 +153,7 @@ class CourseController extends Controller
      */
     public function entry()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $course_id = $data['course_id'];
         $course_info = Course::find($course_id);
@@ -171,6 +178,23 @@ class CourseController extends Controller
         $course_info->save();
         if (!$result) {
             return $this->error('联系机构失败');
+        }
+        $organ_user = User::find($course_info->user_id);
+        // 发送通知
+        if (SystemMessage::where('action',16)->value('site_message') == 1) {
+            (new Message())->saveMessage($organ_user->id,$user->id,'报名信息','有家长/学生报名了您的课程',$course_id,0,4);
+        }
+        if (SystemMessage::where('action',16)->value('text_message') == 1) {
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($user->mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】有家长/学生报名了您的课程",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('稍后会有商家给您致电');
     }

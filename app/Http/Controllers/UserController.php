@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Admin\Repositories\SystemMessage;
 use App\Models\Activity;
 use App\Models\Bill;
 use App\Models\Collect;
@@ -12,6 +11,7 @@ use App\Models\Message;
 use App\Models\Organization;
 use App\Models\ParentStudent;
 use App\Models\PlatformMessage;
+use App\Models\SystemMessage;
 use App\Models\TeacherCareer;
 use App\Models\TeacherCert;
 use App\Models\TeacherCourseOrder;
@@ -33,6 +33,10 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserController extends Controller
@@ -447,6 +451,7 @@ class UserController extends Controller
      */
     public function withdraw()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'amount' => 'required|integer',
@@ -498,6 +503,23 @@ class UserController extends Controller
             // 更新余额
             DB::table('users')->where('id',$user->id)->decrement('withdraw_balance',$data['amount']);
         });
+        // 发送通知
+        if (SystemMessage::where('action',11)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('申请提现','申请提现','用户端');
+        }
+        if (SystemMessage::where('action',11)->value('text_message') == 1) {
+            $mobile = SystemMessage::where('action',11)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】有新的提现申请",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
+        }
         return $this->success('申请成功');
     }
 
@@ -554,6 +576,7 @@ class UserController extends Controller
      */
     public function deliver()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'course_id' => 'required'
@@ -595,6 +618,23 @@ class UserController extends Controller
         $course_info->update();
         if (!$result) {
             return $this->error('投递失败');
+        }
+        // 发送通知
+        if (SystemMessage::where('action',9)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('教师投递','教师投递','教师端');
+        }
+        if (SystemMessage::where('action',9)->value('text_message') == 1) {
+            $mobile = SystemMessage::where('action',9)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】有新的投递",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('投递成功');
     }

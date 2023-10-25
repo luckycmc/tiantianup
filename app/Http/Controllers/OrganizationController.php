@@ -167,10 +167,10 @@ class OrganizationController extends Controller
                 return $this->error($exception->getResults());
             }
         }
-        if (SystemMessage::where('action',7)->value('official_account') == 1) {
+        /*if (SystemMessage::where('action',7)->value('official_account') == 1) {
             // 推送公众号消息
             send_official_message();
-        }
+        }*/
         return $this->success('提交成功');
     }
 
