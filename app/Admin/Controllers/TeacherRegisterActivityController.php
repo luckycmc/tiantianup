@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\DisableActivity;
 use App\Admin\Actions\Grid\UnDisableActivity;
+use App\Admin\Renderable\ActivityLog;
 use App\Admin\Repositories\Activity;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -28,6 +29,7 @@ class TeacherRegisterActivityController extends AdminController
             $grid->column('end_time','结束时间');
             $grid->column('object','活动对象');
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
+            $grid->column('activity_log','活动数据')->display('活动数据')->modal('活动数据',ActivityLog::make(['type' => 2]));
             $grid->column('adder.name','创建人');
             $grid->column('created_at','创建时间');
 

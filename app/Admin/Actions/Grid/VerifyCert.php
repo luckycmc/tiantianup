@@ -81,7 +81,7 @@ class VerifyCert extends RowAction
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
         if ($teacher_activity) {
-            teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书审核通过',$teacher_activity);
+            teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书','资格证书审核通过',$teacher_activity);
         }
 
         return $this->response()

@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'DealActivity' => '教师注册活动',
+        'DealActivity' => '成交活动',
         'activity' => '邀新活动',
     ],
     'fields' => [

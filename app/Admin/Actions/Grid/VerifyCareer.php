@@ -51,7 +51,7 @@ class VerifyCareer extends RowAction
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
         if ($teacher_activity) {
-            teacher_activity_log($teacher_info->user_id,'teacher_career_reward','教学经历审核通过',$teacher_activity);
+            teacher_activity_log($teacher_info->user_id,'teacher_career_reward','教学经历','教学经历审核通过',$teacher_activity);
         }
 
         return $this->response()

@@ -311,10 +311,10 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
 }
 
 // 教师注册活动
-function teacher_activity_log ($teacher_id,$project,$description,$teacher_activity) {
+function teacher_activity_log ($teacher_id,$field,$project,$description,$teacher_activity) {
     // 查询奖励
     $reward = get_reward(2,3);
-    $amount = $reward->$project;
+    $amount = $reward->$field;
     $user = User::find($teacher_id);
     $user->withdraw_balance += $amount;
     $user->total_income += $amount;
@@ -330,6 +330,7 @@ function teacher_activity_log ($teacher_id,$project,$description,$teacher_activi
         'username' => $user->name,
         'activity_id' => $teacher_activity->id,
         'amount' => $amount,
+        'project' => $project,
         'type' => $teacher_activity->type,
         'description' => $description,
         'created_at' => Carbon::now()

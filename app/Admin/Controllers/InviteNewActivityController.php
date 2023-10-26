@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Grid\DisableActivity;
 use App\Admin\Actions\Grid\UnDisableActivity;
+use App\Admin\Renderable\ActivityLog;
 use App\Admin\Repositories\Activity;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -36,7 +37,8 @@ class InviteNewActivityController extends AdminController
             $grid->column('type','活动类型')->using([1 => '邀新活动',2 => '教师注册活动',3 => '成交活动']);
             $grid->column('adder.name','创建人');
             $grid->column('created_at','创建时间');
-        
+            $grid->column('activity_log','活动数据')->display('活动数据')->modal('活动数据',ActivityLog::make(['type' => 1]));
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('name');
                 $filter->equal('status','状态')->select([

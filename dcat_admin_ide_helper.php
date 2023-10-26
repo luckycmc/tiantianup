@@ -55,6 +55,15 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection adder
      * @property Grid\Column|Collection reason
      * @property Grid\Column|Collection is_disabled
+     * @property Grid\Column|Collection user_id
+     * @property Grid\Column|Collection username
+     * @property Grid\Column|Collection first_child
+     * @property Grid\Column|Collection second_child
+     * @property Grid\Column|Collection activity_id
+     * @property Grid\Column|Collection project
+     * @property Grid\Column|Collection amount
+     * @property Grid\Column|Collection role
+     * @property Grid\Column|Collection deal_amount
      * @property Grid\Column|Collection version
      * @property Grid\Column|Collection detail
      * @property Grid\Column|Collection is_enabled
@@ -69,9 +78,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection http_method
      * @property Grid\Column|Collection http_path
      * @property Grid\Column|Collection role_id
-     * @property Grid\Column|Collection user_id
      * @property Grid\Column|Collection value
-     * @property Grid\Column|Collection username
      * @property Grid\Column|Collection mobile
      * @property Grid\Column|Collection password
      * @property Grid\Column|Collection email
@@ -81,14 +88,15 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection last_login_time
      * @property Grid\Column|Collection content
      * @property Grid\Column|Collection editor
+     * @property Grid\Column|Collection region_name
      * @property Grid\Column|Collection initial
      * @property Grid\Column|Collection url
+     * @property Grid\Column|Collection link
      * @property Grid\Column|Collection logo
      * @property Grid\Column|Collection login_bg
      * @property Grid\Column|Collection contact
      * @property Grid\Column|Collection user_agreement
      * @property Grid\Column|Collection is_show_full
-     * @property Grid\Column|Collection amount
      * @property Grid\Column|Collection course_id
      * @property Grid\Column|Collection teacher_id
      * @property Grid\Column|Collection method
@@ -96,7 +104,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection editor_id
      * @property Grid\Column|Collection consult_time
      * @property Grid\Column|Collection organ_id
-     * @property Grid\Column|Collection role
      * @property Grid\Column|Collection latest_end_time
      * @property Grid\Column|Collection course_end
      * @property Grid\Column|Collection deal_pay
@@ -182,7 +189,6 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection tokenable_id
      * @property Grid\Column|Collection abilities
      * @property Grid\Column|Collection last_used_at
-     * @property Grid\Column|Collection region_name
      * @property Grid\Column|Collection code
      * @property Grid\Column|Collection region_type
      * @property Grid\Column|Collection is_last
@@ -203,6 +209,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection site_message
      * @property Grid\Column|Collection text_message
      * @property Grid\Column|Collection official_account
+     * @property Grid\Column|Collection admin_mobile
      * @property Grid\Column|Collection organization
      * @property Grid\Column|Collection teaching_type
      * @property Grid\Column|Collection teacher_cert
@@ -235,7 +242,10 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection has_teacher_cert
      * @property Grid\Column|Collection is_recommend
      * @property Grid\Column|Collection open_id
+     * @property Grid\Column|Collection official_open_id
      * @property Grid\Column|Collection invite_qrcode
+     * @property Grid\Column|Collection union_id
+     * @property Grid\Column|Collection is_new
      * @property Grid\Column|Collection bank
      * @property Grid\Column|Collection account
      *
@@ -283,6 +293,15 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection adder(string $label = null)
      * @method Grid\Column|Collection reason(string $label = null)
      * @method Grid\Column|Collection is_disabled(string $label = null)
+     * @method Grid\Column|Collection user_id(string $label = null)
+     * @method Grid\Column|Collection username(string $label = null)
+     * @method Grid\Column|Collection first_child(string $label = null)
+     * @method Grid\Column|Collection second_child(string $label = null)
+     * @method Grid\Column|Collection activity_id(string $label = null)
+     * @method Grid\Column|Collection project(string $label = null)
+     * @method Grid\Column|Collection amount(string $label = null)
+     * @method Grid\Column|Collection role(string $label = null)
+     * @method Grid\Column|Collection deal_amount(string $label = null)
      * @method Grid\Column|Collection version(string $label = null)
      * @method Grid\Column|Collection detail(string $label = null)
      * @method Grid\Column|Collection is_enabled(string $label = null)
@@ -297,9 +316,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection http_method(string $label = null)
      * @method Grid\Column|Collection http_path(string $label = null)
      * @method Grid\Column|Collection role_id(string $label = null)
-     * @method Grid\Column|Collection user_id(string $label = null)
      * @method Grid\Column|Collection value(string $label = null)
-     * @method Grid\Column|Collection username(string $label = null)
      * @method Grid\Column|Collection mobile(string $label = null)
      * @method Grid\Column|Collection password(string $label = null)
      * @method Grid\Column|Collection email(string $label = null)
@@ -309,14 +326,15 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection last_login_time(string $label = null)
      * @method Grid\Column|Collection content(string $label = null)
      * @method Grid\Column|Collection editor(string $label = null)
+     * @method Grid\Column|Collection region_name(string $label = null)
      * @method Grid\Column|Collection initial(string $label = null)
      * @method Grid\Column|Collection url(string $label = null)
+     * @method Grid\Column|Collection link(string $label = null)
      * @method Grid\Column|Collection logo(string $label = null)
      * @method Grid\Column|Collection login_bg(string $label = null)
      * @method Grid\Column|Collection contact(string $label = null)
      * @method Grid\Column|Collection user_agreement(string $label = null)
      * @method Grid\Column|Collection is_show_full(string $label = null)
-     * @method Grid\Column|Collection amount(string $label = null)
      * @method Grid\Column|Collection course_id(string $label = null)
      * @method Grid\Column|Collection teacher_id(string $label = null)
      * @method Grid\Column|Collection method(string $label = null)
@@ -324,7 +342,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection editor_id(string $label = null)
      * @method Grid\Column|Collection consult_time(string $label = null)
      * @method Grid\Column|Collection organ_id(string $label = null)
-     * @method Grid\Column|Collection role(string $label = null)
      * @method Grid\Column|Collection latest_end_time(string $label = null)
      * @method Grid\Column|Collection course_end(string $label = null)
      * @method Grid\Column|Collection deal_pay(string $label = null)
@@ -410,7 +427,6 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection tokenable_id(string $label = null)
      * @method Grid\Column|Collection abilities(string $label = null)
      * @method Grid\Column|Collection last_used_at(string $label = null)
-     * @method Grid\Column|Collection region_name(string $label = null)
      * @method Grid\Column|Collection code(string $label = null)
      * @method Grid\Column|Collection region_type(string $label = null)
      * @method Grid\Column|Collection is_last(string $label = null)
@@ -431,6 +447,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection site_message(string $label = null)
      * @method Grid\Column|Collection text_message(string $label = null)
      * @method Grid\Column|Collection official_account(string $label = null)
+     * @method Grid\Column|Collection admin_mobile(string $label = null)
      * @method Grid\Column|Collection organization(string $label = null)
      * @method Grid\Column|Collection teaching_type(string $label = null)
      * @method Grid\Column|Collection teacher_cert(string $label = null)
@@ -463,7 +480,10 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection has_teacher_cert(string $label = null)
      * @method Grid\Column|Collection is_recommend(string $label = null)
      * @method Grid\Column|Collection open_id(string $label = null)
+     * @method Grid\Column|Collection official_open_id(string $label = null)
      * @method Grid\Column|Collection invite_qrcode(string $label = null)
+     * @method Grid\Column|Collection union_id(string $label = null)
+     * @method Grid\Column|Collection is_new(string $label = null)
      * @method Grid\Column|Collection bank(string $label = null)
      * @method Grid\Column|Collection account(string $label = null)
      */
@@ -516,6 +536,15 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection adder
      * @property Show\Field|Collection reason
      * @property Show\Field|Collection is_disabled
+     * @property Show\Field|Collection user_id
+     * @property Show\Field|Collection username
+     * @property Show\Field|Collection first_child
+     * @property Show\Field|Collection second_child
+     * @property Show\Field|Collection activity_id
+     * @property Show\Field|Collection project
+     * @property Show\Field|Collection amount
+     * @property Show\Field|Collection role
+     * @property Show\Field|Collection deal_amount
      * @property Show\Field|Collection version
      * @property Show\Field|Collection detail
      * @property Show\Field|Collection is_enabled
@@ -530,9 +559,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection http_method
      * @property Show\Field|Collection http_path
      * @property Show\Field|Collection role_id
-     * @property Show\Field|Collection user_id
      * @property Show\Field|Collection value
-     * @property Show\Field|Collection username
      * @property Show\Field|Collection mobile
      * @property Show\Field|Collection password
      * @property Show\Field|Collection email
@@ -542,14 +569,15 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection last_login_time
      * @property Show\Field|Collection content
      * @property Show\Field|Collection editor
+     * @property Show\Field|Collection region_name
      * @property Show\Field|Collection initial
      * @property Show\Field|Collection url
+     * @property Show\Field|Collection link
      * @property Show\Field|Collection logo
      * @property Show\Field|Collection login_bg
      * @property Show\Field|Collection contact
      * @property Show\Field|Collection user_agreement
      * @property Show\Field|Collection is_show_full
-     * @property Show\Field|Collection amount
      * @property Show\Field|Collection course_id
      * @property Show\Field|Collection teacher_id
      * @property Show\Field|Collection method
@@ -557,7 +585,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection editor_id
      * @property Show\Field|Collection consult_time
      * @property Show\Field|Collection organ_id
-     * @property Show\Field|Collection role
      * @property Show\Field|Collection latest_end_time
      * @property Show\Field|Collection course_end
      * @property Show\Field|Collection deal_pay
@@ -643,7 +670,6 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection tokenable_id
      * @property Show\Field|Collection abilities
      * @property Show\Field|Collection last_used_at
-     * @property Show\Field|Collection region_name
      * @property Show\Field|Collection code
      * @property Show\Field|Collection region_type
      * @property Show\Field|Collection is_last
@@ -664,6 +690,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection site_message
      * @property Show\Field|Collection text_message
      * @property Show\Field|Collection official_account
+     * @property Show\Field|Collection admin_mobile
      * @property Show\Field|Collection organization
      * @property Show\Field|Collection teaching_type
      * @property Show\Field|Collection teacher_cert
@@ -696,7 +723,10 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection has_teacher_cert
      * @property Show\Field|Collection is_recommend
      * @property Show\Field|Collection open_id
+     * @property Show\Field|Collection official_open_id
      * @property Show\Field|Collection invite_qrcode
+     * @property Show\Field|Collection union_id
+     * @property Show\Field|Collection is_new
      * @property Show\Field|Collection bank
      * @property Show\Field|Collection account
      *
@@ -744,6 +774,15 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection adder(string $label = null)
      * @method Show\Field|Collection reason(string $label = null)
      * @method Show\Field|Collection is_disabled(string $label = null)
+     * @method Show\Field|Collection user_id(string $label = null)
+     * @method Show\Field|Collection username(string $label = null)
+     * @method Show\Field|Collection first_child(string $label = null)
+     * @method Show\Field|Collection second_child(string $label = null)
+     * @method Show\Field|Collection activity_id(string $label = null)
+     * @method Show\Field|Collection project(string $label = null)
+     * @method Show\Field|Collection amount(string $label = null)
+     * @method Show\Field|Collection role(string $label = null)
+     * @method Show\Field|Collection deal_amount(string $label = null)
      * @method Show\Field|Collection version(string $label = null)
      * @method Show\Field|Collection detail(string $label = null)
      * @method Show\Field|Collection is_enabled(string $label = null)
@@ -758,9 +797,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection http_method(string $label = null)
      * @method Show\Field|Collection http_path(string $label = null)
      * @method Show\Field|Collection role_id(string $label = null)
-     * @method Show\Field|Collection user_id(string $label = null)
      * @method Show\Field|Collection value(string $label = null)
-     * @method Show\Field|Collection username(string $label = null)
      * @method Show\Field|Collection mobile(string $label = null)
      * @method Show\Field|Collection password(string $label = null)
      * @method Show\Field|Collection email(string $label = null)
@@ -770,14 +807,15 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection last_login_time(string $label = null)
      * @method Show\Field|Collection content(string $label = null)
      * @method Show\Field|Collection editor(string $label = null)
+     * @method Show\Field|Collection region_name(string $label = null)
      * @method Show\Field|Collection initial(string $label = null)
      * @method Show\Field|Collection url(string $label = null)
+     * @method Show\Field|Collection link(string $label = null)
      * @method Show\Field|Collection logo(string $label = null)
      * @method Show\Field|Collection login_bg(string $label = null)
      * @method Show\Field|Collection contact(string $label = null)
      * @method Show\Field|Collection user_agreement(string $label = null)
      * @method Show\Field|Collection is_show_full(string $label = null)
-     * @method Show\Field|Collection amount(string $label = null)
      * @method Show\Field|Collection course_id(string $label = null)
      * @method Show\Field|Collection teacher_id(string $label = null)
      * @method Show\Field|Collection method(string $label = null)
@@ -785,7 +823,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection editor_id(string $label = null)
      * @method Show\Field|Collection consult_time(string $label = null)
      * @method Show\Field|Collection organ_id(string $label = null)
-     * @method Show\Field|Collection role(string $label = null)
      * @method Show\Field|Collection latest_end_time(string $label = null)
      * @method Show\Field|Collection course_end(string $label = null)
      * @method Show\Field|Collection deal_pay(string $label = null)
@@ -871,7 +908,6 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection tokenable_id(string $label = null)
      * @method Show\Field|Collection abilities(string $label = null)
      * @method Show\Field|Collection last_used_at(string $label = null)
-     * @method Show\Field|Collection region_name(string $label = null)
      * @method Show\Field|Collection code(string $label = null)
      * @method Show\Field|Collection region_type(string $label = null)
      * @method Show\Field|Collection is_last(string $label = null)
@@ -892,6 +928,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection site_message(string $label = null)
      * @method Show\Field|Collection text_message(string $label = null)
      * @method Show\Field|Collection official_account(string $label = null)
+     * @method Show\Field|Collection admin_mobile(string $label = null)
      * @method Show\Field|Collection organization(string $label = null)
      * @method Show\Field|Collection teaching_type(string $label = null)
      * @method Show\Field|Collection teacher_cert(string $label = null)
@@ -924,7 +961,10 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection has_teacher_cert(string $label = null)
      * @method Show\Field|Collection is_recommend(string $label = null)
      * @method Show\Field|Collection open_id(string $label = null)
+     * @method Show\Field|Collection official_open_id(string $label = null)
      * @method Show\Field|Collection invite_qrcode(string $label = null)
+     * @method Show\Field|Collection union_id(string $label = null)
+     * @method Show\Field|Collection is_new(string $label = null)
      * @method Show\Field|Collection bank(string $label = null)
      * @method Show\Field|Collection account(string $label = null)
      */
