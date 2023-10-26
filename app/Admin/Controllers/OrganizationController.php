@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\RefuseOrgan;
+use App\Admin\Actions\Grid\VerifyOrgan;
 use App\Admin\Repositories\Organization;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
@@ -84,7 +86,7 @@ class OrganizationController extends AdminController
             });
             $grid->column('contact');
             $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
-            $grid->column('user.status')->select([1 => '正常', 0 => '禁用']);
+            $grid->column('user.status','状态')->select([1 => '正常', 0 => '禁用']);
             $grid->column('reviewer.name','审核人');
             $grid->column('updated_at','审核时间');
 
@@ -98,6 +100,13 @@ class OrganizationController extends AdminController
             $grid->disableDeleteButton();
             // 导出
             $grid->export();
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if ($status == 0) {
+                    $actions->append(new VerifyOrgan());
+                    $actions->append(new RefuseOrgan());
+                }
+            });
         });
     }
 
