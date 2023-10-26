@@ -32,7 +32,7 @@ class LoginController extends Controller
         $code = $data['code'] ?? '';
         $union_id = $data['union_id'] ?? 0;
         // $iv = $data['iv'];
-        $encryptData = $data['encryptedData'];
+        // $encryptData = $data['encryptedData'];
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
 
