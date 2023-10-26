@@ -338,3 +338,37 @@ function teacher_activity_log ($teacher_id,$project,$description,$teacher_activi
     DB::table('bills')->insert($bill_log);
     DB::table('activity_log')->insert($activity_log);
 }
+
+// 成交活动
+function deal_activity_log($user_id,$course_id,$deal_activity) {
+    // 查询奖励
+    $reward = get_reward(3,3);
+    // 用户
+    $user = User::find($user_id);
+    // 需求
+    $course = Course::find($course_id);
+    $role = $course->adder_role;
+    // 成交活动
+    $deal_arr = ['','','parent_','teacher_','organ_'];
+    $deal_prefix = $deal_arr[$role];
+    $deal_reward = $deal_prefix.'deal_reward';
+    $deal_type_field = $deal_prefix.'deal_reward_type';
+    $activity_log = [
+        'user_id' => $user_id,
+        'username' => $user->name,
+        'number' => $user->number,
+        'role' => $role,
+        'amount' => $reward->$deal_reward,
+        'type' => $deal_type_field,
+        'created_at' => Carbon::now()
+    ];
+    $bill_log = [
+        'user_id' => $user->id,
+        'amount' => $reward->$deal_reward,
+        'type' => 9,
+        'description' => '成交',
+        'created_at' => Carbon::now()
+    ];
+    DB::table('activity_log')->insert($activity_log);
+    DB::table('bills')->insert($bill_log);
+}

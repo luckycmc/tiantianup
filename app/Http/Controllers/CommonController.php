@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Course;
@@ -97,6 +98,14 @@ class CommonController extends Controller
                     'created_at' => Carbon::now()
                 ];
                 DB::table('bills')->insert($log_data);
+                // 当前时间
+                $current = Carbon::now()->format('Y-m-d');
+                // 查看是否有注册活动
+                $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
+                    ->where('end_time', '>=', $current)->first();
+                if ($deal_activity) {
+                    deal_activity_log($user->id,$course_id,$deal_activity);
+                }
             }
         } catch (Exception $e) {
             Log::info($data);
