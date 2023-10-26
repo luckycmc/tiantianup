@@ -142,7 +142,6 @@ function get_reward($type,$role) {
             // 邀新活动
             $arr = ['','student_','parent_','teacher_','organ_'];
             $prefix = $arr[$role];
-            Log::info('prefix: '.$prefix);
             $first_field = $prefix.'first_reward';
             $second_field = $prefix.'second_reward';
             $new_field = $prefix.'new_reward';
