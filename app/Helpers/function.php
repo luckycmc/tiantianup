@@ -303,6 +303,7 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
             'first_child' => $granpa->child->count(),
             'second_child' => $granpa->grandson->count(),
             'activity_id' => $invite_activity->id,
+            'type' => $invite_activity->type,
             'created_at' => Carbon::now()
         ];
         DB::table('bills')->insert($granpa_bill_data);
@@ -330,6 +331,7 @@ function teacher_activity_log ($teacher_id,$project,$description,$teacher_activi
         'username' => $user->name,
         'activity_id' => $teacher_activity->id,
         'amount' => $amount,
+        'type' => $teacher_activity->type,
         'description' => $description,
         'created_at' => Carbon::now()
     ];
