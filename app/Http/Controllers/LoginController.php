@@ -69,6 +69,7 @@ class LoginController extends Controller
         if ($invite_activity && $is_new && isset($data['parent_id'])) {
             // 获取活动奖励
             $reward = get_reward(1,$is_role);
+            Log::info('role: '.$is_role);
             $arr = ['','student_','parent_','teacher_','organ_'];
             $prefix = $arr[$is_role];
             $first_field = $prefix.'first_reward';
