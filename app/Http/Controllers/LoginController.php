@@ -72,6 +72,7 @@ class LoginController extends Controller
             Log::info('role: '.$is_role);
             $arr = ['','student_','parent_','teacher_','organ_'];
             $prefix = $arr[$is_role];
+            Log::info('prefix: '.$prefix);
             $first_field = $prefix.'first_reward';
             $second_field = $prefix.'second_reward';
             $new_field = $prefix.'new_reward';
