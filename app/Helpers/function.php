@@ -147,11 +147,11 @@ function get_reward($type,$role) {
             $new_field = $prefix.'new_reward';
             $type_field = $prefix.'reward_type';
             // 查询奖励
-            $reward = Activity::where(['type' => 1,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select($first_field,$second_field,$new_field,$type_field)->first();
+            $reward = Activity::where(['type' => 1,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select('id',$first_field,$second_field,$new_field,$type_field)->first();
             break;
         case 2:
             // 教师注册
-            $reward = Activity::where(['type' => 2,'status' => 1])->select('teacher_real_auth_reward','teacher_cert_reward','teacher_career_reward','teacher_image_reward')->first();
+            $reward = Activity::where(['type' => 2,'status' => 1])->select('id','teacher_real_auth_reward','teacher_cert_reward','teacher_career_reward','teacher_image_reward')->first();
             break;
         case 3:
         default:
@@ -161,7 +161,7 @@ function get_reward($type,$role) {
             $deal_reward = $deal_prefix.'deal_reward';
             $deal_type_field = $deal_prefix.'deal_reward_type';
             // 查询奖励
-            $reward = Activity::where(['type' => 2,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select($deal_reward,$deal_type_field)->first();
+            $reward = Activity::where(['type' => 2,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select('id',$deal_reward,$deal_type_field)->first();
             break;
     }
     return $reward;

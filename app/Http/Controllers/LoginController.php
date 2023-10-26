@@ -108,6 +108,7 @@ class LoginController extends Controller
                 'role' => $parent->role,
                 'first_child' => $parent->child->count(),
                 'second_child' => $parent->grandson->count(),
+                'activity_id' => $invite_activity->id,
                 'created_at' => Carbon::now()
             ];
             $user_activity_log = [
@@ -116,6 +117,7 @@ class LoginController extends Controller
                 'role' => $is_role,
                 'first_child' => 0,
                 'second_child' => 0,
+                'activity_id' => $invite_activity->id,
                 'created_at' => Carbon::now()
             ];
             DB::table('bills')->insert($parent_bill_data);
@@ -143,6 +145,7 @@ class LoginController extends Controller
                     'role' => $granpa->role,
                     'first_child' => $granpa->child->count(),
                     'second_child' => $granpa->grandson->count(),
+                    'activity_id' => $invite_activity->id,
                     'created_at' => Carbon::now()
                 ];
                 DB::table('bills')->insert($granpa_bill_data);
