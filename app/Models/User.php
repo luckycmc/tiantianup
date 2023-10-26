@@ -168,7 +168,7 @@ class User extends Authenticatable implements JWTSubject
     // 二级团队
     public function grandson()
     {
-        return $this->hasManyThrough(User::class, User::class, 'parent_id', 'parent_id');
+        return $this->hasManyThrough(User::class, User::class, 'parent_id', 'id','id');
     }
 
     public function user_courses()
