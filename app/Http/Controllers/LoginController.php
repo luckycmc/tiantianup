@@ -67,8 +67,10 @@ class LoginController extends Controller
         $invite_activity = Activity::where(['status' => 1])->where('start_time', '<=', $current)
         ->where('end_time', '>=', $current)->first();
         if ($invite_activity && $is_new && isset($data['parent_id'])) {
+            // 查询父级信息
+            $parent = User::find($data['parent_id']);
             // 获取活动奖励
-            $reward = get_reward(1,$is_role);
+            $reward = get_reward(1,$parent->role);
             Log::info('role: '.$is_role);
             $arr = ['','student_','parent_','teacher_','organ_'];
             $prefix = $arr[$is_role];
@@ -76,8 +78,7 @@ class LoginController extends Controller
             $first_field = $prefix.'first_reward';
             $second_field = $prefix.'second_reward';
             $new_field = $prefix.'new_reward';
-            // 查询父级信息
-            $parent = User::find($data['parent_id']);
+
             // 发放奖励
             $parent->withdraw_balance += $reward->$first_field;
             $parent->total_balance += $reward->$first_field;
