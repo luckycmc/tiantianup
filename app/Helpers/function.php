@@ -7,6 +7,7 @@ use App\Models\ServicePrice;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -140,6 +141,7 @@ function get_reward($type,$role) {
             // 邀新活动
             $arr = ['','student_','parent_','teacher_','organ_'];
             $prefix = $arr[$role];
+            Log::info('prefix: '.$prefix);
             $first_field = $prefix.'first_reward';
             $second_field = $prefix.'second_reward';
             $new_field = $prefix.'new_reward';
