@@ -6,6 +6,7 @@ use App\Models\Region;
 use App\Models\ServicePrice;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -220,4 +221,93 @@ function get_official_openid($union_id) {
         }
     }
     return $open_id;
+}
+
+function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
+    // 查询父级信息
+    $parent = User::find($parent_id);
+    // 获取活动奖励
+    $reward = get_reward(1,$parent->role);
+    $arr = ['','student_','parent_','teacher_','organ_'];
+    $prefix = $arr[$role];
+    $first_field = $prefix.'first_reward';
+    $second_field = $prefix.'second_reward';
+    $new_field = $prefix.'new_reward';
+
+    // 发放奖励
+    $parent->withdraw_balance += $reward->$first_field;
+    $parent->total_income += $reward->$first_field;
+    $parent->update();
+    $user = User::find($user_id);
+    $user->withdraw_balance += $reward->$new_field;
+    $user->total_income += $reward->$new_field;
+    $user->update();
+    // 保存日志
+    $parent_bill_data = [
+        'user_id' => $parent->id,
+        'amount' => $reward->$first_field,
+        'type' => 2,
+        'description' => '邀新奖励',
+        'created_at' => Carbon::now()
+    ];
+    $user_bill_data = [
+        'user_id' => $user->id,
+        'amount' => $reward->$new_field,
+        'type' => 2,
+        'description' => '邀新奖励',
+        'created_at' => Carbon::now()
+    ];
+    // 保存活动记录
+    $parent_activity_log = [
+        'user_id' => $parent->id,
+        'username' => $parent->name,
+        'role' => $parent->role,
+        'first_child' => $parent->child->count(),
+        'second_child' => $parent->grandson->count(),
+        'activity_id' => $invite_activity->id,
+        'created_at' => Carbon::now()
+    ];
+    $user_activity_log = [
+        'user_id' => $user->id,
+        'username' => $user->name,
+        'role' => $role,
+        'first_child' => 0,
+        'second_child' => 0,
+        'activity_id' => $invite_activity->id,
+        'created_at' => Carbon::now()
+    ];
+    DB::table('bills')->insert($parent_bill_data);
+    DB::table('bills')->insert($user_bill_data);
+    DB::table('activity_log')->insert($parent_activity_log);
+    DB::table('activity_log')->insert($user_activity_log);
+
+    // 查询祖父级
+    if (isset($parent->parent_id)) {
+        $granpa = User::find($parent->parent_id);
+        $granpa->withdraw_balance += $reward->$second_field;
+        $granpa->total_income += $reward->$second_field;
+        $granpa->update();
+        // 保存活动记录
+        $granpa_bill_data = [
+            'user_id' => $granpa->id,
+            'amount' => $reward->$second_field,
+            'type' => 2,
+            'description' => '邀新奖励',
+            'created_at' => Carbon::now()
+        ];
+        $granpa_activity_log = [
+            'user_id' => $granpa->id,
+            'username' => $granpa->name,
+            'role' => $granpa->role,
+            'first_child' => $granpa->child->count(),
+            'second_child' => $granpa->grandson->count(),
+            'activity_id' => $invite_activity->id,
+            'created_at' => Carbon::now()
+        ];
+        DB::table('bills')->insert($granpa_bill_data);
+        DB::table('activity_log')->insert($granpa_activity_log);
+    }
+    //
+
+
 }

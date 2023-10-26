@@ -65,93 +65,9 @@ class LoginController extends Controller
         $current = Carbon::now()->format('Y-m-d');
         // 查看是否有注册活动
         $invite_activity = Activity::where(['status' => 1])->where('start_time', '<=', $current)
-        ->where('end_time', '>=', $current)->first();
+            ->where('end_time', '>=', $current)->first();
         if ($invite_activity && $is_new && isset($data['parent_id'])) {
-            // 查询父级信息
-            $parent = User::find($data['parent_id']);
-            // 获取活动奖励
-            $reward = get_reward(1,$parent->role);
-            Log::info('role: '.$is_role);
-            $arr = ['','student_','parent_','teacher_','organ_'];
-            $prefix = $arr[$is_role];
-            Log::info('prefix: '.$prefix);
-            $first_field = $prefix.'first_reward';
-            $second_field = $prefix.'second_reward';
-            $new_field = $prefix.'new_reward';
-
-            // 发放奖励
-            $parent->withdraw_balance += $reward->$first_field;
-            $parent->total_income += $reward->$first_field;
-            $parent->update();
-            $is_user->withdraw_balance += $reward->$new_field;
-            $is_user->total_income += $reward->$new_field;
-            $is_user->update();
-            // 保存日志
-            $parent_bill_data = [
-                'user_id' => $parent->id,
-                'amount' => $reward->$first_field,
-                'type' => 2,
-                'description' => '邀新奖励',
-                'created_at' => Carbon::now()
-            ];
-            $user_bill_data = [
-                'user_id' => $is_user->id,
-                'amount' => $reward->$new_field,
-                'type' => 2,
-                'description' => '邀新奖励',
-                'created_at' => Carbon::now()
-            ];
-            // 保存活动记录
-            $parent_activity_log = [
-                'user_id' => $parent->id,
-                'username' => $parent->name,
-                'role' => $parent->role,
-                'first_child' => $parent->child->count(),
-                'second_child' => $parent->grandson->count(),
-                'activity_id' => $invite_activity->id,
-                'created_at' => Carbon::now()
-            ];
-            $user_activity_log = [
-                'user_id' => $is_user->id,
-                'username' => $is_user->name,
-                'role' => $is_role,
-                'first_child' => 0,
-                'second_child' => 0,
-                'activity_id' => $invite_activity->id,
-                'created_at' => Carbon::now()
-            ];
-            DB::table('bills')->insert($parent_bill_data);
-            DB::table('bills')->insert($user_bill_data);
-            DB::table('activity_log')->insert($parent_activity_log);
-            DB::table('activity_log')->insert($user_activity_log);
-
-            // 查询祖父级
-            if (isset($parent->parent_id)) {
-                $granpa = User::find($parent->parent_id);
-                $granpa->withdraw_balance += $reward->$second_field;
-                $granpa->total_income += $reward->$second_field;
-                $granpa->update();
-                // 保存活动记录
-                $granpa_bill_data = [
-                    'user_id' => $granpa->id,
-                    'amount' => $reward->$second_field,
-                    'type' => 2,
-                    'description' => '邀新奖励',
-                    'created_at' => Carbon::now()
-                ];
-                $granpa_activity_log = [
-                    'user_id' => $granpa->id,
-                    'username' => $granpa->name,
-                    'role' => $granpa->role,
-                    'first_child' => $granpa->child->count(),
-                    'second_child' => $granpa->grandson->count(),
-                    'activity_id' => $invite_activity->id,
-                    'created_at' => Carbon::now()
-                ];
-                DB::table('bills')->insert($granpa_bill_data);
-                DB::table('activity_log')->insert($granpa_activity_log);
-            }
-            //
+            invite_activity_log($data['parent_id'],$user_id,$is_role,$invite_activity);
         }
         return $this->success('登录成功',compact('token','user_id','is_role'));
     }
@@ -194,7 +110,9 @@ class LoginController extends Controller
             }
             $open_id = $session['openid'];
         }
+        $is_new = 0;
         if (!$is_user) {
+            $is_new = 1;
             // 注册新用户
             $new_user = new User();
             $new_user->mobile = $data['mobile'];
@@ -213,7 +131,15 @@ class LoginController extends Controller
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
         // dd($is_user->role);
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        // 查看是否有注册活动
+        $invite_activity = Activity::where(['status' => 1])->where('start_time', '<=', $current)
+            ->where('end_time', '>=', $current)->first();
         $is_role = $is_user->role ?? 0;
+        if ($invite_activity && $is_new && isset($data['parent_id'])) {
+            invite_activity_log($data['parent_id'],$is_user->id,$is_role,$invite_activity);
+        }
         return $this->success('登录成功',compact('token','is_role'));
     }
 
