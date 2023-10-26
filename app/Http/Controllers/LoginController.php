@@ -81,10 +81,10 @@ class LoginController extends Controller
 
             // 发放奖励
             $parent->withdraw_balance += $reward->$first_field;
-            $parent->total_balance += $reward->$first_field;
+            $parent->total_income += $reward->$first_field;
             $parent->update();
             $is_user->withdraw_balance += $reward->$new_field;
-            $is_user->total_balance += $reward->$new_field;
+            $is_user->total_income += $reward->$new_field;
             $is_user->update();
             // 保存日志
             $parent_bill_data = [
@@ -127,7 +127,7 @@ class LoginController extends Controller
             if (isset($parent->parent_id)) {
                 $granpa = User::find($parent->parent_id);
                 $granpa->withdraw_balance += $reward->$second_field;
-                $granpa->total_balance += $reward->$second_field;
+                $granpa->total_income += $reward->$second_field;
                 $granpa->update();
                 // 保存活动记录
                 $granpa_bill_data = [
