@@ -223,6 +223,7 @@ function get_official_openid($union_id) {
     return $open_id;
 }
 
+// 邀新活动
 function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
     // 查询父级信息
     $parent = User::find($parent_id);
@@ -307,7 +308,31 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
         DB::table('bills')->insert($granpa_bill_data);
         DB::table('activity_log')->insert($granpa_activity_log);
     }
-    //
+}
 
-
+// 教师注册活动
+function teacher_activity_log ($teacher_id,$project,$description,$teacher_activity) {
+    // 查询奖励
+    $reward = get_reward(2,3);
+    $amount = $reward->$project;
+    $user = User::find($teacher_id);
+    $user->withdraw_balance += $amount;
+    $user->total_income += $amount;
+    $bill_log = [
+        'user_id' => $user->id,
+        'amount' => $amount,
+        'type' => 6,
+        'description' => $description,
+        'created_at' => Carbon::now()
+    ];
+    $activity_log = [
+        'user_id' => $user->id,
+        'username' => $user->name,
+        'activity_id' => $teacher_activity->id,
+        'amount' => $amount,
+        'description' => $description,
+        'created_at' => Carbon::now()
+    ];
+    DB::table('bills')->insert($bill_log);
+    DB::table('activity_log')->insert($activity_log);
 }

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Models\Activity;
 use App\Models\TeacherImage;
 use App\Models\User;
 use Carbon\Carbon;
@@ -51,6 +52,15 @@ class VerifyImage extends RowAction
             $user->update();
             DB::table('bills')->insert($bill_log);
         });
+
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        // 查看是否有注册活动
+        $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
+            ->where('end_time', '>=', $current)->first();
+        if ($teacher_activity) {
+            teacher_activity_log($teacher_info->user_id,'teacher_image_reward','教师风采审核通过',$teacher_activity);
+        }
 
         return $this->response()
             ->success('操作成功')

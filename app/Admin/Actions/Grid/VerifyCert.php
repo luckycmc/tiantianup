@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Models\Activity;
 use App\Models\Message;
 use App\Models\SystemMessage;
 use App\Models\TeacherCert;
@@ -45,13 +46,6 @@ class VerifyCert extends RowAction
         $user = User::find($teacher_info->user_id);
         $user->withdraw_balance += $amount;
         $user->total_income += $amount;
-        $bill_log = [
-            'user_id' => $teacher_info->user_id,
-            'amount' => $amount,
-            'type' => 7,
-            'description' => '证书审核通过',
-            'created_at' => Carbon::now()
-        ];
         // 发送通知
         if (SystemMessage::where('action',6)->value('site_message') == 1) {
             (new Message())->saveMessage($teacher_info->user_id,0,'资格证书','资格证书审核通过',0,0,3);
@@ -76,11 +70,19 @@ class VerifyCert extends RowAction
             }
         }*/
         // 保存日志
-        DB::transaction(function () use ($bill_log,$teacher_info,$user) {
+        DB::transaction(function () use ($teacher_info,$user) {
             $teacher_info->update();
             $user->update();
-            DB::table('bills')->insert($bill_log);
         });
+
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        // 查看是否有注册活动
+        $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
+            ->where('end_time', '>=', $current)->first();
+        if ($teacher_activity) {
+            teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书审核通过',$teacher_activity);
+        }
 
         return $this->response()
             ->success('操作成功')

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Forms;
 
+use App\Models\Activity;
 use App\Models\Message;
 use App\Models\SystemMessage;
 use App\Models\TeacherInfo;
@@ -36,19 +37,7 @@ class VerifyRealAuth extends Form implements LazyRenderable
         $teacher_info->status = 1;
         $teacher_info->id_card_no = $id_card_no;
         $teacher_info->real_name = $real_name;
-        // 查询奖励
-        $reward = get_reward(2,3);
-        $amount = $reward->teacher_real_auth_reward;
-        $user = User::find($teacher_info->user_id);
-        $user->withdraw_balance += $amount;
-        $user->total_income += $amount;
-        $bill_log = [
-            'user_id' => $teacher_info->user_id,
-            'amount' => $amount,
-            'type' => 6,
-            'description' => '实名认证审核通过',
-            'created_at' => Carbon::now()
-        ];
+
         // 发送通知
         if (SystemMessage::where('action',4)->value('site_message') == 1) {
             (new Message())->saveMessage($teacher_info->user_id,0,'实名认证','实名认证审核通过',0,0,3);
@@ -67,11 +56,19 @@ class VerifyRealAuth extends Form implements LazyRenderable
             }
         }
         // 保存日志
-        DB::transaction(function () use ($bill_log,$teacher_info,$user) {
+        DB::transaction(function () use ($teacher_info,$user) {
             $teacher_info->update();
             $user->update();
-            DB::table('bills')->insert($bill_log);
         });
+
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        // 查看是否有注册活动
+        $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
+            ->where('end_time', '>=', $current)->first();
+        if ($teacher_activity) {
+            teacher_activity_log($teacher_info->user_id,'teacher_real_auth_reward','实名认证审核通过',$teacher_activity);
+        }
 
         return $this
             ->response()

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Models\Activity;
 use App\Models\TeacherCareer;
 use App\Models\User;
 use Carbon\Carbon;
@@ -38,19 +39,20 @@ class VerifyCareer extends RowAction
         $user = User::find($teacher_info->user_id);
         $user->withdraw_balance += $amount;
         $user->total_income += $amount;
-        $bill_log = [
-            'user_id' => $teacher_info->user_id,
-            'amount' => $amount,
-            'type' => 9,
-            'description' => '教学经历审核通过',
-            'created_at' => Carbon::now()
-        ];
         // 保存日志
-        DB::transaction(function () use ($bill_log,$teacher_info,$user) {
+        DB::transaction(function () use ($teacher_info,$user) {
             $teacher_info->update();
             $user->update();
-            DB::table('bills')->insert($bill_log);
         });
+
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        // 查看是否有注册活动
+        $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
+            ->where('end_time', '>=', $current)->first();
+        if ($teacher_activity) {
+            teacher_activity_log($teacher_info->user_id,'teacher_career_reward','教学经历审核通过',$teacher_activity);
+        }
 
         return $this->response()
             ->success('操作成功')
