@@ -341,25 +341,24 @@ function teacher_activity_log ($teacher_id,$project,$description,$teacher_activi
 
 // 成交活动
 function deal_activity_log($user_id,$course_id,$deal_activity) {
-    // 查询奖励
-    $reward = get_reward(3,3);
     // 用户
     $user = User::find($user_id);
     // 需求
     $course = Course::find($course_id);
     $role = $course->adder_role;
+    // 查询奖励
+    $reward = get_reward(3,$role);
     // 成交活动
     $deal_arr = ['','','parent_','teacher_','organ_'];
     $deal_prefix = $deal_arr[$role];
     $deal_reward = $deal_prefix.'deal_reward';
-    $deal_type_field = $deal_prefix.'deal_reward_type';
     $activity_log = [
         'user_id' => $user_id,
         'username' => $user->name,
         'number' => $user->number,
         'role' => $role,
         'amount' => $reward->$deal_reward,
-        'type' => $deal_type_field,
+        'type' => $deal_activity->type,
         'created_at' => Carbon::now()
     ];
     $bill_log = [
