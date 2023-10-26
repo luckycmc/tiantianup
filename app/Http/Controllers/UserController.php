@@ -601,7 +601,8 @@ class UserController extends Controller
         $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
         // 金额
         $user_city = Region::find($user->city_id)->value('region_name');
-        $amount = get_service_price(1,$user_city);
+        $user_province = Region::find($user->province_id)->value('region_name');
+        $amount = get_service_price(1,$user_province,$user_city);
         // 查看是否已投递
         $deliver_data = [
             'user_id' => $user->id,

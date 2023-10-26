@@ -166,9 +166,9 @@ function get_reward($type,$role) {
 }
 
 // 获取服务费
-function get_service_price($type,$region) {
+function get_service_price($type,$province,$city) {
     $today = Carbon::now()->toDateString();
-    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->whereRaw("FIND_IN_SET('$region',region)")->orderByDesc('created_at')->first();
+    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->whereRaw("FIND_IN_SET('$province',region)")->orWhereRaw("FIND_IN_SET('$city',region)")->orderByDesc('created_at')->first();
     if (!$info) {
         return 0;
     }
