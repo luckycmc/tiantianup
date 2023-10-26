@@ -64,7 +64,7 @@ class LoginController extends Controller
         // 当前时间
         $current = Carbon::now()->format('Y-m-d');
         // 查看是否有注册活动
-        $invite_activity = Activity::where(['status' => 1])->where('start_date', '<=', $current)
+        $invite_activity = Activity::where(['status' => 1])->where('start_time', '<=', $current)
         ->where('end_date', '>=', $current)->first();
         if ($invite_activity && $is_new && isset($data['parent_id'])) {
             // 获取活动奖励
