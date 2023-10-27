@@ -481,7 +481,7 @@ class IndexController extends Controller
      */
     public function get_grade()
     {
-        $grade = Grade::all();
+        $grade = Constant::where('type',8)->get();
         return $this->success('年级',$grade);
     }
 
