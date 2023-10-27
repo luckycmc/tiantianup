@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Collect;
@@ -351,7 +352,7 @@ class IndexController extends Controller
      */
     public function get_province()
     {
-        $province = Region::where('region_type',1)->get();
+        $province = Area::where('parent_id',0)->get();
         $result = $province->sortBy('initial')->groupBy('initial');
         return $this->success('省份',$result);
     }
@@ -378,7 +379,7 @@ class IndexController extends Controller
     {
         $data = \request()->all();
         $province_id = $data['province_id'] ?? 0;
-        $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
+        $city = Area::where(['parent_id' => $province_id])->get();
         $result = $city->sortBy('initial')->groupBy('initial');
         return $this->success('城市',$result);
     }
@@ -409,7 +410,7 @@ class IndexController extends Controller
         $data = \request()->all();
         $city_id = $data['city_id'] ?? 0;
         // 查询省份
-        $district = Region::where(['region_type' => 3,'parent_id' => $city_id])->get();
+        $district = Area::where(['parent_id' => $city_id])->get();
         $result = $district->sortBy('initial')->groupBy('initial');
         return $this->success('区县',$result);
     }
