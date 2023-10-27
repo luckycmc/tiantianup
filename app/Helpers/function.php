@@ -318,6 +318,7 @@ function teacher_activity_log ($teacher_id,$field,$project,$description,$teacher
     $user = User::find($teacher_id);
     $user->withdraw_balance += $amount;
     $user->total_income += $amount;
+    $user->update();
     $bill_log = [
         'user_id' => $user->id,
         'amount' => $amount,
