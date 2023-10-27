@@ -541,7 +541,7 @@ class IndexController extends Controller
      */
     public function get_teaching_type()
     {
-        $types = $methods = Constant::where('type',4)->get();
+        $types = Constant::where('type',4)->get();
         return $this->success('辅导类型',$types);
     }
 
