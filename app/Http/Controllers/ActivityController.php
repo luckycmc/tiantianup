@@ -44,8 +44,8 @@ class ActivityController extends Controller
         }
         $arr = ['','student_','parent_','teacher_','organ_'];
         $prefix = $arr[$user->role];
-        $result->first_reward = $result->$prefix.'first_reward';
-        $result->second_reward = $result->$prefix.'second_reward';
+        $result->first_reward = $result->{$prefix.'first_reward'};
+        $result->second_reward = $result->{$prefix.'first_reward'};
         return $this->success('活动详情',$result);
     }
 }
