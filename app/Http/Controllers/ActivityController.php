@@ -36,10 +36,16 @@ class ActivityController extends Controller
     {
         $data = \request()->all();
         $id = $data['id'] ?? 0;
-        $result = Activity::with('rewards')->find($id);
+        // 当前用户
+        $user = Auth::user();
+        $result = Activity::find($id);
         if (!$result) {
             return $this->error('活动不存在');
         }
+        $arr = ['','student_','parent_','teacher_','organ_'];
+        $prefix = $arr[$user->role];
+        $result->first_reward = $result->$prefix.'first_reward';
+        $result->second_reward = $result->$prefix.'second_reward';
         return $this->success('活动详情',$result);
     }
 }
