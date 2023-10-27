@@ -334,6 +334,8 @@ class IndexController extends Controller
                 } else {
                     $user->career_status = 2;
                 }
+            } else {
+                $user->career_status = 3;
             }
         }
         if ($user->role !== 4) {
