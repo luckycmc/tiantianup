@@ -354,7 +354,7 @@ class IndexController extends Controller
      */
     public function get_province()
     {
-        $province = Area::where('parent_id',0)->get();
+        $province = Region::where('parent_id',0)->get();
         $result = $province->sortBy('initial')->groupBy('initial');
         return $this->success('省份',$result);
     }
@@ -381,7 +381,7 @@ class IndexController extends Controller
     {
         $data = \request()->all();
         $province_id = $data['province_id'] ?? 0;
-        $city = Area::where(['parent_id' => $province_id])->get();
+        $city = Region::where(['parent_id' => $province_id])->get();
         $result = $city->sortBy('initial')->groupBy('initial');
         return $this->success('城市',$result);
     }
@@ -412,7 +412,7 @@ class IndexController extends Controller
         $data = \request()->all();
         $city_id = $data['city_id'] ?? 0;
         // 查询省份
-        $district = Area::where(['parent_id' => $city_id])->get();
+        $district = Region::where(['parent_id' => $city_id])->get();
         $result = $district->sortBy('initial')->groupBy('initial');
         return $this->success('区县',$result);
     }
