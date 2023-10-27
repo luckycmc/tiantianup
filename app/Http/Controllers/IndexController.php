@@ -297,7 +297,6 @@ class IndexController extends Controller
     {
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(6);
         // 收益
         $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
         // 我的收藏
@@ -319,7 +318,7 @@ class IndexController extends Controller
             $user->education_status = $user->teacher_education ? $user->teacher_education->status : 3;
             $user->image_status = $user->teacher_image ? $user->teacher_image->status : 3;
             // 教学经历
-            $career = $user->teacher_careers;
+            $career = $user->teacher_career;
             if (isset($career)) {
                 $is_all_passed = $career->every(function ($career) {
                     return $career->status == 1;
@@ -328,9 +327,9 @@ class IndexController extends Controller
                     return $career->status == 0;
                 });
                 if ($is_all_passed) {
-                    $user->career_status == 1;
+                    $user->career_status = 1;
                 } elseif ($is_all_pending) {
-                    $user->career_status == 0;
+                    $user->career_status = 0;
                 } else {
                     $user->career_status = 2;
                 }
