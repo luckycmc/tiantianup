@@ -3,6 +3,8 @@
 namespace App\Admin\Actions\Grid;
 
 use App\Models\Activity;
+use App\Models\Message;
+use App\Models\SystemMessage;
 use App\Models\TeacherImage;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,6 +15,10 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 
 class VerifyImage extends RowAction
 {
@@ -30,6 +36,7 @@ class VerifyImage extends RowAction
      */
     public function handle(Request $request)
     {
+        $config = config('services.sms');
         $teacher_id = $this->getKey();
         $teacher_info = TeacherImage::find($teacher_id);
         $teacher_info->status = 1;
@@ -52,6 +59,24 @@ class VerifyImage extends RowAction
             $user->update();
             DB::table('bills')->insert($bill_log);
         });
+
+        // 发送通知
+        if (SystemMessage::where('action',6)->value('site_message') == 1) {
+            (new Message())->saveMessage($teacher_info->user_id,0,'教师风采','教师风采审核通过',0,0,3);
+        }
+        if (SystemMessage::where('action',6)->value('text_message') == 1) {
+            $text = '教师风采';
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($user->mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添向尚】恭喜您，您的".$text."已通过审核",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
+        }
 
         // 当前时间
         $current = Carbon::now()->format('Y-m-d');
