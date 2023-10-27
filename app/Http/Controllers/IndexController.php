@@ -6,6 +6,7 @@ use App\Models\Area;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Collect;
+use App\Models\Constant;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Education;
@@ -500,7 +501,7 @@ class IndexController extends Controller
      */
     public function get_subject()
     {
-        $subject = Subject::all();
+        $subject = Constant::where('type',5)->get();
         return $this->success('科目',$subject);
     }
 
@@ -510,7 +511,7 @@ class IndexController extends Controller
      */
     public function get_organ_type()
     {
-        $type = OrganType::all();
+        $type = Constant::where('type',2)->get();
         return $this->success('机构类型',$type);
     }
 
@@ -530,7 +531,7 @@ class IndexController extends Controller
      */
     public function get_teaching_method()
     {
-        $methods = TeachingMethod::all();
+        $methods = Constant::where('type',6)->get();
         return $this->success('授课方式',$methods);
     }
 
@@ -540,7 +541,7 @@ class IndexController extends Controller
      */
     public function get_teaching_type()
     {
-        $types = TeachingType::all();
+        $types = $methods = Constant::where('type',4)->get();
         return $this->success('辅导类型',$types);
     }
 
