@@ -5,14 +5,34 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\PayWithdraw;
 use App\Admin\Actions\Grid\RefuseWithdraw;
 use App\Admin\Actions\Grid\VerifyWithdraw;
+use App\Admin\Forms\WithdrawSetting;
 use App\Admin\Repositories\Withdraw;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Dcat\Admin\Widgets\Card;
+use Dcat\Admin\Widgets\Modal;
 
 class WithdrawController extends AdminController
 {
+    /*public function index(Content $content)
+    {
+        return $content
+            ->header('Modal')
+            ->description('模态窗')
+            ->body($this->modal());
+    }*/
+
+    protected function modal()
+    {
+        return Modal::make()
+            ->lg()
+            ->title('修改密码')
+            ->body(WithdrawSetting::make())
+            ->button('修改密码');
+    }
     /**
      * Make a grid builder.
      *
@@ -68,6 +88,12 @@ class WithdrawController extends AdminController
                 }
                 return $rows;
             });
+            $modal = Modal::make()
+                ->lg()
+                ->title('提现配置')
+                ->body(WithdrawSetting::make())
+                ->button('提现配置');
+            $grid->tools($modal);
         });
     }
 
