@@ -320,18 +320,20 @@ class IndexController extends Controller
             $user->image_status = $user->teacher_image ? $user->teacher_image->status : 3;
             // 教学经历
             $career = $user->teacher_careers;
-            $is_all_passed = $career->every(function ($career) {
-                return $career->status == 1;
-            });
-            $is_all_pending = $career->every(function ($career) {
-                return $career->status == 0;
-            });
-            if ($is_all_passed) {
-                $user->career_status == 1;
-            } elseif ($is_all_pending) {
-                $user->career_status == 0;
-            } else {
-                $user->career_status = 2;
+            if (isset($career)) {
+                $is_all_passed = $career->every(function ($career) {
+                    return $career->status == 1;
+                });
+                $is_all_pending = $career->every(function ($career) {
+                    return $career->status == 0;
+                });
+                if ($is_all_passed) {
+                    $user->career_status == 1;
+                } elseif ($is_all_pending) {
+                    $user->career_status == 0;
+                } else {
+                    $user->career_status = 2;
+                }
             }
         }
         if ($user->role !== 4) {
