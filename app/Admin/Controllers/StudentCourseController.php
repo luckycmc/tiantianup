@@ -38,6 +38,7 @@ class StudentCourseController extends AdminController
             $grid->column('organization.name','创建人');
             $grid->column('status','状态')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);
             $grid->column('reason','拒绝原因');
+            $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             $grid->column('created_at','创建时间');
 
             $grid->filter(function (Grid\Filter $filter) {
