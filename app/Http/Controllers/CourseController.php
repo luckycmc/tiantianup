@@ -111,13 +111,16 @@ class CourseController extends Controller
                 }
             }
             if (isset($data['province'])) {
-                $where[] = ['courses.province','=',$data['province']];
+                $id = Region::where('region_name',$data['province']);
+                $where[] = ['courses.province','=',$id];
             }
             if (isset($data['city'])) {
-                $where[] = ['courses.city','=',$data['city']];
+                $id = Region::where('region_name',$data['city']);
+                $where[] = ['courses.city','=',$id];
             }
             if (isset($data['district'])) {
-                $where[] = ['courses.district','=',$data['district']];
+                $id = Region::where('region_name',$data['district']);
+                $where[] = ['courses.district','=',$id];
             }
             if (isset($data['gender'])) {
                 $where[] = ['courses.gender','=',$data['gender']];

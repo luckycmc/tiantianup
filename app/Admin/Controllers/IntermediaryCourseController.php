@@ -31,7 +31,11 @@ class IntermediaryCourseController extends AdminController
             $grid->column('gender','学员性别');
             $grid->column('grade','年级');
             $grid->column('region','省市区')->display(function () {
-                return $this->province.$this->city.$this->district;
+                // dd($this->province,$this->city,$this->district);
+                $province = Region::where('id',$this->province)->value('region_name');
+                $city = Region::where('id',$this->city)->value('region_name');
+                $district = Region::where('id',$this->district)->value('region_name');
+                return $province.$city.$district;
             });
             $grid->column('address','上课地点');
             $grid->column('class_price','费用');
@@ -124,9 +128,6 @@ class IntermediaryCourseController extends AdminController
                 $form->deleteInput('class_date_start');
                 $form->deleteInput('class_date_end');
                 $form->end_time = Carbon::now()->addDays($form->valid_time);
-                $form->province = Region::where('id', $form->province)->value('region_name');
-                $form->city = Region::where('id', $form->city)->value('region_name');
-                $form->district = Region::where('id', $form->district)->value('region_name');
             });
 
             $form->display('created_at');

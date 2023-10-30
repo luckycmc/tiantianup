@@ -180,7 +180,8 @@ class IndexController extends Controller
             $where[] = ['method','=',$data['method']];
         }
         if (isset($data['district'])) {
-            $where[] = ['district','=',$data['district']];
+            $id = Region::where('region_name',$data['district']);
+            $where[] = ['district','=',$id];
         }
         // 当前用户
         $user = Auth::user();
