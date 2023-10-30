@@ -308,6 +308,7 @@ class IndexController extends Controller
         if ($user->role == 3) {
             $user->entry = $user->deliver_log()->count();
         }
+        $user->team = $user->child()->count() + $user->grandson()->count();
         // 未读消息
         $user->message = $user->messages()->where('status',0)->count();
         // 联系人数量
