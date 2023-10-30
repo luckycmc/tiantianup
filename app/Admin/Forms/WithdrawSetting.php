@@ -49,10 +49,14 @@ class WithdrawSetting extends Form
      */
     public function default()
     {
+        $base_information = BaseInformation::first();
+        $withdraw_min = $base_information->withdraw_min;
+        $withdraw_commission = $base_information->withdraw_commission;
+        $withdraw_pay_time = $base_information->withdraw_pay_time;
         return [
-            'withdraw_min'  => '',
-            'withdraw_commission' => '',
-            'withdraw_pay_time' => '',
+            'withdraw_min'  => $withdraw_min,
+            'withdraw_commission' => $withdraw_commission,
+            'withdraw_pay_time' => $withdraw_pay_time,
         ];
     }
 }

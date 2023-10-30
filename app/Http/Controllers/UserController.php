@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Course;
@@ -473,12 +474,22 @@ class UserController extends Controller
         if ($data['amount'] > $user->withdraw_balance) {
             return $this->error('可提现余额不足');
         }
+        // 查询手续费
+        $base_information = BaseInformation::first();
+        $withdraw_min = $base_information->withdraw_min;
+        $withdraw_commission = $base_information->withdraw_commission;
+        if ($data['amount'] < $withdraw_min) {
+            return $this->error('最少提现'.$withdraw_min);
+        }
+        if ($data['amount'] < $user->balance - $withdraw_commission) {
+            return $this->error('余额不足');
+        }
         // 提现记录
         $withdraw_data = [
             'user_id' => $user->id,
             'role' => $user->role,
             'mobile' => $data['mobile'] ?? '',
-            'amount' => $data['amount'],
+            'amount' => $data['amount'] - $withdraw_commission,
             'type' => $data['type'],
             'username' => $data['username'],
             'account' => $data['account'],
