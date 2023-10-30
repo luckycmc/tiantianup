@@ -30,16 +30,19 @@ class StudentCourseController extends AdminController
             $grid->column('subject','科目');
             $grid->column('grade','年级');
             $grid->column('region','省市区')->display(function () {
+                if(!isset($this->organization)) {
+                    return null;
+                }
                 return $this->organization->province->region_name.$this->organization->city->region_name.$this->organization->district->region_name;
             });
             $grid->column('organization.name','创建人');
             $grid->column('status','状态')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);
             $grid->column('reason','拒绝原因');
             $grid->column('created_at','创建时间');
-        
+
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
-        
+
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -112,7 +115,7 @@ class StudentCourseController extends AdminController
             $form->text('status');
             $form->text('reviewer_id');
             $form->text('reason');
-        
+
             $form->display('created_at');
             $form->display('updated_at');
         });

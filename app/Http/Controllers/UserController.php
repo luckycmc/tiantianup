@@ -370,7 +370,7 @@ class UserController extends Controller
 
     public function my_team()
     {
-        
+
     }
 
     /**
@@ -613,7 +613,8 @@ class UserController extends Controller
         // 金额
         $user_city = Region::find($user->city_id)->value('region_name');
         $user_province = Region::find($user->province_id)->value('region_name');
-        $amount = get_service_price(1,$user_province,$user_city);
+//        $amount = get_service_price(1,$user_province,$user_city);
+        $amount = 0.01;
         // 查看是否已投递
         $deliver_data = [
             'user_id' => $user->id,

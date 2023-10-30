@@ -40,10 +40,10 @@ class CourseController extends Controller
             $distance_expr = "
             (
                 6371 * acos(
-                    cos(radians({$latitude})) * 
-                    cos(radians(organizations.latitude)) * 
-                    cos(radians(organizations.longitude) - radians({$longitude})) + 
-                    sin(radians({$latitude})) * 
+                    cos(radians({$latitude})) *
+                    cos(radians(organizations.latitude)) *
+                    cos(radians(organizations.longitude) - radians({$longitude})) +
+                    sin(radians({$latitude})) *
                     sin(radians(organizations.latitude))
                 )
             ) AS distance";
@@ -166,7 +166,8 @@ class CourseController extends Controller
         $out_trade_no = app('snowflake')->id();
         $user_city = Region::find($user->city_id)->value('region_name');
         $user_province = Region::find($user->province_id)->value('region_name');
-        $amount = get_service_price(3, $user_province,$user_city);
+//        $amount = get_service_price(3, $user_province,$user_city);
+        $amount = 0.01;
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
