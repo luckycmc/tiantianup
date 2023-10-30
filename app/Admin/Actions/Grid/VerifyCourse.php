@@ -37,6 +37,7 @@ class VerifyCourse extends RowAction
         $course_id = $this->getKey();
         $course_info = Course::find($course_id);
         $course_info->status = 1;
+        $course_info->is_recommend = 1;
         $course_info->update();
         $user = User::find($course_info->user_id);
 
