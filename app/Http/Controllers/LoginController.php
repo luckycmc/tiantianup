@@ -168,10 +168,10 @@ class LoginController extends Controller
         $code = mt_rand(1000,9999);
         $easySms = new EasySms($config);
         try {
-            $number = new PhoneNumber($data['mobile']);
+            /*$number = new PhoneNumber($data['mobile']);
             $easySms->send($number,[
                 'content'  => '【添添向尚】您的验证码'.$code.'。如非本人操作，请忽略本短信',
-            ]);
+            ]);*/
         } catch (Exception|NoGatewayAvailableException $exception) {
             return $this->error($exception->getResults());
         }

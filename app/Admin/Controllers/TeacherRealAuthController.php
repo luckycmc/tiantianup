@@ -51,7 +51,7 @@ class TeacherRealAuthController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new TeacherRealAuth(), function (Show $show) {
+        return Show::make($id, new TeacherInfo(), function (Show $show) {
             $show->field('id');
             $show->field('user_id');
             $show->field('id_card_front');
@@ -72,7 +72,7 @@ class TeacherRealAuthController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new TeacherRealAuth(), function (Form $form) {
+        return Form::make(new TeacherInfo(), function (Form $form) {
             $form->display('id');
             $form->display('user_id');
             $form->image('id_card_front')->saveFullUrl();
