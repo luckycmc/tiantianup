@@ -186,4 +186,10 @@ class CommonController extends Controller
         get_user_list();
         // send_official_message($open_id,json_encode($data));
     }
+
+    public function test_price()
+    {
+        $price = get_service_price(1,'','驻马店市');
+        dd($price);
+    }
 }
