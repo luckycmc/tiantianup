@@ -13,17 +13,17 @@ class Course extends Model
 
     public function teaching_method()
     {
-        return $this->hasOne(TeachingMethod::class,'name','method');
+        return $this->hasOne(Constant::class,'name','method')->where('type',6);
     }
 
     public function teaching_type()
     {
-        return $this->hasOne(TeachingType::class,'name','type');
+        return $this->hasOne(Constant::class,'name','type')->where('type',4);
     }
 
     public function teaching_subject()
     {
-        return $this->hasOne(Subject::class,'name','subject');
+        return $this->hasOne(Constant::class,'name','subject')->where('type',5);
     }
 
     public function organization()
