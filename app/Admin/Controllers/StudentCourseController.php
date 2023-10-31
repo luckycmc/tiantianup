@@ -20,7 +20,7 @@ class StudentCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Course('organization'), function (Grid $grid) {
+        return Grid::make(new Course(['organization','province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('role',1);
             $grid->column('id')->sortable();
             $grid->column('organization.name','机构名称');
@@ -30,10 +30,7 @@ class StudentCourseController extends AdminController
             $grid->column('subject','科目');
             $grid->column('grade','年级');
             $grid->column('region','省市区')->display(function () {
-                if(!isset($this->organization)) {
-                    return null;
-                }
-                return $this->organization->province->region_name.$this->organization->city->region_name.$this->organization->district->region_name;
+                return $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
             });
             $grid->column('organization.name','创建人');
             $grid->column('status','状态')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);

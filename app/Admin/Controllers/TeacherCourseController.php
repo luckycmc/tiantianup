@@ -20,7 +20,7 @@ class TeacherCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Course(['organization','adder']), function (Grid $grid) {
+        return Grid::make(new Course(['organization','adder','province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('role',3)->whereNotIn('adder_role',[0]);
             $grid->column('id')->sortable();
             $grid->column('publisher','发布者')->display(function () {
@@ -38,7 +38,7 @@ class TeacherCourseController extends AdminController
             $grid->column('reason','拒绝原因');
             $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             $grid->column('region','省市区')->display(function () {
-                return $this->province.$this->city.$this->district;
+                return $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
             });
             $grid->column('adder.name','创建人');
             $grid->column('created_at','创建时间');
