@@ -190,7 +190,7 @@ class CourseController extends Controller
         if (!$result) {
             return $this->error('联系机构失败');
         }
-        $organ_user = User::find($course_info->organ_id);
+        $organ_user = User::find($course_info->adder_id);
         // 发送通知
         if (SystemMessage::where('action',16)->value('site_message') == 1) {
             (new Message())->saveMessage($organ_user->id,$user->id,'报名信息','有家长/学生报名了您的课程',$course_id,0,4);
