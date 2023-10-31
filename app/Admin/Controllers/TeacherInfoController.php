@@ -30,7 +30,7 @@ class TeacherInfoController extends AdminController
             $grid->column('name','教师姓名');
             $grid->column('gender','性别')->using([0 => '女',1 => '男']);
             $grid->column('mobile','手机号');
-            $grid->column('status','账号状态')->using([0 => '未注册', 1 => '正常', 2 => '禁用']);
+            $grid->column('status','账号状态')->select([0 => '未注册', 1 => '正常', 2 => '禁用']);
             $grid->column('region','所在省市区')->display(function () {
                 return $this->province->region_name.$this->city->region_name.$this->district->region_name;
             });
