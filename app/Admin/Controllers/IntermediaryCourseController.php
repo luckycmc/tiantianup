@@ -24,7 +24,7 @@ class IntermediaryCourseController extends AdminController
     {
         return Grid::make(new Course('adder'), function (Grid $grid) {
             $grid->model()->where('adder_role',0);
-            $grid->column('number','编号');
+            $grid->column('id','编号');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
             $grid->column('subject','科目');

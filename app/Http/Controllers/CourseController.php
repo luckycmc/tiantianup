@@ -78,6 +78,7 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
+        $user = User::find(43);
         if (isset($data['is_entry'])) {
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
@@ -143,7 +144,7 @@ class CourseController extends Controller
             $v->distance = round($v->distance,2);
             if ($v->adder_role == 0) {
                 // 是否查看
-                $v->is_show = $v->teacher_course->where('status',1)->isNotEmpty();
+                $v->is_show = $v->deliver->where('pay_status',1)->isNotEmpty();
             }
             $v->province = $v->province_info->region_name;
             $v->city = $v->city_info->region_name;
