@@ -245,6 +245,9 @@ class IndexController extends Controller
         }
         $result->class_date = json_decode($result->class_date,true);
         // 上课地址
+        $result->province = $result->province_info->region_name;
+        $result->city = $result->city_info->region_name;
+        $result->district = $result->district_info->region_name;
         $result->class_address = $result->province_info->region_name.$result->city_info->region_name.$result->district_info->region_name.$result->address;
         return $this->success('课程详情',$result);
     }
