@@ -312,7 +312,10 @@ class IndexController extends Controller
         // 我的报名
         $user->entry = $user->user_courses()->count();
         if ($user->role == 3) {
-            $user->entry = $user->deliver_log()->count();
+            $user_entry_course = $user->deliver_log->filter(function ($item) {
+                return $item->course->adder_role !== 0;
+            });
+            $user->entry = $user_entry_course->count();
         }
         $user->team = $user->child()->count() + $user->grandson()->count();
         // 未读消息
