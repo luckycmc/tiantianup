@@ -99,6 +99,7 @@ class LoginController extends Controller
         $sendcode = Redis::get($data['mobile']);
         if(!$sendcode || $sendcode!=$data['code']) return $this->error('验证码不正确');
         // 查询用户是否存在
+        Log::info('mobile: '.$data['mobile']);
         $is_user = User::where('mobile',$data['mobile'])->first();
         Log::info('is_user: '.$is_user);
         // 获取open_id

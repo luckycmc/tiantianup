@@ -55,6 +55,6 @@ class Course extends Model
 
     public function adder()
     {
-        return $this->belongsTo(User::class,'adder_id','id');
+        return $this->belongsTo(User::class,'adder_id');
     }
 }

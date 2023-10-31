@@ -25,6 +25,7 @@ class TeacherCourseController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('publisher','发布者')->display(function () {
                 if ($this->adder_role == 2) {
+                    dd('aa');
                     return $this->adder->name;
                 } else {
                     return $this->organization->name;
