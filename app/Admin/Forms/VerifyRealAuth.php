@@ -44,10 +44,10 @@ class VerifyRealAuth extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',4)->value('text_message') == 1) {
             $text = '实名认证';
-            /*// 发送短信
+            // 发送短信
             $easySms = new EasySms($config);
             $user = User::find($teacher_info->user_id);
-            try {
+            /*try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
                     'content'  => "【添添向尚】恭喜您，您的".$text."已通过审核",
