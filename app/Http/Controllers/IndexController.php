@@ -70,10 +70,9 @@ class IndexController extends Controller
                 return $this->error('定位出错');
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
-            Log::info('district_id: '.$district_id);
         }
         // 查询当前位置的所有推荐教师
-        $teachers = User::with(['teacher_experience','teacher_info'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3])->paginate($page_size);
+        $teachers = User::with(['teacher_experience','teacher_info'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3])->ddSql()->paginate($page_size);
 
         foreach ($teachers as $teacher) {
             $teaching_year = 0;

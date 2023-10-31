@@ -187,6 +187,7 @@ class TeacherInfoController extends AdminController
             $form->select('district_id','区县');
             $form->text('address','详细地址');
             $form->text('introduction','个人简介');
+            $form->select('is_recommend','是否推荐')->options([0 => '否', 1 => '是']);
             if ($form->isCreating()) {
                 $form->hidden('role')->value(3);
                 $form->hidden('is_recommend')->value(0);
