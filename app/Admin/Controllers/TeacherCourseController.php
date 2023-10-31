@@ -21,11 +21,10 @@ class TeacherCourseController extends AdminController
     protected function grid()
     {
         return Grid::make(new Course(['organization','adder']), function (Grid $grid) {
-            $grid->model()->where('role',3);
+            $grid->model()->where('role',3)->whereNotIn('adder_role',[0]);
             $grid->column('id')->sortable();
             $grid->column('publisher','发布者')->display(function () {
                 if ($this->adder_role == 2) {
-                    dd('aa');
                     return $this->adder->name;
                 } else {
                     return $this->organization->name;

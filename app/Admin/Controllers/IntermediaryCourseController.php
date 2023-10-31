@@ -28,7 +28,7 @@ class IntermediaryCourseController extends AdminController
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
             $grid->column('subject','科目');
-            $grid->column('gender','学员性别');
+            $grid->column('gender','学员性别')->using([0 => '女', 1 => '男']);
             $grid->column('grade','年级');
             $grid->column('region','省市区')->display(function () {
                 // dd($this->province,$this->city,$this->district);
