@@ -79,7 +79,6 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $user = User::find(43);
         if (isset($data['is_entry'])) {
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
