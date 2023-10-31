@@ -147,6 +147,9 @@ class CourseController extends Controller
                 // 是否查看
                 $v->is_show = $v->teacher_course->where('status',1)->isNotEmpty();
             }
+            $v->province = $v->province_info->region_name;
+            $v->city = $v->city_info->region_name;
+            $v->district = $v->district_info->region_name;
         }
         return $this->success('课程列表',$result);
     }
