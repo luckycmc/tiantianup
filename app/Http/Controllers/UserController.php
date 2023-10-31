@@ -55,6 +55,7 @@ class UserController extends Controller
             'province_id' => 'required',
             'city_id' => 'required',
             'district_id' => 'required',
+            'contact' => 'required',
         ];
         $messages = [
             'avatar.required' => '头像不能为空',
@@ -68,6 +69,7 @@ class UserController extends Controller
             'province_id.required' => '省份不能为空',
             'city_id.required' => '城市不能为空',
             'district_id.required' => '区县不能为空',
+            'contact.required' => '联系方式不能为空',
         ];
         if ($role == 1) {
             $rules['grade'] = 'required';
