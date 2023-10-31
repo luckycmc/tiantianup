@@ -47,7 +47,7 @@ class VerifyOrgan extends RowAction
             $user = User::find($organ_info->user_id);
             Log::info('mobile: '.$user->mobile);
             $text = '机构入驻';
-            // 发送短信
+            /*// 发送短信
             $easySms = new EasySms($config);
             try {
                 $number = new PhoneNumber($user->mobile);
@@ -56,7 +56,7 @@ class VerifyOrgan extends RowAction
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
-            }
+            }*/
         }
 
         return $this->response()

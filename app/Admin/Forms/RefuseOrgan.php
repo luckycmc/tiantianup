@@ -38,7 +38,7 @@ class RefuseOrgan extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',1)->value('text_message') == 1) {
             $text = '机构入驻';
-            // 发送短信
+            /*// 发送短信
             $easySms = new EasySms($config);
             $user = User::find($organ_info->user_id);
             try {
@@ -48,7 +48,7 @@ class RefuseOrgan extends Form implements LazyRenderable
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
-            }
+            }*/
         }
     }
 

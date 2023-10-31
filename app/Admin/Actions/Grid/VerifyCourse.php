@@ -48,7 +48,7 @@ class VerifyCourse extends RowAction
             }
             if (SystemMessage::where('action',8)->value('text_message') == 1) {
                 $text = '需求';
-                // 发送短信
+                /*// 发送短信
                 $easySms = new EasySms($config);
                 try {
                     $number = new PhoneNumber($user->mobile);
@@ -59,7 +59,7 @@ class VerifyCourse extends RowAction
                     return $this->response()
                         ->error('操作失败')
                         ->refresh();
-                }
+                }*/
             }
         }
 

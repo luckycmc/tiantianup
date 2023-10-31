@@ -40,7 +40,7 @@ class RefuseRealAuth extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',4)->value('text_message') == 1) {
             $text = '实名认证';
-            // 发送短信
+            /*// 发送短信
             $easySms = new EasySms($config);
             try {
                 $number = new PhoneNumber($user->mobile);
@@ -49,7 +49,7 @@ class RefuseRealAuth extends Form implements LazyRenderable
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
-            }
+            }*/
         }
 
         return $this

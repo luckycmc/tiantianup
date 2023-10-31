@@ -59,7 +59,7 @@ class VerifyCareer extends RowAction
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '教学经历';
             // 发送短信
-            $easySms = new EasySms($config);
+            /*$easySms = new EasySms($config);
             try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
@@ -67,7 +67,7 @@ class VerifyCareer extends RowAction
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
-            }
+            }*/
         }
 
         // 当前时间

@@ -44,7 +44,7 @@ class VerifyRealAuth extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',4)->value('text_message') == 1) {
             $text = '实名认证';
-            // 发送短信
+            /*// 发送短信
             $easySms = new EasySms($config);
             $user = User::find($teacher_info->user_id);
             try {
@@ -54,7 +54,7 @@ class VerifyRealAuth extends Form implements LazyRenderable
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
-            }
+            }*/
         }
         // 保存日志
         DB::transaction(function () use ($teacher_info,$user) {
