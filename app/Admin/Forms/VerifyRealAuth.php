@@ -37,6 +37,9 @@ class VerifyRealAuth extends Form implements LazyRenderable
         $teacher_info->status = 1;
         $teacher_info->id_card_no = $id_card_no;
         $teacher_info->real_name = $real_name;
+        $user = User::find($teacher_info->user_id);
+        $user->is_real_auth = 1;
+        $user->update();
 
         // 发送通知
         if (SystemMessage::where('action',4)->value('site_message') == 1) {
@@ -46,7 +49,7 @@ class VerifyRealAuth extends Form implements LazyRenderable
             $text = '实名认证';
             // 发送短信
             $easySms = new EasySms($config);
-            $user = User::find($teacher_info->user_id);
+
             /*try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
