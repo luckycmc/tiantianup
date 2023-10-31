@@ -39,7 +39,7 @@ class VerifyCourse extends RowAction
         $course_info->status = 1;
         $course_info->is_recommend = 1;
         $course_info->update();
-        $user = User::find($course_info->user_id);
+        $user = User::find($course_info->adder_id);
 
         // 发送通知
         if (SystemMessage::where('action',8)->value('site_message') == 1) {
