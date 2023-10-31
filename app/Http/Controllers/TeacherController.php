@@ -225,6 +225,9 @@ class TeacherController extends Controller
         $course = $result->map(function ($item) {
             return $item->course;
         });
+        $course = $course->filter(function ($item) {
+            return $item->adder_role !== 0;
+        })->values();
         if (isset($data['name'])) {
             $course = $course->filter(function ($user) use ($data) {
                 return str_contains(strtolower($user['name']), strtolower($data['name']));
