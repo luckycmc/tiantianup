@@ -11,6 +11,7 @@ class Area extends Model
 {
     use ModelTree;
 	use HasDateTimeFormatter;
-    protected $orderColumn = 'order';
+    protected $table = 'regions';
+    protected $orderColumn = 'region_type';
     protected $titleColumn = 'region_name';
 }

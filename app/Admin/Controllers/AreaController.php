@@ -23,6 +23,7 @@ class AreaController extends AdminController
                 $row->column(12, $tree);
                 $tree->expand(false);
                 $tree->maxDepth(3);
+                $tree->showEditButton();
                 $tree->disableCreateButton();
                 $tree->branch(function ($branch) {
                     return "{$branch['region_name']}";
@@ -80,7 +81,7 @@ class AreaController extends AdminController
     {
         return Form::make(new Area(), function (Form $form) {
             // $form->display('id');
-            $form->select('province_id')->options('/api/city')->load('city','/api/city');
+            /*$form->select('province_id')->options('/api/city')->load('city','/api/city');
             $form->select('city_id')->options('/api/city');
             $form->saving(function (Form $form) {
                 // dd($form->city_id,$form->city);
@@ -89,13 +90,13 @@ class AreaController extends AdminController
                 $form->id = $form->city_id;
                 $form->parent_id = $form->city_id;
                 $form->region_name = Region::where('id',$form->id);
-            });
+            });*/
             // $form->text('region_name');
-            /*$form->select('parent_id', trans('admin.parent_id'))
+            $form->select('parent_id', trans('admin.parent_id'))
                 ->options(\App\Models\Area::selectOptions())
                 ->saving(function ($v) {
                     return (int) $v;
-                })->required();*/
+                })->required();
             // $form->text('initial','首字母');
         
             $form->display('created_at');
