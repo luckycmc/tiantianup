@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Tree\CheckCity;
 use App\Admin\Repositories\Area;
 use App\Models\Region;
 use Dcat\Admin\Form;
@@ -78,14 +79,24 @@ class AreaController extends AdminController
     protected function form()
     {
         return Form::make(new Area(), function (Form $form) {
-            $form->display('id');
-            $form->text('region_name');
-            $form->select('parent_id', trans('admin.parent_id'))
+            // $form->display('id');
+            $form->select('province_id')->options('/api/city')->load('city','/api/city');
+            $form->select('city_id')->options('/api/city');
+            $form->saving(function (Form $form) {
+                // dd($form->city_id,$form->city);
+                $region_type = Region::where('id');
+                $form->deleteInput('city');
+                $form->id = $form->city_id;
+                $form->parent_id = $form->city_id;
+                $form->region_name = Region::where('id',$form->id);
+            });
+            // $form->text('region_name');
+            /*$form->select('parent_id', trans('admin.parent_id'))
                 ->options(\App\Models\Area::selectOptions())
                 ->saving(function ($v) {
                     return (int) $v;
-                })->required();
-            $form->text('initial','首字母');
+                })->required();*/
+            // $form->text('initial','首字母');
         
             $form->display('created_at');
             $form->display('updated_at');

@@ -23,7 +23,9 @@ class TeacherCourseController extends AdminController
         return Grid::make(new Course(['organization','adder']), function (Grid $grid) {
             $grid->model()->where('role',3);
             $grid->column('id')->sortable();
-            $grid->column('organization.name','发布者');
+            $grid->column('publisher','发布者')->display(function () {
+
+            });
             $grid->column('name');
             $grid->column('type','辅导类型');
             $grid->column('subject','科目');
