@@ -123,7 +123,7 @@ class ParentController extends Controller
     {
         $data = \request()->all();
         $course_id = $data['course_id'] ?? 0;
-        $course_info = Course::find($course_id);
+        $course_info = Course::with(['province_info','city_info','district_info'])->find($course_id);
         if (!$course_info) {
             return $this->error('课程不存在');
         }

@@ -57,4 +57,19 @@ class Course extends Model
     {
         return $this->belongsTo(User::class,'adder_id');
     }
+
+    public function province_info()
+    {
+        return $this->belongsTo(Region::class,'province');
+    }
+
+    public function city_info()
+    {
+        return $this->belongsTo(Region::class,'city');
+    }
+
+    public function district_info()
+    {
+        return $this->belongsTo(Region::class,'district');
+    }
 }
