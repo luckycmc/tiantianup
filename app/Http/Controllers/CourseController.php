@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\DeliverLog;
 use App\Models\Message;
 use App\Models\Region;
 use App\Models\SystemMessage;
@@ -104,7 +105,7 @@ class CourseController extends Controller
         if (isset($data['is_platform'])) {
             $where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
-                $order_arr = TeacherCourseOrder::where(['user_id' => $user->id])->pluck('course_id');
+                $order_arr = DeliverLog::where(['user_id' => $user->id])->pluck('course_id');
                 if ($data['is_show'] == 1) {
                     $where[] = [function ($query) use ($order_arr) {
                         $query->whereIn('courses.id',$order_arr);
