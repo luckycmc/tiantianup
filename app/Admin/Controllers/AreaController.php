@@ -2,41 +2,32 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Actions\Tree\CheckCity;
 use App\Admin\Repositories\Area;
 use App\Models\Region;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Layout\Content;
-use Dcat\Admin\Layout\Row;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
-use Dcat\Admin\Tree;
 
 class AreaController extends AdminController
 {
-    public function index(Content $content)
+    /*public function index(Content $content)
     {
         return $content->header('运营城市')
             ->body(function (Row $row) {
                 $tree = new Tree(new \App\Models\Area());
-                $tree->query(function ($query) {
-                    return $query->where('region_type', '<=', 2);
-                });
                 $row->column(12, $tree);
                 $tree->expand(false);
                 $tree->maxDepth(1);
                 $tree->disableCreateButton();
-                $tree->disableQuickCreateButton();
                 $tree->branch(function ($branch) {
-                    $is_checked = $branch['is_checked'] == 0 ? '' : '(已授权)';
-                    return "{$branch['region_name']}".$is_checked;
+                    return "{$branch['region_name']}";
                 });
                 $tree->tools(function (Tree\Tools $tools) {
                     $tools->add(new CheckCity());
                 });
             });
-    }
+    }*/
     /**
      * Make a grid builder.
      *
@@ -44,19 +35,18 @@ class AreaController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Area(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('region_name');
-            $grid->column('parent_id');
-            $grid->column('order');
-            $grid->column('initial');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
-        
+        return Grid::make(new \App\Models\Area(), function (Grid $grid) {
+            $grid->region_name->tree(); // 开启树状表格功能
+            $grid->column('is_checked','是否授权')->select([0 => '否', 1 => '是']);
+
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->like('region_name');
             });
+            $grid->disableCreateButton();
+            $grid->disableEditButton();
+            $grid->disableDeleteButton();
+            $grid->disableActions();
+            $grid->disableBatchDelete();
         });
     }
 
@@ -86,25 +76,8 @@ class AreaController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new Area(), function (Form $form) {
-            // $form->display('id');
-            /*$form->select('province_id')->options('/api/city')->load('city','/api/city');
-            $form->select('city_id')->options('/api/city');
-            $form->saving(function (Form $form) {
-                // dd($form->city_id,$form->city);
-                $region_type = Region::where('id');
-                $form->deleteInput('city');
-                $form->id = $form->city_id;
-                $form->parent_id = $form->city_id;
-                $form->region_name = Region::where('id',$form->id);
-            });*/
-            // $form->text('region_name');
-            $form->select('parent_id', trans('admin.parent_id'))
-                ->options(\App\Models\Area::selectOptions())
-                ->saving(function ($v) {
-                    return (int) $v;
-                })->required();
-            // $form->text('initial','首字母');
+        return Form::make(new Region(), function (Form $form) {
+            $form->radio('is_checked')->options([0 => '否', 1 => '是']);
         
             $form->display('created_at');
             $form->display('updated_at');

@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'Area' => 'Area',
+        'Area' => '运营城市',
         'area' => 'Area',
     ],
     'fields' => [
