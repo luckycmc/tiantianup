@@ -327,7 +327,7 @@ class IndexController extends Controller
         $user->contact_count = $user->contacts->count();
         // 标签
         if ($user->role == 3) {
-            $user->tags = $user->teacher_tags->pluck('tag');
+            $user->tags = $user->teacher_tags->pluck('tag','id');
             $user->real_auth_status = $user->teacher_real_auth ? $user->teacher_real_auth->status : 3;
             $user->cert_status = $user->teacher_cert ? $user->teacher_cert->status : 3;
             $user->education_status = $user->teacher_education ? $user->teacher_education->status : 3;
