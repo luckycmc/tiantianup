@@ -801,10 +801,7 @@ class UserController extends Controller
                 'created_at' => Carbon::now()
             ];
         }
-        DB::transaction(function () use ($user, $tag_data) {
-            DB::table('teacher_tags')->where('user_id',$user->id)->delete();
-            DB::table('teacher_tags')->insert($tag_data);
-        });
+        DB::table('teacher_tags')->insert($tag_data);
         return $this->success('设置成功');
     }
 

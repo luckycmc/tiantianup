@@ -20,13 +20,17 @@ class AreaController extends AdminController
         return $content->header('运营城市')
             ->body(function (Row $row) {
                 $tree = new Tree(new \App\Models\Area());
+                $tree->query(function ($query) {
+                    return $query->where('region_type', '<=', 2);
+                });
                 $row->column(12, $tree);
                 $tree->expand(false);
-                $tree->maxDepth(3);
-                $tree->showEditButton();
+                $tree->maxDepth(1);
                 $tree->disableCreateButton();
+                $tree->disableQuickCreateButton();
                 $tree->branch(function ($branch) {
-                    return "{$branch['region_name']}";
+                    $is_checked = $branch['is_checked'] == 0 ? '' : '(已授权)';
+                    return "{$branch['region_name']}".$is_checked;
                 });
             });
     }
