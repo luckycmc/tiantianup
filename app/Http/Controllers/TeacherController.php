@@ -80,7 +80,7 @@ class TeacherController extends Controller
             ->where($where)
             ->where(['users.district_id' => $district_id,'users.role' => 3])
             ->orderBy($sort_field,$order)
-            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject')
+            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->distinct()
             ->paginate($page_size);
         foreach ($result as $v) {

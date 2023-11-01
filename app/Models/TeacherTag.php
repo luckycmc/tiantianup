@@ -11,6 +11,6 @@ class TeacherTag extends Model
 	use HasDateTimeFormatter;
     protected $table = 'teacher_tags';
     protected $guarded = [];
-    public $timestamps = false;
+    public $timestamps = true;
 
 }

@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Message;
 use App\Models\SystemMessage;
 use App\Models\TeacherInfo;
+use App\Models\TeacherTag;
 use App\Models\User;
 use Carbon\Carbon;
 use Dcat\Admin\Contracts\LazyRenderable;
@@ -59,10 +60,16 @@ class VerifyRealAuth extends Form implements LazyRenderable
                 return $this->error($exception->getResults());
             }*/
         }
+        $tag = '实名认证';
+        $tag_info = [
+            'user_id' => $user->id,
+            'tag' => $tag
+        ];
         // 保存日志
-        DB::transaction(function () use ($teacher_info,$user) {
+        DB::transaction(function () use ($teacher_info,$user,$tag_info) {
             $teacher_info->update();
             $user->update();
+            TeacherTag::updateOrCreate(['user_id' => $user->id,'tag' => $tag_info['tag']],$tag_info);
         });
 
         // 当前时间

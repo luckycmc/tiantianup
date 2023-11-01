@@ -102,6 +102,15 @@ class UserController extends Controller
         if (!$result) {
             return $this->error('更新失败');
         }
+        // 更新教师标签
+        if ($user->role == 3) {
+            $tag = '资料完善';
+            $tag_info = [
+                'user_id' => $user->id,
+                'tag' => $tag
+            ];
+            TeacherTag::updateOrCreate(['user_id' => $user->id,'tag' => $tag],$tag_info);
+        }
         return $this->success('更新成功');
     }
 

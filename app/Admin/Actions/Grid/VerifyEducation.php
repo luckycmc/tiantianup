@@ -3,7 +3,9 @@
 namespace App\Admin\Actions\Grid;
 
 use App\Models\TeacherEducation;
+use App\Models\TeacherTag;
 use App\Models\User;
+use Carbon\Carbon;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Traits\HasPermissions;
@@ -31,6 +33,12 @@ class VerifyEducation extends RowAction
         $teacher_info = TeacherEducation::find($teacher_id);
         $teacher_info->status = 1;
         $teacher_info->update();
+        $tag = $teacher_info->highest_education;
+        $tag_info = [
+            'user_id' => $teacher_id,
+            'tag' => $tag
+        ];
+        TeacherTag::updateOrCreate(['user_id' => $teacher_id,'tag' => $tag],$tag_info);
 
         return $this->response()
             ->success('操作成功')

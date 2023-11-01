@@ -56,4 +56,5 @@ Route::group([
     $router->resource('/teacher_course_setting','TeacherCourseSettingController');
     $router->resource('/platform_message','PlatformMessageController');
     $router->resource('/area','AreaController');
+    $router->resource('/tag','TagController');
 });

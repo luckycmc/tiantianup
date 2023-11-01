@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Message;
 use App\Models\SystemMessage;
 use App\Models\TeacherCareer;
+use App\Models\TeacherTag;
 use App\Models\User;
 use Carbon\Carbon;
 use Dcat\Admin\Actions\Response;
@@ -46,10 +47,16 @@ class VerifyCareer extends RowAction
         $user = User::find($teacher_info->user_id);
         $user->withdraw_balance += $amount;
         $user->total_income += $amount;
+        $tag = $user->teacher_info->teaching_year.'年教学经验';
+        $tag_info = [
+            'user_id' => $user->id,
+            'tag' => $tag
+        ];
         // 保存日志
-        DB::transaction(function () use ($teacher_info,$user) {
+        DB::transaction(function () use ($teacher_info,$user,$tag_info) {
             $teacher_info->update();
             $user->update();
+            TeacherTag::updateOrCreate(['user_id' => $user->id,'tag' => $tag_info['tag']],$tag_info);
         });
 
         // 发送通知
