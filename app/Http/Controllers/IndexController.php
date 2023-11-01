@@ -218,6 +218,7 @@ class IndexController extends Controller
             $address = $result->organization->address;
             // 地址
             $result->address = $province.$city.$district.$address;
+            $result->class_date = $result->platform_class_date;
         }
         // 当前用户
         $user = Auth::user();
