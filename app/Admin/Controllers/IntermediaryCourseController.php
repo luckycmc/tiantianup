@@ -40,6 +40,7 @@ class IntermediaryCourseController extends AdminController
             $grid->column('address','上课地点');
             $grid->column('class_price','费用');
             $grid->column('class_duration','上课时长');
+            $grid->column('platform_class_date','上课时间');
             $grid->column('mobile','联系方式');
             $grid->column('adder.name','发布人');
             $grid->column('buyer_count','付费人数');
@@ -105,7 +106,7 @@ class IntermediaryCourseController extends AdminController
             $form->text('subject','科目');
             $form->text('grade','年级');
             $form->radio('gender','性别')->options([0 => '女',1 => '男']);
-            $form->datetimeRange('class_date_start','class_date_end','上课时间');
+            $form->text('platform_class_date','上课时间');
             $form->select('province','省')->options('/api/city')->load('city','/api/city');
             $form->select('city','市')->options('/api/city')->load('district','/api/city');
             $form->select('district','区')->options('/api/city');
