@@ -373,7 +373,7 @@ class IndexController extends Controller
 
     public function get_loc_province()
     {
-        $province = Region::where('region_type',1)->select('id','initial','region_name')->get();
+        $province = Region::where(['region_type' => 1,'is_checked' => 1])->select('id','initial','region_name')->get();
         $result = $province->groupBy('initial') // 按照 initial 字段进行分组
         ->map(function ($items) {
             $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
@@ -403,7 +403,7 @@ class IndexController extends Controller
         $data = \request()->all();
         $province_id = $data['province_id'] ?? 0;
         // 查询省份
-        $city = Region::where(['region_type' => 2,'parent_id' => $province_id])->get();
+        $city = Region::where(['region_type' => 2,'parent_id' => $province_id,'is_checked' => 1])->get();
         $result = $city->groupBy('initial') // 按照 initial 字段进行分组
         ->map(function ($items) {
             $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
@@ -434,7 +434,7 @@ class IndexController extends Controller
         $data = \request()->all();
         $city_id = $data['city_id'] ?? 0;
         // 查询省份
-        $district = Region::where(['region_type' => 3,'parent_id' => $city_id])->get();
+        $district = Region::where(['region_type' => 3,'parent_id' => $city_id,'is_checked' => 1])->get();
         $result = $district->groupBy('initial') // 按照 initial 字段进行分组
         ->map(function ($items) {
             $data = $items->pluck('region_name')->toArray(); // 提取 region_name，转换为普通数组
