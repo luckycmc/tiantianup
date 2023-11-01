@@ -218,7 +218,6 @@ class IndexController extends Controller
             $address = $result->organization->address;
             // 地址
             $result->address = $province.$city.$district.$address;
-            $result->class_date = $result->platform_class_date;
         }
         // 当前用户
         $user = Auth::user();
@@ -240,6 +239,9 @@ class IndexController extends Controller
             if ($course_info->adder_role == 0) {
                 $result->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id,'pay_status' => 1])->exists();
             }
+        }
+        if ($result->adder_role == 0) {
+            $result->class_date = $result->platform_class_date;
         }
 
         if ($result->is_entry) {
