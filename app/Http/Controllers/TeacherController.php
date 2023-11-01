@@ -12,6 +12,7 @@ use App\Models\TeacherEducation;
 use App\Models\TeacherImage;
 use App\Models\TeacherInfo;
 use App\Models\TeacherRealAuth;
+use App\Models\TeacherTag;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
@@ -374,5 +375,22 @@ class TeacherController extends Controller
             return $this->error('操作失败');
         }
         return $this->success('创建成功',$out_trade_no);
+    }
+
+    /**
+     * 更新标签显示状态
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_tag_status()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $tag_info = TeacherTag::find($id);
+        if (!$tag_info) {
+            return $this->error('标签不存在');
+        }
+        $tag_info->is_show = !$tag_info->is_show;
+        $tag_info->update();
+        return $this->success('操作成功');
     }
 }
