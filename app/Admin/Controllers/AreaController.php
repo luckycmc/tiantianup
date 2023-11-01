@@ -32,6 +32,9 @@ class AreaController extends AdminController
                     $is_checked = $branch['is_checked'] == 0 ? '' : '(已授权)';
                     return "{$branch['region_name']}".$is_checked;
                 });
+                $tree->tools(function (Tree\Tools $tools) {
+                    $tools->add(new CheckCity());
+                });
             });
     }
     /**
