@@ -99,7 +99,7 @@ class IndexController extends Controller
     {
         $data = \request()->all();
         $id = $data['teacher_id'];
-        $result = User::with(['teacher_experience','teacher_info','teacher_tags','teacher_cert','teacher_education','teacher_image'])->where(['id' => $id])->first();
+        $result = User::with(['teacher_experience','teacher_info','teacher_tags','teacher_cert','teacher_education'])->where(['id' => $id])->first();
         if (!$result) {
             return $this->error('教师不存在');
         }
@@ -152,7 +152,7 @@ class IndexController extends Controller
         }
         // 投递详情
         $result->deliver_detail = $result->deliver_log;
-        $result->images = json_decode($result->image,true);
+        $result->images = json_decode($result->teacher_demeanor[0],true);
         return $this->success('教师详情',$result);
     }
 
