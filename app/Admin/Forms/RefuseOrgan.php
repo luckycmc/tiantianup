@@ -5,6 +5,7 @@ namespace App\Admin\Forms;
 use App\Models\Message;
 use App\Models\SystemMessage;
 use App\Models\User;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
@@ -31,6 +32,7 @@ class RefuseOrgan extends Form implements LazyRenderable
         $organ_info = \App\Models\Organization::find($id);
         $organ_info->status = 2;
         $organ_info->reason = $reason;
+        $organ_info->reviewer_id = Admin::user()->id;
         $organ_info->update();
         // 发送通知
         if (SystemMessage::where('action',1)->value('site_message') == 1) {

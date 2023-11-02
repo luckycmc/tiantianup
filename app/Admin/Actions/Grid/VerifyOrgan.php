@@ -7,6 +7,7 @@ use App\Models\Organization;
 use App\Models\SystemMessage;
 use App\Models\User;
 use Dcat\Admin\Actions\Response;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Traits\HasPermissions;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -38,6 +39,7 @@ class VerifyOrgan extends RowAction
         $id = $this->getKey();
         $organ_info = Organization::find($id);
         $organ_info->status = 1;
+        $organ_info->reviewer_id = Admin::user()->id;
         $organ_info->update();
         // 发送通知
         if (SystemMessage::where('action',1)->value('site_message') == 1) {

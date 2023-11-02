@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\DisableOrgan;
+use App\Admin\Actions\Grid\EnableOrgan;
 use App\Admin\Actions\Grid\RefuseOrgan;
 use App\Admin\Actions\Grid\VerifyOrgan;
 use App\Admin\Repositories\Organization;
@@ -47,7 +49,7 @@ class OrganizationController extends AdminController
             });
             $grid->column('contact');
             $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
-            $grid->column('user.status','账户状态')->select([1 => '正常', 0 => '禁用']);
+            $grid->column('user.status','账户状态')->using([1 => '正常', 2 => '禁用']);
             $grid->column('reviewer.name','审核人');
             $grid->column('updated_at','审核时间');
         
@@ -55,12 +57,21 @@ class OrganizationController extends AdminController
                 $filter->like('name');
                 $filter->like('user.number','ID');
                 $filter->equal('type')->select('/api/organ_type');
-                $filter->equal('nature','培训类型')->select('/api/nature');
+                $filter->equal('nature','机构性质')->select('/api/nature');
             });
             // 禁用删除
             $grid->disableDeleteButton();
             // 导出
             $grid->export();
+            $grid->actions(function ($actions) {
+                $status = $actions->row->user->status;
+                if (!in_array($status,[2,3])) {
+                    $actions->append(new DisableOrgan());
+                } else {
+                    $actions->append(new EnableOrgan());
+                }
+            });
+
         });
     }
 
@@ -78,13 +89,12 @@ class OrganizationController extends AdminController
             $grid->column('type');
             $grid->column('training_type','培训类型');
             $grid->column('nature','机构性质');
-            $grid->column('user.name','负责人');
+            $grid->column('contact','负责人');
             $grid->column('mobile');
             $grid->column('id_card_no');
             $grid->column('region','省市区')->display(function () {
                 return $this->province->region_name.$this->city->region_name.$this->district->region_name;
             });
-            $grid->column('contact');
             $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             $grid->column('user.status','状态')->select([1 => '正常', 0 => '禁用']);
             $grid->column('reviewer.name','审核人');
