@@ -40,12 +40,8 @@ class VerifyCert extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherCert::find($teacher_id);
         $teacher_info->status = 1;
-        // 查询奖励
-        $reward = get_reward(2,3);
-        $amount = $reward->teacher_real_auth_reward;
         $user = User::find($teacher_info->user_id);
-        $user->withdraw_balance += $amount;
-        $user->total_income += $amount;
+        $user->has_teacher_cert = 1;
         // 发送通知
         if (SystemMessage::where('action',6)->value('site_message') == 1) {
             (new Message())->saveMessage($teacher_info->user_id,0,'资格证书','资格证书审核通过',0,0,3);
@@ -81,6 +77,12 @@ class VerifyCert extends RowAction
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
         if ($teacher_activity) {
+            // 查询奖励
+            $reward = get_reward(2,3);
+            $amount = $reward->teacher_real_auth_reward;
+            $user->withdraw_balance += $amount;
+            $user->total_income += $amount;
+            $user->update();
             teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书','资格证书审核通过',$teacher_activity);
         }
 
