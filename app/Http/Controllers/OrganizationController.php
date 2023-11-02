@@ -49,6 +49,10 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $user->role = $data['role'] ?? 4;
         $user->organ_role_id = 1;
+        // 用户编号
+        if (!isset($user->number)) {
+            $user->number = create_user_number($data['city_id'],$user->id);
+        }
         $user->update();
         unset($data['role']);
         // 存入机构

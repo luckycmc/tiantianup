@@ -7,6 +7,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\DB;
 
 class ConstantController extends AdminController
 {
@@ -90,5 +91,35 @@ class ConstantController extends AdminController
             $form->display('created_at');
             $form->display('updated_at');
         });
+    }
+
+    // 培训类型
+    public function training_type()
+    {
+        $training_type = DB::table('constant')->where('type',6)->select('id','name as text')->get();
+        if (!isset($training_type)) {
+            return [];
+        }
+        return $training_type;
+    }
+
+    // 机构类型
+    public function organ_type()
+    {
+        $organ_type = DB::table('constant')->where('type',2)->select('id','name as text')->get();
+        if (!isset($organ_type)) {
+            return [];
+        }
+        return $organ_type;
+    }
+
+    // 机构性质
+    public function nature()
+    {
+        $nature = DB::table('constant')->where('type',3)->select('id','name as text')->get();
+        if (!isset($nature)) {
+            return [];
+        }
+        return $nature;
     }
 }

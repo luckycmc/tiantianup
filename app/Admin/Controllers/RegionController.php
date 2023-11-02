@@ -81,4 +81,15 @@ class RegionController extends AdminController
         }
         return $data;
     }
+
+    // 运营城市
+    public function operational_city(Request $request)
+    {
+        $id = $request->get('q') ?? 0;
+        $data = DB::table('regions')->where(['parent_id' => $id,'is_checked' => 1])->select('region_name as text','id')->get();
+        if (!$data) {
+            return [];
+        }
+        return $data;
+    }
 }

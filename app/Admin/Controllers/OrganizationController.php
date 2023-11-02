@@ -226,14 +226,14 @@ class OrganizationController extends AdminController
                 $form->display('user.number','ID');
             }
             $form->text('name');
-            $form->text('type');
-            $form->text('training_type','培新类型');
-            $form->text('nature');
+            $form->select('type')->options('/api/organ_type');
+            $form->select('training_type','培训类型')->options('/api/training_type');
+            $form->select('nature')->options('/api/nature');
             $form->text('contact','负责人');
             $form->text('mobile');
             $form->text('id_card_no');
-            $form->select('province_id','省份')->options('/api/city')->load('city_id', '/api/city');
-            $form->select('city_id','城市')->options('/api/city')->load('district_id', '/api/city');
+            $form->select('province_id','省份')->options('/api/operational_city')->load('city_id', '/api/operational_city');
+            $form->select('city_id','城市')->options('/api/operational_city')->load('district_id', '/api/operational_city');
             $form->select('district_id','区县');
             $form->text('address');
             $form->image('door_image','机构logo')->uniqueName()->move('public/organization/images')->saveFullUrl();

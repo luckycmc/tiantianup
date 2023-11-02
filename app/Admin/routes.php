@@ -17,9 +17,13 @@ Route::group([
         $router->get('/admin_users', 'AuthController@admin_users');
         $router->get('/province', 'RegionController@province');
         $router->get('/city', 'RegionController@city');
+        $router->get('/operational_city', 'RegionController@operational_city');
         $router->get('/organ_type', 'OrganTypeController@list');
         $router->get('/nature', 'TeachingMethodController@list');
         $router->get('/education', 'EducationController@list');
+        $router->get('/training_type', 'ConstantController@training_type');
+        $router->get('/organ_type', 'ConstantController@organ_type');
+        $router->get('/nature', 'ConstantController@nature');
     });
     $router->resource('/organization','OrganizationController');
     $router->resource('/user','UserController');
