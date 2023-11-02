@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'TeacherRealAuth' => 'TeacherRealAuth',
+        'TeacherRealAuth' => '实名认证',
         'teacher-real-auth' => 'TeacherRealAuth',
     ],
     'fields' => [

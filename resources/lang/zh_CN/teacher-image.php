@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'TeacherImage' => 'TeacherImage',
+        'TeacherImage' => '教师风采',
         'teacher-image' => 'TeacherImage',
     ],
     'fields' => [

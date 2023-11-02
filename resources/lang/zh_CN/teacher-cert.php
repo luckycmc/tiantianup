@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'TeacherCert' => 'TeacherCert',
+        'TeacherCert' => '资格证书',
         'teacher-cert' => 'TeacherCert',
     ],
     'fields' => [

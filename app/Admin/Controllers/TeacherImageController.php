@@ -42,6 +42,13 @@ class TeacherImageController extends AdminController
                     $actions->append(new RefuseImage());
                 }
             });
+            $grid->export()->rows(function ($rows) {
+                foreach ($rows as &$row) {
+                    $arr = ['待审核','通过','拒绝'];
+                    $row['status'] = $arr[$row['status']];
+                }
+                return $rows;
+            });
         });
     }
 

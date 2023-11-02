@@ -56,6 +56,16 @@ class ActivityController extends AdminController
             $grid->disableCreateButton();
             $grid->disableDeleteButton();
             $grid->disableEditButton();
+            $grid->export()->rows(function ($rows) {
+                foreach ($rows as &$row) {
+                    $arr = ['已结束','进行中','待开始','已拒绝','待审核'];
+                    $type_arr = ['','邀新活动','教师注册活动','成交活动'];
+                    $row['status'] = $arr[$row['status']];
+                    $row['type'] = $type_arr[$row['type']];
+                    $row['is_disabled'] = $row['is_disabled'] == 0 ? '否' : '是';
+                }
+                return $rows;
+            });
         });
     }
 

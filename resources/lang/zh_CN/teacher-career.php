@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'TeacherCareer' => 'TeacherCareer',
+        'TeacherCareer' => '教学经历',
         'teacher-career' => 'TeacherCareer',
     ],
     'fields' => [

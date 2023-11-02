@@ -35,6 +35,7 @@ class UserController extends AdminController
                 $filter->equal('id');
         
             });
+            $grid->export();
         });
     }
 
