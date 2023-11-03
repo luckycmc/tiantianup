@@ -183,7 +183,7 @@ class CommonController extends Controller
         $data = [
             'content' => 'test'
         ];
-        get_user_list();
+        get_official_openid($open_id);
         // send_official_message($open_id,json_encode($data));
     }
 
