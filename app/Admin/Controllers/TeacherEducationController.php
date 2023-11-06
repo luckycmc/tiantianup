@@ -20,6 +20,7 @@ class TeacherEducationController extends AdminController
     protected function grid()
     {
         return Grid::make(new TeacherEducation(['user']), function (Grid $grid) {
+            $grid->model()->orderByDesc('created_at');
             $grid->column('id')->sortable();
             $grid->column('user.name','教师姓名');
             $grid->column('highest_education');
@@ -30,10 +31,22 @@ class TeacherEducationController extends AdminController
             $grid->column('status','状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
-        
+
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->like('name');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;

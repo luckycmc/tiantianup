@@ -20,6 +20,7 @@ class TeacherCertController extends AdminController
     protected function grid()
     {
         return Grid::make(new TeacherCert('user'), function (Grid $grid) {
+            $grid->model()->orderByDesc('created_at');
             $grid->column('id')->sortable();
             $grid->column('user.name','教师姓名');
             $grid->column('teacher_cert')->display(function ($teacher_cert) {
@@ -35,10 +36,22 @@ class TeacherCertController extends AdminController
             $grid->column('reason','拒绝原因');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
-        
+
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->like('name');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             });
 
             $grid->actions(function ($actions) {
@@ -70,9 +83,9 @@ class TeacherCertController extends AdminController
         return Show::make($id, new TeacherCert(), function (Show $show) {
             $show->field('id');
             $show->field('teacher_id');
-            $show->field('teacher_cert');
-            $show->field('other_cert');
-            $show->field('honor_cert');
+            $show->field('teacher_cert')->image();
+            $show->field('other_cert')->image();
+            $show->field('honor_cert')->image();
             $show->field('status');
             $show->field('created_at');
             $show->field('updated_at');
