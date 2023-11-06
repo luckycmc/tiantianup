@@ -2,9 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\DisableTeacher;
+use App\Admin\Actions\Grid\EnableTeacher;
 use App\Admin\Actions\Grid\Recommend;
-use App\Admin\Repositories\TeacherImage;
-use App\Admin\Repositories\TeacherInfo;
 use App\Admin\Repositories\User;
 use App\Models\TeacherCareer;
 use Dcat\Admin\Form;
@@ -64,6 +64,14 @@ class TeacherInfoController extends AdminController
                 $tools->batch(function ($batch) {
                     $batch->add(new Recommend('批量推荐', 1));
                 });
+            });
+            $grid->actions(function ($actions) {
+                $status = $actions->row->status;
+                if (!in_array($status,[2,3])) {
+                    $actions->append(new DisableTeacher());
+                } else {
+                    $actions->append(new EnableTeacher());
+                }
             });
             $grid->export();
         });
