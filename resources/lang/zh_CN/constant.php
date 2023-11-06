@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'Constant' => 'Constant',
+        'Constant' => '系统常量',
         'constant' => 'Constant',
     ],
     'fields' => [

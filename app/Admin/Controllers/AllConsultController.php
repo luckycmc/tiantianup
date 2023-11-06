@@ -3,14 +3,13 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Consult;
-use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Models\Administrator;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 
-class ConsultController extends AdminController
+class AllConsultController extends AdminController
 {
     /**
      * Make a grid builder.
@@ -20,8 +19,6 @@ class ConsultController extends AdminController
     protected function grid()
     {
         return Grid::make(new Consult(['adder','editor']), function (Grid $grid) {
-            $admin = Admin::user()->id;
-            $grid->model()->where('adder_id',$admin);
             $grid->column('consult_time','咨询时间');
             $grid->column('username');
             $grid->column('mobile');
@@ -43,8 +40,6 @@ class ConsultController extends AdminController
                     $q->where('consult_time', '>=', $start);
                     $q->where('consult_time', '<=', $end);
                 })->datetime();
-                $filter->equal('type','咨询类型')->select([0 => '咨询',1 => '投诉', 2 => '建议']);
-                $filter->equal('type')->select([0 => '咨询',1 => '投诉', 2 => '建议']);
             });
             $grid->disableDeleteButton();
             $grid->disableViewButton();
@@ -84,19 +79,14 @@ class ConsultController extends AdminController
     protected function form()
     {
         return Form::make(new Consult(), function (Form $form) {
-            $admin = Admin::user()->id;
             $form->display('id');
             $form->text('username')->required();
-            $form->mobile('mobile')->required();
+            $form->text('mobile')->required();
             $form->select('type')->options([0 => '热线咨询',1 => '在线咨询'])->required();
             $form->select('method')->options([0 => '咨询',1 => '投诉', 2 => '建议'])->required();
             $form->text('content')->required();
-            if ($form->isCreating()) {
-                $form->hidden('adder_id')->default($admin);
-            }
-            if ($form->isEditing()) {
-                $form->hidden('editor_id')->default($admin);
-            }
+            $form->select('adder_id','添加人')->options('/api/admin_users')->required();
+            $form->select('editor_id','修改人')->options('/api/admin_users');
             $form->datetime('consult_time')->required();
 
             $form->display('created_at');
