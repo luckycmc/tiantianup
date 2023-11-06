@@ -44,7 +44,7 @@ class ConsultController extends AdminController
                     $q->where('consult_time', '<=', $end);
                 })->datetime();
                 $filter->equal('type','咨询类型')->select([0 => '咨询',1 => '投诉', 2 => '建议']);
-                $filter->equal('type')->select([0 => '咨询',1 => '投诉', 2 => '建议']);
+                $filter->equal('adder_id','添加人')->select('/api/admin_users');
             });
             $grid->disableDeleteButton();
             $grid->disableViewButton();

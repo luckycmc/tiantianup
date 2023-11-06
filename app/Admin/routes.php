@@ -32,6 +32,7 @@ Route::group([
     $router->resource('/teacher_cert','TeacherCertController');
     $router->resource('/teacher_career','TeacherCareerController');
     $router->resource('/consults','ConsultController');
+    $router->resource('/all_consults','AllConsultController');
     $router->resource('/teacher_course','TeacherCourseController');
     $router->resource('/student_course','StudentCourseController');
     $router->resource('/intermediary_course','IntermediaryCourseController');
