@@ -22,6 +22,7 @@ class TeacherRealAuthController extends AdminController
     protected function grid()
     {
         return Grid::make(new TeacherInfo('teacher'), function (Grid $grid) {
+            $grid->model()->orderByDesc('created_at');
             $grid->column('id')->sortable();
             $grid->column('teacher.name','教师姓名');
             $grid->column('id_card_front')->image('',60,60);
@@ -45,6 +46,22 @@ class TeacherRealAuthController extends AdminController
                     $row['status'] = $arr[$row['status']];
                 }
                 return $rows;
+            });
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->like('name');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             });
         });
     }
