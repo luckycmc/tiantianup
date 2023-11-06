@@ -29,7 +29,7 @@ class TeacherRealAuthController extends AdminController
             $grid->column('id_card_backend')->image('',60,60);
             $grid->column('real_name');
             $grid->column('id_card_no');
-            $grid->column('status','审核状态')->using([0 => '待审核',1 => '通过', 2 => '拒绝']);
+            $grid->column('status','审核状态')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             $grid->column('reason');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -78,11 +78,11 @@ class TeacherRealAuthController extends AdminController
         return Show::make($id, new TeacherInfo(), function (Show $show) {
             $show->field('id');
             $show->field('user_id');
-            $show->field('id_card_front');
-            $show->field('id_card_backend');
+            $show->field('id_card_front')->image();
+            $show->field('id_card_backend')->image();
             $show->field('real_name');
             $show->field('id_card_no');
-            $show->field('status','审核状态');
+            $show->field('status','审核状态')->as([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             $show->field('reason');
             $show->field('created_at');
             $show->field('updated_at');
