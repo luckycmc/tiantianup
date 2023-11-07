@@ -317,9 +317,9 @@ class OrganizationController extends Controller
         // 投递列表
         $result = DeliverLog::with(['user'])->where('course_id',$course_id)->paginate($page_size);
         foreach ($result as $v) {
-            $v->teacher_info = $v->user->teacher_info;
-            $v->teacher_education = $v->user->teacher_education;
-            $v->subject = $v->course->subject;
+            $v->teacher_info = $v->user->teacher_info ?? '未填写';
+            $v->teacher_education = $v->user->teacher_education ?? '未填写';
+            $v->subject = $v->course->subject ?? '未填写';
             $v->teacher_tags = $v->user->teacher_tags->pluck('tag');
             $v->deliver_detail = $v->user->deliver_log;
         }
