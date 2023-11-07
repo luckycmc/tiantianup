@@ -88,7 +88,7 @@ class UserController extends Controller
         if ($user->role != 3) {
             $data['age'] = Carbon::parse($data['birthday'])->diffInYears(Carbon::now());
         }
-        if ($user->role == 4) {
+        if ($role == 4) {
             // 机构信息
             $organization = Organization::where('user_id',$user->id)->first();
             $organization->latitude = $data['latitude'] ?? '';
@@ -98,8 +98,8 @@ class UserController extends Controller
             unset($data['longitude']);
         }
         $data['created_at'] = Carbon::now();
-        Log::info('role: '.$user->role);
-        if ($user->role == 2) {
+        Log::info('role: '.$role);
+        if ($role == 2) {
             $province = Region::where('id',$data['province_id'])->value('region_name');
             $city = Region::where('id',$data['city_id'])->value('region_name');
             $district = Region::where('id',$data['district_id'])->value('region_name');
@@ -113,7 +113,7 @@ class UserController extends Controller
             return $this->error('更新失败');
         }
         // 更新教师标签
-        if ($user->role == 3) {
+        if ($role == 3) {
             $tag = '资料完善';
             $tag_info = [
                 'user_id' => $user->id,
