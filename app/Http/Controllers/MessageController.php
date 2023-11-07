@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +21,9 @@ class MessageController extends Controller
         // 当前用户
         $user = Auth::user();
         $result = Message::where(['user_id' => $user->id,'status' => $status])->paginate($page_size);
+        foreach ($result as $v) {
+            $v->role = $user->role;
+        }
         return $this->success('消息列表',$result);
     }
 
