@@ -216,7 +216,7 @@ class IndexController extends Controller
             $result->address = $result->organization->address;
         }
         if ($result->adder_role == 2) {
-            $result->distance = calculate_distance($latitude,$longitude,$result->latitude,$result->longitude);
+            $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
             // 地址
             $result->address = $result->adder->address;
         }
