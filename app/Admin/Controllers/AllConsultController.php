@@ -9,6 +9,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Models\Administrator;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Str;
 
 class AllConsultController extends AdminController
 {
@@ -26,7 +27,7 @@ class AllConsultController extends AdminController
             $grid->column('type','咨询方式')->using([0 => '热线咨询',1 => '在线咨询']);
             $grid->column('method','咨询类型')->using([0 => '咨询',1 => '投诉', 2 => '建议']);
             $grid->column('content')->display(function ($content) {
-                return substr($content,50);
+                return Str::limit($content,20,'...');
             });
             $grid->column('adder.username','添加人');
             $grid->column('editor.username','修改人');
