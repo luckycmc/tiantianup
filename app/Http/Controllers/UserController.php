@@ -103,6 +103,7 @@ class UserController extends Controller
             $city = Region::where('id',$data['city_id'])->value('region_name');
             $district = Region::where('id',$data['district_id'])->value('region_name');
             $location_data = get_long_lat($province,$city,$district,$data['address'] ?? '');
+            Log::info('arr: ',$location_data);
             $data['longitude'] = $location_data[0];
             $data['latitude'] = $location_data[1];
         }
