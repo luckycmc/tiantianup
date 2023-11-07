@@ -152,7 +152,7 @@ class IndexController extends Controller
         }
         // 投递详情
         $result->deliver_detail = $result->deliver_log;
-        $result->images = json_decode($result->teacher_demeanor[0],true);
+        // $result->images = json_decode($result->teacher_demeanor[0],true);
         $result->tags = $result->teacher_tags->filter(function ($item) {
             return $item->is_show == 1;
         })->values();
