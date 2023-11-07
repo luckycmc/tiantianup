@@ -104,7 +104,7 @@ class CommonController extends Controller
                 $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
                     ->where('end_time', '>=', $current)->first();
                 if ($deal_activity) {
-                    deal_activity_log($user->id,$course_id,$deal_activity);
+                    deal_activity_log($user->id,$order->course_id,$deal_activity);
                 }
             }
         } catch (Exception $e) {
