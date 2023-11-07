@@ -627,6 +627,9 @@ class UserController extends Controller
         if (!$course_info) {
             return $this->error('课程不存在');
         }
+        if ($course_info->course_status == 4) {
+            return $this->error('该课程已被授权');
+        }
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
