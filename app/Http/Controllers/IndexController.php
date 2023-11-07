@@ -208,16 +208,17 @@ class IndexController extends Controller
         $course_id = $data['course_id'] ?? 0;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
-        $result = Course::with('organization')->find($course_id);
+        $result = Course::with(['organization','adder'])->find($course_id);
         // 距离
         if ($result->adder_role == 4) {
             $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
-            $province = $result->organization->province->region_name;
-            $city = $result->organization->city->region_name;
-            $district = $result->organization->district->region_name;
-            $address = $result->organization->address;
             // 地址
-            $result->address = $province.$city.$district.$address;
+            $result->address = $result->organization->address;
+        }
+        if ($result->adder_role == 2) {
+            $result->distance = calculate_distance($latitude,$longitude,$result->latitude,$result->longitude);
+            // 地址
+            $result->address = $result->adder->address;
         }
         // 当前用户
         $user = Auth::user();
@@ -250,11 +251,6 @@ class IndexController extends Controller
             $result->entry_time = $entry_time;
         }
         $result->class_date = json_decode($result->class_date,true);
-        // 上课地址
-        $result->province = $result->province_info->region_name;
-        $result->city = $result->city_info->region_name;
-        $result->district = $result->district_info->region_name;
-        $result->class_address = $result->province_info->region_name.$result->city_info->region_name.$result->district_info->region_name.$result->address;
         return $this->success('课程详情',$result);
     }
 
