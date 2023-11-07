@@ -115,10 +115,20 @@ function get_location ($longitude, $latitude) {
     $response = file_get_contents($url);
     $data = json_decode($response, true);
     if ($data['status'] == 1 ) {
-         return $city = $data['regeocode']['addressComponent'];
+         return $data['regeocode']['addressComponent'];
     } else {
         return false;
     }
+}
+
+function get_long_lat($province,$city,$district,$address) {
+    $key = '4a81139b372ea849981ff499f53c6344'; // 替换为您自己的API密钥
+    $url = "https://restapi.amap.com/v3/geocode/geo?key={$key}&address={$province}.{$city}.{$district}.$address";
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+    $info = $data['geocodes'][0]['location'];
+    $arr = explode(',',$info);
+    return $arr;
 }
 
 function get_access_token () {

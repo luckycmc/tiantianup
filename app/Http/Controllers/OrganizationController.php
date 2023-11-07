@@ -154,7 +154,8 @@ class OrganizationController extends Controller
         $data['adder_id'] = $user->id;
         $data['end_time'] = $data['end_time'] ?? Carbon::now()->addDays(7);
         $data['class_duration']  = $data['duration'] * $data['class_number'];
-        Log::info('data: ',$data);
+        $data['longitude'] = $user->organization->longitude ?? '';
+        $data['latitude'] = $user->organization->latitude ?? '';
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
             return $this->error('提交失败');

@@ -34,7 +34,7 @@ class RefuseCourse extends Form implements LazyRenderable
         $course_info->reason = $reason;
         $course_info->update();
 
-        $user = User::find($course_info->user_id);
+        $user = User::find($course_info->adder_id);
         // 发送通知
         if (SystemMessage::where('action',8)->value('site_message') == 1) {
             (new Message())->saveMessage($user->id,0,'需求审核','需求审核通过',$id,0,3);

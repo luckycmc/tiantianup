@@ -77,6 +77,8 @@ class ParentController extends Controller
         $data['adder_id'] = $user->id;
         // 处理时间
         $data['class_date'] = json_encode($data['class_date']);
+        $data['longitude'] = $user->longitude ?? '';
+        $data['latitude'] = $user->latitude ?? '';
         // 保存数据
         $result = Course::updateOrCreate(['id' => $id],$data);
         if (!$result) {

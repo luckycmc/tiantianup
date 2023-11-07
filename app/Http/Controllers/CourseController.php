@@ -33,22 +33,21 @@ class CourseController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 排序
         $sort_field = 'courses.created_at';
-        $select_field = ['courses.*','organizations.name as organ_name','organizations.longitude','organizations.latitude'];
-        if (isset($data['sort_price'])) {
-            $sort_field = 'courses.class_price';
-        } else if (isset($data['sort_distance'])) {
-            $sort_field = 'distance';
-            $distance_expr = "
+        $distance_expr = "
             (
                 6371 * acos(
                     cos(radians({$latitude})) *
-                    cos(radians(organizations.latitude)) *
-                    cos(radians(organizations.longitude) - radians({$longitude})) +
+                    cos(radians(courses.latitude)) *
+                    cos(radians(courses.longitude) - radians({$longitude})) +
                     sin(radians({$latitude})) *
-                    sin(radians(organizations.latitude))
+                    sin(radians(courses.latitude))
                 )
             ) AS distance";
-            $select_field = ['courses.*','organizations.name as organ_name',DB::raw($distance_expr)];
+        $select_field = ['courses.*','organizations.name as organ_name',DB::raw($distance_expr)];
+        if (isset($data['sort_price'])) {
+            $sort_field = 'courses.class_price';
+        } else if (isset($data['sort_distance'])) {
+            $sort_field = 'courses.distance';
         }
         $order = $data['order'] ?? 'desc';
         // 筛选

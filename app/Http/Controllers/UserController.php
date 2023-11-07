@@ -98,6 +98,14 @@ class UserController extends Controller
             unset($data['longitude']);
         }
         $data['created_at'] = Carbon::now();
+        if ($user->role == 2) {
+            $province = Region::where('id',$data['province_id'])->value('region_name');
+            $city = Region::where('id',$data['city_id'])->value('region_name');
+            $district = Region::where('id',$data['district_id'])->value('region_name');
+            $location_data = get_long_lat($province,$city,$district,$data['address'] ?? '');
+            $data['longitude'] = $location_data[0];
+            $data['latitude'] = $location_data[1];
+        }
         $result = DB::table('users')->where('id',$user->id)->update($data);
         if (!$result) {
             return $this->error('更新失败');

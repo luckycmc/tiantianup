@@ -192,4 +192,9 @@ class CommonController extends Controller
         $price = get_service_price(1,'','驻马店市');
         dd($price);
     }
+
+    public function test_long()
+    {
+        get_long_lat('河南省','郑州市','高新区','须水河西路大正水晶森林');
+    }
 }

@@ -51,7 +51,7 @@ class PlatformMessageController extends AdminController
             $show->field('name');
             $show->field('content');
             $show->field('send_platform');
-            $show->field('status')->as([0 => '未读', 1 => '已读']);
+            $show->field('status')->using([0 => '未读', 1 => '已读']);
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -70,7 +70,7 @@ class PlatformMessageController extends AdminController
             $form->text('content');
             $form->text('send_platform');
             $form->text('status');
-        
+
             $form->display('created_at');
             $form->display('updated_at');
         });
