@@ -40,8 +40,8 @@ class LoginController extends Controller
         if (!isset($session['session_key'])) {
             return $this->error('登陆失败');
         }
-        $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptData);
-        Log::info('decryptedData: '.$decryptedData);
+        // $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptData);
+        // Log::info('decryptedData: '.$decryptedData);
         // 判断用户是否存在
         $is_new = 0;
         $is_user = User::where(['open_id' => $session['openid']])->first();
