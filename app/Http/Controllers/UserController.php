@@ -660,7 +660,7 @@ class UserController extends Controller
         // 发送通知
         if (SystemMessage::where('action',9)->value('site_message') == 1) {
             (new PlatformMessage())->saveMessage('教师投递','教师投递','教师端');
-            (new Message())->saveMessage($course_info->adder_id,$user->id,'教师投递','有教师投递您的需求',$data['course_id'],'教师端',6);
+            (new Message())->saveMessage($course_info->adder_id,$user->id,'教师投递','有教师投递您的需求',$data['course_id'],1,6);
         }
         if (SystemMessage::where('action',9)->value('text_message') == 1) {
             $admin_mobile = SystemMessage::where('action',9)->value('admin_mobile');
