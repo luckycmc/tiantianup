@@ -824,6 +824,7 @@ class OrganizationController extends Controller
         $user = Auth::user();
         // 余额
         $balance = $user->withdraw_balance;
+        Log::info('amount: '.$order->amount);
         if ($order->amount < $balance) {
             $order->status = 1;
             $user->withdraw_balance -= $order->amount;
