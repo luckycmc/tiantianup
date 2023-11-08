@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
@@ -74,6 +75,14 @@ class OrganizationController extends Controller
             }
             // 保存图片
             DB::table('organ_images')->insert($image_data);
+        }
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        // 查看是否有注册活动
+        $invite_activity = Activity::where(['status' => 1,'type' => 1])->where('start_time', '<=', $current)
+            ->where('end_time', '>=', $current)->first();
+        if ($invite_activity && isset($data['parent_id'])) {
+            invite_activity_log($data['parent_id'],$user->id,$user->role,$invite_activity);
         }
         return $this->success('提交成功');
     }

@@ -43,10 +43,8 @@ class LoginController extends Controller
         // $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptData);
         // Log::info('decryptedData: '.$decryptedData);
         // 判断用户是否存在
-        $is_new = 0;
         $is_user = User::where(['open_id' => $session['openid']])->first();
         if (!$is_user) {
-            $is_new = 1;
             $new_user = new User();
             $new_user->open_id = $session['openid'];
             $new_user->union_id = $union_id;
@@ -61,14 +59,6 @@ class LoginController extends Controller
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
         $is_role = $is_user->role ?? 0;
-        // 当前时间
-        $current = Carbon::now()->format('Y-m-d');
-        // 查看是否有注册活动
-        $invite_activity = Activity::where(['status' => 1,'type' => 1])->where('start_time', '<=', $current)
-            ->where('end_time', '>=', $current)->first();
-        if ($invite_activity && $is_new && isset($data['parent_id'])) {
-            invite_activity_log($data['parent_id'],$user_id,$is_role,$invite_activity);
-        }
         return $this->success('登录成功',compact('token','user_id','is_role'));
     }
 
