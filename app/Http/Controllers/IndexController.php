@@ -188,7 +188,12 @@ class IndexController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $result = Course::with('organization')->where($where)->where(['status' => 1,'role' => $user->role,'adder_role' => 4])->paginate($page_size);
+        if (in_array($user->role,[1,2])) {
+            $role = 1;
+        } else {
+            $role = 3;
+        }
+        $result = Course::with('organization')->where($where)->where(['status' => 1,'role' => $role,'adder_role' => 4])->paginate($page_size);
         foreach ($result as $v) {
             $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
             // 是否已报名
