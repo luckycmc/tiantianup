@@ -219,6 +219,7 @@ class IndexController extends Controller
             $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
             // 地址
             $result->address = $result->adder->address;
+            $result->nickname = $result->adder->nickname;
         }
         // 当前用户
         $user = Auth::user();
