@@ -216,9 +216,10 @@ class TeacherController extends Controller
         }
         $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
         foreach ($result as $v) {
+            $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
             // 机构
             if ($v->course->adder_role == 4) {
-                $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
+                // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
                 $v->course->course_role = $v->course->adder_role;
             }
             $v->course->pay_status = $v->pay_status;
