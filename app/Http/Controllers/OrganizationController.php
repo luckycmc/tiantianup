@@ -757,7 +757,7 @@ class OrganizationController extends Controller
             }
             $user->withdraw_balance -= $total_amount;
             $user->update();
-            $result = '余额支付222';
+            $result = '余额支付';
         } else {
             // 调起支付
             $pay_data = [
@@ -830,7 +830,7 @@ class OrganizationController extends Controller
             $user->withdraw_balance -= $order->amount;
             $order->update();
             $user->update();
-            $result = '余额支付111';
+            $result = '余额支付';
         } else {
             // 调起支付
             $pay_data = [
