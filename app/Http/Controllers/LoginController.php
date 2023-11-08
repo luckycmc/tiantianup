@@ -218,29 +218,33 @@ class LoginController extends Controller
             return $this->error('邀请人不存在');
         }
         // 获取open_id
-        $open_id = '';
-        if (isset($data['wx_code'])) {
-            $app = Factory::miniProgram($config);
-            $session = $app->auth->session($data['wx_code']);
-            if (!isset($session['session_key'])) {
-                return $this->error('登陆失败');
-            }
-            $open_id = $session['openid'];
+        if (!isset($data['wx_code'])) {
+            return $this->error('注册失败');
         }
-        // 注册新用户
-        $member = new User();
-        $member->role = 4;
-        $member->parent_id = $parent_id;
-        $member->organ_role_id = $organ_role_id;
-        $member->open_id = $open_id;
-        $member->mobile = $data['mobile'] ?? null;
-        $member->name = $data['name'] ?? null;
-        $member->save();
+        $app = Factory::miniProgram($config);
+        $session = $app->auth->session($data['wx_code']);
+        if (!isset($session['session_key'])) {
+            return $this->error('登陆失败');
+        }
+        $open_id = $session['openid'];
+        $is_user = User::where('open_id',$open_id)->first();
+        if (!$is_user) {
+            // 注册新用户
+            $member = new User();
+            $member->role = 4;
+            $member->parent_id = $parent_id;
+            $member->organ_role_id = $organ_role_id;
+            $member->open_id = $open_id;
+            $member->mobile = $data['mobile'] ?? null;
+            $member->name = $data['name'] ?? null;
+            $member->save();
+            $is_user = $member;
+        }
         // 用户登录
-        $token = JWTAuth::fromUser($member);
+        $token = JWTAuth::fromUser($is_user);
         //设置token
-        Redis::set('TOKEN:'.$member->id,$token);
-        $is_role = $member->role ?? 0;
+        Redis::set('TOKEN:'.$is_user->id,$token);
+        $is_role = $is_user->role ?? 0;
         return $this->success('登录成功',compact('token','is_role'));
     }
 }
