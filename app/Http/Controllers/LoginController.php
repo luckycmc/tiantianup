@@ -241,6 +241,10 @@ class LoginController extends Controller
             $member->name = $data['name'] ?? null;
             $member->save();
             $is_user = $member;
+        } else {
+            $is_user->mobile = $data['mobile'];
+            $is_user->name = $data['name'];
+            $is_user->update();
         }
         // 用户登录
         $token = JWTAuth::fromUser($is_user);
