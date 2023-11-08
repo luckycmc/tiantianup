@@ -228,7 +228,9 @@ class LoginController extends Controller
         }
         $open_id = $session['openid'];
         $is_user = User::where('open_id',$open_id)->first();
+        $is_new = 0;
         if (!$is_user) {
+            $is_new = 1;
             // 注册新用户
             $member = new User();
             $member->role = 4;
@@ -245,6 +247,6 @@ class LoginController extends Controller
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
         $is_role = $is_user->role ?? 0;
-        return $this->success('登录成功',compact('token','is_role'));
+        return $this->success('登录成功',compact('token','is_role','is_new'));
     }
 }
