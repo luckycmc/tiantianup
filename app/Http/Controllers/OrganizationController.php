@@ -59,7 +59,7 @@ class OrganizationController extends Controller
         $data['created_at'] = Carbon::now();
         $data['user_id'] = $user->id;
         $id = DB::table('organizations')->insertGetId($data);
-        $user->organ_id = id;
+        $user->organ_id = $id;
         $user->update();
         $images = \request()->input('images');
         if ($images) {
