@@ -17,12 +17,12 @@ class TeamController extends Controller
         // 当前用户
         $user = Auth::user();
         // 一级团队
-        $child = User::where('parent_id', $user->id)->select('id','avatar','name','created_at')->get();
+        $child = User::where(['parent_id' => $user->id,'is_perfect' => 1])->select('id','avatar','name','created_at')->get();
         foreach ($child as $v) {
             $v->child_count = User::where('parent_id',$v->id)->count();
         }
         // 二级团队
-        $grandson = User::whereIn('parent_id',$child->pluck('id'))->get();
+        $grandson = User::whereIn('parent_id',$child->pluck('id'))->where('is_perfect',1)->get();
         // 一级团队人数
         $child_count = $child->count();
         $grandson_count = $grandson->count();
