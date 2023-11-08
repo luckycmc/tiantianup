@@ -218,44 +218,49 @@ class LoginController extends Controller
             return $this->error('邀请人不存在');
         }
         // 获取open_id
-        if (!isset($data['wx_code'])) {
-            return $this->error('注册失败');
+        $open_id = '';
+        if (isset($data['wx_code'])) {
+            $app = Factory::miniProgram($config);
+            $session = $app->auth->session($data['wx_code']);
+            if (!isset($session['session_key'])) {
+                return $this->error('登陆失败');
+            }
+            $open_id = $session['openid'];
         }
+        // 注册新用户
+        $member = new User();
+        $member->role = 4;
+        $member->parent_id = $parent_id;
+        $member->organ_role_id = $organ_role_id;
+        $member->open_id = $open_id;
+        $member->mobile = $data['mobile'] ?? null;
+        $member->name = $data['name'] ?? null;
+        $member->save();
+        // 用户登录
+        $token = JWTAuth::fromUser($member);
+        //设置token
+        Redis::set('TOKEN:'.$member->id,$token);
+        $is_role = $member->role ?? 0;
+        return $this->success('登录成功',compact('token','is_role'));
+    }
+
+    /**
+     * 判断是否为新用户
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function is_new()
+    {
+        $config = config('wechat.mini_program.default');
+        $data = \request()->all();
+        $code = $data['code'] ?? 0;
         $app = Factory::miniProgram($config);
-        $session = $app->auth->session($data['wx_code']);
+        $session = $app->auth->session($code);
         if (!isset($session['session_key'])) {
-            return $this->error('登陆失败');
+            return $this->error('系统错误');
         }
         $open_id = $session['openid'];
-        $is_user = User::where('open_id',$open_id)->first();
-        $is_new = 0;
-        if (!$is_user) {
-            $is_new = 1;
-            /*// 注册新用户
-            $member = new User();
-            $member->role = 4;
-            $member->parent_id = $parent_id;
-            $member->organ_role_id = $organ_role_id;
-            $member->open_id = $open_id;
-            $member->mobile = $data['mobile'] ?? null;
-            $member->name = $data['name'] ?? null;
-            $member->save();
-            $is_user = $member;*/
-        }
-        $insert_data = [
-            'role' => 4,
-            'parent_id' => $parent_id,
-            'organ_role_id' => $organ_role_id,
-            'mobile' => $data['mobile'],
-            'name' => $data['name'],
-            'open_id' => $open_id
-        ];
-        User::updateOrCreated(['open_id' => $open_id],$insert_data);
-        // 用户登录
-        $token = JWTAuth::fromUser($is_user);
-        //设置token
-        Redis::set('TOKEN:'.$is_user->id,$token);
-        $is_role = $is_user->role ?? 0;
-        return $this->success('登录成功',compact('token','is_role','is_new'));
+        $is_new = User::where('open_id',$open_id)->exists();
+        return $this->success('是否为新用户',$is_new);
     }
 }
