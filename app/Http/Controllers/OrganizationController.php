@@ -546,7 +546,7 @@ class OrganizationController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
-        $members = User::with('organ_role')->where(['role' => 4,'parent_id' => $user->id])->paginate($page_size);
+        $members = User::with('organ_role')->where(['role' => 4,'organ_id' => $user->organ_id])->paginate($page_size);
         foreach ($members as $member) {
             $member->role_name = $member->organ_role->name;
         }
