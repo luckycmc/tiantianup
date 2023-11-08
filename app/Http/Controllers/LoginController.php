@@ -222,6 +222,7 @@ class LoginController extends Controller
         if (isset($data['wx_code'])) {
             $app = Factory::miniProgram($config);
             $session = $app->auth->session($data['wx_code']);
+            Log::info('organ_session: ',$session);
             if (!isset($session['session_key'])) {
                 return $this->error('登陆失败');
             }
