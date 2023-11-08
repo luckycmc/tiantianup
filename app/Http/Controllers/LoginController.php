@@ -230,6 +230,7 @@ class LoginController extends Controller
         // 注册新用户
         $member = new User();
         $member->role = 4;
+        $member->organ_id = User::where('id',$parent_id)->value('organ_id');
         // $member->parent_id = $parent_id;
         $member->organ_role_id = $organ_role_id;
         $member->open_id = $open_id;

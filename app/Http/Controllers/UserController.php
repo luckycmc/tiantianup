@@ -94,6 +94,8 @@ class UserController extends Controller
             $organization->latitude = $data['latitude'] ?? '';
             $organization->longitude = $data['longitude'] ?? '';
             $organization->update();
+            $user->organ_id = $organization->id;
+            $user->update();
             unset($data['latitude']);
             unset($data['longitude']);
         }
