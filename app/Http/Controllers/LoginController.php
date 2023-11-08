@@ -231,7 +231,7 @@ class LoginController extends Controller
         $is_new = 0;
         if (!$is_user) {
             $is_new = 1;
-            // 注册新用户
+            /*// 注册新用户
             $member = new User();
             $member->role = 4;
             $member->parent_id = $parent_id;
@@ -240,12 +240,17 @@ class LoginController extends Controller
             $member->mobile = $data['mobile'] ?? null;
             $member->name = $data['name'] ?? null;
             $member->save();
-            $is_user = $member;
-        } else {
-            $is_user->mobile = $data['mobile'];
-            $is_user->name = $data['name'];
-            $is_user->update();
+            $is_user = $member;*/
         }
+        $insert_data = [
+            'role' => 4,
+            'parent_id' => $parent_id,
+            'organ_role_id' => $organ_role_id,
+            'mobile' => $data['mobile'],
+            'name' => $data['name'],
+            'open_id' => $open_id
+        ];
+        User::updateOrCreated(['open_id' => $open_id],$insert_data);
         // 用户登录
         $token = JWTAuth::fromUser($is_user);
         //设置token
