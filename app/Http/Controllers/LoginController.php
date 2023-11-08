@@ -256,6 +256,7 @@ class LoginController extends Controller
         $code = $data['code'] ?? 0;
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
+        Log::info('session',$session);
         if (!isset($session['session_key'])) {
             return $this->error('系统错误');
         }
