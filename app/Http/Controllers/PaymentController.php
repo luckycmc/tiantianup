@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\TeacherCourseOrder;
 use App\Models\User;
@@ -33,11 +34,14 @@ class PaymentController extends Controller
         if (!$order) {
             return $this->error('订单不存在');
         }
-        if (in_array($order->course_status,[4,5])) {
-            return $this->error('该订单已关闭');
-        }
         // 当前用户
         $user = Auth::user();
+        if ($user->role == 3) {
+            $course_info = Course::find($order->course_id);
+            if (in_array($course_info->course_status,[4,5])) {
+                return $this->error('该订单已关闭');
+            }
+        }
         $order->pay_type = $pay_type;
         $order->save();
         // 微信支付
