@@ -53,6 +53,7 @@ class OrganizationController extends Controller
         if (!isset($user->number)) {
             $user->number = create_user_number($data['city_id'],$user->id);
         }
+        $user->is_perfect = 1;
         $user->update();
         unset($data['role']);
         // 存入机构

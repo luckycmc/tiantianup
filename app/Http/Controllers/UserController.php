@@ -110,6 +110,7 @@ class UserController extends Controller
             $data['longitude'] = $location_data[0];
             $data['latitude'] = $location_data[1];
         }
+        $data['is_perfect'] = 1;
         $result = DB::table('users')->where('id',$user->id)->update($data);
         if (!$result) {
             return $this->error('更新失败');
