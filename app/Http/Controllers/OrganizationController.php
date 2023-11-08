@@ -868,4 +868,16 @@ class OrganizationController extends Controller
         $organization->images = $organization->image_info->pluck('url');
         return $this->success('机构信息',$organization);
     }
+
+    /**
+     * 成员权限
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_member_privilege()
+    {
+        $user = Auth::user();
+        // 机构角色
+        $privileges = $user->organ_role->privileges->pluck('privilege');
+        return $this->success('成员权限',$privileges);
+    }
 }
