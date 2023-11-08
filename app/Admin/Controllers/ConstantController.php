@@ -34,6 +34,7 @@ class ConstantController extends AdminController
                 10 => '随行人员类型',
                 11 => '到访目的',
                 12 => '联系人关系',
+                13 => '培训类型',
             ]);
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -86,6 +87,7 @@ class ConstantController extends AdminController
                 10 => '随行人员类型',
                 11 => '到访目的',
                 12 => '联系人关系',
+                13 => '培训类型',
             ]);
         
             $form->display('created_at');

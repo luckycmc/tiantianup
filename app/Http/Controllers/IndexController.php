@@ -539,7 +539,7 @@ class IndexController extends Controller
      */
     public function get_training_type()
     {
-        $type = TrianingType::all();
+        $type = Constant::where('type',13)->get();
         return $this->success('培训类型',$type);
     }
 
