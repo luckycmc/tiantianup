@@ -848,7 +848,7 @@ class OrganizationController extends Controller
             Log::info('data:',$pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
         }
-        Log::info('result',$result);
+        Log::info('result',$result->toArray());
         return $this->success('调起支付',compact('result'));
     }
 
