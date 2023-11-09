@@ -89,7 +89,7 @@ class User extends Authenticatable implements JWTSubject
     // 教师风采
     public function teacher_demeanor($teacher_id)
     {
-        return $this->teacher_images()->where('user_id',$teacher_id)->where('type',2)->get();
+        return $this->teacher_images()->where('user_id',$teacher_id)->where('type',2)->first();
     }
 
     // 收藏课程
