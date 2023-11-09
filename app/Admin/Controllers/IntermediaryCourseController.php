@@ -38,8 +38,8 @@ class IntermediaryCourseController extends AdminController
                 return $province.$city.$district;
             });
             $grid->column('address','上课地点');
-            $grid->column('class_price','费用');
-            $grid->column('class_duration','上课时长');
+            $grid->column('class_price','费用(元)');
+            $grid->column('class_duration','上课时长(小时)');
             $grid->column('platform_class_date','上课时间');
             $grid->column('mobile','联系方式');
             $grid->column('adder.name','发布人');
@@ -120,11 +120,11 @@ class IntermediaryCourseController extends AdminController
             $form->select('city','市')->options('/api/city')->load('district','/api/city');
             $form->select('district','区')->options('/api/city');
             $form->text('address','上课地点');
-            $form->number('class_duration','上课时长');
-            $form->number('class_price','费用');
+            $form->number('class_duration','上课时长(小时)');
+            $form->number('class_price','费用(元)');
             $form->text('requirement','要求');
             $form->text('detail','详情');
-            $form->number('valid_time','有效期');
+            $form->number('valid_time','有效期(天)');
             $form->text('qq_account','QQ号');
             $form->text('wechat_account','微信号');
             $form->mobile('mobile','手机号');
