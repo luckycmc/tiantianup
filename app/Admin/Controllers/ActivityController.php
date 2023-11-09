@@ -125,7 +125,7 @@ class ActivityController extends AdminController
                 }
                 if (Str::contains($object,'教师')) {
                     $show->field('teacher_deal_reward_type');
-                    $show->field('deal_teacher_reward');
+                    $show->field('teacher_deal_reward');
                 }
                 if (Str::contains($object,'机构')) {
                     $show->field('organ_deal_reward_type');

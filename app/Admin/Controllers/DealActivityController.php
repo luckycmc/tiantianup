@@ -119,7 +119,7 @@ class DealActivityController extends AdminController
                 return implode(',',$value);
             })->canCheckAll()->when(['教师'],function (Form $form) {
                 $form->radio('teacher_deal_reward_type','教师奖励类型')->options(['现金' => '现金'])->default('现金');
-                $form->number('deal_teacher_reward','奖励额度');
+                $form->number('teacher_deal_reward','奖励额度');
             })->when(['家长'],function (Form $form) {
                 $form->radio('parent_deal_reward_type','家长奖励类型')->options(['现金' => '现金'])->default('现金');
                 $form->number('parent_deal_reward','奖励额度');
