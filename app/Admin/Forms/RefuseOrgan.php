@@ -40,7 +40,7 @@ class RefuseOrgan extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',1)->value('text_message') == 1) {
             $text = '机构入驻';
-            /*// 发送短信
+            // 发送短信
             $easySms = new EasySms($config);
             $user = User::find($organ_info->user_id);
             try {
@@ -49,8 +49,10 @@ class RefuseOrgan extends Form implements LazyRenderable
                     'content'  => "【添添向尚】很抱歉，您的".$text."未通过审核",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->error($exception->getResults());
-            }*/
+                return $this->response()
+                    ->error('操作失败')
+                    ->refresh();
+            }
         }
     }
 

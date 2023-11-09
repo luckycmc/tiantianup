@@ -51,14 +51,16 @@ class VerifyRealAuth extends Form implements LazyRenderable
             // 发送短信
             $easySms = new EasySms($config);
 
-            /*try {
+            try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
                     'content'  => "【添添向尚】恭喜您，您的".$text."已通过审核",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->error($exception->getResults());
-            }*/
+                return $this->response()
+                    ->error('操作失败')
+                    ->refresh();
+            }
         }
         $tag = '实名认证';
         $tag_info = [

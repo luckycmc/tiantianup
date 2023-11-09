@@ -67,15 +67,17 @@ class VerifyImage extends RowAction
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '教师风采';
             // 发送短信
-           /* $easySms = new EasySms($config);
+            $easySms = new EasySms($config);
             try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
                     'content'  => "【添添向尚】恭喜您，您的".$text."已通过审核",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->error($exception->getResults());
-            }*/
+                return $this->response()
+                    ->error('操作失败')
+                    ->refresh();
+            }
         }
 
         // 当前时间

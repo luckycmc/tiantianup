@@ -39,7 +39,7 @@ class RefuseCert extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '资格证书';
-            /*// 发送短信
+            // 发送短信
             $easySms = new EasySms($config);
             $user = User::find($teacher_info->user_id);
             try {
@@ -48,8 +48,10 @@ class RefuseCert extends Form implements LazyRenderable
                     'content'  => "【添添向尚】很抱歉，您的".$text."未通过审核",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->error($exception->getResults());
-            }*/
+                return $this->response()
+                    ->error('操作失败')
+                    ->refresh();
+            }
         }
 
         return $this

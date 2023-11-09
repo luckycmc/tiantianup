@@ -44,7 +44,7 @@ class RefuseWithdraw extends Form implements LazyRenderable
         }
         if (SystemMessage::where('action',12)->value('text_message') == 1) {
             $text = '提现申请';
-            /*// 发送短信
+            // 发送短信
             $easySms = new EasySms($config);
             try {
                 $number = new PhoneNumber($user->mobile);
@@ -55,7 +55,7 @@ class RefuseWithdraw extends Form implements LazyRenderable
                 return $this->response()
                     ->error('操作失败')
                     ->refresh();
-            }*/
+            }
         }
 
         return $this
