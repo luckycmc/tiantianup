@@ -52,8 +52,9 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         $where = [];
-        if (isset($data['district_id'])) {
-            $where[] = ['organizations.district_id','=',$data['district_id']];
+        if (isset($data['city'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['organizations.city_id','=',$city_id];
         }
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
@@ -78,7 +79,6 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $user = User::find(19);
         if (isset($data['is_entry'])) {
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
@@ -104,7 +104,8 @@ class CourseController extends Controller
         if (isset($data['is_platform'])) {
             $where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
-                $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
+                $city_id = $data['city'] ? Region::where('region_name',$data['city'])->value('id') : $user->city_id;
+                $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1,'city' => $city_id])->distinct()->pluck('course_id');
                 if ($data['is_show'] == 1) {
                     $where[] = [function ($query) use ($order_arr) {
                         $query->whereIn('courses.id',$order_arr);
