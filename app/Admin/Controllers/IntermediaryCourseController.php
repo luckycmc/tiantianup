@@ -134,7 +134,6 @@ class IntermediaryCourseController extends AdminController
             $form->hidden('class_date');
             $form->hidden('end_time');
             $form->saving(function (Form $form) {
-                $form->class_date = json_encode([$form->class_date_start,$form->class_date_end]);
                 $form->deleteInput('class_date_start');
                 $form->deleteInput('class_date_end');
                 $form->end_time = Carbon::now()->addDays($form->valid_time);
