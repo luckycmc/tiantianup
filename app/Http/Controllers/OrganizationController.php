@@ -876,8 +876,19 @@ class OrganizationController extends Controller
     public function get_member_privilege()
     {
         $user = Auth::user();
-        // 机构角色
-        $privileges = $user->organ_role->privileges->pluck('privilege');
-        return $this->success('成员权限',$privileges);
+        $user = User::find(20);
+        // 员工权限
+        $privileges = $user->organ_role->privileges->pluck('name');
+        // 获取所有权限
+        $all_privileges = OrganPrivilege::all()->pluck('name');
+
+        // 使用 map 方法遍历集合 B，并构建新的关联数组
+        $result = $all_privileges->map(function ($item) use ($privileges) {
+            return [
+                $item => $privileges->contains($item)
+            ];
+        })->collapse();
+        $return = $result->all();
+        return $this->success('成员权限',$return);
     }
 }
