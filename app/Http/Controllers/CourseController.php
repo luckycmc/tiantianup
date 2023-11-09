@@ -52,10 +52,6 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         $where = [];
-        if (isset($data['city'])) {
-            $city_id = Region::where('region_name',$data['city'])->value('id');
-            $where[] = ['organizations.city_id','=',$city_id];
-        }
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
         }
@@ -65,6 +61,7 @@ class CourseController extends Controller
         if (isset($data['filter_subject'])) {
             $where[] = ['courses.subject','=',$data['filter_subject']];
         }
+
         if (isset($data['filter_price_min']) && isset($data['filter_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_price_min']];
             $where[] = ['courses.class_price','<=',$data['filter_price_max']];
@@ -79,7 +76,12 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $user = User::find(19);
+        if (isset($data['city'])) {
+            $id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['courses.city','=',$id];
+        } else {
+            $where[] = ['courses.city','=',$user->city_id];
+        }
         if (isset($data['is_entry'])) {
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
@@ -105,7 +107,6 @@ class CourseController extends Controller
         if (isset($data['is_platform'])) {
             $where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
-                $city_id = $data['city'] ? Region::where('region_name',$data['city'])->value('id') : $user->city_id;
                 $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
                 if ($data['is_show'] == 1) {
                     $where[] = [function ($query) use ($order_arr) {
@@ -116,12 +117,6 @@ class CourseController extends Controller
             if (isset($data['province'])) {
                 $id = Region::where('region_name',$data['province'])->value('id');
                 $where[] = ['courses.province','=',$id];
-            }
-            if (isset($data['city'])) {
-                $id = Region::where('region_name',$data['city'])->value('id');
-                $where[] = ['courses.city','=',$id];
-            } else {
-                $where[] = ['courses.city','=',$user->city_id];
             }
             if (isset($data['district'])) {
                 $id = Region::where('region_name',$data['district'])->value('id');
