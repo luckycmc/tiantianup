@@ -143,7 +143,7 @@ class CourseController extends Controller
             $v->distance = round($v->distance,2);
             if ($v->adder_role == 0) {
                 // 是否查看
-                $v->is_show = $v->deliver->where('pay_status',1)->exists();
+                $v->is_show = (bool) $v->deliver->where('pay_status', 1)->isNotEmpty();
             }
             $v->province = $v->province_info->region_name;
             $v->city = $v->city_info->region_name;
