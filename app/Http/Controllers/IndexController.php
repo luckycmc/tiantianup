@@ -125,7 +125,10 @@ class IndexController extends Controller
         // 是否收藏
         $result->has_collect = $user->has_collect_teacher($id);
         // 教师风采
-        $result->teacher_demeanor = json_decode($result->teacher_demeanor($id)->url,true);
+        $result->teacher_demeanor = $result->teacher_demeanor($id);
+        if ($result->teacher_demeanor) {
+            $result->teacher_demeanor = json_decode($result->teacher_demeanor->url,true);
+        }
         /*foreach ($result->teacher_demeanor as $v) {
             $v->url = json_decode($v->url,true);
         }*/
