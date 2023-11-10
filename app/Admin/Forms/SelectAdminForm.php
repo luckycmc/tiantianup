@@ -38,7 +38,7 @@ class SelectAdminForm extends Form implements LazyRenderable
      */
     public function form()
     {
-        $this->select('admin_id')->options('/api/admin_users');
+        $this->select('admin_id','管理员')->options('/api/admin_users');
     }
 
     /**
