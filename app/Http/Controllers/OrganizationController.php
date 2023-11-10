@@ -402,7 +402,7 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
         // 查询角色列表
-        $role_list = OrganRole::paginate($page_size);
+        $role_list = OrganRole::whereNotIn('id',[1])->paginate($page_size);
         foreach ($role_list as $v) {
             $v->user_count = $v->users()->count();
             $v->has_privilege = $v->privileges()->exists();
