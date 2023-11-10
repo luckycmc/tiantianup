@@ -647,9 +647,9 @@ class UserController extends Controller
         $out_trade_no = app('snowflake')->id();
         $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
         // 金额
-        $user_city = Region::find($user->city_id)->value('region_name');
-        $user_province = Region::find($user->province_id)->value('region_name');
-        $user_district = Region::find($user->district_id)->value('region_name');
+        $user_city = Region::where('id',$user->city_id)->value('region_name');
+        $user_province = Region::where('id',$user->province_id)->value('region_name');
+        $user_district = Region::where('id',$user->district_id)->value('region_name');
         $amount = get_service_price(1,$user_province,$user_city,$user_district);
         // $amount = 0.01;
         // 查看是否已投递
