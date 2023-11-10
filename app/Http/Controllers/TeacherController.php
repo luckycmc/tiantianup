@@ -356,12 +356,13 @@ class TeacherController extends Controller
         $out_trade_no = app('snowflake')->id();
         $user_city = Region::find($user->city_id)->value('region_name');
         $user_province = Region::find($user->province_id)->value('region_name');
+        $user_district = Region::find($user->district_id)->value('region_name');
         if ($course_info->adder_role == 0) {
             $type = 4;
         } else {
             $type = 3;
         }
-       $amount = get_service_price($type,$user_province,$user_city);
+       $amount = get_service_price($type,$user_province,$user_city,$user_district);
         // $amount = 0.01;
         $insert_data = [
             'user_id' => $user->id,

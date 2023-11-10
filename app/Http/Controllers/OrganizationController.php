@@ -106,13 +106,15 @@ class OrganizationController extends Controller
         if ($user->role == 4) {
             $user_city = Region::find($user->organization->city_id)->value('region_name');
             $user_province = Region::find($user->organization->province_id)->value('region_name');
+            $user_district = Region::find($user->organization->district_id)->value('region_name');
         } else {
             $user_city = Region::find($user->city_id)->value('region_name');
             $user_province = Region::find($user->province_id)->value('region_name');
+            $user_district = Region::find($user->district_id)->value('region_name');
         }
 
         // 查询服务费
-        $service_price = get_service_price(2,$user_province,$user_city);
+        $service_price = get_service_price(2,$user_province,$user_city,$user_district);
         Log::info('service_price: '.$service_price);
         // $service_price = 0.01;
         $order_data = [
