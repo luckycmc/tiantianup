@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\SelectAdmin;
 use App\Admin\Repositories\SystemMessage;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -52,6 +53,12 @@ class SystemMessageController extends AdminController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
         
+            });
+            $grid->actions(function ($actions) {
+                $object = $actions->row->object;
+                if (mb_strpos($object, '平台员工') !== false) {
+                    $actions->append(new SelectAdmin());
+                }
             });
         });
     }
