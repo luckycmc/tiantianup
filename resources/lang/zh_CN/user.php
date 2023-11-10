@@ -1,8 +1,8 @@
 <?php 
 return [
     'labels' => [
-        'User' => 'User',
-        'user' => 'User',
+        'User' => '客户',
+        'user' => '客户',
     ],
     'fields' => [
         'avatar' => '头像',

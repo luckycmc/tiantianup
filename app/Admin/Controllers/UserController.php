@@ -21,7 +21,7 @@ class UserController extends AdminController
             $grid->model()->whereIn('role',[1,2]);
             $grid->column('number','ID');
             $grid->column('name');
-            $grid->column('role');
+            $grid->column('role')->using([1 => '学生', 2 => '家长']);
             $grid->column('mobile');
             $grid->column('region','省市区')->display(function () {
                 if (isset($this->province)) {
