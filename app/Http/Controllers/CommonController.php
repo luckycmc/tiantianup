@@ -189,7 +189,7 @@ class CommonController extends Controller
 
     public function test_price()
     {
-        $price = get_service_price(2,'','昌平区');
+        $price = get_service_price(2,'','','昌平区');
         dd($price);
     }
 
