@@ -877,7 +877,6 @@ class OrganizationController extends Controller
     public function get_member_privilege()
     {
         $user = Auth::user();
-        $user = User::find(20);
         // 员工权限
         $privileges = $user->organ_role->privileges->pluck('name');
         // 获取所有权限
