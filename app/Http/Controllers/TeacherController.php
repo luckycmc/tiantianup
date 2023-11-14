@@ -65,7 +65,7 @@ class TeacherController extends Controller
             $where[] = ['teacher_career.object','like','%'.$data['filter_object'].'%'];
         }
         if (isset($data['filter_subject'])) {
-            $where[] = ['teacher_career.object','like','%'.$data['filter_subject'].'%'];
+            $where[] = ['teacher_career.subject','like','%'.$data['filter_subject'].'%'];
         }
         if (isset($data['filter_gender'])) {
             $where[] = ['users.gender','=',$data['filter_gender']];
@@ -88,6 +88,7 @@ class TeacherController extends Controller
             ->orderBy($sort_field,$order)
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->distinct()
+            ->ddSql()
             ->paginate($page_size);
         foreach ($result as $v) {
             // 科目
