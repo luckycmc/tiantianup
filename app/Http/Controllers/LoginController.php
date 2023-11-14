@@ -195,7 +195,7 @@ class LoginController extends Controller
         try {
             $number = new PhoneNumber($data['mobile']);
             $easySms->send($number,[
-                'content'  => '【添添向尚】您的验证码'.$code.'。如非本人操作，请忽略本短信',
+                'content'  => '【添添学】您的验证码'.$code.'。如非本人操作，请忽略本短信',
             ]);
         } catch (Exception|NoGatewayAvailableException $exception) {
             return $this->error($exception->getResults());

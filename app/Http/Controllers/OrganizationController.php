@@ -191,7 +191,7 @@ class OrganizationController extends Controller
             try {
                 $number = new PhoneNumber($mobile);
                 $easySms->send($number,[
-                    'content'  => "【添添向尚】有新发布的需求",
+                    'content'  => "【添添学】有新发布的需求",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());

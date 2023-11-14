@@ -556,7 +556,7 @@ class UserController extends Controller
             try {
                 $number = new PhoneNumber($mobile);
                 $easySms->send($number,[
-                    'content'  => "【添添向尚】有新的提现申请",
+                    'content'  => "【添添学】有新的提现申请",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
@@ -682,7 +682,7 @@ class UserController extends Controller
             try {
                 $adder_number = new PhoneNumber($adder_mobile);
                 $easySms->send($adder_number,[
-                    'content'  => "【添添向尚】有新的投递",
+                    'content'  => "【添添学】有新的投递",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());

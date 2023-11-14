@@ -180,7 +180,7 @@ class ParentController extends Controller
                 try {
                     $number = new PhoneNumber($user->mobile);
                     $easySms->send($number,[
-                        'content'  => "【添添向尚】恭喜您，您的".$text."被选中",
+                        'content'  => "【添添学】恭喜您，您的".$text."被选中",
                     ]);
                 } catch (Exception|NoGatewayAvailableException $exception) {
                     return $this->error($exception->getResults());

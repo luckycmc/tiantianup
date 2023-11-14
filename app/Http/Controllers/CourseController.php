@@ -203,7 +203,7 @@ class CourseController extends Controller
             try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
-                    'content'  => "【添添向尚】有家长/学生报名了您的课程",
+                    'content'  => "【添添学】有家长/学生报名了您的课程",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());

@@ -46,7 +46,7 @@ class RefuseCareer extends Form implements LazyRenderable
             try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
-                    'content'  => "【添添向尚】很抱歉，您的".$text."未通过审核",
+                    'content'  => "【添添学】很抱歉，您的".$text."未通过审核",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->response()
