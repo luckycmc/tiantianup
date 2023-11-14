@@ -680,6 +680,7 @@ class OrganizationController extends Controller
         }
         // 当前机构
         $user = Auth::user();
+        $user = User::find(30);
         // 机构购买的教师
         $teacher_ids = UserTeacherOrder::where('user_id',$user->id)->distinct()->pluck('teacher_id');
         // 排序
@@ -727,7 +728,7 @@ class OrganizationController extends Controller
             // ->where(['district_id' => $district_id])
             ->whereIn('users.id',$teacher_ids)
             ->orderBy($sort_field,$order)
-            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject')
+            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->paginate($page_size);
         foreach ($result as $v) {
             // 科目
