@@ -55,7 +55,6 @@ class UserController extends Controller
             'province_id' => 'required',
             'city_id' => 'required',
             'district_id' => 'required',
-            'contact' => 'required',
         ];
         $messages = [
             'avatar.required' => '头像不能为空',
