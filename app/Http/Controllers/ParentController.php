@@ -45,6 +45,7 @@ class ParentController extends Controller
      */
     public function create_course()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'name' => 'required|string',
@@ -88,6 +89,19 @@ class ParentController extends Controller
             $number = create_course_number($result->id);
             $result->number = $number;
             $result->save();
+        }
+        if (SystemMessage::where('action',9)->value('text_message') == 1) {
+            $admin_mobile = SystemMessage::where('action',9)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $admin_number = new PhoneNumber($admin_mobile);
+                $easySms->send($admin_number,[
+                    'content'  => "【添添学】有新发布的需求",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('操作成功');
     }
