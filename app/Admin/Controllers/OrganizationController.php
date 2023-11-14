@@ -41,12 +41,13 @@ class OrganizationController extends AdminController
             $grid->column('type');
             $grid->column('training_type','培训类型');
             $grid->column('nature','机构性质');
-            $grid->column('user.name','负责人');
+            $grid->column('user.name','联系人');
             $grid->column('mobile');
             $grid->column('id_card_no');
             $grid->column('region','省市区')->display(function () {
                 return $this->province->region_name.$this->city->region_name.$this->district->region_name;
             });
+            $grid->column('address','详细地址');
             $grid->column('contact');
             $grid->column('status')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             $grid->column('user.status','账户状态')->using([1 => '正常', 2 => '禁用']);
