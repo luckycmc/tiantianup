@@ -32,6 +32,7 @@ class LoginController extends Controller
         $data = \request()->all();
         $code = $data['code'] ?? '';
         $union_id = $data['union_id'] ?? 0;
+        $mobile = $data['mobile'] ?? null;
         $iv = $data['iv'] ?? '';
         $encryptData = $data['encryptedData'] ?? '';
         $app = Factory::miniProgram($config);
@@ -50,6 +51,7 @@ class LoginController extends Controller
             $new_user->open_id = $session['openid'];
             $new_user->union_id = $union_id;
             $new_user->parent_id = $data['parent_id'] ?? null;
+            $new_user->mobile = $mobile;
             $new_user->save();
             $is_user = $new_user;
         }
