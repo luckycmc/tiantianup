@@ -675,10 +675,10 @@ class UserController extends Controller
         }
         // 发送通知
         if (SystemMessage::where('action',9)->value('site_message') == 1) {
-            (new PlatformMessage())->saveMessage('教师投递','教师投递','教师端');
+            // (new PlatformMessage())->saveMessage('教师投递','教师投递','教师端');
             (new Message())->saveMessage($course_info->adder_id,$user->id,'教师投递','有教师投递您的需求',$data['course_id'],1,6);
         }
-        if (SystemMessage::where('action',9)->value('text_message') == 1) {
+        /*if (SystemMessage::where('action',9)->value('text_message') == 1) {
             $admin_mobile = SystemMessage::where('action',9)->value('admin_mobile');
             $adder_mobile = User::where('id',$course_info->adder_id)->value('mobile');
             // 发送短信
@@ -695,7 +695,7 @@ class UserController extends Controller
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
             }
-        }
+        }*/
         return $this->success('投递成功');
     }
 

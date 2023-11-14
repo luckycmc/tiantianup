@@ -127,6 +127,7 @@ class TeacherCourseController extends AdminController
             $form->select('status')->options([0 => '待审核',1 => '已通过',3 => '已拒绝']);
             $form->text('reviewer_id');
             $form->text('reason');
+            $form->radio('is_recommend','是否推荐')->options([0 => '否', 1 => '是']);
         
             $form->display('created_at');
             $form->display('updated_at');

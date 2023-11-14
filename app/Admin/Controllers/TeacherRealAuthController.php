@@ -82,7 +82,7 @@ class TeacherRealAuthController extends AdminController
             $show->field('id_card_backend')->image();
             $show->field('real_name');
             $show->field('id_card_no');
-            $show->field('status','审核状态')->as([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
+            $show->field('status','审核状态')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             $show->field('reason');
             $show->field('created_at');
             $show->field('updated_at');
