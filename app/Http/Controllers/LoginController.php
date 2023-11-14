@@ -46,6 +46,7 @@ class LoginController extends Controller
         // Log::info('decryptedData: '.$decryptedData);
         // 判断用户是否存在
         $is_user = User::where(['open_id' => $session['openid']])->first();
+        Log::info('open_id: '.$session['openid']);
         if (!$is_user) {
             $new_user = new User();
             $new_user->open_id = $session['openid'];
