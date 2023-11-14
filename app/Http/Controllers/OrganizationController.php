@@ -680,7 +680,6 @@ class OrganizationController extends Controller
         }
         // 当前机构
         $user = Auth::user();
-        $user = User::find(30);
         // 机构购买的教师
         $teacher_ids = UserTeacherOrder::where('user_id',$user->id)->distinct()->pluck('teacher_id');
         // 排序
