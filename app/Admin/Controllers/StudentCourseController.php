@@ -122,6 +122,7 @@ class StudentCourseController extends AdminController
             $form->text('status');
             $form->text('reviewer_id');
             $form->text('reason');
+            $form->radio('is_recommend','是否推荐')->options([0 => '否', 1 => '是']);
 
             $form->display('created_at');
             $form->display('updated_at');
