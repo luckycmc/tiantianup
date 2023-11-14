@@ -43,7 +43,7 @@ class VerifyOrgan extends RowAction
         $organ_info->update();
         // 发送通知
         if (SystemMessage::where('action',1)->value('site_message') == 1) {
-            (new Message())->saveMessage($organ_info->user_id,0,'机构入驻','机构入驻审核通过',0,0,3);
+            (new Message())->saveMessage($organ_info->user_id,0,'机构入驻','机构入驻审核通过',0,0,7);
         }
         if (SystemMessage::where('action',1)->value('text_message') == 1) {
             $user = User::find($organ_info->user_id);
