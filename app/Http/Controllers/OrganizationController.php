@@ -185,7 +185,7 @@ class OrganizationController extends Controller
             (new PlatformMessage())->saveMessage('发布需求','发布需求','机构端');
         }
         if (SystemMessage::where('action',7)->value('text_message') == 1) {
-            $mobile = SystemMessage::where('action',6)->value('admin_mobile');
+            $mobile = SystemMessage::where('action',7)->value('admin_mobile');
             // 发送短信
             $easySms = new EasySms($config);
             try {
