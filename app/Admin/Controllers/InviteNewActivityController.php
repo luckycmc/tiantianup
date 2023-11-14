@@ -133,7 +133,7 @@ class InviteNewActivityController extends AdminController
                 $form->number('student_second_reward','二级邀请人奖励');
                 $form->number('student_new_reward','新用户奖励');
             })->when(['机构'],function (Form $form) {
-                $form->radio('teacher_reward_type','机构奖励类型')->options(['现金' => '现金']);
+                $form->radio('organ_reward_type','机构奖励类型')->options(['现金' => '现金']);
                 $form->number('organ_first_reward','一级邀请人奖励');
                 $form->number('organ_second_reward','二级邀请人奖励');
                 $form->number('organ_new_reward','新用户奖励');
