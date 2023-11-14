@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
@@ -60,6 +61,35 @@ class LoginController extends Controller
         Redis::set('TOKEN:'.$is_user->id,$token);
         $is_role = $is_user->role ?? 0;
         return $this->success('登录成功',compact('token','user_id','is_role'));
+    }
+
+    /**
+     * 获取绑定手机号
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\HttpException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function get_wx_mobile()
+    {
+        $config = config('wechat.mini_program.default');
+        $data = \request()->all();
+        $app = Factory::miniProgram($config);
+        $access_token = $app->access_token->getToken()['access_token'];
+        $url = 'https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=' . $access_token;
+        // 使用 curl 发送网络请求
+        $result = https_request($url, json_encode(['code' => $data['code']]));
+        $array  = json_decode($result, true);
+        if (isset($array['errcode']) && $array['errcode'] == 0) {
+            // 获取成功
+            $mobile = $array['phone_info']['phoneNumber'];
+            return $this->success('绑定手机号',$mobile);
+        } else {
+            // 获取失败
+            return $this->error('获取手机号失败');
+        }
     }
 
     /**
