@@ -871,6 +871,7 @@ class OrganizationController extends Controller
         $organization->ditrict_name = $organization->district->region_name;
         $organization->images = $organization->image_info->pluck('url');
         $organization->organ_role_id = $user->organ_role_id;
+        $organization->mobile = $user->mobile;
         return $this->success('机构信息',$organization);
     }
 
