@@ -6,6 +6,7 @@ use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Region;
+use App\Models\SystemMessage;
 use App\Models\TeacherCert;
 use App\Models\TeacherCourseOrder;
 use App\Models\TeacherEducation;
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\Exception;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
+use Overtrue\EasySms\PhoneNumber;
 
 class TeacherController extends Controller
 {
@@ -105,6 +110,7 @@ class TeacherController extends Controller
      */
     public function update_cert()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'teacher_cert' => 'required',
@@ -134,6 +140,19 @@ class TeacherController extends Controller
         $result = TeacherCert::updateOrCreate(['user_id' => $user->id],$education_data);
         if (!$result) {
             return $this->error('提交失败');
+        }
+        if (SystemMessage::where('action',9)->value('text_message') == 1) {
+            $admin_mobile = SystemMessage::where('action',9)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $admin_number = new PhoneNumber($admin_mobile);
+                $easySms->send($admin_number,[
+                    'content'  => "【添添学】教师资料更新",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('提交成功');
     }

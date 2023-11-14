@@ -678,24 +678,19 @@ class UserController extends Controller
             // (new PlatformMessage())->saveMessage('教师投递','教师投递','教师端');
             (new Message())->saveMessage($course_info->adder_id,$user->id,'教师投递','有教师投递您的需求',$data['course_id'],1,6);
         }
-        /*if (SystemMessage::where('action',9)->value('text_message') == 1) {
-            $admin_mobile = SystemMessage::where('action',9)->value('admin_mobile');
+        if (SystemMessage::where('action',9)->value('text_message') == 1) {
             $adder_mobile = User::where('id',$course_info->adder_id)->value('mobile');
             // 发送短信
             $easySms = new EasySms($config);
             try {
-                $admin_number = new PhoneNumber($admin_mobile);
                 $adder_number = new PhoneNumber($adder_mobile);
-                $easySms->send($admin_number,[
-                    'content'  => "【添添向尚】有新的投递",
-                ]);
                 $easySms->send($adder_number,[
                     'content'  => "【添添向尚】有新的投递",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
             }
-        }*/
+        }
         return $this->success('投递成功');
     }
 
