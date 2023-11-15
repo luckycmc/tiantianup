@@ -683,7 +683,7 @@ class UserController extends Controller
                     'content'  => "【添添学】有新的投递",
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->error($exception->getMessage());
+                return $this->error($exception->getExceptions());
             }
         }
         return $this->success('投递成功');
