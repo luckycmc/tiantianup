@@ -177,8 +177,9 @@ class ParentController extends Controller
                 $text = '投递';
                 // 发送短信
                 $easySms = new EasySms($config);
+                $mobile = User::where('id',$user_id)->value('mobile');
                 try {
-                    $number = new PhoneNumber($user->mobile);
+                    $number = new PhoneNumber($mobile);
                     $easySms->send($number,[
                         'content'  => "【添添学】恭喜您，您的".$text."被选中",
                     ]);
