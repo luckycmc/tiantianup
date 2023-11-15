@@ -62,6 +62,7 @@ class OrganizationController extends Controller
         $data['user_id'] = $user->id;
         $id = DB::table('organizations')->insertGetId($data);
         $user->organ_id = $id;
+        $user->mobile = $data['mobile'];
         $user->update();
         $images = \request()->input('images');
         if ($images) {
