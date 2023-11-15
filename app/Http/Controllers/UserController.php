@@ -677,14 +677,10 @@ class UserController extends Controller
             $adder_mobile = User::where('id',$course_info->adder_id)->value('mobile');
             // 发送短信
             $easySms = new EasySms($config);
-            try {
-                $adder_number = new PhoneNumber($adder_mobile);
-                $easySms->send($adder_number,[
-                    'content'  => "【添添学】有新的投递",
-                ]);
-            } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->error($exception->getExceptions());
-            }
+            $adder_number = new PhoneNumber($adder_mobile);
+            $easySms->send($adder_number,[
+                'content'  => "【添添学】有新的投递",
+            ]);
         }
         return $this->success('投递成功');
     }
