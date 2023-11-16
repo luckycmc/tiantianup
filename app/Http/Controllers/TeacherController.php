@@ -229,6 +229,7 @@ class TeacherController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
+        $user = User::find(33);
         $where = [];
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
@@ -240,6 +241,7 @@ class TeacherController extends Controller
             if ($v->course->adder_role == 4) {
                 // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
                 $v->course->course_role = $v->course->adder_role;
+                $v->organization_name = $v->course->organization->name;
             }
             $v->course->pay_status = $v->pay_status;
         }
