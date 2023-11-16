@@ -41,6 +41,22 @@ function create_course_number($course_id)
     return $number;
 }
 
+function create_df_number($course_id)
+{
+    $city_id = Course::where('id',$course_id)->value('city');
+    // 查询省市code
+    $region_code = Region::where('id',$city_id)->value('code');
+    // 截取前四位
+    $code = substr($region_code,0,4);
+    $today = Carbon::now();
+    $year = $today->format('y'); // 两位年份
+    $month = $today->format('m'); // 两位月份
+    $day = $today->format('d');   // 两位日期
+    $number = 'DF'.$code.$year.$month.$day.pad($course_id,6);
+    return $number;
+
+}
+
 function pad($id,$int)
 {
     return str_pad($id,$int,'0',STR_PAD_LEFT);

@@ -24,7 +24,7 @@ class IntermediaryCourseController extends AdminController
     {
         return Grid::make(new Course('adder'), function (Grid $grid) {
             $grid->model()->where('adder_role',0);
-            $grid->column('id','编号');
+            $grid->column('number','编号');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
             $grid->column('subject','科目');
@@ -137,6 +137,19 @@ class IntermediaryCourseController extends AdminController
                 $form->deleteInput('class_date_start');
                 $form->deleteInput('class_date_end');
                 $form->end_time = Carbon::now()->addDays($form->valid_time);
+            });
+            $form->saved(function (Form $form, $result) {
+                // 判断是否是新增操作
+                if ($form->isCreating()) {
+                    // 也可以这样获取自增ID
+                    $course_id = $form->getKey();
+
+                    if (!$course_id) {
+                        return $form->error('数据保存失败');
+                    }
+                    $number = create_df_number($course_id);
+                    $form->model()->update(['number' => $number]);
+                }
             });
 
             $form->display('created_at');
