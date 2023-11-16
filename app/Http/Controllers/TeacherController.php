@@ -243,6 +243,7 @@ class TeacherController extends Controller
                 $v->organization_name = $v->course->organization->name;
             }
             $v->course->pay_status = $v->pay_status;
+            $v->course->is_checked = $v->is_checked;
         }
         $course = $result->map(function ($item) {
             return $item->course;
