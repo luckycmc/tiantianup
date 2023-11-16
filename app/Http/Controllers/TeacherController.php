@@ -229,7 +229,6 @@ class TeacherController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(33);
         $where = [];
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
