@@ -8,6 +8,7 @@ use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\User;
 use Dcat\Admin\Actions\Response;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\RowAction;
 use Dcat\Admin\Traits\HasPermissions;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -39,6 +40,7 @@ class VerifyCourse extends RowAction
         $course_info = Course::find($course_id);
         $course_info->status = 1;
         $course_info->is_recommend = 1;
+        $course_info->reviewer = Admin::user()->name;
         if ($course_info->adder_role == 0) {
             $province = Region::where('id',$course_info->province)->value('region_name');
             $city = Region::where('id',$course_info->city)->value('region_name');
