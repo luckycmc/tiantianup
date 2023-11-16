@@ -201,7 +201,7 @@ class CourseController extends Controller
             // 发送短信
             $easySms = new EasySms($config);
             try {
-                $number = new PhoneNumber($organ_user->organization->mobile);
+                $number = new PhoneNumber($organ_user->mobile);
                 $easySms->send($number,[
                     'content'  => "【添添学】有家长/学生报名了您的课程",
                 ]);
