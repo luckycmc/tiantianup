@@ -285,6 +285,7 @@ class LoginController extends Controller
             return $this->error('系统错误');
         }
         $open_id = $session['openid'];
+        Log::info('open_id: '.$open_id);
         $is_new = User::where('open_id',$open_id)->exists();
         return $this->success('是否为新用户',$is_new);
     }
