@@ -47,7 +47,9 @@ class TeacherController extends Controller
         }
         // 当前用户
         $user = Auth::user();
+        $user = User::find(18);
         $page_size = $data['page_size'] ?? 10;
+        $page = $data['page'];
         // 排序
         $order = $data['order'] ?? 'desc';
         $sort_field = 'users.age';
@@ -85,10 +87,19 @@ class TeacherController extends Controller
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
             ->where(['users.district_id' => $district_id,'users.role' => 3])
-            ->orderBy($sort_field,$order)
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
-            ->distinct()
+            ->orderBy($sort_field,$order)
             ->paginate($page_size);
+        // 去重
+        $result = $result->unique('id');
+        // 排序
+        $result = new \Illuminate\Pagination\LengthAwarePaginator(
+            $result,
+            count($result),
+            $page_size,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
         foreach ($result as $v) {
             // 科目
             $v->subject = explode(',',$v->subject);
