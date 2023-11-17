@@ -119,24 +119,24 @@ class InviteNewActivityController extends AdminController
                 return implode(',',$value);
             })->canCheckAll()->when(['教师'],function (Form $form) {
                 $form->radio('teacher_reward_type','教师奖励类型')->options(['现金' => '现金']);
-                $form->number('teacher_first_reward','一级邀请人奖励');
-                $form->number('teacher_second_reward','二级邀请人奖励');
-                $form->number('teacher_new_reward','新用户奖励');
+                $form->decimal('teacher_first_reward','一级邀请人奖励');
+                $form->decimal('teacher_second_reward','二级邀请人奖励');
+                $form->decimal('teacher_new_reward','新用户奖励');
             })->when(['家长'],function (Form $form) {
                 $form->radio('parent_reward_type','家长奖励类型')->options(['现金' => '现金', '优惠券' => '优惠券']);
-                $form->number('parent_first_reward','一级邀请人奖励');
-                $form->number('parent_second_reward','二级邀请人奖励');
-                $form->number('parent_new_reward','新用户奖励');
+                $form->decimal('parent_first_reward','一级邀请人奖励');
+                $form->decimal('parent_second_reward','二级邀请人奖励');
+                $form->decimal('parent_new_reward','新用户奖励');
             })->when(['学生'],function (Form $form) {
                 $form->radio('student_reward_type','学生奖励类型')->options(['现金' => '现金', '优惠券' => '优惠券']);
-                $form->number('student_first_reward','一级邀请人奖励');
-                $form->number('student_second_reward','二级邀请人奖励');
-                $form->number('student_new_reward','新用户奖励');
+                $form->decimal('student_first_reward','一级邀请人奖励');
+                $form->decimal('student_second_reward','二级邀请人奖励');
+                $form->decimal('student_new_reward','新用户奖励');
             })->when(['机构'],function (Form $form) {
                 $form->radio('organ_reward_type','机构奖励类型')->options(['现金' => '现金']);
-                $form->number('organ_first_reward','一级邀请人奖励');
-                $form->number('organ_second_reward','二级邀请人奖励');
-                $form->number('organ_new_reward','新用户奖励');
+                $form->decimal('organ_first_reward','一级邀请人奖励');
+                $form->decimal('organ_second_reward','二级邀请人奖励');
+                $form->decimal('organ_new_reward','新用户奖励');
             });
             $form->hidden('type','类型')->default(1);
             $form->text('description','描述');
