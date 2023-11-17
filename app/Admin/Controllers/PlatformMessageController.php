@@ -18,6 +18,7 @@ class PlatformMessageController extends AdminController
     protected function grid()
     {
         return Grid::make(new PlatformMessage(), function (Grid $grid) {
+            $grid->model()->orderByDesc('created_at');
             $grid->column('id')->sortable();
             $grid->column('name');
             $grid->column('content');

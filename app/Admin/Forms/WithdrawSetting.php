@@ -37,9 +37,9 @@ class WithdrawSetting extends Form
      */
     public function form()
     {
-        $this->number('withdraw_min','最低提现金额')->required();
-        $this->number('withdraw_commission','提现手续费')->required();
-        $this->number('withdraw_pay_time','预计打款时间')->required();
+        $this->number('withdraw_min','最低提现金额(元)')->required();
+        $this->number('withdraw_commission','提现手续费(元)')->required();
+        $this->number('withdraw_pay_time','预计打款时间(天)')->required();
     }
 
     /**
