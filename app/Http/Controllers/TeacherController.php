@@ -280,6 +280,7 @@ class TeacherController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
+
         // 当前用户
         $user = Auth::user();
         $sort_field = 'courses.created_at';
@@ -293,6 +294,12 @@ class TeacherController extends Controller
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
+        // 当前城市
+        $location_info = get_location($longitude,$latitude);
+        $city = $location_info['city'];
+        $city_id = Region::where('region_name',$city)->value('id');
+
+        $where[] = ['courses.city_id','=',$city_id];
         if (isset($data['filter_type'])) {
             $where[] = ['courses.type','=',$data['filter_type']];
         }

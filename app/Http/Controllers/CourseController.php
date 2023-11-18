@@ -52,6 +52,12 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         $where = [];
+        // 当前城市
+        $location_info = get_location($longitude,$latitude);
+        $city = $location_info['city'];
+        $city_id = Region::where('region_name',$city)->value('id');
+
+        $where[] = ['courses.city_id','=',$city_id];
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
         }
