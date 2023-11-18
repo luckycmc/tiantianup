@@ -85,7 +85,7 @@ class LoginController extends Controller
         // 使用 curl 发送网络请求
         $result = https_request($url, json_encode(['code' => $data['code']]));
         $array  = json_decode($result, true);
-        Log::info('array: '.$array);
+        Log::info('array: ',$array);
         if (isset($array['errcode']) && $array['errcode'] == 0) {
             // 获取成功
             $mobile = $array['phone_info']['phoneNumber'];
