@@ -177,7 +177,7 @@ class IndexController extends Controller
         $city = $location_info['city'];
         $city_id = Region::where('region_name',$city)->value('id');
 
-        $where[] = ['city_id','=',$city_id];
+        $where[] = ['city','=',$city_id];
         $where = [];
         if (isset($data['name'])) {
             $where[] = ['name','like','%'.$data['name'].'%'];

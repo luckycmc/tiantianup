@@ -299,7 +299,7 @@ class TeacherController extends Controller
         $city = $location_info['city'];
         $city_id = Region::where('region_name',$city)->value('id');
 
-        $where[] = ['courses.city_id','=',$city_id];
+        $where[] = ['courses.city','=',$city_id];
         if (isset($data['filter_type'])) {
             $where[] = ['courses.type','=',$data['filter_type']];
         }

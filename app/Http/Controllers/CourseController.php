@@ -57,7 +57,7 @@ class CourseController extends Controller
         $city = $location_info['city'];
         $city_id = Region::where('region_name',$city)->value('id');
 
-        $where[] = ['courses.city_id','=',$city_id];
+        $where[] = ['courses.city','=',$city_id];
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
         }
