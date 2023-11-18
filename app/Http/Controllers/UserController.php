@@ -125,8 +125,8 @@ class UserController extends Controller
         // 查看是否有注册活动
         $invite_activity = Activity::where(['status' => 1,'type' => 1])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
-        if ($invite_activity && isset($data['parent_id'])) {
-            invite_activity_log($data['parent_id'],$user->id,$user->role,$invite_activity);
+        if ($invite_activity && isset($user->parent_id)) {
+            invite_activity_log($user->parent_id,$user->id,$user->role,$invite_activity);
         }
         return $this->success('更新成功');
     }
