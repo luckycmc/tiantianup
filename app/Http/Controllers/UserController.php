@@ -129,7 +129,7 @@ class UserController extends Controller
         Log::info('parent_id: '.$user->parent_id);
         if ($invite_activity && isset($user->parent_id)) {
             Log::info(111);
-            invite_activity_log($user->parent_id,$user->id,$user->role,$invite_activity);
+            invite_activity_log($user->parent_id,$user->id,$role,$invite_activity);
         }
         return $this->success('更新成功');
     }
