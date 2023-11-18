@@ -122,7 +122,7 @@ class UserController extends Controller
         }
         // 当前时间
         $current = Carbon::now()->format('Y-m-d');
-        if ($user->is_new <= 1) {
+        if ($user->is_new == 0) {
             // 查看是否有注册活动
             $invite_activity = Activity::where(['status' => 1,'type' => 1])->where('start_time', '<=', $current)
                 ->where('end_time', '>=', $current)->first();
@@ -130,7 +130,7 @@ class UserController extends Controller
                 invite_activity_log($user->parent_id,$user->id,$role,$invite_activity);
             }
         }
-        $user->is_new += 1;
+        $user->is_new = 1;
         $user->update();
         return $this->success('更新成功');
     }
