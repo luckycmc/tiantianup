@@ -90,8 +90,8 @@ class ParentController extends Controller
             $result->number = $number;
             $result->save();
         }
-        if (SystemMessage::where('action',9)->value('text_message') == 1) {
-            $admin_mobile = SystemMessage::where('action',9)->value('admin_mobile');
+        if (SystemMessage::where('action',7)->value('text_message') == 1) {
+            $admin_mobile = SystemMessage::where('action',7)->value('admin_mobile');
             // 发送短信
             $easySms = new EasySms($config);
             try {
