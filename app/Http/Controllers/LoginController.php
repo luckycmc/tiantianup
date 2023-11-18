@@ -80,7 +80,7 @@ class LoginController extends Controller
         $config = config('wechat.mini_program.default');
         $data = \request()->all();
         $app = Factory::miniProgram($config);
-        $access_token = $app->access_token->getToken()['access_token'];
+        $access_token = $app->access_token->getToken(true)['access_token'];
         $url = 'https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=' . $access_token;
         // 使用 curl 发送网络请求
         $result = https_request($url, json_encode(['code' => $data['code']]));
