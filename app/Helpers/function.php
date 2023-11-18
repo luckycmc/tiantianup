@@ -259,6 +259,7 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
     $first_field = $prefix.'first_reward';
     $second_field = $prefix.'second_reward';
     $new_field = $prefix.'new_reward';
+    Log::info('reward: '.$reward->$first_field);
 
     // 发放奖励
     $parent->withdraw_balance += $reward->$first_field;
