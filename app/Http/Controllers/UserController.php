@@ -120,32 +120,19 @@ class UserController extends Controller
             ];
             TeacherTag::updateOrCreate(['user_id' => $user->id,'tag' => $tag],$tag_info);
         }
-        return $this->success('更新成功');
-    }
-
-    /**
-     * 邀新活动
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function invite_new_activity()
-    {
-        $data = \request()->all();
-        $role = $data['role'] ?? 1;
-        $is_new = $data['is_new'] ?? 0;
-        // 当前用户
-        $user = Auth::user();
-        if ($is_new) {
-            // 当前时间
-            $current = Carbon::now()->format('Y-m-d');
+        // 当前时间
+        $current = Carbon::now()->format('Y-m-d');
+        if ($user->is_new > 0) {
             // 查看是否有注册活动
             $invite_activity = Activity::where(['status' => 1,'type' => 1])->where('start_time', '<=', $current)
                 ->where('end_time', '>=', $current)->first();
             if ($invite_activity && isset($user->parent_id)) {
                 invite_activity_log($user->parent_id,$user->id,$role,$invite_activity);
             }
-            return $this->success('奖励发放成功');
         }
-        return $this->error('非新用户');
+        $user->is_new += 1;
+        $user->update();
+        return $this->success('更新成功');
     }
 
     /**
