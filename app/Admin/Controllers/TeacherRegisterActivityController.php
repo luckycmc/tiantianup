@@ -116,7 +116,7 @@ class TeacherRegisterActivityController extends AdminController
             $form->decimal('teacher_real_auth_reward','实名认证奖励');
             $form->decimal('teacher_cert_reward','资格证书奖励');
             $form->decimal('teacher_career_reward','教学经历奖励');
-            $form->number('teacher_image_reward','教师风采/客户见证奖励');
+            $form->decimal('teacher_image_reward','教师风采/客户见证奖励');
             $form->text('introduction','介绍');
             $form->dateRange('start_time','end_time','活动时间');
             $form->select('status','状态')->options([0 => '已结束',1 => '进行中',2 => '待开始',3 => '已拒绝', 4 => '待审核', 5 => '禁用']);
