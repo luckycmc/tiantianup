@@ -44,7 +44,7 @@ class StudentCourseController extends AdminController
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
-                if (in_array($status,[0,3])) {
+                if ($status == 0) {
                     $actions->append(new VerifyCourse());
                     $actions->append(new RefuseCourse());
                 }
