@@ -47,7 +47,7 @@ class CourseController extends Controller
         if (isset($data['sort_price'])) {
             $sort_field = 'courses.class_price';
         } else if (isset($data['sort_distance'])) {
-            $sort_field = 'courses.distance';
+            $sort_field = 'distance';
         }
         $order = $data['order'] ?? 'desc';
         // 筛选
