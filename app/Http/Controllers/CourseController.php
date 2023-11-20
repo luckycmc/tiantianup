@@ -51,7 +51,6 @@ class CourseController extends Controller
         }
         $order = $data['order'] ?? 'desc';
         // 筛选
-        $where = [];
         // 当前城市
         $location_info = get_location($longitude,$latitude);
         $city = $location_info['city'];
@@ -83,6 +82,7 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
+        $user = User::find(9);
         if (isset($data['city'])) {
             $id = Region::where('region_name',$data['city'])->value('id');
             $where[] = ['courses.city','=',$id];
