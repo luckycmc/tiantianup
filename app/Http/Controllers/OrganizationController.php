@@ -318,7 +318,7 @@ class OrganizationController extends Controller
             return $this->error(implode(',',$errors->all()));
         }
         // 更新数据
-        $data['status'] == 0;
+        $data['status'] = 0;
         $result = DB::table('courses')->where('id',$id)->update($data);
         if (!$result) {
             return $this->error('编辑失败');
