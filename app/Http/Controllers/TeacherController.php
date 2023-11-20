@@ -47,7 +47,7 @@ class TeacherController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $user = User::find(18);
+        // $user = User::find(18);
         $page_size = $data['page_size'] ?? 10;
         $page = $data['page'];
         // 排序
