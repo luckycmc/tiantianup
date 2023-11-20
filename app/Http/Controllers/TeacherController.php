@@ -391,9 +391,9 @@ class TeacherController extends Controller
         if (!$course_info) {
             return $this->error('需求不存在');
         }
-        if ($course_info->course_status == 4) {
+        /*if ($course_info->course_status == 4) {
             return $this->error('该课程被抢走啦');
-        }
+        }*/
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
