@@ -260,6 +260,7 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
     $second_field = $prefix.'second_reward';
     $new_field = $prefix.'new_reward';
     Log::info('reward: '.$reward);
+    Log::info('role: '.$role);
     Log::info('field: '.$first_field);
     Log::info('reward_field: '.$reward->$first_field);
 
