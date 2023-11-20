@@ -158,14 +158,14 @@ class LoginController extends Controller
         Redis::set('TOKEN:'.$is_user->id,$token);
         // dd($is_user->role);
         // 当前时间
-        $current = Carbon::now()->format('Y-m-d');
-        // 查看是否有注册活动
+        // $current = Carbon::now()->format('Y-m-d');
+        /*// 查看是否有注册活动
         $invite_activity = Activity::where(['status' => 1])->where('start_time', '<=', $current)
-            ->where('end_time', '>=', $current)->first();
+            ->where('end_time', '>=', $current)->first();*/
         $is_role = $is_user->role ?? 0;
-        if ($invite_activity && $is_new && isset($data['parent_id'])) {
+        /*if ($invite_activity && $is_new && isset($data['parent_id'])) {
             invite_activity_log($data['parent_id'],$is_user->id,$is_role,$invite_activity);
-        }
+        }*/
         return $this->success('登录成功',compact('token','is_role'));
     }
 
