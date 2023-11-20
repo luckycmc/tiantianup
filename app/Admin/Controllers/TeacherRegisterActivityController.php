@@ -113,9 +113,9 @@ class TeacherRegisterActivityController extends AdminController
             $form->radio('object','对象')->options(['教师' => '教师'])->default('教师');
             $form->hidden('type','类型')->default(2);
             $form->text('description','活动描述');
-            $form->number('teacher_real_auth_reward','实名认证奖励');
-            $form->number('teacher_cert_reward','资格证书奖励');
-            $form->number('teacher_career_reward','教学经历奖励');
+            $form->decimal('teacher_real_auth_reward','实名认证奖励');
+            $form->decimal('teacher_cert_reward','资格证书奖励');
+            $form->decimal('teacher_career_reward','教学经历奖励');
             $form->number('teacher_image_reward','教师风采/客户见证奖励');
             $form->text('introduction','介绍');
             $form->dateRange('start_time','end_time','活动时间');
