@@ -31,6 +31,7 @@ class CourseController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
+        $where = [];
         // 排序
         $sort_field = 'courses.created_at';
         $distance_expr = "
@@ -52,12 +53,14 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         // 当前城市
-        $location_info = get_location($longitude,$latitude);
-        $city = $location_info['city'];
-        $city_id = Region::where('region_name',$city)->value('id');
+        if (isset($data['longitude']) && isset($data['latitude'])) {
+            $location_info = get_location($longitude,$latitude);
+            $city = $location_info['city'];
+            $city_id = Region::where('region_name',$city)->value('id');
 
-        $where = [];
-        $where[] = ['courses.city','=',$city_id];
+            $where[] = ['courses.city','=',$city_id];
+        }
+
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
         }
