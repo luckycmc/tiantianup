@@ -57,6 +57,7 @@ class CourseController extends Controller
         $city = $location_info['city'];
         $city_id = Region::where('region_name',$city)->value('id');
 
+        $where = [];
         $where[] = ['courses.city','=',$city_id];
         if (isset($data['fitler_type'])) {
             $where[] = ['courses.type','=',$data['fitler_type']];
@@ -85,9 +86,8 @@ class CourseController extends Controller
         if (isset($data['city'])) {
             $id = Region::where('region_name',$data['city'])->value('id');
             $where[] = ['courses.city','=',$id];
-        } else {
-            $where[] = ['courses.city','=',$user->city_id];
         }
+        // dd($where);
         if (isset($data['is_entry'])) {
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
