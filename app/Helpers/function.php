@@ -255,12 +255,12 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
     // 获取活动奖励
     $reward = get_reward(1,$parent->role);
     $arr = ['','student_','parent_','teacher_','organ_'];
-    $prefix = $arr[$role];
+    $prefix = $arr[$parent->role];
     $first_field = $prefix.'first_reward';
     $second_field = $prefix.'second_reward';
     $new_field = $prefix.'new_reward';
     Log::info('reward: '.$reward);
-    Log::info('role: '.$role);
+    // Log::info('role: '.$role);
     Log::info('field: '.$first_field);
     Log::info('reward_field: '.$reward->$first_field);
 
