@@ -47,7 +47,11 @@ class VerifyCareer extends RowAction
         $user = User::find($teacher_info->user_id);
         $user->withdraw_balance += $amount;
         $user->total_income += $amount;
-        $tag = $user->teacher_info->teaching_year.'年教学经验';
+        $start_time = Carbon::parse($teacher_info->start_time);
+        $end_time = Carbon::parse($teacher_info->end_time);
+        $teaching_year = $start_time->diffInYears($end_time);
+        $user->teaching_year += $teaching_year;
+        $tag = $user->teaching_year.'年教学经验';
         $tag_info = [
             'user_id' => $user->id,
             'tag' => $tag

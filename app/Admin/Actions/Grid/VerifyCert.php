@@ -49,7 +49,7 @@ class VerifyCert extends RowAction
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '资格证书';
             // 发送短信
-            /*$easySms = new EasySms($config);
+            $easySms = new EasySms($config);
             try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
@@ -57,7 +57,7 @@ class VerifyCert extends RowAction
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->error($exception->getResults());
-            }*/
+            }
         }
         /*if (SystemMessage::where('action',6)->value('official_account') == 1) {
             // 推送公众号消息
