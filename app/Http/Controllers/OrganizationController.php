@@ -60,6 +60,7 @@ class OrganizationController extends Controller
         // 存入机构
         $data['created_at'] = Carbon::now();
         $data['user_id'] = $user->id;
+        $data['mobile'] = $user->mobile;
         $id = DB::table('organizations')->insertGetId($data);
         $user->organ_id = $id;
         $user->update();
