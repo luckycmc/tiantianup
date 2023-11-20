@@ -283,8 +283,12 @@ class TeacherController extends Controller
 
         // 当前用户
         $user = Auth::user();
+        // $user = User::find(4);
         $sort_field = 'courses.created_at';
         $order = 'desc';
+        if (isset($data['sort_created_at'])) {
+            $order = $data['sort_created_at'] == 0 ? 'desc' : 'asc';
+        }
         if (isset($data['sort_class_price'])) {
             $sort_field = 'courses.class_price';
             $order = $data['sort_class_price'] == 0 ? 'desc' : 'asc';
@@ -306,8 +310,8 @@ class TeacherController extends Controller
         if (isset($data['filter_method'])) {
             $where[] = ['courses.method','=',$data['filter_method']];
         }
-        if (isset($data['subject'])) {
-            $where[] = ['courses.subject','=',$data['subject']];
+        if (isset($data['filter_subject'])) {
+            $where[] = ['courses.subject','=',$data['filter_subject']];
         }
         if (isset($data['grade'])) {
             $where[] = ['courses.grade','=',$data['grade']];

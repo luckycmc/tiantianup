@@ -173,6 +173,9 @@ class OrganizationController extends Controller
         $data['class_duration']  = $data['duration'] * $data['class_number'];
         $data['longitude'] = $user->organization->longitude ?? '';
         $data['latitude'] = $user->organization->latitude ?? '';
+        if ($data['role'] == 3) {
+            $data['class_price'] = $data['base_price'];
+        }
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
             return $this->error('提交失败');
