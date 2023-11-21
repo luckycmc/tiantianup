@@ -688,8 +688,12 @@ class OrganizationController extends Controller
         }
         // 当前机构
         $user = Auth::user();
+        // 用户所在机构
+        $organ_id = $user->organ_id;
+        // 机构所有的成员
+        $organ_user = User::where('organ_id',$organ_id)->get()->pluck('id')->toArray();
         // 机构购买的教师
-        $teacher_ids = UserTeacherOrder::where('user_id',$user->id)->distinct()->pluck('teacher_id');
+        $teacher_ids = UserTeacherOrder::whereIn('user_id',$organ_user)->distinct()->pluck('teacher_id');
         // 排序
         $order = $data['order'] ?? 'desc';
         $sort_field = 'users.age';
