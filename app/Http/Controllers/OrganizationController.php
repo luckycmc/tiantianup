@@ -220,7 +220,10 @@ class OrganizationController extends Controller
         $status = $data['status'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(33);
+        // 查询当前用户的机构
+        $organ_id = $user->organ_id;
+        // 机构成员
+        $organ_users = User::where('organ_id',$organ_id)->value('id');
         // 角色
         $role = $data['role'] ?? 3;
         // 排序条件
@@ -246,7 +249,7 @@ class OrganizationController extends Controller
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];
         }
-        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status,'adder_id' => $user->id])->where($where)->orderBy($sort_field,$sort)->paginate($page_size);
+        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->orderBy($sort_field,$sort)->paginate($page_size);
         return $this->success('需求列表',$result);
     }
 
