@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Overtrue\EasySms\EasySms;
 use Overtrue\EasySms\Exceptions\Exception;
 use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
@@ -65,6 +66,8 @@ class CourseController extends Controller
             $region_info = get_long_lat('','',$district_name,'');
             $longitude = $region_info[0];
             $latitude = $region_info[1];
+            Log::info('longitude'.$longitude);
+            Log::info('latitude'.$latitude);
         }
 
         if (isset($data['fitler_type'])) {
