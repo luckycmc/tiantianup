@@ -377,6 +377,7 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
     // 需求
     $course = Course::find($course_id);
     $role = $course->adder_role;
+    Log::info('role: '.$role);
     // 查询奖励
     $reward = get_reward(3,$role);
     // 成交活动
