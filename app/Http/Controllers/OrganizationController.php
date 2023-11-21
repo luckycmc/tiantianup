@@ -223,7 +223,7 @@ class OrganizationController extends Controller
         // 查询当前用户的机构
         $organ_id = $user->organ_id;
         // 机构成员
-        $organ_users = User::where('organ_id',$organ_id)->value('id');
+        $organ_users = User::where('organ_id',$organ_id)->get()->pluck('id')->toArray();
         // 角色
         $role = $data['role'] ?? 3;
         // 排序条件
