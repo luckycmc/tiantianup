@@ -172,13 +172,18 @@ class IndexController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
-        // 当前城市
-        $location_info = get_location($longitude,$latitude);
-        $city = $location_info['city'];
-        $city_id = Region::where('region_name',$city)->value('id');
 
         $where = [];
-        // $where[] = ['city','=',$city_id];
+        if (isset($data['is_default'])) {
+            // 当前城市
+            $location_info = get_location($longitude,$latitude);
+            $city = $location_info['city'];
+            $city_id = Region::where('region_name',$city)->value('id');
+        } else {
+            $city_id = $data['city'];
+        }
+        $where[] = ['city','=',$city_id];
+
         if (isset($data['name'])) {
             $where[] = ['name','like','%'.$data['name'].'%'];
         }
