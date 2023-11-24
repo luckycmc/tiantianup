@@ -87,7 +87,7 @@ class TeacherController extends Controller
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
             ->where(['users.district_id' => $district_id,'users.role' => 3])
-            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
+            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
         // 去重
