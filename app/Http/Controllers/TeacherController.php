@@ -283,7 +283,7 @@ class TeacherController extends Controller
 
         // 当前用户
         $user = Auth::user();
-        $user = User::find(2);
+        // $user = User::find(2);
         // $user = User::find(4);
         $sort_field = 'courses.created_at';
         $order = 'desc';
