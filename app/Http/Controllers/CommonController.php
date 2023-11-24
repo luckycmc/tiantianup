@@ -88,8 +88,10 @@ class CommonController extends Controller
                     $user->save();
                     $order->save();
                 }
-                /*$course->course_status = 4;
-                $course->update();*/
+                if ($course->adder_role !== 0) {
+                    $course->course_status = 4;
+                    $course->update();
+                }
                 // 保存日志
                 $log_data = [
                     'user_id' => $user->id,
