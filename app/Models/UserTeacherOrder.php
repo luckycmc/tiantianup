@@ -30,7 +30,7 @@ class UserTeacherOrder extends Model
 
     public function teacher_education()
     {
-        return $this->belongsTo(TeacherEducation::class,'teacher_id');
+        return $this->belongsTo(TeacherEducation::class,'teacher_id','user_id');
     }
     
 }
