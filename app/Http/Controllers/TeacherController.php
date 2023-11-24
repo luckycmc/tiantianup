@@ -277,6 +277,7 @@ class TeacherController extends Controller
     public function course_list()
     {
         $data = \request()->all();
+        Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
