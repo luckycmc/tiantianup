@@ -862,8 +862,8 @@ class UserController extends Controller
         $date_sort = $data['date_sort'] ?? 'desc';
         $entry_start_date = $data['entry_start_date'] ?? Carbon::createFromTimestamp(0)->format('Y-m-d');
         $entry_end_date = $data['entry_end_date'] ?? Carbon::now()->format('Y-m-d');
-        $longitude = $data['longitude'] ?? 0;
-        $latitude = $data['latitude'] ?? 0;
+        /*$longitude = $data['longitude'] ?? 0;
+        $latitude = $data['latitude'] ?? 0;*/
         $distance_min = $data['distance_min'] ?? 0;
         $distance_max = $data['distance_max'] ?? 0;
         // 当前用户
@@ -885,6 +885,8 @@ class UserController extends Controller
         }
         // 查询我报名的课程
         if (isset($data['latitude']) && isset($data['longitude'])) {
+            $longitude = $data['longitude'] ?? 0;
+            $latitude = $data['latitude'] ?? 0;
             $course = $user->user_courses()->where($where)->whereHas('organization',function ($query) use ($longitude,$latitude,$distance_min,$distance_max) {
                 $query->select(['id', 'name'])
                     ->selectRaw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) *
