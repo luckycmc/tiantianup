@@ -97,6 +97,7 @@ class CommonController extends Controller
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
                     'type' => 4,
+                    'description' => '查看需求',
                     'created_at' => Carbon::now()
                 ];
                 DB::table('bills')->insert($log_data);
