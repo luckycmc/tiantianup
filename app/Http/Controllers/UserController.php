@@ -885,8 +885,8 @@ class UserController extends Controller
         }
         // 查询我报名的课程
         if (isset($data['latitude']) && isset($data['longitude'])) {
-            $longitude = $data['longitude'] ?? 0;
-            $latitude = $data['latitude'] ?? 0;
+            $longitude = $data['longitude'];
+            $latitude = $data['latitude'];
             $course = $user->user_courses()->where($where)->whereHas('organization',function ($query) use ($longitude,$latitude,$distance_min,$distance_max) {
                 $query->select(['id', 'name'])
                     ->selectRaw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) *
