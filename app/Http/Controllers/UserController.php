@@ -119,6 +119,10 @@ class UserController extends Controller
                 'tag' => $tag
             ];
             TeacherTag::updateOrCreate(['user_id' => $user->id,'tag' => $tag],$tag_info);
+            // 发送通知
+            if (SystemMessage::where('action',3)->value('site_message') == 1) {
+                (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
+            }
         }
         // 当前时间
         $current = Carbon::now()->format('Y-m-d');

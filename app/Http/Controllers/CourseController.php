@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Message;
+use App\Models\PlatformMessage;
 use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\TeacherCourseOrder;
