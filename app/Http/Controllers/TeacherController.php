@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BaseInformation;
 use App\Models\Course;
 use App\Models\DeliverLog;
+use App\Models\PlatformMessage;
 use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\TeacherCert;
@@ -224,6 +225,10 @@ class TeacherController extends Controller
         $result = TeacherImage::updateOrCreate(['user_id' => $user->id],$insert_data);
         if (!$result) {
             return $this->error('提交失败');
+        }
+        // 发送通知
+        if (SystemMessage::where('action',3)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
         }
         return $this->success('提交成功');
     }
