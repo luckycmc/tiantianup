@@ -325,7 +325,8 @@ class TeacherController extends Controller
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
         if (isset($data['district'])) {
-            $where[] = ['courses.district','=',$data['district']];
+            $district_id = Region::where('region_name',$data['district'])->value('id');
+            $where[] = ['courses.district','=',$district_id];
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
