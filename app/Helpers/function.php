@@ -187,7 +187,7 @@ function get_reward($type,$role) {
             $deal_reward = $deal_prefix.'deal_reward';
             $deal_type_field = $deal_prefix.'deal_reward_type';
             // 查询奖励
-            $reward = Activity::where(['type' => 2,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select('id',$deal_reward,$deal_type_field)->first();
+            $reward = Activity::where(['type' => 3,'status' => 1])->whereRaw("FIND_IN_SET('$role_word',object)")->select('id',$deal_reward,$deal_type_field)->first();
             break;
     }
     return $reward;

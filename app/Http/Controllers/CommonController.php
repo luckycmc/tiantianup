@@ -100,7 +100,7 @@ class CommonController extends Controller
                 DB::table('bills')->insert($log_data);
                 // 当前时间
                 $current = Carbon::now()->format('Y-m-d');
-                // 查看是否有注册活动
+                // 查看是否有成交活动
                 $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
                     ->where('end_time', '>=', $current)->first();
                 if ($deal_activity) {
