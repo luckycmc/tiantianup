@@ -858,6 +858,7 @@ class UserController extends Controller
     public function my_entry()
     {
         $data = \request()->all();
+        Log::info('data: '.$data);
         $page_size = $data['page_size'] ?? 10;
         $date_sort = $data['date_sort'] ?? 'desc';
         $entry_start_date = $data['entry_start_date'] ?? Carbon::createFromTimestamp(0)->format('Y-m-d');
