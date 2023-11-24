@@ -350,7 +350,7 @@ class TeacherController extends Controller
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3, 'courses.status' => 1])->where('courses.adder_role','!=',0)->ddSql()->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+                ->where($where)->where(['courses.role' => 3, 'courses.status' => 1])->where('courses.adder_role','!=',0)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
 
         foreach ($result as $v) {
