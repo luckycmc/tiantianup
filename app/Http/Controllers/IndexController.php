@@ -105,7 +105,7 @@ class IndexController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        $user = User::find(7);
+        // $user = User::find(7);
         // 判断当前用户是否能查看
         $teaching_year = 0;
         $subject = [];
