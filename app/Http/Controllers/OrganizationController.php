@@ -38,6 +38,7 @@ class OrganizationController extends Controller
      */
     public function create()
     {
+        $config = config('services.sms');
         $data = \request()->except('images');
         $rules = [];
         $messages = [];
@@ -84,6 +85,23 @@ class OrganizationController extends Controller
             ->where('end_time', '>=', $current)->first();
         if ($invite_activity && isset($data['parent_id'])) {
             invite_activity_log($data['parent_id'],$user->id,$user->role,$invite_activity);
+        }
+        // 发送通知
+        if (SystemMessage::where('action',0)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('机构入驻','机构入驻','机构端');
+        }
+        if (SystemMessage::where('action',0)->value('text_message') == 1) {
+            $mobile = SystemMessage::where('action',0)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添学】有新入驻的机构",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('提交成功');
     }
