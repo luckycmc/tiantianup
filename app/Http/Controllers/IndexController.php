@@ -220,7 +220,12 @@ class IndexController extends Controller
         }
         $result = Course::with('organization')->where($where)->where(['status' => 1,'role' => $role,'is_recommend' => 1])->whereNotIn('adder_role',[0])->paginate($page_size);
         foreach ($result as $v) {
-            $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            if ($v->adder_role == 4) {
+                $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            } else {
+                $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
+            }
+
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
             $v->class_date = json_decode($v->class_date,true);
