@@ -570,6 +570,16 @@ class IndexController extends Controller
     }
 
     /**
+     * 机构性质
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_organ_nature()
+    {
+        $nature = Constant::where('type',3)->get();
+        return $this->success('机构类型',$nature);
+    }
+
+    /**
      * 获取培训类型
      * @return \Illuminate\Http\JsonResponse
      */
