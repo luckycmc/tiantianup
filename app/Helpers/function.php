@@ -409,14 +409,14 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
         'user_id' => $adder_id,
         'username' => $teacher->name,
         'number' => $teacher->number,
-        'role' => $role,
-        'amount' => $teacher_reward->teacher_reward,
+        'role' => 3,
+        'amount' => $teacher_reward->teacher_deal_reward,
         'type' => $deal_activity->type,
         'created_at' => Carbon::now()
     ];
     $teacher_bill_log = [
         'user_id' => $user_id,
-        'amount' => $teacher_reward->teacher_reward,
+        'amount' => $teacher_reward->teacher_deal_reward,
         'type' => 9,
         'description' => '成交',
         'created_at' => Carbon::now()
