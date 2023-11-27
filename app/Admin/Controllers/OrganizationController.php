@@ -41,7 +41,6 @@ class OrganizationController extends AdminController
             $grid->column('type');
             $grid->column('training_type','培训类型');
             $grid->column('nature','机构性质');
-            $grid->column('user.name','联系人');
             $grid->column('mobile');
             $grid->column('id_card_no');
             $grid->column('region','省市区')->display(function () {
