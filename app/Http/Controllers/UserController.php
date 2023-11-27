@@ -342,6 +342,7 @@ class UserController extends Controller
      */
     public function teaching_experience()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $id = $data['id'] ?? 0;
         $user_id = Auth::id();
@@ -365,6 +366,23 @@ class UserController extends Controller
         DB::table('teacher_info')->where('user_id',$user_id)->update(['teaching_year' => $teaching_year]);
         if (!$result) {
             return $this->error('提交失败');
+        }
+        // 发送通知
+        if (SystemMessage::where('action',3)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
+        }
+        if (SystemMessage::where('action',3)->value('text_message') == 1) {
+            $admin_mobile = SystemMessage::where('action',3)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $admin_number = new PhoneNumber($admin_mobile);
+                $easySms->send($admin_number,[
+                    'content'  => "【添添学】教师资料更新",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('提交成功');
     }
@@ -783,6 +801,7 @@ class UserController extends Controller
      */
     public function update_education()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'highest_education' => 'required',
@@ -820,6 +839,23 @@ class UserController extends Controller
         $result = TeacherEducation::updateOrCreate(['user_id' => $user->id],$education_data);
         if (!$result) {
             return $this->error('提交失败');
+        }
+        // 发送通知
+        if (SystemMessage::where('action',3)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
+        }
+        if (SystemMessage::where('action',3)->value('text_message') == 1) {
+            $admin_mobile = SystemMessage::where('action',3)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $admin_number = new PhoneNumber($admin_mobile);
+                $easySms->send($admin_number,[
+                    'content'  => "【添添学】教师资料更新",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('提交成功');
     }

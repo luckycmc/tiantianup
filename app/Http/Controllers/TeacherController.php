@@ -205,6 +205,7 @@ class TeacherController extends Controller
      */
     public function update_teacher_images()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $rules = [
             'url' => 'required',
@@ -233,6 +234,19 @@ class TeacherController extends Controller
         // 发送通知
         if (SystemMessage::where('action',3)->value('site_message') == 1) {
             (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
+        }
+        if (SystemMessage::where('action',3)->value('text_message') == 1) {
+            $admin_mobile = SystemMessage::where('action',3)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $admin_number = new PhoneNumber($admin_mobile);
+                $easySms->send($admin_number,[
+                    'content'  => "【添添学】教师资料更新",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('提交成功');
     }
