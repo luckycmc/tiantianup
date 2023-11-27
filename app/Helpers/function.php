@@ -372,36 +372,60 @@ function teacher_activity_log ($teacher_id,$field,$project,$description,$teacher
 
 // 成交活动
 function deal_activity_log($user_id,$course_id,$deal_activity) {
-    // 用户
-    $user = User::find($user_id);
+    // 教师
+    $teacher = User::find($user_id);
     // 需求
     $course = Course::find($course_id);
     $role = $course->adder_role;
     Log::info('role: '.$role);
     // 查询奖励
     $reward = get_reward(3,$role);
+    $adder_id = $course->adder_id;
+    $adder = User::find($adder_id);
     // 成交活动
     $deal_arr = ['','','parent_','teacher_','organ_'];
     $deal_prefix = $deal_arr[$role];
     $deal_reward = $deal_prefix.'deal_reward';
+    // 家长或机构
     $activity_log = [
-        'user_id' => $user_id,
-        'username' => $user->name,
-        'number' => $user->number,
+        'user_id' => $adder_id,
+        'username' => $adder->name,
+        'number' => $adder->number,
         'role' => $role,
         'amount' => $reward->$deal_reward,
         'type' => $deal_activity->type,
         'created_at' => Carbon::now()
     ];
     $bill_log = [
-        'user_id' => $user->id,
+        'user_id' => $adder_id,
         'amount' => $reward->$deal_reward,
         'type' => 9,
         'description' => '成交',
         'created_at' => Carbon::now()
     ];
+    // 教师
+    $teacher_reward = get_reward(3,3);
+    $teacher_activity_log = [
+        'user_id' => $adder_id,
+        'username' => $teacher->name,
+        'number' => $teacher->number,
+        'role' => $role,
+        'amount' => $teacher_reward->teacher_reward,
+        'type' => $deal_activity->type,
+        'created_at' => Carbon::now()
+    ];
+    $teacher_bill_log = [
+        'user_id' => $user_id,
+        'amount' => $teacher_reward->teacher_reward,
+        'type' => 9,
+        'description' => '成交',
+        'created_at' => Carbon::now()
+    ];
+
+    DB::table('activity_log')->insert($teacher_activity_log);
     DB::table('activity_log')->insert($activity_log);
     DB::table('bills')->insert($bill_log);
+    DB::table('bills')->insert($teacher_bill_log);
 }
 
 /**
