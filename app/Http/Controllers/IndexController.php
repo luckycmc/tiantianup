@@ -105,6 +105,7 @@ class IndexController extends Controller
         }
         // 当前用户
         $user = Auth::user();
+        $user = User::find(7);
         // 判断当前用户是否能查看
         $teaching_year = 0;
         $subject = [];
@@ -154,7 +155,9 @@ class IndexController extends Controller
             $result->mobile = null;
         }
         // 投递详情
-        $result->deliver_detail = $result->deliver_log;
+        if (isset($data['course_id'])) {
+            $result->deliver_detail = $result->deliver_log->where('course_id',$data['course_id'])->values();
+        }
         // $result->images = json_decode($result->teacher_demeanor[0],true);
         $result->tags = $result->teacher_tags->filter(function ($item) {
             return $item->is_show == 1;
