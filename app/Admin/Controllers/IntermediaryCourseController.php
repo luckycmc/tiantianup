@@ -39,7 +39,7 @@ class IntermediaryCourseController extends AdminController
             });
             $grid->column('address','上课地点');
             $grid->column('class_price','费用(元)');
-            $grid->column('class_duration','上课时长(小时)');
+            $grid->column('class_duration','上课时长(分钟)');
             $grid->column('platform_class_date','上课时间');
             $grid->column('mobile','联系方式');
             $grid->column('adder.name','发布人');
