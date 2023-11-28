@@ -42,6 +42,8 @@ class CourseController extends Controller
             $longitude = $region_info[0];
             $latitude = $region_info[1];
         }
+        Log::info('longitude: '.$longitude);
+        Log::info('latitude: '.$latitude);
         $distance_expr = "
             (
                 6371 * acos(
