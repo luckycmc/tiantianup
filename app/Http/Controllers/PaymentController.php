@@ -26,8 +26,10 @@ class PaymentController extends Controller
         if ($role == 3) {
             $object = new DeliverLog();
             $pay_config = 'teacher';
+            $status_field = 'pay_status';
         } else {
             $object = new UserTeacherOrder();
+            $status_field = 'status';
         }
         // 查询订单
         $order = $object::where('out_trade_no',$out_trade_no)->first();
@@ -85,8 +87,7 @@ class PaymentController extends Controller
         } else {
             // 余额支付
             $user->withdraw_balance = $user->withdraw_balance - $order->amount;
-            $order->status = 1;
-            $order->pay_status = 1;
+            $order->$status_field = 1;
             DB::transaction(function () use ($user,$order) {
                 $user->save();
                 $order->save();
