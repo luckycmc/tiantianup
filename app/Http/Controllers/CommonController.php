@@ -125,18 +125,39 @@ class CommonController extends Controller
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $orders = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->first();
+                // 查询用户
+                $user = User::find($orders->user_id);
                 if (empty($orders)) {
                     // 单个支付
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
                     $order->status = 1;
                     $order->update();
+                    // 保存日志
+                    $log_data = [
+                        'user_id' => $user->id,
+                        'amount' => '-'.$order->amount,
+                        'type' => 10,
+                        'description' => '查看报名',
+                        'created_at' => Carbon::now()
+                    ];
+                    DB::table('bills')->insert($log_data);
                 } else {
                     $order_arr = UserCourse::where('total_out_trade_no',$info['out_trade_no'])->get();
                     foreach ($order_arr as $order) {
                         $order->status = 1;
                         $order->update();
+                        // 保存日志
+                        $log_data = [
+                            'user_id' => $user->id,
+                            'amount' => '-'.$order->amount,
+                            'type' => 10,
+                            'description' => '查看报名',
+                            'created_at' => Carbon::now()
+                        ];
+                        DB::table('bills')->insert($log_data);
                     }
                 }
+
             }
         } catch (Exception $e) {
             Log::info($data);
