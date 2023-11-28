@@ -85,7 +85,7 @@ class CommonController extends Controller
                 } else if ($order->pay_type == 2) {
                     // 组合支付
                     $order->pay_status = 1;
-                    $user->withdraw_balance = $user->withdraw_balance - $order->discount;
+                    $user->withdraw_balance += $user->withdraw_balance - $order->discount;
                     $user->save();
                     $order->save();
                 }
