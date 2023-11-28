@@ -348,6 +348,7 @@ class TeacherController extends Controller
         if (isset($data['filter_adder_role'])) {
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
+        Log::info($data['filter_adder_role']);
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
             $district_id = Region::where('region_name',$data['district'])->value('id');
