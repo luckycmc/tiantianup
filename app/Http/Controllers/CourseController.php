@@ -42,6 +42,11 @@ class CourseController extends Controller
             $longitude = $region_info[0];
             $latitude = $region_info[1];
         }
+        if (isset($data['district'])) {
+            $region_info = get_long_lat('','',$data['district'],'');
+            $longitude = $region_info[0];
+            $latitude = $region_info[1];
+        }
         Log::info('longitude: '.$longitude);
         Log::info('latitude: '.$latitude);
         $distance_expr = "
