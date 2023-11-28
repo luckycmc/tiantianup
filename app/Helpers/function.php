@@ -403,6 +403,10 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
         'description' => '成交',
         'created_at' => Carbon::now()
     ];
+    $user = User::find($adder_id);
+    $user->withdraw_balance += $reward->$deal_reward;
+    $user->total_income += $reward->$deal_reward;
+    $user->update();
     // 教师
     $teacher_reward = get_reward(3,3);
     $teacher_activity_log = [
@@ -421,6 +425,9 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
         'description' => '成交',
         'created_at' => Carbon::now()
     ];
+    $teacher->withdraw_balance += $teacher_reward->teacher_deal_reward;
+    $teacher->total_income += $teacher_reward->teacher_deal_reward;
+    $teacher->update();
 
     DB::table('activity_log')->insert($teacher_activity_log);
     DB::table('activity_log')->insert($activity_log);
