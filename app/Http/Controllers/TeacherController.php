@@ -454,7 +454,7 @@ class TeacherController extends Controller
         if (!$result) {
             return $this->error('操作失败');
         }
-        return $this->success('创建成功',$out_trade_no);
+        return $this->success('创建成功',compact('out_trade_no','amount'));
     }
 
     /**
