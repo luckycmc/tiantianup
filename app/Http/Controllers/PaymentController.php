@@ -86,6 +86,7 @@ class PaymentController extends Controller
             // 余额支付
             $user->withdraw_balance = $user->withdraw_balance - $order->amount;
             $order->status = 1;
+            $order->pay_status = 1;
             DB::transaction(function () use ($user,$order) {
                 $user->save();
                 $order->save();
