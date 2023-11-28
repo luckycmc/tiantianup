@@ -129,7 +129,7 @@ class CommonController extends Controller
                     // 单个支付
                     $order = UserCourse::where('out_trade_no',$info['out_trade_no'])->first();
                     // 查询用户
-                    $user = User::find($order->user_id);
+                    $user = User::find($order->course->adder_id);
                     $order->status = 1;
                     $order->update();
                     // 保存日志
@@ -147,7 +147,7 @@ class CommonController extends Controller
                         $order->status = 1;
                         $order->update();
                         // 查询用户
-                        $user = User::find($order->user_id);
+                        $user = User::find($order->course->adder_id);
                         // 保存日志
                         $log_data = [
                             'user_id' => $user->id,
