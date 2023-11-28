@@ -31,6 +31,8 @@ class CommonController extends Controller
             if ($info['trade_state'] == 'SUCCESS') {
                 // 查询订单
                 $order = UserTeacherOrder::where('out_trade_no',$info['out_trade_no'])->first();
+                // 查询用户
+                $user = User::find($order->user_id);
                 // 查询支付类型
                 if ($order->pay_type == 1) {
                     // 微信支付
@@ -40,8 +42,6 @@ class CommonController extends Controller
                 } else if ($order->pay_type == 2) {
                     // 组合支付
                     $order->status = 1;
-                    // 查询用户
-                    $user = User::find($order->user_id);
                     $user->withdraw_balance = $user->withdraw_balance - $order->discount;
                     $user->save();
                     $order->save();
