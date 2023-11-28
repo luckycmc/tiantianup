@@ -384,7 +384,7 @@ class OrganizationController extends Controller
         })->paginate($page_size);
         foreach ($result as $v) {
             $user_course = UserCourse::where(['user_id' => $v->id,'course_id' => $v->student_course[0]['id']])->first();
-            $v->pay_status = $user_course->status;
+            $v->pay_status = $v->status;
             $v->out_trade_no = $user_course->out_trade_no;
         }
         // 支付总人数
