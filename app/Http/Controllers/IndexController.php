@@ -74,6 +74,8 @@ class IndexController extends Controller
         // 查询当前位置的所有推荐教师
         $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
 
+        // 当前用户
+        $user = Auth::user();
         foreach ($teachers as $teacher) {
             $teaching_year = 0;
             $subject = [];
@@ -87,6 +89,7 @@ class IndexController extends Controller
             }
             $teacher->teaching_year = $teaching_year;
             $teacher->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
+            $teacher->is_pay = $user->user_teacher_orders->where('status',1)->exists();
         }
         return $this->success('推荐教师列表',$teachers);
     }
