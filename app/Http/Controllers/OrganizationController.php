@@ -726,7 +726,7 @@ class OrganizationController extends Controller
         // 机构所有的成员
         $organ_user = User::where('organ_id',$organ_id)->get()->pluck('id')->toArray();
         // 机构购买的教师
-        $teacher_ids = UserTeacherOrder::whereIn('user_id',$organ_user)->distinct()->pluck('teacher_id');
+        $teacher_ids = UserTeacherOrder::whereIn('user_id',$organ_user)->where('status',1)->distinct()->pluck('teacher_id');
         // 排序
         $order = $data['order'] ?? 'desc';
         $sort_field = 'users.age';
