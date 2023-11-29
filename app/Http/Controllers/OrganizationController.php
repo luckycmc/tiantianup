@@ -315,6 +315,7 @@ class OrganizationController extends Controller
      */
     public function update_course()
     {
+        $config = config('services.sms');
         $data = \request()->all();
         $id = $data['id'] ?? 0;
         // 查询课程
@@ -344,6 +345,23 @@ class OrganizationController extends Controller
         $result = DB::table('courses')->where('id',$id)->update($data);
         if (!$result) {
             return $this->error('编辑失败');
+        }
+        // 发送通知
+        if (SystemMessage::where('action',7)->value('site_message') == 1) {
+            (new PlatformMessage())->saveMessage('发布需求','发布需求','机构端');
+        }
+        if (SystemMessage::where('action',7)->value('text_message') == 1) {
+            $mobile = SystemMessage::where('action',7)->value('admin_mobile');
+            // 发送短信
+            $easySms = new EasySms($config);
+            try {
+                $number = new PhoneNumber($mobile);
+                $easySms->send($number,[
+                    'content'  => "【添添学】有新发布的需求",
+                ]);
+            } catch (Exception|NoGatewayAvailableException $exception) {
+                return $this->error($exception->getResults());
+            }
         }
         return $this->success('编辑成功');
     }

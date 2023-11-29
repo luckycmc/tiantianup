@@ -132,7 +132,7 @@ class UserController extends Controller
                 try {
                     $admin_number = new PhoneNumber($admin_mobile);
                     $easySms->send($admin_number,[
-                        'content'  => "【添添学】'.$text.'更新",
+                        'content'  => "【添添学】".$text."更新",
                     ]);
                 } catch (Exception|NoGatewayAvailableException $exception) {
                     return $this->error($exception->getResults());
