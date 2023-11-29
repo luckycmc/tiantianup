@@ -47,8 +47,8 @@ class CourseController extends Controller
             $longitude = $region_info[0];
             $latitude = $region_info[1];
         }*/
-        Log::info('longitude: '.$longitude);
-        Log::info('latitude: '.$latitude);
+        /*Log::info('longitude: '.$longitude);
+        Log::info('latitude: '.$latitude);*/
         $distance_expr = "
             (
                 6371 * acos(
@@ -68,13 +68,13 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         // 当前城市
-        if (isset($data['longitude']) && isset($data['latitude'])) {
+        /*if (isset($data['longitude']) && isset($data['latitude'])) {
             $location_info = get_location($longitude,$latitude);
             $city = $location_info['city'];
             $city_id = Region::where('region_name',$city)->value('id');
 
             $where[] = ['courses.city','=',$city_id];
-        }
+        }*/
 
 
         if (isset($data['fitler_type'])) {
@@ -110,7 +110,6 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(9);
         if (isset($data['city'])) {
             $id = Region::where('region_name',$data['city'])->value('id');
             $where[] = ['courses.city','=',$id];
