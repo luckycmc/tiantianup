@@ -201,9 +201,9 @@ class IndexController extends Controller
         }
         if (isset($data['district'])) {
             $id = Region::where('region_name',$data['district']);
-            $district = get_long_lat('','',$data['district'],'');
+            /*$district = get_long_lat('','',$data['district'],'');
             $longitude = $district[0];
-            $latitude = $district[1];
+            $latitude = $district[1];*/
             Log::info('longitude: '.$longitude);
             Log::info('latitude: '.$latitude);
             $where[] = ['district','=',$id];

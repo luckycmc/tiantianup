@@ -36,7 +36,7 @@ class CourseController extends Controller
         $where = [];
         // 排序
         $sort_field = 'courses.created_at';
-        if (isset($data['district_id'])) {
+        /*if (isset($data['district_id'])) {
             $district_name = Region::where('id',$data['district_id'])->value('region_name');
             $region_info = get_long_lat('','',$district_name,'');
             $longitude = $region_info[0];
@@ -46,7 +46,7 @@ class CourseController extends Controller
             $region_info = get_long_lat('','',$data['district'],'');
             $longitude = $region_info[0];
             $latitude = $region_info[1];
-        }
+        }*/
         Log::info('longitude: '.$longitude);
         Log::info('latitude: '.$latitude);
         $distance_expr = "
