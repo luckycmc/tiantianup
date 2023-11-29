@@ -50,7 +50,7 @@ class CommonController extends Controller
                 $log_data = [
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
-                    'type' => 4,
+                    'type' => 5,
                     'description' => '查看教师',
                     'created_at' => Carbon::now()
                 ];

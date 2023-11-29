@@ -7,6 +7,7 @@ use App\Models\DeliverLog;
 use App\Models\TeacherCourseOrder;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -84,6 +85,15 @@ class PaymentController extends Controller
                 ]
             ];
             $result = Pay::wechat($config)->mini($pay_data);
+            // 保存日志
+            $log_data = [
+                'user_id' => $user->id,
+                'amount' => '-'.$balance,
+                'type' => 5,
+                'description' => '查看教师',
+                'created_at' => Carbon::now()
+            ];
+            DB::table('bills')->insert($log_data);
         } else {
             // 余额支付
             $user->withdraw_balance = $user->withdraw_balance - $order->amount;
@@ -93,6 +103,15 @@ class PaymentController extends Controller
                 $order->save();
             });
             $result = '支付成功';
+            // 保存日志
+            $log_data = [
+                'user_id' => $user->id,
+                'amount' => '-'.$order->amount,
+                'type' => 5,
+                'description' => '查看教师',
+                'created_at' => Carbon::now()
+            ];
+            DB::table('bills')->insert($log_data);
         }
         return $this->success('调起支付',compact('result'));
     }
