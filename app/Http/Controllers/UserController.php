@@ -384,7 +384,7 @@ class UserController extends Controller
         }
         // 发送通知
         if (SystemMessage::where('action',3)->value('site_message') == 1) {
-            (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
+            (new PlatformMessage())->saveMessage('教学经历更新','教学经历更新','教师端');
         }
         if (SystemMessage::where('action',3)->value('text_message') == 1) {
             $admin_mobile = SystemMessage::where('action',3)->value('admin_mobile');
@@ -859,7 +859,7 @@ class UserController extends Controller
         }
         // 发送通知
         if (SystemMessage::where('action',3)->value('site_message') == 1) {
-            (new PlatformMessage())->saveMessage('教师资料更新','教师资料更新','教师端');
+            (new PlatformMessage())->saveMessage('教育经历更新','教育经历更新','教师端');
         }
         if (SystemMessage::where('action',3)->value('text_message') == 1) {
             $admin_mobile = SystemMessage::where('action',3)->value('admin_mobile');
