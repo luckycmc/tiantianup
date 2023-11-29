@@ -174,7 +174,11 @@ class CourseController extends Controller
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
             // 是否已投递
-            $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+            if ($v->adder_role == 0) {
+                $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
+            } else {
+                $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+            }
             $v->distance = round($v->distance,2);
             if ($v->adder_role == 0) {
                 // 是否查看
