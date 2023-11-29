@@ -309,7 +309,7 @@ class TeacherController extends Controller
 
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(2);
+        // $user = User::find(10);
         // $user = User::find(4);
         $sort_field = 'courses.created_at';
         $order = 'desc';
@@ -363,7 +363,7 @@ class TeacherController extends Controller
             $where[] = ['courses.class_price','<=',$data['filter_class_price_max']];
         }
         if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
-            $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
+            $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
             $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
