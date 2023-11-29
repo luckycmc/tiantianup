@@ -467,7 +467,7 @@ class UserController extends Controller
                 }
                 $v->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
                 if (isset($v->teacher_info)) {
-                    $v->picture = $v->teacher_info->picture;
+                    $v->teacher->picture = $v->teacher_info->picture;
                 }
             }
         } else {
