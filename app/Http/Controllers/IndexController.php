@@ -89,9 +89,7 @@ class IndexController extends Controller
             }
             $teacher->teaching_year = $teaching_year;
             $teacher->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
-            $teacher->is_pay = $user->user_teacher_orders->contains(function ($item) {
-                return $item->status == 1;
-            });
+            $teacher->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $teacher->id,'status' => 1])->exists();
         }
         return $this->success('推荐教师列表',$teachers);
     }
