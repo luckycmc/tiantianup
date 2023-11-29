@@ -204,8 +204,8 @@ class IndexController extends Controller
             /*$district = get_long_lat('','',$data['district'],'');
             $longitude = $district[0];
             $latitude = $district[1];*/
-            Log::info('longitude: '.$longitude);
-            Log::info('latitude: '.$latitude);
+            /*Log::info('longitude: '.$longitude);
+            Log::info('latitude: '.$latitude);*/
             $where[] = ['district','=',$id];
         }
         if (isset($data['district_id'])) {
