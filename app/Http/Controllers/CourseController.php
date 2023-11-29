@@ -84,7 +84,11 @@ class CourseController extends Controller
             $where[] = ['courses.method','=',$data['filter_method']];
         }
         if (isset($data['filter_subject'])) {
-            $where[] = ['courses.subject','=',$data['filter_subject']];
+            if (isset($data['is_platform'])) {
+                $where[] = ['courses.subject','like','%'.$data['filter_subject'].'%'];
+            } else {
+                $where[] = ['courses.subject','=',$data['filter_subject']];
+            }
         }
 
         if (isset($data['filter_price_min']) && isset($data['filter_price_max'])) {
@@ -92,7 +96,12 @@ class CourseController extends Controller
             $where[] = ['courses.class_price','<=',$data['filter_price_max']];
         }
         if (isset($data['grade'])) {
-            $where[] = ['courses.grade','=',$data['grade']];
+            if (isset($data['is_platform'])) {
+                $where[] = ['courses.grade','like','%'.$data['grade'].'%'];
+            } else {
+                $where[] = ['courses.grade','=',$data['grade']];
+            }
+
         }
         if (isset($data['filter_distance_min']) && isset($data['filter_price_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
