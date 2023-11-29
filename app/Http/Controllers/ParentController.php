@@ -116,6 +116,7 @@ class ParentController extends Controller
     {
         $data = \request()->all();
         $status = $data['status'] ?? 0;
+        Log::info('status: '.$status);
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
