@@ -119,7 +119,7 @@ class IntermediaryCourseController extends AdminController
             $form->select('province','省')->options('/api/city')->load('city','/api/city');
             $form->select('city','市')->options('/api/city')->load('district','/api/city');
             $form->select('district','区')->options('/api/city');
-            $form->text('address','上课地点');
+            $form->text('address','上课地点')->required();
             $form->number('class_duration','上课时长(分钟)');
             $form->number('class_price','费用(元)');
             $form->text('requirement','要求');

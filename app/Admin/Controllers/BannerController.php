@@ -71,7 +71,7 @@ class BannerController extends AdminController
             $form->checkbox('object')->options(['学生' => '学生', '家长' => '家长', '教师' => '教师', '机构' => '机构'])->canCheckAll()->saving(function ($value) {
                 return implode(',',$value);
             });
-            $form->url('link');
+            $form->text('link');
             $form->text('adder');
             $form->text('editor');
         
