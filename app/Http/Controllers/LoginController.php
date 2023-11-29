@@ -241,6 +241,13 @@ class LoginController extends Controller
         if (!$user) {
             return $this->error('邀请人不存在');
         }
+        // 校验手机号
+        if (isset($data['mobile'])) {
+            $is_user = User::where('mobile',$data['mobile'])->exists();
+            if ($is_user) {
+                return $this->error('该手机号已被注册，请重新输入');
+            }
+        }
         // 获取open_id
         $open_id = '';
         if (isset($data['wx_code'])) {
@@ -251,13 +258,6 @@ class LoginController extends Controller
                 return $this->error('登陆失败');
             }
             $open_id = $session['openid'];
-        }
-        // 校验手机号
-        if (isset($data['mobile'])) {
-            $is_user = User::where('mobile',$data['mobile'])->exists();
-            if ($is_user) {
-                return $this->error('该手机号已被注册，请重新输入');
-            }
         }
         // 注册新用户
         $member = new User();
