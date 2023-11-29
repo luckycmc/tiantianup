@@ -355,8 +355,8 @@ class TeacherController extends Controller
             $region_info = get_long_lat('','',$data['district'],'');
             $district_id = Region::where('region_name',$data['district'])->value('id');
             $where[] = ['courses.district','=',$district_id];
-            $longitude = $region_info[0];
-            $latitude = $region_info[1];
+            /*$longitude = $region_info[0];
+            $latitude = $region_info[1];*/
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
