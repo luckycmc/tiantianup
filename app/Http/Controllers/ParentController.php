@@ -120,16 +120,17 @@ class ParentController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
+        // $user = User::find(11);
         // 查询数据
         $result = Course::where(['adder_id' => $user->id,'status' => $status,'adder_role' => 2])->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             $v->class_time = json_decode($v->class_date,true);
-            if ($v->status == 1) {
+            /*if ($v->status == 1) {
                 $deliver_info = $v->deliver()->first();
                 if ($deliver_info) {
                     $v->course_status = $deliver_info->status;
                 }
-            }
+            }*/
         }
         return $this->success('我的发布',$result);
     }
