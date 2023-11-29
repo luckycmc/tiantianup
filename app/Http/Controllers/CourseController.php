@@ -103,10 +103,10 @@ class CourseController extends Controller
             }
 
         }
-        if (isset($data['filter_distance_min']) && isset($data['filter_price_max'])) {
-            $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))";
+        if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
+            $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
-            $where[] = [DB::raw($distance_expr),'<=',$data['filter_price_max']];
+            $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
         // 当前用户
         $user = Auth::user();
