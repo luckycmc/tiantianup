@@ -495,7 +495,6 @@ class UserController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(12);
         if ($is_all) {
             // 筛选
             $where = [];
@@ -504,8 +503,10 @@ class UserController extends Controller
                 $where[] = ['amount',$condition,0];
             }
             if (isset($data['type'])) {
-                Log::info('data: '.$data['type']);
-                $where[] = [['type','=',3],'or',['type','=',9]];
+                $where[] = [function ($query) {
+                    $query->where('type',3)
+                        ->orWhere('type',9);
+                }];
             }
             if (isset($data['created_at'])) {
                 $where[] = ['created_at','>=',$data['created_at'].' 00:00:00'];
