@@ -41,23 +41,23 @@ class VerifyImage extends RowAction
         $teacher_info = TeacherImage::find($teacher_id);
         $teacher_info->status = 1;
         // 查询奖励
-        $reward = get_reward(2,3);
-        $amount = $reward->teacher_real_auth_reward;
+        // $reward = get_reward(2,3);
+        // $amount = $reward->teacher_real_auth_reward;
         $user = User::find($teacher_info->user_id);
-        $user->withdraw_balance += $amount;
-        $user->total_income += $amount;
-        $bill_log = [
+        /*$user->withdraw_balance += $amount;
+        $user->total_income += $amount;*/
+        /*$bill_log = [
             'user_id' => $teacher_info->user_id,
             'amount' => $amount,
             'type' => 8,
             'description' => '教师风采审核通过',
             'created_at' => Carbon::now()
-        ];
+        ];*/
         // 保存日志
-        DB::transaction(function () use ($bill_log,$teacher_info,$user) {
+        DB::transaction(function () use ($teacher_info,$user) {
             $teacher_info->update();
             $user->update();
-            DB::table('bills')->insert($bill_log);
+            // DB::table('bills')->insert($bill_log);
         });
 
         // 发送通知
