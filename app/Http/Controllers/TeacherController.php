@@ -337,8 +337,8 @@ class TeacherController extends Controller
         if (isset($data['filter_subject'])) {
             $where[] = ['courses.subject','=',$data['filter_subject']];
         }
-        if (isset($data['grade'])) {
-            $where[] = ['courses.grade','=',$data['grade']];
+        if (isset($data['filter_grade'])) {
+            $where[] = ['courses.grade','=',$data['filter_grade']];
         }
         if (isset($data['filter_adder_role'])) {
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
