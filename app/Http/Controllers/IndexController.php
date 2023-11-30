@@ -211,12 +211,12 @@ class IndexController extends Controller
             Log::info('latitude: '.$latitude);*/
             $where[] = ['district','=',$id];
         }
-        if (isset($data['district_id'])) {
+        /*if (isset($data['district_id'])) {
             $district_name = Region::where('id',$data['district_id'])->value('region_name');
             $region_info = get_long_lat('','',$district_name,'');
             $longitude = $region_info[0];
             $latitude = $region_info[1];
-        }
+        }*/
         // 当前用户
         $user = Auth::user();
         if (in_array($user->role,[1,2])) {
