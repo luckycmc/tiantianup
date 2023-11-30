@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\TeacherCourseOrder;
@@ -102,6 +103,14 @@ class PaymentController extends Controller
                 'created_at' => Carbon::now()
             ];
             DB::table('bills')->insert($log_data);
+            // 当前时间
+            $current = Carbon::now()->format('Y-m-d');
+            // 查看是否有成交活动
+            $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
+                ->where('end_time', '>=', $current)->first();
+            if ($deal_activity) {
+                deal_activity_log($user->id,$order->course_id,$deal_activity);
+            }
         } else {
             // 余额支付
             $user->withdraw_balance = $user->withdraw_balance - $order->amount;
@@ -120,6 +129,14 @@ class PaymentController extends Controller
                 'created_at' => Carbon::now()
             ];
             DB::table('bills')->insert($log_data);
+            // 当前时间
+            $current = Carbon::now()->format('Y-m-d');
+            // 查看是否有成交活动
+            $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
+                ->where('end_time', '>=', $current)->first();
+            if ($deal_activity) {
+                deal_activity_log($user->id,$order->course_id,$deal_activity);
+            }
         }
         return $this->success('调起支付',compact('result'));
     }
