@@ -178,6 +178,8 @@ class IndexController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
+        Log::info('longitude: '.$longitude);
+        Log::info('latitude: '.$latitude);
 
         $where = [];
         if (isset($data['is_default'])) {
