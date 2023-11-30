@@ -42,11 +42,11 @@ class VerifyCareer extends RowAction
         $teacher_info = TeacherCareer::find($teacher_id);
         $teacher_info->status = 1;
         // 查询奖励
-        $reward = get_reward(2,3);
-        $amount = $reward->teacher_real_auth_reward;
+        // $reward = get_reward(2,3);
+        // $amount = $reward->teacher_real_auth_reward;
         $user = User::find($teacher_info->user_id);
-        $user->withdraw_balance += $amount;
-        $user->total_income += $amount;
+        /*$user->withdraw_balance += $amount;
+        $user->total_income += $amount;*/
         $start_time = Carbon::parse($teacher_info->start_time);
         $end_time = Carbon::parse($teacher_info->end_time);
         $teaching_year = $start_time->diffInYears($end_time);
