@@ -62,6 +62,13 @@ class OrganizationController extends Controller
         $data['created_at'] = Carbon::now();
         $data['user_id'] = $user->id;
         $data['mobile'] = $user->mobile;
+        // 获取经纬度
+        $province = Region::where('id',$data['province_id'])->value('region_name');
+        $city = Region::where('id',$data['city_id'])->value('region_name');
+        $district = Region::where('id',$data['province_id'])->value('region_name');
+        $long_lat = get_long_lat($province,$city,$district,$data['address']);
+        $data['longitude'] = $long_lat[0];
+        $data['latitude'] = $long_lat[1];
         $id = DB::table('organizations')->insertGetId($data);
         $user->organ_id = $id;
         $user->update();
