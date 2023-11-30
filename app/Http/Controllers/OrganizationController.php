@@ -888,6 +888,15 @@ class OrganizationController extends Controller
             $order->update();
             $user->update();
             $result = '余额支付';
+            // 保存日志
+            $log_data = [
+                'user_id' => $user->id,
+                'amount' => '-'.$order->amount,
+                'type' => 10,
+                'description' => '查看教师',
+                'created_at' => Carbon::now()
+            ];
+            DB::table('bills')->insert($log_data);
         } else {
             // 调起支付
             $pay_data = [
