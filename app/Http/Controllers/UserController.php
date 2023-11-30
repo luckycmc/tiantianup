@@ -457,7 +457,7 @@ class UserController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(33);
+        $user = User::find(2);
         if ($type == 1) {
             $result = Collect::with(['teacher','teacher_info','teacher_career','teacher_education'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
             foreach ($result as $v) {
@@ -470,7 +470,7 @@ class UserController extends Controller
                 if (isset($v->teacher_info)) {
                     $v->teacher->picture = $v->teacher_info->picture;
                 }
-                $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->teacher->user_id,'status' => 1])->exists();
+                $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->teacher_id,'status' => 1])->exists();
             }
         } else {
             $result = Collect::with(['course'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
