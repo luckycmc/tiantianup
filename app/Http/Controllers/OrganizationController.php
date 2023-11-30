@@ -65,8 +65,8 @@ class OrganizationController extends Controller
         // 获取经纬度
         $province = Region::where('id',$data['province_id'])->value('region_name');
         $city = Region::where('id',$data['city_id'])->value('region_name');
-        $district = Region::where('id',$data['province_id'])->value('region_name');
-        $long_lat = get_long_lat($province,$city,$district,$data['address']);
+        $district = Region::where('id',$data['district_id'])->value('region_name');
+        $long_lat = get_long_lat($province,$city,$district,$data['address'] ?? null);
         $data['longitude'] = $long_lat[0];
         $data['latitude'] = $long_lat[1];
         $id = DB::table('organizations')->insertGetId($data);
@@ -829,7 +829,6 @@ class OrganizationController extends Controller
                 ],
                 '_config' => 'organization',
             ];
-            // dd($pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
         }
         return $this->success('调起支付',compact('result'));
@@ -881,7 +880,6 @@ class OrganizationController extends Controller
         $user = Auth::user();
         // 余额
         $balance = $user->withdraw_balance;
-        Log::info('amount: '.$order->amount);
         if ($order->amount <= $balance) {
             $order->status = 1;
             $user->withdraw_balance -= $order->amount;
