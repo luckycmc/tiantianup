@@ -470,7 +470,6 @@ class UserController extends Controller
                 if (isset($v->teacher_info)) {
                     $v->teacher->picture = $v->teacher_info->picture;
                 }
-                $v->entry = UserCourse::where(['user_id' => $user->id])->exists();
             }
         } else {
             $result = Collect::with(['course'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
@@ -480,6 +479,7 @@ class UserController extends Controller
                     $v->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
                     $v->course_organ = $v->course->organization;
                 }
+                $v->entry = UserCourse::where(['user_id' => $user->id,'course_id' => $course_info->id])->exists();
             }
         }
 
