@@ -23,6 +23,7 @@ use App\Models\TeacherRealAuth;
 use App\Models\TeacherTag;
 use App\Models\User;
 use App\Models\UserContact;
+use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
 use App\Models\Withdraw;
 use Carbon\Carbon;
@@ -469,6 +470,7 @@ class UserController extends Controller
                 if (isset($v->teacher_info)) {
                     $v->teacher->picture = $v->teacher_info->picture;
                 }
+                $v->entry = UserCourse::where(['user_id' => $user->id])->exists();
             }
         } else {
             $result = Collect::with(['course'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
