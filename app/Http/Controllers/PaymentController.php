@@ -18,16 +18,19 @@ class PaymentController extends Controller
     public function create_pay_order()
     {
         $config = config('pay');
-        // dd($config);
         $data = \request()->all();
         $out_trade_no = $data['out_trade_no'] ?? '';
         $pay_type = $data['pay_type'] ?? 1;
         $role = $data['role'] ?? 0;
         $pay_config = 'default';
+        $type = 5;
+        $description = '查看教师';
         if ($role == 3) {
             $object = new DeliverLog();
             $pay_config = 'teacher';
             $status_field = 'pay_status';
+            $type = 9;
+            $description = '成交';
         } else {
             $object = new UserTeacherOrder();
             $status_field = 'status';
@@ -41,6 +44,10 @@ class PaymentController extends Controller
         $user = Auth::user();
         if ($user->role == 3) {
             $course_info = Course::find($order->course_id);
+            if ($course_info->adder_role == 0) {
+                $type = 11;
+                $description = '查看中介单';
+            }
             if (in_array($course_info->course_status,[4,5])) {
                 return $this->error('该订单已关闭');
             }
@@ -90,8 +97,8 @@ class PaymentController extends Controller
             $log_data = [
                 'user_id' => $user->id,
                 'amount' => '-'.$balance,
-                'type' => 5,
-                'description' => '查看教师',
+                'type' => $type,
+                'description' => $description,
                 'created_at' => Carbon::now()
             ];
             DB::table('bills')->insert($log_data);
@@ -108,8 +115,8 @@ class PaymentController extends Controller
             $log_data = [
                 'user_id' => $user->id,
                 'amount' => '-'.$order->amount,
-                'type' => 5,
-                'description' => '查看教师',
+                'type' => $type,
+                'description' => $description,
                 'created_at' => Carbon::now()
             ];
             DB::table('bills')->insert($log_data);
