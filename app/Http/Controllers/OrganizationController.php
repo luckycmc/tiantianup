@@ -346,6 +346,7 @@ class OrganizationController extends Controller
         }
         // 更新数据
         $data['status'] = 0;
+        Log::info('data: ',$data);
         $result = DB::table('courses')->where('id',$id)->update($data);
         if (!$result) {
             return $this->error('编辑失败');
