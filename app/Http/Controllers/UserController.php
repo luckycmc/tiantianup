@@ -470,6 +470,7 @@ class UserController extends Controller
                 if (isset($v->teacher_info)) {
                     $v->teacher->picture = $v->teacher_info->picture;
                 }
+                $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->teacher_info->user_id,'status' => 1])->exists();
             }
         } else {
             $result = Collect::with(['course'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
