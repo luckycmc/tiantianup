@@ -893,7 +893,7 @@ class OrganizationController extends Controller
                 'user_id' => $user->id,
                 'amount' => '-'.$order->amount,
                 'type' => 10,
-                'description' => '查看教师',
+                'description' => '查看报名',
                 'created_at' => Carbon::now()
             ];
             DB::table('bills')->insert($log_data);
