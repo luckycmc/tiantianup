@@ -495,7 +495,7 @@ class UserController extends Controller
         $page_size = $data['page_size'] ?? 10;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(12);
+        // $user = User::find(12);
         if ($is_all) {
             // 筛选
             $where = [];
