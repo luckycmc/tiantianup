@@ -479,7 +479,7 @@ class UserController extends Controller
                     $v->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
                     $v->course_organ = $v->course->organization;
                 }
-                $v->entry = UserCourse::where(['user_id' => $user->id,'course_id' => $course_info->id])->exists();
+                $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $course_info->id])->exists();
             }
         }
 
