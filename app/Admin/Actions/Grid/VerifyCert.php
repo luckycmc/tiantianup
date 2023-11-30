@@ -78,11 +78,11 @@ class VerifyCert extends RowAction
             ->where('end_time', '>=', $current)->first();
         if ($teacher_activity) {
             // 查询奖励
-            $reward = get_reward(2,3);
+            /*$reward = get_reward(2,3);
             $amount = $reward->teacher_real_auth_reward;
             $user->withdraw_balance += $amount;
             $user->total_income += $amount;
-            $user->update();
+            $user->update();*/
             teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书','资格证书审核通过',$teacher_activity);
         }
 
