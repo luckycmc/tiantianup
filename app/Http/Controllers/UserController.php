@@ -503,6 +503,7 @@ class UserController extends Controller
                 $where[] = ['amount',$condition,0];
             }
             if (isset($data['type'])) {
+                Log::info('data: '.$data['type']);
                 $where[] = ['type','=',$data['type']];
             }
             if (isset($data['created_at'])) {
