@@ -346,7 +346,7 @@ class OrganizationController extends Controller
         }
         // 更新数据
         $data['status'] = 0;
-        Log::info('data: ',$data);
+        $data['updated_at'] = Carbon::now();
         $result = DB::table('courses')->where('id',$id)->update($data);
         if (!$result) {
             return $this->error('编辑失败');
