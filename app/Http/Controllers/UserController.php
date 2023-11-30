@@ -457,7 +457,6 @@ class UserController extends Controller
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        $user = User::find(2);
         if ($type == 1) {
             $result = Collect::with(['teacher','teacher_info','teacher_career','teacher_education'])->where(['user_id' => $user->id,'type' => $type])->paginate($page_size);
             foreach ($result as $v) {
