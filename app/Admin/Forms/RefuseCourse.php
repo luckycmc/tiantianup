@@ -35,23 +35,25 @@ class RefuseCourse extends Form implements LazyRenderable
         $course_info->update();
 
         $user = User::find($course_info->adder_id);
-        // 发送通知
-        if (SystemMessage::where('action',8)->value('site_message') == 1) {
-            (new Message())->saveMessage($user->id,0,'需求审核','很抱歉，您的需求审核未通过',$id,0,3);
-        }
-        if (SystemMessage::where('action',8)->value('text_message') == 1) {
-            $text = '需求';
-            // 发送短信
-            $easySms = new EasySms($config);
-            try {
-                $number = new PhoneNumber($user->mobile);
-                $easySms->send($number,[
-                    'content'  => "【添添学】很抱歉，您的".$text."未通过审核",
-                ]);
-            } catch (Exception|NoGatewayAvailableException $exception) {
-                return $this->response()
-                    ->error('操作失败')
-                    ->refresh();
+        if ($course_info->adder_role !== 0) {
+            // 发送通知
+            if (SystemMessage::where('action',8)->value('site_message') == 1) {
+                (new Message())->saveMessage($user->id,0,'需求审核','很抱歉，您的需求审核未通过',$id,0,3);
+            }
+            if (SystemMessage::where('action',8)->value('text_message') == 1) {
+                $text = '需求';
+                // 发送短信
+                $easySms = new EasySms($config);
+                try {
+                    $number = new PhoneNumber($user->mobile);
+                    $easySms->send($number,[
+                        'content'  => "【添添学】很抱歉，您的".$text."未通过审核",
+                    ]);
+                } catch (Exception|NoGatewayAvailableException $exception) {
+                    return $this->response()
+                        ->error('操作失败')
+                        ->refresh();
+                }
             }
         }
 
