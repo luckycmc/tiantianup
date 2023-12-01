@@ -105,11 +105,13 @@ class PaymentController extends Controller
             DB::table('bills')->insert($log_data);
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
-            // 查看是否有成交活动
-            $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
-                ->where('end_time', '>=', $current)->first();
-            if ($deal_activity) {
-                deal_activity_log($user->id,$order->course_id,$deal_activity);
+            if ($user->role !== 4) {
+                // 查看是否有成交活动
+                $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
+                    ->where('end_time', '>=', $current)->first();
+                if ($deal_activity) {
+                    deal_activity_log($user->id,$order->course_id,$deal_activity);
+                }
             }
         } else {
             // 余额支付
@@ -131,11 +133,13 @@ class PaymentController extends Controller
             DB::table('bills')->insert($log_data);
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
-            // 查看是否有成交活动
-            $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
-                ->where('end_time', '>=', $current)->first();
-            if ($deal_activity) {
-                deal_activity_log($user->id,$order->course_id,$deal_activity);
+            if ($user->role !== 4) {
+                // 查看是否有成交活动
+                $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
+                    ->where('end_time', '>=', $current)->first();
+                if ($deal_activity) {
+                    deal_activity_log($user->id,$order->course_id,$deal_activity);
+                }
             }
         }
         return $this->success('调起支付',compact('result'));
