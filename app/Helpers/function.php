@@ -400,7 +400,7 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
         'user_id' => $adder_id,
         'amount' => $reward->$deal_reward,
         'type' => 9,
-        'description' => '成交',
+        'description' => '成交奖励',
         'created_at' => Carbon::now()
     ];
     $user = User::find($adder_id);
@@ -422,7 +422,7 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
         'user_id' => $user_id,
         'amount' => $teacher_reward->teacher_deal_reward,
         'type' => 9,
-        'description' => '成交',
+        'description' => '成交奖励',
         'created_at' => Carbon::now()
     ];
     $teacher->withdraw_balance += $teacher_reward->teacher_deal_reward;
