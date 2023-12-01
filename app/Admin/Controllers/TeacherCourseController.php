@@ -34,7 +34,7 @@ class TeacherCourseController extends AdminController
             $grid->column('type','辅导类型');
             $grid->column('subject','科目');
             $grid->column('grade','年级');
-            $grid->column('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已关闭',3 => '已拒绝']);
+            $grid->column('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已结束',3 => '已拒绝']);
             $grid->column('reason','拒绝原因');
             $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             $grid->column('region','省市区')->display(function () {
