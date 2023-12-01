@@ -290,7 +290,7 @@ class OrganizationController extends Controller
             return $this->error('课程不存在');
         }
         if ($course_info->end_time < date('Y-m-d H:i:s')) {
-            $course_info->status = 3;
+            $course_info->status = 2;
             $course_info->save();
         }
         if (!in_array($course_info->status,[0,2])) {
