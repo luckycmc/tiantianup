@@ -154,6 +154,7 @@ class LoginController extends Controller
         }
         // 用户登录
         $token = JWTAuth::fromUser($is_user);
+        Redis::del($data['mobile']);
         //设置token
         Redis::set('TOKEN:'.$is_user->id,$token);
         // dd($is_user->role);
