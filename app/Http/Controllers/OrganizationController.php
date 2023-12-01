@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\BaseInformation;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\Message;
 use App\Models\OrganPrivilege;
@@ -192,7 +193,7 @@ class OrganizationController extends Controller
         $data['class_date'] = json_encode($data['class_date']);
         $data['adder_role'] = 4;
         $data['adder_id'] = $user->id;
-        $data['end_time'] = $data['end_time'] ?? Carbon::now()->addDays(7);
+        $data['end_time'] = $data['end_time'].'23:59:59' ?? Carbon::now()->setTime(23,59,59)->addDays(7);
         $data['class_duration']  = $data['duration'] * $data['class_number'];
         $data['longitude'] = $user->organization->longitude ?? '';
         $data['latitude'] = $user->organization->latitude ?? '';
