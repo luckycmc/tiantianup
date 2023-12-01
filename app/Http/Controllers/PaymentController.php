@@ -30,8 +30,8 @@ class PaymentController extends Controller
             $object = new DeliverLog();
             $pay_config = 'teacher';
             $status_field = 'pay_status';
-            $type = 9;
-            $description = '成交奖励';
+            $type = 12;
+            $description = '服务费';
         } else {
             $object = new UserTeacherOrder();
             $status_field = 'status';
