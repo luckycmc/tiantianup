@@ -150,6 +150,7 @@ class IntermediaryCourseController extends AdminController
                     $number = create_df_number($course_id);
                     $form->model()->update(['number' => $number]);
                 }
+                $form->model()->update(['status' => 0]);
             });
 
             $form->display('created_at');
