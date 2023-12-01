@@ -65,7 +65,7 @@ class IndexController extends Controller
         Log::info('district_id: '.$district_id);
         Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
-        if ((isset($data['longitude']) && isset($data['latitude'])) || !isset($data['district_id'])) {
+        if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
