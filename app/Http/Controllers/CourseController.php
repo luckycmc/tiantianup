@@ -213,6 +213,9 @@ class CourseController extends Controller
         $user_city = Region::where('id',$user->city_id)->value('region_name');
         $user_province = Region::where('id',$user->province_id)->value('region_name');
         $user_district = Region::where('id',$user->district_id)->value('region_name');
+        Log::info('user_city: '.$user_city);
+        Log::info('user_province: '.$user_province);
+        Log::info('user_district: '.$user_district);
         $amount = get_service_price(3, $user_province,$user_city,$user_district);
         Log::info('amount: '.$amount);
         // $amount = 0.01;
