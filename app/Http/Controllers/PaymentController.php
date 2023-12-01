@@ -105,7 +105,7 @@ class PaymentController extends Controller
             DB::table('bills')->insert($log_data);
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
-            if ($user->role !== 4) {
+            if ($user->role == 3) {
                 // 查看是否有成交活动
                 $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
                     ->where('end_time', '>=', $current)->first();
@@ -133,7 +133,7 @@ class PaymentController extends Controller
             DB::table('bills')->insert($log_data);
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
-            if ($user->role !== 4) {
+            if ($user->role == 3) {
                 // 查看是否有成交活动
                 $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
                     ->where('end_time', '>=', $current)->first();
