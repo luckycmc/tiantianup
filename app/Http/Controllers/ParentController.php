@@ -76,7 +76,7 @@ class ParentController extends Controller
         $data['status'] = 0;
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
-        $carbon = Carbon::createFromFormat('Y-m-d H:i:s', $data['end_time']);
+        $carbon = Carbon::createFromFormat('Y-m-d', $data['end_time']);
         if ($carbon->format('H:i:s') === '00:00:00') {
             $data['end_time'] = $carbon->setTime(23,59,59);
         }
