@@ -115,6 +115,9 @@ class CourseController extends Controller
             $id = Region::where('region_name',$data['city_name'])->value('id');
             $where[] = ['courses.city','=',$id];
         }
+        if (isset($data['district_id'])) {
+            $where[] = ['courses.district_id','=',$data['district_id']];
+        }
         // dd($where);
         if (isset($data['is_entry'])) {
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
