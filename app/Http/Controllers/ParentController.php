@@ -77,7 +77,7 @@ class ParentController extends Controller
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
         if (strlen($data['end_time']) <= 12) {
-            $date['end_time'] = $data['end_time']." 23:59:59";
+            $data['end_time'] = $data['end_time']." 23:59:59";
         }
 
         // 价格
