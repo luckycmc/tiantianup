@@ -76,7 +76,10 @@ class ParentController extends Controller
         $data['status'] = 0;
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
-        $data['end_time'] = Carbon::createFromFormat('Y-m-d',$data['end_time'])->setTime(23,59,59)->format('Y-m-d H:i:s') ?? Carbon::now()->setTime(23,59,59)->addDays(7)->format('Y-m-d H:i:s');
+        $carbon = Carbon::createFromFormat('Y-m-d H:i:s', $data['end_time']);
+        if ($carbon->format('H:i:s') === '00:00:00') {
+            $data['end_time'] = $carbon->setTime(23,59,59);
+        }
         // 价格
         $data['class_price'] = $data['class_price_min'] ?? 0;
         // 处理时间
