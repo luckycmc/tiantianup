@@ -389,10 +389,21 @@ class IndexController extends Controller
                 $is_all_pending = $career->every(function ($career) {
                     return $career->status == 0;
                 });
+                $is_all_refuse = $career->every(function ($career) {
+                    return $career->status == 2;
+                });
+                $is_some_passed = $career->pluck('status')->contains(0) && $career->pluck('status')->contains(1);
+                $is_some_refused = $career->pluck('status')->contains(0) && $career->pluck('status')->contains(2);
                 if ($is_all_passed) {
                     $user->career_status = 1;
                 } elseif ($is_all_pending) {
                     $user->career_status = 0;
+                } else if ($is_all_refuse) {
+                    $user->career_status = 5;
+                } else if ($is_some_passed) {
+                    $user->career_status = 2;
+                } else if ($is_some_refused) {
+                    $user->career_status = 4;
                 } else {
                     $user->career_status = 2;
                 }

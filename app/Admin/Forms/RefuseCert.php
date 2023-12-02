@@ -35,7 +35,7 @@ class RefuseCert extends Form implements LazyRenderable
         $teacher_info->update();
         // 发送通知
         if (SystemMessage::where('action',6)->value('site_message') == 1) {
-            (new Message())->saveMessage($teacher_info->user_id,0,'资格证书','资格证书审核失败','',0,3);
+            (new Message())->saveMessage($teacher_info->user_id,0,'资格证书','资格证书审核失败',null,0,3);
         }
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '资格证书';

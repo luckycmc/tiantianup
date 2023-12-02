@@ -9,7 +9,7 @@ use Dcat\Admin\Widgets\Modal;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\Admin\Forms\RefuseRealAuth as RefuseEducationForm;
+use App\Admin\Forms\RefuseEducation as RefuseEducationForm;
 
 class RefuseEducation extends RowAction
 {
