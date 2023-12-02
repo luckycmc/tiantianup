@@ -69,13 +69,13 @@ class CourseController extends Controller
         $order = $data['order'] ?? 'desc';
         // 筛选
         // 当前城市
-        if (isset($data['longitude']) && isset($data['latitude'])) {
+        /*if (isset($data['longitude']) && isset($data['latitude'])) {
             $location_info = get_location($longitude,$latitude);
             $city = $location_info['city'];
             $city_id = Region::where('region_name',$city)->value('id');
 
             $where[] = ['courses.city','=',$city_id];
-        }
+        }*/
 
 
         if (isset($data['fitler_type'])) {
@@ -172,6 +172,7 @@ class CourseController extends Controller
             ->where($where)
             ->where('courses.status','=',1)
             ->orderBy($sort_field,$order)
+            ->ddSql()
             ->paginate($page_size);
 
         foreach ($result as $v) {
