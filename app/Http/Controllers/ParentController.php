@@ -76,15 +76,8 @@ class ParentController extends Controller
         $data['status'] = 0;
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
-        Log::info('end_time: '.$data['end_time']);
-        $date = Carbon::createFromFormat('Y-m-d', $data['end_time']);
-        if ($date !== false) {
-            $date['end_time'] = $date->endOfDay()->toDateTimeString();
-        } else {
-            $dateTime = Carbon::createFromFormat('Y-m-d H:i:s', $data['end_time']);
-            if ($dateTime !== false) {
-                $date['end_time'] = $date['end_time'];
-            }
+        if (strlen($data['end_time']) <= 12) {
+            $date['end_time'] = $data['end_time']." 23:59:59";
         }
 
         // 价格
