@@ -856,8 +856,15 @@ class OrganizationController extends Controller
             $order = UserCourse::where('out_trade_no',$data['out_trade_no'])->first();
             $amount = $order->amount;
         }
+        if ($balance < $amount && $balance > 0) {
+            $discount_amount = $balance;
+        } else if ($balance == 0) {
+            $discount_amount = 0;
+        } else {
+            $discount_amount = $amount;
+        }
         $actual_amount = max(($amount - $balance), 0);
-        return $this->success('获取金额',compact('balance','actual_amount','amount'));
+        return $this->success('获取金额',compact('discount_amount','actual_amount','amount'));
     }
 
     /**
