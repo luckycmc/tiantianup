@@ -79,7 +79,7 @@ class ParentController extends Controller
         $date_string = Carbon::parse($data['end_time']);
         $end_time = date_create_from_format('Y-m-d H:i:s',$date_string);
         if ($end_time !== false && !array_sum(date_get_last_errors())) {
-            $data['end_time'] = $data['end_time'];
+            $data['end_time'] = $data['end_time']." 23:59:59";
         } else {
             $data['end_time'] = Carbon::createFromFormat('Y-m-d', $data['end_time'])->setTime(23,59,59);
         }
