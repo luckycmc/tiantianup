@@ -365,6 +365,7 @@ class UserController extends Controller
         $data['user_id'] = $user_id;
         // 查询是否存在
         $data['created_at'] = Carbon::now();
+        $data['status'] = 0;
         $result = TeacherCareer::updateOrCreate(['id' => $id],$data);
         if (!$result) {
             return $this->error('保存失败');
