@@ -116,7 +116,7 @@ class CourseController extends Controller
             $where[] = ['courses.city','=',$id];
         }
         if (isset($data['district_id'])) {
-            $where[] = ['courses.district_id','=',$data['district_id']];
+            $where[] = ['courses.district','=',$data['district_id']];
         }
         // dd($where);
         if (isset($data['is_entry'])) {
