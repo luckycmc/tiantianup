@@ -45,7 +45,7 @@ class LoginController extends Controller
         // $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptData);
         // Log::info('decryptedData: '.$decryptedData);
         // 查询手机号是否已被注册
-        $user = User::where(['mobile' => $mobile,'open_id' => $session['openid']])->first();
+        $user = User::where(['mobile' => $mobile,'role' => ['!=',null]])->first();
         if ($user) {
             return $this->error('该手机号已被注册');
         }
