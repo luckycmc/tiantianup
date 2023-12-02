@@ -172,7 +172,6 @@ class CourseController extends Controller
             ->where($where)
             ->where('courses.status','=',1)
             ->orderBy($sort_field,$order)
-            ->ddSql()
             ->paginate($page_size);
 
         foreach ($result as $v) {
