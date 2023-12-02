@@ -125,9 +125,6 @@ class LoginController extends Controller
         // 查询用户是否存在
         Log::info('mobile: '.$data['mobile']);
         $is_user = User::where('mobile',$data['mobile'])->first();
-        if ($is_user) {
-            return $this->error('该手机号已被注册');
-        }
         Log::info('is_user: '.$is_user);
         // 获取open_id
         $open_id = '';
