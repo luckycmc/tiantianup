@@ -92,7 +92,7 @@ class TeacherController extends Controller
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
         // 去重
-        $result = $result->unique('id');
+        $result = $result->unique('id')->values();
         // 排序
         $result = new \Illuminate\Pagination\LengthAwarePaginator(
             $result,
