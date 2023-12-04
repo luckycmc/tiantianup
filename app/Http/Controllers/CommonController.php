@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Agreement;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Course;
@@ -176,6 +177,16 @@ class CommonController extends Controller
     public function get_base_information()
     {
         $result = BaseInformation::first();
+        return $this->success('基本信息',$result);
+    }
+
+    /**
+     * 获取协议
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_policy()
+    {
+        $result = Agreement::all();
         return $this->success('基本信息',$result);
     }
 
