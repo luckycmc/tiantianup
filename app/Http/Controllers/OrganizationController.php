@@ -884,6 +884,9 @@ class OrganizationController extends Controller
         if ($order->status == 2) {
             return $this->error('该订单已关闭');
         }
+        if ($order->status == 1) {
+            return $this->error('该订单已被支付');
+        }
         // 当前用户
         $user = Auth::user();
         // 余额
