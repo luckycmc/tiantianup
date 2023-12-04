@@ -36,7 +36,7 @@ class RefuseOrgan extends Form implements LazyRenderable
         $organ_info->update();
         // 发送通知
         if (SystemMessage::where('action',1)->value('site_message') == 1) {
-            (new Message())->saveMessage($organ_info->user_id,0,'机构入驻','机构入驻审核','',0,3);
+            (new Message())->saveMessage($organ_info->user_id,0,'机构入驻','机构入驻审核',0,0,3);
         }
         if (SystemMessage::where('action',1)->value('text_message') == 1) {
             $text = '机构入驻';
@@ -54,6 +54,10 @@ class RefuseOrgan extends Form implements LazyRenderable
                     ->refresh();
             }
         }
+        return $this
+            ->response()
+            ->success('操作成功')
+            ->refresh();
     }
 
     /**
