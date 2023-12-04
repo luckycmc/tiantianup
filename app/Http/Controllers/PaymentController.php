@@ -41,6 +41,9 @@ class PaymentController extends Controller
         if (!$order) {
             return $this->error('订单不存在');
         }
+        if ($order->$status_field == 1) {
+            return $this->error('该订单已被支付');
+        }
         // 当前用户
         $user = Auth::user();
         if ($user->role == 3) {
