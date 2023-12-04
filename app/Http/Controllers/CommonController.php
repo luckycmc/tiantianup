@@ -113,7 +113,8 @@ class CommonController extends Controller
                 }
             }
         } catch (Exception $e) {
-            Log::info($data);
+            Log::info($e->getMessage());
+            return $this->error($e->getMessage());
         }
     }
 
