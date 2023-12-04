@@ -73,6 +73,7 @@ class OrganizationController extends Controller
         $data['latitude'] = $long_lat[1];
         Log::info('data: ',$data);
         $id = Organization::updateOrCreate(['id' => $user->organ_id],$data);
+        Log::info('id: '.$id);
         // $id = DB::table('organizations')->insertGetId($data);
         $user->organ_id = $id;
         $user->update();
