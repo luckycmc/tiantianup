@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\Message;
+use App\Models\Organization;
 use App\Models\OrganPrivilege;
 use App\Models\OrganRole;
 use App\Models\OrganRolePrivilege;
@@ -70,7 +71,8 @@ class OrganizationController extends Controller
         $long_lat = get_long_lat($province,$city,$district,$data['address'] ?? null);
         $data['longitude'] = $long_lat[0];
         $data['latitude'] = $long_lat[1];
-        $id = DB::table('organizations')->insertGetId($data);
+        $id = Organization::updateOrCreate(['id' => $user->organ_id],$data);
+        // $id = DB::table('organizations')->insertGetId($data);
         $user->organ_id = $id;
         $user->update();
         $images = \request()->input('images');
