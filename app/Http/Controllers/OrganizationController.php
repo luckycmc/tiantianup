@@ -803,6 +803,9 @@ class OrganizationController extends Controller
         $total_amount = 0;
         foreach ($out_trade_no_arr as $v) {
             $order_info = UserCourse::where('out_trade_no',$v)->first();
+            if ($order_info->status == 1) {
+                return $this->error('该订单已被支付');
+            }
             $order_info->total_out_trade_no = $total_out_trade_no;
             $total_amount += $order_info->amount;
             $order_info->update();
