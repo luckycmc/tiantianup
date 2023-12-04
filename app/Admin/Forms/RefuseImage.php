@@ -36,7 +36,7 @@ class RefuseImage extends Form implements LazyRenderable
 
         // 发送通知
         if (SystemMessage::where('action',6)->value('site_message') == 1) {
-            (new Message())->saveMessage($teacher_info->user_id,0,'教师风采','教师风采审核通过',0,0,3);
+            (new Message())->saveMessage($teacher_info->user_id,0,'教师风采','教师风采审核失败',0,0,3);
         }
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '教师风采';

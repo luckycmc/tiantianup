@@ -65,7 +65,8 @@ class VerifyRealAuth extends Form implements LazyRenderable
         $tag = '实名认证';
         $tag_info = [
             'user_id' => $user->id,
-            'tag' => $tag
+            'tag' => $tag,
+            'type' => 3
         ];
         // 保存日志
         DB::transaction(function () use ($teacher_info,$user,$tag_info) {

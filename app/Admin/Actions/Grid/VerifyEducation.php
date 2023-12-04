@@ -44,7 +44,8 @@ class VerifyEducation extends RowAction
         $tag = $teacher_info->highest_education;
         $tag_info = [
             'user_id' => $teacher_id,
-            'tag' => $tag
+            'tag' => $tag,
+            'type' => 0
         ];
         TeacherTag::updateOrCreate(['user_id' => $teacher_id,'tag' => $tag],$tag_info);
         // 发送通知

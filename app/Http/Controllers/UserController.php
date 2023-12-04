@@ -118,7 +118,8 @@ class UserController extends Controller
             $tag = '资料完善';
             $tag_info = [
                 'user_id' => $user->id,
-                'tag' => $tag
+                'tag' => $tag,
+                'type' => 2
             ];
             TeacherTag::updateOrCreate(['user_id' => $user->id,'tag' => $tag],$tag_info);
             // 发送通知

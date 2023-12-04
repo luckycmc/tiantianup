@@ -54,8 +54,11 @@ class VerifyCareer extends RowAction
         $tag = $user->teaching_year.'年教学经验';
         $tag_info = [
             'user_id' => $user->id,
-            'tag' => $tag
+            'tag' => $tag,
+            'type' => 1,
         ];
+        // 删除所有教学经历标签
+        TeacherTag::where(['user_id' => $user->id,'type' => 1])->delete();
         // 保存日志
         DB::transaction(function () use ($teacher_info,$user,$tag_info) {
             $teacher_info->update();
