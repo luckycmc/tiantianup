@@ -72,17 +72,16 @@ class OrganizationController extends Controller
         $data['longitude'] = $long_lat[0];
         $data['latitude'] = $long_lat[1];
         Log::info('data: ',$data);
-        $id = Organization::updateOrCreate(['id' => $user->organ_id],$data);
-        Log::info('id: '.$id);
+        $result = Organization::updateOrCreate(['id' => $user->organ_id],$data);
         // $id = DB::table('organizations')->insertGetId($data);
-        $user->organ_id = $id;
+        $user->organ_id = $result->id;
         $user->update();
         $images = \request()->input('images');
         if ($images) {
             $image_data = [];
             foreach ($images as $v) {
                 $image_data[] = [
-                    'organ_id' => $id,
+                    'organ_id' => $result->id,
                     'url' => $v,
                     'created_at' => Carbon::now()
                 ];
