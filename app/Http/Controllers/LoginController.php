@@ -33,8 +33,6 @@ class LoginController extends Controller
         $code = $data['code'] ?? '';
         $union_id = $data['union_id'] ?? 0;
         $mobile = $data['mobile'] ?? null;
-        $iv = $data['iv'] ?? '';
-        $encryptData = $data['encryptedData'] ?? '';
         $app = Factory::miniProgram($config);
         $session = $app->auth->session($code);
 
@@ -44,15 +42,15 @@ class LoginController extends Controller
         }
         // $decryptedData = $app->encryptor->decryptData($session['session_key'], $iv, $encryptData);
         // Log::info('decryptedData: '.$decryptedData);
-        // 查询手机号是否已被注册
-        $user = User::where(['mobile' => $mobile])->first();
-        if ($user) {
-            return $this->error('该手机号已被注册');
-        }
         // 判断用户是否存在
         $is_user = User::where(['open_id' => $session['openid']])->first();
         Log::info('open_id: '.$session['openid']);
         if (!$is_user) {
+            // 查询手机号是否已被注册
+            $user = User::where(['mobile' => $mobile])->first();
+            if ($user) {
+                return $this->error('该手机号已被注册');
+            }
             $new_user = new User();
             $new_user->open_id = $session['openid'];
             $new_user->union_id = $union_id;
@@ -145,12 +143,16 @@ class LoginController extends Controller
         if (!$is_user) {
             $is_new = 1;
             // 注册新用户
-            $new_user = new User();
-            $new_user->mobile = $data['mobile'];
-            $new_user->parent_id = $data['parent_id'] ?? null;
-            $new_user->open_id = $open_id;
-            $new_user->save();
-            $is_user = $new_user;
+            // 查询openid是否存在
+            $user = User::where('open_id',$data['openid'])->first();
+            if (!$user) {
+                $new_user = new User();
+                $new_user->mobile = $data['mobile'];
+                $new_user->parent_id = $data['parent_id'] ?? null;
+                $new_user->open_id = $open_id;
+                $new_user->save();
+                $is_user = $new_user;
+            }
         }
         if (!$is_user->invite_qrcode) {
             $qrcode = create_qr_code($is_user->id);
