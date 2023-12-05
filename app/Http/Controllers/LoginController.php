@@ -144,7 +144,7 @@ class LoginController extends Controller
             $is_new = 1;
             // 注册新用户
             // 查询openid是否存在
-            $user = User::where('open_id',$data['openid'])->first();
+            $user = User::where('open_id',$open_id)->first();
             if (!$user) {
                 $new_user = new User();
                 $new_user->mobile = $data['mobile'];
