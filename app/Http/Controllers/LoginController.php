@@ -154,7 +154,7 @@ class LoginController extends Controller
                 $is_user = $new_user;
             }
         }
-        if (!$is_user->invite_qrcode) {
+        if (!isset($is_user->invite_qrcode)) {
             $qrcode = create_qr_code($is_user->id);
             $is_user->invite_qrcode = env('APP_URL').$qrcode;
             $is_user->update();
