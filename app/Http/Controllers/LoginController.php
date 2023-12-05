@@ -153,11 +153,11 @@ class LoginController extends Controller
                 $new_user->save();
                 $is_user = $new_user;
             }
-        }
-        if (!isset($is_user->invite_qrcode)) {
-            $qrcode = create_qr_code($is_user->id);
-            $is_user->invite_qrcode = env('APP_URL').$qrcode;
-            $is_user->update();
+            if (!isset($is_user->invite_qrcode)) {
+                $qrcode = create_qr_code($is_user->id);
+                $is_user->invite_qrcode = env('APP_URL').$qrcode;
+                $is_user->update();
+            }
         }
         // 用户登录
         $token = JWTAuth::fromUser($is_user);
