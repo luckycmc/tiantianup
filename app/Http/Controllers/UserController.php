@@ -1006,7 +1006,7 @@ class UserController extends Controller
                 'page' => 'pages/login/index',
                 'scene' =>  $user->id,
                 'check_path' => true,
-                'env_version' => 'trial'
+                'env_version' => 'release'
             ];
 
             $request_url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$access_token;
