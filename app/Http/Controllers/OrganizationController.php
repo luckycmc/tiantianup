@@ -146,6 +146,7 @@ class OrganizationController extends Controller
 
         // 查询服务费
         $service_price = get_service_price(2,$user_province,$user_city,$user_district);
+        Log::info('service_price: '.$service_price);
         // $service_price = 0.01;
         $order_data = [
             'user_id' => $user->id,
