@@ -201,7 +201,7 @@ function get_service_price($type,$province,$city,$district) {
         $query->whereRaw("FIND_IN_SET('$province',region)")
             ->orWhereRaw("FIND_IN_SET('$city',region)")
             ->orWhereRaw("FIND_IN_SET('$district',region)");
-    })->orderByDesc('created_at')->logListenedSql()->first();
+    })->orderByDesc('created_at')->first();
     if (!$info) {
         return 0;
     }
