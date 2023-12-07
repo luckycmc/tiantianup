@@ -27,7 +27,7 @@ class TeacherRealAuthController extends AdminController
             $grid->column('teacher.name','教师姓名');
             $grid->column('id_card_front')->image('',60,60);
             $grid->column('id_card_backend')->image('',60,60);
-            $grid->column('picture')->image('',60,60);
+            $grid->column('picture','免冠照片')->image('',60,60);
             $grid->column('real_name');
             $grid->column('id_card_no');
             $grid->column('status','审核状态')->using([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
