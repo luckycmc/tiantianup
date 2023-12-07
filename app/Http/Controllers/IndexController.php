@@ -368,7 +368,7 @@ class IndexController extends Controller
             });
             $user->entry = $user_entry_course->count();
         }
-        $user->team = $user->child()->count() + $user->grandson()->count();
+        $user->team = $user->child()->where('users.is_perfect',1)->count() + $user->grandson()->where('users.is_perfect',1)->count();
         // 未读消息
         $user->message = $user->messages()->where('status',0)->count();
         // 联系人数量
