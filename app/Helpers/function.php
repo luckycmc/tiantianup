@@ -198,9 +198,9 @@ function get_service_price($type,$province,$city,$district) {
     $today = Carbon::now()->toDateString();
     Log::info('type: '.$type);
     $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->where(function ($query) use ($province,$city,$district) {
-        $query->where("FIND_IN_SET('$province',region)")
-            ->orWhere("FIND_IN_SET('$city',region)")
-            ->orWhere("FIND_IN_SET('$district',region)");
+        $query->whereRaw("FIND_IN_SET('$province',region)")
+            ->orWhereRaw("FIND_IN_SET('$city',region)")
+            ->orWhereRaw("FIND_IN_SET('$district',region)");
     })->orderByDesc('created_at')->logListenedSql()->first();
     if (!$info) {
         return 0;
