@@ -159,11 +159,9 @@ class OrganizationController extends Controller
             'created_at' => Carbon::now()
         ];
         // 保存数据
-        if (!DB::table('user_teacher_orders')->where(['user_id' => $user->id,'teacher_id' => $teacher_id])->first()) {
-            $result = DB::table('user_teacher_orders')->insert($order_data);
-            if (!$result) {
-                return $this->error('生成订单失败');
-            }
+        $result = DB::table('user_teacher_orders')->insert($order_data);
+        if (!$result) {
+            return $this->error('生成订单失败');
         }
         return $this->success('生成订单成功',compact('out_trade_no','service_price'));
     }
