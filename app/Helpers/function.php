@@ -197,7 +197,7 @@ function get_reward($type,$role) {
 function get_service_price($type,$province,$city,$district) {
     $today = Carbon::now()->toDateString();
     Log::info('type: '.$type);
-    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->whereRaw("FIND_IN_SET('$province',region)")->orWhereRaw("FIND_IN_SET('$city',region)")->orWhereRaw("FIND_IN_SET('$district',region)")->orderByDesc('created_at')->first();
+    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->whereRaw("FIND_IN_SET('$province',region)")->orWhereRaw("FIND_IN_SET('$city',region)")->orWhereRaw("FIND_IN_SET('$district',region)")->orderByDesc('created_at')->dumpListenedSql()->first();
     if (!$info) {
         return 0;
     }
