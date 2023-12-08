@@ -241,7 +241,21 @@ class CommonController extends Controller
     public function course_list()
     {
         $data = \request()->all();
-        $role = $data['role'] ?? 1;
+        $role = 4;
+        $page_size = $data['page_size'] ?? 10;
+        $result = Course::where('adder_role', 4)->where('end_time','>',Carbon::now())->orderByDesc('created_at')->paginate($page_size);
+        return $this->success('课程列表',$result);
+    }
 
+    /**
+     * 教师列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function teacher_list()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $result = User::where(['is_perfect' => 1,'status' => 1,'role' => 3,'is_recommend' => 1])->paginate($page_size);
+        return $this->success('教师列表',$result);
     }
 }
