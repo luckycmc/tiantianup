@@ -276,4 +276,23 @@ class CommonController extends Controller
         $result = DB::table('activities')->whereRaw("FIND_IN_SET('$role_str',object)")->where('status',$status)->paginate($page_size);
         return $this->success('活动列表',$result);
     }
+
+    /**
+     * 活动详情
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function detail()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $result = Activity::find($id);
+        if (!$result) {
+            return $this->error('活动不存在');
+        }
+        $arr = ['','student_','parent_','teacher_','organ_'];
+        $prefix = $arr[4];
+        $result->first_reward = $result->{$prefix.'first_reward'};
+        $result->second_reward = $result->{$prefix.'second_reward'};
+        return $this->success('活动详情',$result);
+    }
 }
