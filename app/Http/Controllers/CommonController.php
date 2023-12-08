@@ -15,6 +15,7 @@ use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yansongda\Pay\Exception\Exception;
@@ -257,5 +258,22 @@ class CommonController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $result = User::where(['is_perfect' => 1,'status' => 1,'role' => 3,'is_recommend' => 1])->paginate($page_size);
         return $this->success('教师列表',$result);
+    }
+
+    /**
+     * 活动列表
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function activity_list()
+    {
+        $data = \request()->all();
+        $page_size = $data['page_size'] ?? 10;
+        $status = $data['status'] ?? 1;
+        // 用户角色
+        $role = 4;
+        $role_arr = ['','学生','家长','教师','机构'];
+        $role_str = $role_arr[$role];
+        $result = DB::table('activities')->whereRaw("FIND_IN_SET('$role_str',object)")->where('status',$status)->paginate($page_size);
+        return $this->success('活动列表',$result);
     }
 }
