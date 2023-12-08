@@ -344,7 +344,7 @@ class CommonController extends Controller
      * 活动详情
      * @return \Illuminate\Http\JsonResponse
      */
-    public function detail()
+    public function activity_detail()
     {
         $data = \request()->all();
         $id = $data['id'] ?? 0;
