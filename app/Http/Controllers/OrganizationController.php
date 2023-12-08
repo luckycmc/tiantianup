@@ -277,7 +277,7 @@ class OrganizationController extends Controller
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];
         }
-        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->where('end_time','>',Carbon::now())->orderBy($sort_field,$sort)->paginate($page_size);
+        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->orderBy($sort_field,$sort)->paginate($page_size);
         return $this->success('需求列表',$result);
     }
 
