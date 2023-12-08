@@ -175,6 +175,7 @@ class CourseController extends Controller
             ->select($select_field)
             ->where($where)
             ->where('courses.status','=',1)
+            ->where('courses.end_time','>',Carbon::now())
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
 
