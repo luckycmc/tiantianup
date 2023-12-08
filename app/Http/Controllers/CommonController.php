@@ -237,4 +237,11 @@ class CommonController extends Controller
     {
         get_long_lat('河南省','郑州市','高新区','须水河西路大正水晶森林');
     }
+
+    public function course_list()
+    {
+        $data = \request()->all();
+        $role = $data['role'] ?? 1;
+
+    }
 }
