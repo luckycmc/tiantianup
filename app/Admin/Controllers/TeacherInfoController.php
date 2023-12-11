@@ -52,6 +52,9 @@ class TeacherInfoController extends AdminController
                 $filter->equal('teacher_info.highest_education','学历')->select('/api/education');
                 $filter->equal('is_real_auth','实名认证')->select([0 => '未实名', 1 => '已实名']);
                 $filter->equal('has_teacher_cert','是否有教师资格证')->radio([1 => '是', 0 => '否']);
+                $filter->equal('province_id','省份')->select('/api/city')->load('city_id','/api/city');
+                $filter->equal('city_id','城市')->select('/api/city')->load('district_id','/api/city');
+                $filter->equal('district_id','区县')->select('/api/city');
                 $filter->whereBetween('created_at',function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
@@ -76,7 +79,23 @@ class TeacherInfoController extends AdminController
                     $actions->append(new EnableTeacher());
                 }
             });
-            $grid->export();
+            $grid->export()->rows(function ($rows) {
+                foreach ($rows as &$row) {
+                    Log::info('row: ',$row->toArray());
+                    $arr = ['未注册','正常','禁用','永久禁用'];
+                    $status_arr = ['待审核', '审核通过','拒绝'];
+                    $row['gender'] = $row['gender'] == 1 ? '男' : '女';
+                    $row['is_real_auth'] = $row['is_real_auth'] == 1 ? '是' : '否';
+                    $row['status'] = $arr[$row['status']];
+                    $row['has_teacher_cert'] = $row['is_real_auth'] == 1 ? '是' : '否';
+                    $row['is_recommend'] = $row['is_recommend'] == 1 ? '是' : '否';
+                    if ($row['teacher_info']) {
+                        $row['teacher_info']['status'] = $status_arr[$row['teacher_info']['status']];
+                    }
+                    $row['region'] = $row->province->region_name.$row->city->region_name.$row->district->region_name;
+                }
+                return $rows;
+            });;
         });
     }
 
