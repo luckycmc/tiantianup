@@ -258,18 +258,9 @@ class CommonController extends Controller
     public function teacher_list()
     {
         $data = \request()->all();
-        $district_id = $data['district_id'] ?? 0;
         $page_size = $data['page_size'] ?? 10;
-        if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id'])) {
-            // 根据经纬度获取省市区
-            $location = get_location($data['longitude'],$data['latitude']);
-            if (!$location) {
-                return $this->error('定位出错');
-            }
-            $district_id = Region::where('code',$location['adcode'])->value('id');
-        }
         // 查询当前位置的所有推荐教师
-        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
+        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
         foreach ($teachers as $teacher) {
             $teaching_year = 0;
             $subject = [];
