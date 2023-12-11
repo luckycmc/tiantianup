@@ -95,7 +95,7 @@ class TeacherInfoController extends AdminController
                     $row['region'] = $row->province->region_name.$row->city->region_name.$row->district->region_name;
                 }
                 return $rows;
-            });;
+            });
         });
     }
 

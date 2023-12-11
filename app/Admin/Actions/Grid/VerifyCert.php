@@ -77,7 +77,7 @@ class VerifyCert extends RowAction
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
         // 查询是否已获得奖励
-        $is_reward = Activity::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '资格证书审核通过'])->exists();
+        $is_reward = \App\Models\ActivityLog::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '资格证书审核通过'])->exists();
         if ($teacher_activity && !$is_reward) {
             // 查询奖励
             /*$reward = get_reward(2,3);

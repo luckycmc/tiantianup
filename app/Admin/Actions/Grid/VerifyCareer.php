@@ -90,7 +90,7 @@ class VerifyCareer extends RowAction
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
         // 查询是否已获得奖励
-        $is_reward = Activity::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '教学经历审核通过'])->exists();
+        $is_reward = \App\Models\ActivityLog::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '教学经历审核通过'])->exists();
         if ($teacher_activity && !$is_reward) {
             teacher_activity_log($teacher_info->user_id,'teacher_career_reward','教学经历','教学经历审核通过',$teacher_activity);
         }
