@@ -60,12 +60,15 @@ class BillController extends AdminController
                 foreach ($rows as &$row) {
                     Log::info('row: ',$row->toArray());
                     $arr = ['已结束','进行中','待开始','已拒绝','待审核'];
-                    $type_arr = ['','邀新活动','教师注册活动','成交活动'];
+                    $type_arr = ['','余额提现','邀新奖励','活动奖励','购买课程','查看教师','审核教学经历','审核证书','审核教师风采','成交','查看报名','查看中介单'];
                     if (isset($row['status'])) {
                         $row['status'] = $arr[$row['status']];
                     } else {
                         $row['status'] = '/';
                     }
+                    $role_arr = ['','学生','家长','教师','机构'];
+                    $row['role'] = $role_arr[$row['role']];
+                    // $row['user.name'] = $row->user->role == 4 ? $row->user->organization->name : $row->user->name;
 
                     $row['type'] = $type_arr[$row['type']];
                     $row['is_disabled'] = $row['is_disabled'] == 0 ? '否' : '是';
