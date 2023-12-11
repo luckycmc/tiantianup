@@ -17,13 +17,26 @@ class UserCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new UserCourse(), function (Grid $grid) {
+        return Grid::make(new UserCourse(['user','course']), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('user_id');
-            $grid->column('role');
-            $grid->column('course_id');
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
+            $grid->column('user.number','用户编号');
+            $grid->column('user.name','用户名称');
+            $grid->column('role','用户类型')->using([1 => '学生', 2 => '家长', 3 => '教师', 4 => '机构']);
+            $grid->column('user.organization.name','机构名称');
+            $grid->column('course.number','课程编号');
+            $grid->column('course.name','课程名称');
+            $grid->column('status','报名单状态')->using([0 => '待支付', 1 => '已支付']);
+            $grid->column('user.mobile','手机号');
+            $grid->column('amount','服务费');
+            $grid->column('area','省市区')->display(function () {
+                if ($this->user) {
+                    return $this->user->province->region_name.$this->user->city->region_name.$this->user->district->region_name;
+                } else {
+                    return null;
+                }
+            });
+            $grid->column('created_at','报名时间');
+            $grid->column('updated_at','支付时间')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
