@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Agreement;
+use App\Models\Banner;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Course;
@@ -11,6 +12,7 @@ use App\Models\DeliverLog;
 use App\Models\Organization;
 use App\Models\OrganRole;
 use App\Models\Region;
+use App\Models\RotateImage;
 use App\Models\User;
 use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
@@ -357,5 +359,20 @@ class CommonController extends Controller
         $result->first_reward = $result->{$prefix.'first_reward'};
         $result->second_reward = $result->{$prefix.'second_reward'};
         return $this->success('活动详情',$result);
+    }
+
+    /**
+     * 获取banner图
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_banner()
+    {
+        $data = \request()->all();
+        $role = $data['role'] ?? 4;
+        $role_arr = ['','学生','家长','教师','机构'];
+        $role_str = $role_arr[$role];
+
+        $result = Banner::whereRaw("FIND_IN_SET('$role_str',object)")->get();
+        return $this->success('获取banner图',$result);
     }
 }

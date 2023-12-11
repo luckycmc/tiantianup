@@ -7,6 +7,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Log;
 
 class BillController extends AdminController
 {
@@ -17,10 +18,18 @@ class BillController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Bill('user'), function (Grid $grid) {
+        return Grid::make(new Bill(['user']), function (Grid $grid) {
             $grid->model()->whereIn('type',[4,5]);
             $grid->column('id')->sortable();
-            $grid->column('user.name','用户姓名');
+            $grid->column('user.name','用户姓名')->display(function () {
+                // dd($this->user->role);
+                if ($this->user->role == 4) {
+                    return $this->user->organization->name;
+                } else {
+                    return $this->user->name;
+                }
+            });
+            $grid->column('user.role','用户身份')->using([1 => '学生', 2 => '家长', 3 => '教师', 4 => '机构']);
             $grid->column('amount');
             $grid->column('type');
             $grid->column('description');
@@ -49,9 +58,15 @@ class BillController extends AdminController
             });
             $grid->export()->rows(function ($rows) {
                 foreach ($rows as &$row) {
+                    Log::info('row: ',$row->toArray());
                     $arr = ['已结束','进行中','待开始','已拒绝','待审核'];
                     $type_arr = ['','邀新活动','教师注册活动','成交活动'];
-                    $row['status'] = $arr[$row['status']];
+                    if (isset($row['status'])) {
+                        $row['status'] = $arr[$row['status']];
+                    } else {
+                        $row['status'] = '/';
+                    }
+
                     $row['type'] = $type_arr[$row['type']];
                     $row['is_disabled'] = $row['is_disabled'] == 0 ? '否' : '是';
                 }
