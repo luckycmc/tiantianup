@@ -7,6 +7,9 @@ use App\Admin\Actions\Grid\EnableTeacher;
 use App\Admin\Actions\Grid\Recommend;
 use App\Admin\Repositories\User;
 use App\Models\TeacherCareer;
+use App\Models\TeacherCert;
+use App\Models\TeacherEducation;
+use App\Models\TeacherInfo;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
@@ -78,15 +81,18 @@ class TeacherInfoController extends AdminController
     }
 
     public function show($id,Content $content) {
-        return $content->title('教师详情')
-            ->body(Tab::make()
-                ->add('基本信息',$this->detail($id))
-                ->add('实名认证',$this->real_auth($id))
-                ->add('资格证书',$this->cert($id))
-                ->add('教育经历',$this->education($id))
-                ->add('教学经历',$this->career($id))
-                ->add('教师风采',$this->images($id))
-            );
+        $tab = Tab::make();
+        $tab->add('基本信息',$this->detail($id))
+            ->add('实名认证',$this->real_auth($id));
+        if (TeacherCert::where('user_id',$id)->value('id')) {
+            $tab->add('资格证书',$this->cert($id));
+        }
+        if (TeacherEducation::where('user_id',$id)->value('id')) {
+            $tab->add('教育经历',$this->education($id));
+        }
+        $tab->add('教学经历',$this->career($id))
+            ->add('教师风采',$this->images($id));
+        return $content->title('教师详情')->body($tab);
     }
 
     // 实名认证
@@ -95,20 +101,26 @@ class TeacherInfoController extends AdminController
             $show->field('is_real_auth','实名认证状态')->using([0 => '未实名', 1 => '已实名']);
             $show->field('teacher_info.id_card_front','身份证人像面')->image();
             $show->field('teacher_info.id_card_backend','身份证人像面')->image();
+            $show->field('teacher_info.picture','免冠照片')->image();
         });
     }
 
     // 资格证书
     private function cert($id) {
-        return Show::make($id,new User(['teacher_info']),function (Show $show) {
-            $show->field('teacher_info.teacher_cert','资格证书')->image();
-            $show->field('teacher_info.graduate_cert','荣誉证书')->image();
-            $show->field('teacher_info.diploma','其他证书')->image();
+        return Show::make($id,new TeacherCert(),function (Show $show) use ($id) {
+            $show->field('teacher_cert','资格证书')->image();
+            $show->field('honor_cert','荣誉证书')->as(function () {
+                return json_decode($this->honor_cert);
+            })->image();
+            $show->field('other_cert','其他证书')->as(function () {
+                return json_decode($this->other_cert);
+            })->image();
         });
     }
 
     // 教育经历
     private function education($id) {
+        $id = TeacherEducation::where('user_id',$id)->value('id');
         return Show::make($id,new User(['teacher_info']),function (Show $show) {
             $show->field('teacher_info.highest_education','最高学历');
             $show->field('teacher_info.graduate_school','毕业院校');
@@ -160,12 +172,15 @@ class TeacherInfoController extends AdminController
         return Show::make($id, new User(['teacher_info','province','city','district','teacher_tags']), function (Show $show) {
             $show->field('number','ID');
             $show->field('name','教师姓名');
+            $show->field('avatar','头像')->image('',60,60);
             $show->field('gender','性别')->using([0 => '女',1 => '男']);
             $show->field('mobile','手机号');
             $show->field('status','账号状态')->using([0 => '未注册', 1 => '正常', 2 => '禁用']);
             $show->field('region','所在省市区')->as(function () {
                 return $this->province->region_name.$this->city->region_name.$this->district->region_name;
             });
+            $show->field('address','详细地址');
+            $show->field('introduction','个人介绍');
             $show->field('teacher_info.highest_education','学历');
             $show->field('is_real_auth','实名认证状态')->using([0 => '未实名', 1 => '已实名']);
             $show->field('has_teacher_cert','是否有教师资格证')->using([0 => '否',1 => '是']);
