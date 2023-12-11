@@ -263,10 +263,6 @@ function invite_activity_log ($parent_id,$user_id,$role,$invite_activity) {
     $first_field = $prefix.'first_reward';
     $second_field = $prefix.'second_reward';
     $new_field = $prefix.'new_reward';
-    Log::info('reward: '.$reward);
-    // Log::info('role: '.$role);
-    Log::info('field: '.$first_field);
-    Log::info('reward_field: '.$reward->$first_field);
 
     // 发放奖励
     $parent->withdraw_balance += $reward->$first_field;
@@ -353,25 +349,27 @@ function teacher_activity_log ($teacher_id,$field,$project,$description,$teacher
     $user->withdraw_balance += $amount;
     $user->total_income += $amount;
     $user->update();
-    $bill_log = [
-        'user_id' => $user->id,
-        'amount' => $amount,
-        'type' => 6,
-        'description' => $description,
-        'created_at' => Carbon::now()
-    ];
-    $activity_log = [
-        'user_id' => $user->id,
-        'username' => $user->name,
-        'activity_id' => $teacher_activity->id,
-        'amount' => $amount,
-        'project' => $project,
-        'type' => $teacher_activity->type,
-        'description' => $description,
-        'created_at' => Carbon::now()
-    ];
-    DB::table('bills')->insert($bill_log);
-    DB::table('activity_log')->insert($activity_log);
+    if ($amount > 0) {
+        $bill_log = [
+            'user_id' => $user->id,
+            'amount' => $amount,
+            'type' => 6,
+            'description' => $description,
+            'created_at' => Carbon::now()
+        ];
+        $activity_log = [
+            'user_id' => $user->id,
+            'username' => $user->name,
+            'activity_id' => $teacher_activity->id,
+            'amount' => $amount,
+            'project' => $project,
+            'type' => $teacher_activity->type,
+            'description' => $description,
+            'created_at' => Carbon::now()
+        ];
+        DB::table('bills')->insert($bill_log);
+        DB::table('activity_log')->insert($activity_log);
+    }
 }
 
 // 成交活动
