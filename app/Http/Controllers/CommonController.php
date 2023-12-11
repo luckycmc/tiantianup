@@ -258,7 +258,9 @@ class CommonController extends Controller
     public function teacher_list()
     {
         $data = \request()->all();
-        if (isset($data['longitude']) && isset($data['latitude'])) {
+        $district_id = $data['district_id'] ?? 0;
+        $page_size = $data['page_size'] ?? 10;
+        if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
@@ -266,63 +268,23 @@ class CommonController extends Controller
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
         }
-        $page_size = $data['page_size'] ?? 10;
-        $page = $data['page'] ?? 1;
-        // 排序
-        $order = $data['order'] ?? 'desc';
-        $sort_field = 'users.age';
-        if (isset($data['sort_teaching_year'])) {
-            $sort_field = 'teacher_info.teaching_year';
-        } elseif (isset($data['sort_education'])) {
-            $sort_field = 'teacher_education.education_id';
+        // 查询当前位置的所有推荐教师
+        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
+        foreach ($teachers as $teacher) {
+            $teaching_year = 0;
+            $subject = [];
+            foreach ($teacher->teacher_experience as $experience) {
+                $start_time = Carbon::parse($experience->start_time);
+                $end_time = Carbon::parse($experience->end_time);
+                $teaching_years = $start_time->diffInYears($end_time);
+                $teaching_year += $teaching_years;
+                // 课程
+                $subject[] = explode(',',$experience->subject);
+            }
+            $teacher->teaching_year = $teaching_year;
+            $teacher->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
         }
-        // 筛选
-        $where = [];
-        if (isset($data['city_id'])) {
-            $where[] = ['users.city_id','=',$data['city_id']];
-        }
-        if (isset($data['filter_object'])) {
-            $where[] = ['teacher_career.object','like','%'.$data['filter_object'].'%'];
-        }
-        if (isset($data['filter_subject'])) {
-            $where[] = ['teacher_career.subject','like','%'.$data['filter_subject'].'%'];
-        }
-        if (isset($data['filter_gender'])) {
-            $where[] = ['users.gender','=',$data['filter_gender']];
-        }
-        if (isset($data['filter_education'])) {
-            $where[] = ['teacher_education.highest_education','=',$data['filter_education']];
-        }
-        if (isset($data['filter_teaching_year_min']) && isset($data['filter_teaching_year_max'])) {
-            $where[] = ['teacher_info.teaching_year','>',$data['filter_teaching_year_min']];
-            $where[] = ['teacher_info.teaching_year','<',$data['filter_teaching_year_max']];
-        }
-        if (isset($data['filter_is_auth'])) {
-            $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
-        }
-        $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
-            ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
-            ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
-            ->where($where)
-            ->where(['users.role' => 3])
-            ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture as teacher_info.picture')
-            ->orderBy($sort_field,$order)
-            ->paginate($page_size);
-        // 去重
-        $result = $result->unique('id')->values();
-        // 排序
-        $result = new \Illuminate\Pagination\LengthAwarePaginator(
-            $result,
-            count($result),
-            $page_size,
-            $page,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
-        foreach ($result as $v) {
-            // 科目
-            $v->subject = explode(',',$v->subject);
-        }
-        return $this->success('教师列表',$result);
+        return $this->success('推荐教师列表',$teachers);
     }
 
     /**
