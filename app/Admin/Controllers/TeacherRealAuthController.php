@@ -49,7 +49,7 @@ class TeacherRealAuthController extends AdminController
                 return $rows;
             });
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->like('name');
+                $filter->like('real_name');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
@@ -102,6 +102,7 @@ class TeacherRealAuthController extends AdminController
             $form->display('user_id');
             $form->image('id_card_front')->saveFullUrl();
             $form->image('id_card_backend')->saveFullUrl();
+            $form->image('picture')->saveFullUrl();
             $form->text('real_name');
             $form->text('id_card_no');
             $form->select('status','审核状态')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
