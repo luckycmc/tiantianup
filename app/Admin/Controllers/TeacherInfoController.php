@@ -27,7 +27,7 @@ class TeacherInfoController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new User(['teacher_info','province','city','district','teacher_education']), function (Grid $grid) {
+        return Grid::make(new User(['teacher_info','province','city','district','teacher_education','teacher_career']), function (Grid $grid) {
             $grid->model()->where('role',3);
             $grid->column('number','ID');
             $grid->column('name','教师姓名');
@@ -38,7 +38,13 @@ class TeacherInfoController extends AdminController
                 return $this->province->region_name.$this->city->region_name.$this->district->region_name;
             });
             $grid->column('teacher_education.highest_education','学历');
-            $grid->column('teacher_education.highest_education','所授科目');
+            $grid->column('subject','所授科目')->display(function () {
+                if (!$this->teacher_career->isEmpty()) {
+                    return implode(',',$this->teacher_career->pluck('subject')->unique()->toArray());
+                } else {
+                    return null;
+                }
+            });
             $grid->column('is_real_auth','实名认证状态')->using([0 => '未实名', 1 => '已实名']);
             $grid->column('has_teacher_cert','是否有教师资格证')->using([0 => '否',1 => '是']);
             $grid->column('teacher_info.status','审核状态')->using([0 => '待审核', 1 => '审核通过', 2 => '拒绝']);
