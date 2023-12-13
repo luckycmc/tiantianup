@@ -87,7 +87,6 @@ class TeacherInfoController extends AdminController
             });
             $grid->export()->rows(function ($rows) {
                 foreach ($rows as &$row) {
-                    Log::info('row: ',$row->toArray());
                     $arr = ['未注册','正常','禁用','永久禁用'];
                     $status_arr = ['待审核', '审核通过','拒绝'];
                     $row['gender'] = $row['gender'] == 1 ? '男' : '女';

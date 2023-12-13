@@ -21,7 +21,6 @@ class ActivityLog extends LazyRenderable
                 $grid->column('role','用户类型')->using([1 => '学生',2 => '家长',3 => '教师', 4 => '机构']);
                 $grid->column('first_child','一级下线人数');
                 $grid->column('second_child','二级下线人数');
-                $grid->export();
             } else if ($type == 2) {
                 $grid->column('username','教师姓名');
                 $grid->column('project','完成项目');

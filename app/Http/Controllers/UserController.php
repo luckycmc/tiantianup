@@ -99,7 +99,9 @@ class UserController extends Controller
             unset($data['latitude']);
             unset($data['longitude']);
         }
-        $data['created_at'] = Carbon::now();
+        if (!isset($user->created_at)) {
+            $data['created_at'] = Carbon::now();
+        }
         if ($role == 2) {
             $province = Region::where('id',$data['province_id'])->value('region_name');
             $city = Region::where('id',$data['city_id'])->value('region_name');
