@@ -50,7 +50,7 @@ class TeacherController extends Controller
         $user = Auth::user();
         // $user = User::find(18);
         $page_size = $data['page_size'] ?? 10;
-        $page = $data['page'];
+        $page = $data['page'] ?? 1;
         // 排序
         $order = $data['order'] ?? 'desc';
         $sort_field = 'users.age';
