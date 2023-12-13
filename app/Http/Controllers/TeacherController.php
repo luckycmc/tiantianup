@@ -90,7 +90,7 @@ class TeacherController extends Controller
             ->where(['users.district_id' => $district_id,'users.role' => 3])
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->orderBy($sort_field,$order)
-            ->paginate($page_size);
+            ->get();
         // 去重
         $result = $result->unique('id')->values();
         // 排序
