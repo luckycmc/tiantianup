@@ -90,17 +90,19 @@ class TeacherController extends Controller
             ->where(['users.district_id' => $district_id,'users.role' => 3])
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->orderBy($sort_field,$order)
+            ->distinct()
             ->paginate($page_size);
-        // 去重
-        $result = $result->unique('id')->values();
+        // dd($result->toArray());
+        /*// 去重
+        $info = $result->unique('id')->values();
         // 分页
         $result = new \Illuminate\Pagination\LengthAwarePaginator(
-            $result,
-            count($result),
+            $info,
+            count($info),
             $page_size,
             $page,
             ['path' => request()->url(), 'query' => request()->query()]
-        );
+        );*/
         foreach ($result as $v) {
             // 科目
             $v->subject = explode(',',$v->subject);
