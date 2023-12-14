@@ -97,6 +97,7 @@ class PaymentController extends Controller
             ];
             $result = Pay::wechat($config)->mini($pay_data);
             $user->withdraw_balance = $user->withdraw_balance - $balance;
+            $user->update();
             // 保存日志
             $log_data = [
                 'user_id' => $user->id,
@@ -122,8 +123,8 @@ class PaymentController extends Controller
             $user->withdraw_balance = $user->withdraw_balance - $order->amount;
             $order->$status_field = 1;
             DB::transaction(function () use ($user,$order) {
-                $user->save();
-                $order->save();
+                $user->update();
+                $order->update();
             });
             $result = '支付成功';
             // 保存日志
