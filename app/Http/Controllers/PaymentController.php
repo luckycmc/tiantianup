@@ -96,8 +96,8 @@ class PaymentController extends Controller
                 ]
             ];
             $result = Pay::wechat($config)->mini($pay_data);
-            $user->withdraw_balance = $user->withdraw_balance - $balance;
-            $user->update();
+            /*$user->withdraw_balance = $user->withdraw_balance - $balance;
+            $user->update();*/
             // 保存日志
             $log_data = [
                 'user_id' => $user->id,
