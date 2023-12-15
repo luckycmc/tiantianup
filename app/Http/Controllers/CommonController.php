@@ -120,7 +120,9 @@ class CommonController extends Controller
                     'description' => $description,
                     'created_at' => Carbon::now()
                 ];
-                DB::table('bills')->insert($log_data);
+                if ($order->discount > 0) {
+                    DB::table('bills')->insert($log_data);
+                }
                 DB::table('bills')->insert($log_data_wechat);
                 // 当前时间
                 /*$current = Carbon::now()->format('Y-m-d');
