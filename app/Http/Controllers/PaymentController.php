@@ -90,7 +90,7 @@ class PaymentController extends Controller
                 'out_trade_no' => $out_trade_no,
                 'description' => '服务费',
                 'amount' => [
-                    'total' => $amount * 100,
+                    'total' => bcmul($amount,100,2),
                     'currency' => 'CNY',
                 ],
                 'payer' => [
