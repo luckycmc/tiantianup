@@ -83,7 +83,7 @@ class PaymentController extends Controller
             $order->discount = $balance;
             $order->update();
             // 微信支付金额
-            $amount = round($order->amount - $balance,2);
+            $amount = bcsub($order->amount,$balance);
             Log::info('amount: '.$amount);
             // 调起支付
             $pay_data = [
