@@ -82,7 +82,7 @@ class PaymentController extends Controller
             $order->discount = $balance;
             $order->update();
             // 微信支付金额
-            $amount = $order->amount - $balance;
+            $amount = round($order->amount - $balance,2);
             // 调起支付
             $pay_data = [
                 'out_trade_no' => $out_trade_no,
