@@ -95,7 +95,8 @@ class PaymentController extends Controller
                 ],
                 'payer' => [
                     'openid' => $user->open_id,
-                ]
+                ],
+                '_config' => $pay_config,
             ];
             Log::info('pay_status: ',$pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
