@@ -103,14 +103,14 @@ class PaymentController extends Controller
             /*$user->withdraw_balance = $user->withdraw_balance - $balance;
             $user->update();*/
             // 保存日志
-            $log_data = [
+            /*$log_data = [
                 'user_id' => $user->id,
                 'amount' => '-'.$balance,
                 'type' => $type,
                 'description' => $description,
                 'created_at' => Carbon::now()
             ];
-            DB::table('bills')->insert($log_data);
+            DB::table('bills')->insert($log_data);*/
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
             $course_info = Course::find($order->course_id);
