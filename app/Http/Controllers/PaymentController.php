@@ -80,7 +80,7 @@ class PaymentController extends Controller
             $balance = $user->withdraw_balance;
             // 更新订单数据
             $order->discount = $balance;
-            $order->save();
+            $order->update();
             // 微信支付金额
             $amount = $order->amount - $balance;
             // 调起支付
