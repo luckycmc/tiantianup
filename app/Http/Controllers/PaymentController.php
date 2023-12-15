@@ -97,6 +97,7 @@ class PaymentController extends Controller
                     'openid' => $user->open_id,
                 ]
             ];
+            Log::info('pay_status: ',$pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
             /*$user->withdraw_balance = $user->withdraw_balance - $balance;
             $user->update();*/
