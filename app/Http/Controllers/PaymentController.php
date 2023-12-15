@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yansongda\Pay\Pay;
 
 class PaymentController extends Controller
@@ -83,6 +84,7 @@ class PaymentController extends Controller
             $order->update();
             // 微信支付金额
             $amount = round($order->amount - $balance,2);
+            Log::info('amount: '.$amount);
             // 调起支付
             $pay_data = [
                 'out_trade_no' => $out_trade_no,
