@@ -99,15 +99,29 @@ class CommonController extends Controller
                     $course->course_status = 4;
                     $course->update();
                 }
+                $type = 4;
+                $description = '查看需求';
+                if ($course->adder_role == 0) {
+                    $type = 11;
+                    $description = '查看中介单';
+                }
                 // 保存日志
                 $log_data = [
                     'user_id' => $user->id,
-                    'amount' => '-'.$order->amount,
-                    'type' => 4,
-                    'description' => '查看需求',
+                    'amount' => '-'.$order->discount,
+                    'type' => $type,
+                    'description' => $description,
+                    'created_at' => Carbon::now()
+                ];
+                $log_data_wechat = [
+                    'user_id' => $user->id,
+                    'amount' => '-'.($order->amount - $order->discount),
+                    'type' => $type,
+                    'description' => $description,
                     'created_at' => Carbon::now()
                 ];
                 DB::table('bills')->insert($log_data);
+                DB::table('bills')->insert($log_data_wechat);
                 // 当前时间
                 $current = Carbon::now()->format('Y-m-d');
                 // 查看是否有成交活动
