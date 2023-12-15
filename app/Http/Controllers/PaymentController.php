@@ -57,7 +57,7 @@ class PaymentController extends Controller
             }
         }
         $order->pay_type = $pay_type;
-        $order->save();
+        $order->update();
         // 微信支付
         if ($pay_type == 1) {
             // 调起支付
