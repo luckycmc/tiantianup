@@ -21,9 +21,8 @@ class TeacherEducationController extends AdminController
     {
         return Grid::make(new TeacherEducation(['user']), function (Grid $grid) {
             $grid->model()->orderByDesc('created_at');
-            $grid->column('id')->sortable();
-            $grid->column('user.name','教师姓名');
             $grid->column('user.number','教师编号');
+            $grid->column('user.name','教师姓名');
             $grid->column('highest_education');
             $grid->column('graduate_school');
             $grid->column('speciality');

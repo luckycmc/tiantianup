@@ -21,9 +21,8 @@ class TeacherCareerController extends AdminController
     {
         return Grid::make(new TeacherCareer('teacher'), function (Grid $grid) {
             $grid->model()->orderByDesc('created_at');
-            $grid->column('id')->sortable();
-            $grid->column('teacher.name','教师姓名');
             $grid->column('teacher.number','教师编号');
+            $grid->column('teacher.name','教师姓名');
             $grid->column('organization');
             $grid->column('subject');
             $grid->column('object');

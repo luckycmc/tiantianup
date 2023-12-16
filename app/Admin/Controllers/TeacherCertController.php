@@ -21,9 +21,8 @@ class TeacherCertController extends AdminController
     {
         return Grid::make(new TeacherCert('user'), function (Grid $grid) {
             $grid->model()->orderByDesc('created_at');
-            $grid->column('id')->sortable();
-            $grid->column('user.name','教师名称');
             $grid->column('user.number','教师编号');
+            $grid->column('user.name','教师名称');
             $grid->column('teacher_cert')->display(function ($teacher_cert) {
                 return json_decode($teacher_cert,true);
             })->image('',60,60);

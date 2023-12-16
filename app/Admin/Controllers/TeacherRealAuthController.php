@@ -23,9 +23,8 @@ class TeacherRealAuthController extends AdminController
     {
         return Grid::make(new TeacherInfo('teacher'), function (Grid $grid) {
             $grid->model()->orderByDesc('created_at');
-            $grid->column('id')->sortable();
-            $grid->column('teacher.name','教师姓名');
             $grid->column('teacher.number','教师编号');
+            $grid->column('teacher.name','教师姓名');
             $grid->column('id_card_front')->image('',60,60);
             $grid->column('id_card_backend')->image('',60,60);
             $grid->column('picture','免冠照片')->image('',60,60);
