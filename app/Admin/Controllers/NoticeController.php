@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Repositories\Notice;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -65,10 +66,11 @@ class NoticeController extends AdminController
         return Form::make(new Notice(), function (Form $form) {
             $form->display('id');
             $form->text('title');
-            $form->text('content');
-            $form->text('status');
-            $form->text('object');
-            $form->text('author');
+            $form->editor('content');
+            $form->checkbox('object','对象')->options(['1' => '学生', '2' => '家长', '3' => '教师', '4' => '机构'])->saving(function ($value) {
+                return implode(',', $value);
+            });
+            $form->hidden('author')->value(Admin::user()->name);
         
             $form->display('created_at');
             $form->display('updated_at');

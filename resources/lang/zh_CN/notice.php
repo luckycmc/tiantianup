@@ -1,8 +1,8 @@
 <?php 
 return [
     'labels' => [
-        'Notice' => 'Notice',
-        'notice' => 'Notice',
+        'Notice' => '公告',
+        'notice' => '公告',
     ],
     'fields' => [
         'title' => '标题',

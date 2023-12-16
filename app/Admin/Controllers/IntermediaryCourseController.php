@@ -116,9 +116,9 @@ class IntermediaryCourseController extends AdminController
             $form->text('grade','年级');
             $form->radio('gender','性别')->options([0 => '女',1 => '男']);
             $form->text('platform_class_date','上课时间');
-            $form->select('province','省')->options('/api/city')->load('city','/api/city');
-            $form->select('city','市')->options('/api/city')->load('district','/api/city');
-            $form->select('district','区')->options('/api/city');
+            $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
+            $form->select('city','市')->options('/api/city')->load('district','/api/city')->required();
+            $form->select('district','区')->options('/api/city')->required();
             $form->text('address','上课地点')->required();
             $form->number('class_duration','上课时长(分钟)');
             $form->number('class_price','费用(元)');

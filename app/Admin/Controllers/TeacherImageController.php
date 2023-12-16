@@ -23,6 +23,7 @@ class TeacherImageController extends AdminController
             $grid->model()->where('type',2)->orderByDesc('created_at');
             $grid->column('id')->sortable();
             $grid->column('user.name','教师名称');
+            $grid->column('user.number','教师编号');
             $grid->column('url','图片')->display(function ($url) {
                 return json_decode($url,true);
             })->image('',60,60);
