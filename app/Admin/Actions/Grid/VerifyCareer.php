@@ -41,6 +41,7 @@ class VerifyCareer extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherCareer::find($teacher_id);
         $teacher_info->status = 1;
+        $teacher_info->reason = null;
         // 查询奖励
         // $reward = get_reward(2,3);
         // $amount = $reward->teacher_real_auth_reward;

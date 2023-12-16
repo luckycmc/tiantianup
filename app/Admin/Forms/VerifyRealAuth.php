@@ -36,6 +36,7 @@ class VerifyRealAuth extends Form implements LazyRenderable
         $real_name = $input['real_name'] ?? '';
         $teacher_info = TeacherInfo::find($id);
         $teacher_info->status = 1;
+        $teacher_info->reason = null;
         $teacher_info->id_card_no = $id_card_no;
         $teacher_info->real_name = $real_name;
         $user = User::find($teacher_info->user_id);

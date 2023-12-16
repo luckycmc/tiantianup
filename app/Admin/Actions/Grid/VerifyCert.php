@@ -40,6 +40,7 @@ class VerifyCert extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherCert::find($teacher_id);
         $teacher_info->status = 1;
+        $teacher_info->reason = null;
         $user = User::find($teacher_info->user_id);
         $user->has_teacher_cert = 1;
         // 发送通知
