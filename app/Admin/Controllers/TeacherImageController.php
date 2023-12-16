@@ -94,7 +94,7 @@ class TeacherImageController extends AdminController
         return Form::make(new TeacherImage(), function (Form $form) {
             $form->display('id');
             $form->text('user_id');
-            $form->image('url')->saveFullUrl();
+            $form->multipleImage('url')->saveAsJson()->saveFullUrl();
             $form->hidden('type')->default(0);
             $form->select('status')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $form->text('reason','拒绝原因');
