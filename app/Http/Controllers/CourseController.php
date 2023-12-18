@@ -160,7 +160,7 @@ class CourseController extends Controller
                 $where[] = ['courses.province','=',$id];
             }
             if (isset($data['district'])) {
-                $id = Region::where('region_name',$data['district'])->value('id');
+                $id = Region::where(['region_name' => $data['district'],'parent_id' => $data['city']])->value('id');
                 $where[] = ['courses.district','=',$id];
             }
             if (isset($data['gender'])) {
