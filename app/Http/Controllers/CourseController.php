@@ -146,6 +146,7 @@ class CourseController extends Controller
             $where[] = ['courses.adder_role','=',4];
         }
         if (isset($data['is_platform'])) {
+            Log::info('aaaa');
             $where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
                 $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
