@@ -46,11 +46,11 @@ class LoginController extends Controller
         $is_user = User::where(['open_id' => $session['openid']])->first();
         Log::info('open_id: '.$session['openid']);
         if (!$is_user) {
-            // 查询手机号是否已被注册
+            /*// 查询手机号是否已被注册
             $user = User::where(['mobile' => $mobile])->first();
             if ($user) {
                 return $this->error('该手机号已被注册');
-            }
+            }*/
             $new_user = new User();
             $new_user->open_id = $session['openid'];
             $new_user->union_id = $union_id;
@@ -144,7 +144,7 @@ class LoginController extends Controller
             $is_new = 1;
             // 注册新用户
             // 查询openid是否存在
-            $user = User::where('open_id',$open_id)->first();
+            /*$user = User::where('open_id',$open_id)->first();
             if (!$user) {
                 $new_user = new User();
                 $new_user->mobile = $data['mobile'];
@@ -154,7 +154,13 @@ class LoginController extends Controller
                 $is_user = $new_user;
             } else {
                 $is_user = $user;
-            }
+            }*/
+            $new_user = new User();
+            $new_user->mobile = $data['mobile'];
+            $new_user->parent_id = $data['parent_id'] ?? null;
+            $new_user->open_id = $open_id;
+            $new_user->save();
+            $is_user = $new_user;
             if (!isset($is_user->invite_qrcode)) {
                 $qrcode = create_qr_code($is_user->id);
                 $is_user->invite_qrcode = env('APP_URL').$qrcode;
