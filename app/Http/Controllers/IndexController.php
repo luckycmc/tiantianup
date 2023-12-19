@@ -284,6 +284,8 @@ class IndexController extends Controller
             // 课程信息
             $course_info = Course::find($course_id);
             if ($course_info->adder_role == 0) {
+                $course_info->visit_count += 1;
+                $course_info->update();
                 $result->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id,'pay_status' => 1])->exists();
             }
         }

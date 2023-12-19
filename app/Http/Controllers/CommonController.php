@@ -77,6 +77,8 @@ class CommonController extends Controller
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
                 $course = Course::find($order->course_id);
+                $course->pay_count += 1;
+                $course->update();
                 /*// 已授权
                 $order->status = 4;*/
                 // 查询用户

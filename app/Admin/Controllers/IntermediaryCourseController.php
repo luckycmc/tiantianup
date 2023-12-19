@@ -7,6 +7,7 @@ use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
 use App\Models\Region;
 use Carbon\Carbon;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -23,7 +24,7 @@ class IntermediaryCourseController extends AdminController
     protected function grid()
     {
         return Grid::make(new Course('adder'), function (Grid $grid) {
-            $grid->model()->where('adder_role',0);
+            $grid->model()->where('adder_role',0)->orderByDesc('created_at');
             $grid->column('number','编号');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
@@ -42,9 +43,9 @@ class IntermediaryCourseController extends AdminController
             $grid->column('class_duration','上课时长(分钟)');
             $grid->column('platform_class_date','上课时间');
             $grid->column('mobile','联系方式');
-            $grid->column('adder.name','发布人');
+            $grid->column('adder_name','发布人');
             $grid->column('buyer_count','付费人数');
-            $grid->column('visitor_count','浏览人数');
+            $grid->column('visit_count','浏览人数');
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -131,6 +132,7 @@ class IntermediaryCourseController extends AdminController
             $form->text('contact','联系人');
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
+            $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
             $form->hidden('end_time');
             $form->saving(function (Form $form) {
