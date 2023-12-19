@@ -48,8 +48,29 @@ class IntermediaryCourseController extends AdminController
             $grid->column('visit_count','浏览人数');
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->equal('number','需求编号');
+                $filter->equal('subject','科目');
+                $filter->equal('gender','性别');
+                $filter->equal('grade','年级');
+                $filter->equal('mobile','联系方式');
+                $filter->like('adder_name','发布人 ');
+                $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
+                $filter->between('class_price','课时费');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
+                $filter->equal('province_id','省份')->select('/api/city')->load('city_id','/api/city');
+                $filter->equal('city_id','城市')->select('/api/city')->load('district_id','/api/city');
+                $filter->equal('district_id','区县')->select('/api/city');
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
