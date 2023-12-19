@@ -130,7 +130,6 @@ class CourseController extends Controller
                 $where[] = [function ($query) use ($course_arr) {
                     $query->whereIn('courses.id',$course_arr);
                 }];
-                Log::info('where: ',$where);
             } else {
                 $where[] = [function ($query) use ($course_arr) {
                     $query->whereNotIn('courses.id',$course_arr);
@@ -154,6 +153,7 @@ class CourseController extends Controller
                     $where[] = [function ($query) use ($order_arr) {
                         $query->whereIn('courses.id',$order_arr);
                     }];
+                    Log::info('where: ',$where);
                 }
             }
             if (isset($data['province'])) {
