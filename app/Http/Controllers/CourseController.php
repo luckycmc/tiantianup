@@ -171,13 +171,16 @@ class CourseController extends Controller
             if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
                 $where[] = ['courses.created_at','>=',$data['created_at_start']];
                 $where[] = ['courses.created_at','<=',$data['created_at_end']];
+            } else {
+                $where[] = ['courses.end_time','>=',Carbon::now()];
             }
+        } else {
+            $where[] = ['courses.end_time','>=',Carbon::now()];
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
             ->where('courses.status','=',1)
-            ->where('courses.end_time','>',Carbon::now())
             ->orderBy($sort_field,$order)
             ->paginate($page_size);
 
