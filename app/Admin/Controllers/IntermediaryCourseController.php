@@ -23,7 +23,7 @@ class IntermediaryCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Course('adder'), function (Grid $grid) {
+        return Grid::make(new Course(['province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('adder_role',0)->orderByDesc('created_at');
             $grid->column('number','编号');
             $grid->column('created_at','发布时间');
@@ -61,8 +61,9 @@ class IntermediaryCourseController extends AdminController
             $grid->export()->rows(function ($rows) {
                 foreach ($rows as &$row) {
                     $arr = ['待审核','已通过','已关闭','已拒绝'];
+                    $row['gender'] = $row['gender'] == 0 ? '男' : '女';
                     $row['status'] = $arr[$row['status']];
-                    $row['region'] = $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
+                    $row['region'] = $row->province_info->region_name.$row->city_info->region_name.$row->district_info->region_name;
                     $row['is_recommend'] = $row['is_recommend'] == 0 ? '否' : '是';
                 }
                 return $rows;
