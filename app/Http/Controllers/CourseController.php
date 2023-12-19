@@ -130,6 +130,7 @@ class CourseController extends Controller
                 $where[] = [function ($query) use ($course_arr) {
                     $query->whereIn('courses.id',$course_arr);
                 }];
+                Log::info('where: ',$where);
             } else {
                 $where[] = [function ($query) use ($course_arr) {
                     $query->whereNotIn('courses.id',$course_arr);
@@ -149,7 +150,7 @@ class CourseController extends Controller
             $where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
                 $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
-                if ($data['is_show'] == 1) {
+                if ($data['is_show'] == true) {
                     $where[] = [function ($query) use ($order_arr) {
                         $query->whereIn('courses.id',$order_arr);
                     }];
