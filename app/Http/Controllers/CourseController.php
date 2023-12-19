@@ -111,7 +111,7 @@ class CourseController extends Controller
         }
         // 当前用户
         $user = Auth::user();
-        if (isset($data['city_name']) && !isset($data['is_show'])) {
+        if (isset($data['city_name'])) {
             $id = Region::where('region_name',$data['city_name'])->value('id');
             $where[] = ['courses.city','=',$id];
         }
