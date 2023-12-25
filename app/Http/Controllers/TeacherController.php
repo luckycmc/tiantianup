@@ -350,6 +350,7 @@ class TeacherController extends Controller
         }
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
+            Log::info('city_id: '.$city_id);
             $district_id = Region::where('region_name',$data['district'])->where('parent_id',$city_id)->value('id');
             $where[] = ['courses.district','=',$district_id];
             /*$longitude = $region_info[0];
