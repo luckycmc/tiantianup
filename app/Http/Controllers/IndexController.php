@@ -79,6 +79,9 @@ class IndexController extends Controller
             $city_id = Region::where('region_name',$data['city'])->value('id');
             $where[] = ['city_id','=',$city_id];
         }
+        if (isset($data['district_id'])) {
+            $where[] = ['district_id','=',$data['district_id']];
+        }
         Log::info('where: ',$where);
         // 查询当前位置的所有推荐教师
         $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where($where)->where(['is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
