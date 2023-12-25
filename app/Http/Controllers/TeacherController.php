@@ -297,7 +297,6 @@ class TeacherController extends Controller
     public function course_list()
     {
         $data = \request()->all();
-        Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
@@ -345,13 +344,16 @@ class TeacherController extends Controller
         if (isset($data['filter_adder_role'])) {
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
-        Log::info($data['filter_adder_role']);
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
             $district_id = Region::where('region_name',$data['district'])->value('id');
             $where[] = ['courses.district','=',$district_id];
             /*$longitude = $region_info[0];
             $latitude = $region_info[1];*/
+        }
+        if (isset($data['city'])) {
+            $district_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['courses.city','=',$district_id];
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
