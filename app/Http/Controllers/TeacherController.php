@@ -38,7 +38,7 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $district_id = $data['district_id'] ?? 0;
-        if (isset($data['longitude']) && isset($data['latitude'])) {
+        if (isset($data['longitude']) && isset($data['latitude']) && !isset($data['district_id'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
@@ -63,6 +63,13 @@ class TeacherController extends Controller
         $where = [];
         if (isset($data['city_id'])) {
             $where[] = ['users.city_id','=',$data['city_id']];
+        }
+        if (isset($data['city'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['users.city_id','=',$city_id];
+        }
+        if (isset($data['district_id'])) {
+            $where[] = ['users.district_id','=',$data['district_id']];
         }
         if (isset($data['filter_object'])) {
             $where[] = ['teacher_career.object','like','%'.$data['filter_object'].'%'];
