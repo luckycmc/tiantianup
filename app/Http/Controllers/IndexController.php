@@ -226,7 +226,7 @@ class IndexController extends Controller
         } else {
             $role = 3;
         }
-        Log::info('where: '.$where);
+        Log::info('where: ',$where);
         $result = Course::with('organization')->where($where)->where(['status' => 1,'role' => $role,'is_recommend' => 1])->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
