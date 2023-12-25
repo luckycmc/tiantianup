@@ -91,6 +91,15 @@ class CourseController extends Controller
                 $where[] = ['courses.subject','=',$data['filter_subject']];
             }
         }
+        if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city'])) {
+            // 根据经纬度获取省市区
+            $location = get_location($data['longitude'],$data['latitude']);
+            if (!$location) {
+                return $this->error('定位出错');
+            }
+            $city_id = Region::where('code',$location['city'])->value('id');
+            $where[] = ['courses.city', '=', $city_id];
+        }
 
         if (isset($data['filter_price_min']) && isset($data['filter_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_price_min']];
