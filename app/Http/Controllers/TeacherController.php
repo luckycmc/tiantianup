@@ -321,6 +321,9 @@ class TeacherController extends Controller
         $where = [];
         if (isset($data['city_id'])) {
             $where[] = ['courses.city','=',$data['city_id']];
+        } else if (isset($data['city'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['courses.city','=',$city_id];
         } else {
             // 当前城市
             $location_info = get_location($longitude,$latitude);
@@ -350,10 +353,6 @@ class TeacherController extends Controller
             $where[] = ['courses.district','=',$district_id];
             /*$longitude = $region_info[0];
             $latitude = $region_info[1];*/
-        }
-        if (isset($data['city'])) {
-            $district_id = Region::where('region_name',$data['city'])->value('id');
-            $where[] = ['courses.city','=',$district_id];
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
