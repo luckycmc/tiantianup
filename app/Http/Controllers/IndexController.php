@@ -65,6 +65,7 @@ class IndexController extends Controller
         Log::info('district_id: '.$district_id);
         Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
+        $where = [];
         if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
@@ -72,9 +73,14 @@ class IndexController extends Controller
                 return $this->error('定位出错');
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
+            $where[] = ['district_id', '=', $district_id];
+        }
+        if (isset($data['city'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['city_id','=',$city_id];
         }
         // 查询当前位置的所有推荐教师
-        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
+        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where($where)->where(['is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
 
         // 当前用户
         $user = Auth::user();
