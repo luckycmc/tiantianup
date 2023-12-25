@@ -321,7 +321,8 @@ class TeacherController extends Controller
         $where = [];
         $city_id = 0;
         if (isset($data['city_id'])) {
-            $where[] = ['courses.city','=',$data['city_id']];
+            $city_id = $data['city_id'];
+            $where[] = ['courses.city','=',$city_id];
         } else if (isset($data['city'])) {
             $city_id = Region::where('region_name',$data['city'])->value('id');
             $where[] = ['courses.city','=',$city_id];
