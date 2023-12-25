@@ -38,6 +38,7 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $district_id = $data['district_id'] ?? 0;
+        $where = [];
         if (isset($data['longitude']) && isset($data['latitude']) && !isset($data['district_id'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
@@ -45,6 +46,7 @@ class TeacherController extends Controller
                 return $this->error('定位出错');
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
+            $where[] = ['users.district_id','=',$district_id];
         }
         // 当前用户
         $user = Auth::user();
@@ -60,7 +62,7 @@ class TeacherController extends Controller
             $sort_field = 'teacher_education.education_id';
         }
         // 筛选
-        $where = [];
+
         if (isset($data['city_id'])) {
             $where[] = ['users.city_id','=',$data['city_id']];
         }
