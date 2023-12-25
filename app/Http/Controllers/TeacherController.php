@@ -364,6 +364,7 @@ class TeacherController extends Controller
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
             $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
+        Log::info('where: ',$where);
         if (isset($data['filter_delivery_status'])) {
             $delivery_arr = DeliverLog::where('user_id',$user->id)->pluck('course_id');
             if ($data['filter_delivery_status'] == 0) {
