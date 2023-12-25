@@ -319,6 +319,7 @@ class TeacherController extends Controller
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
+        $city_id = 0;
         if (isset($data['city_id'])) {
             $where[] = ['courses.city','=',$data['city_id']];
         } else if (isset($data['city'])) {
@@ -349,7 +350,7 @@ class TeacherController extends Controller
         }
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
-            $district_id = Region::where('region_name',$data['district'])->value('id');
+            $district_id = Region::where('region_name',$data['district'])->where('parent_id',$city_id)->value('id');
             $where[] = ['courses.district','=',$district_id];
             /*$longitude = $region_info[0];
             $latitude = $region_info[1];*/
