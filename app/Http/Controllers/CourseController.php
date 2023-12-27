@@ -91,7 +91,7 @@ class CourseController extends Controller
                 $where[] = ['courses.subject','=',$data['filter_subject']];
             }
         }
-        if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city'])) {
+        if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city']) && !isset($data['city_name'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
@@ -193,6 +193,7 @@ class CourseController extends Controller
             ->where($where)
             ->where('courses.status','!=',0)
             ->orderBy($sort_field,$order)
+            ->logListenedSql()
             ->paginate($page_size);
 
         foreach ($result as $v) {
