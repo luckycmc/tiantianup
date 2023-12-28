@@ -144,8 +144,6 @@ class CourseController extends Controller
                     $query->whereNotIn('courses.id',$course_arr);
                 }];
             }
-        } else {
-            $where[] = ['courses.end_time','>=',Carbon::now()];
         }
         if ($user->role == 3) {
             $where[] = ['courses.role','=',3];
