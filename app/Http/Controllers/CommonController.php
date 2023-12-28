@@ -346,4 +346,25 @@ class CommonController extends Controller
         $result = Banner::whereRaw("FIND_IN_SET('$role_str',object)")->get();
         return $this->success('获取banner图',$result);
     }
+
+    /**
+     * 获取定位
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_location()
+    {
+        $data_lat_lnt = request()->all();
+        $longitude = $data_lat_lnt['longitude'] ?? '116.41339'; // 经度
+        $latitude = $data_lat_lnt['latitude'] ?? '39.91092'; // 纬度
+        $key = '4a81139b372ea849981ff499f53c6344'; // 替换为您自己的API密钥
+        $url = "https://restapi.amap.com/v3/geocode/regeo?key={$key}&location={$longitude},{$latitude}";
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+        if ($data['status'] == 1 ) {
+            $city = $data['regeocode']['addressComponent'];
+            return $this->success('成功',$city);
+        } else {
+            return $this->error('失败，请重新加载');
+        }
+    }
 }
