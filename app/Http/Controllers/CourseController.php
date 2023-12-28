@@ -166,6 +166,8 @@ class CourseController extends Controller
                     }];
                     Log::info('where: ',$where);
                 }
+            } else {
+                $where[] = ['courses.end_time','>=',Carbon::now()];
             }
             if (isset($data['province'])) {
                 $id = Region::where('region_name',$data['province'])->value('id');
@@ -182,8 +184,6 @@ class CourseController extends Controller
             if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
                 $where[] = ['courses.created_at','>=',$data['created_at_start']];
                 $where[] = ['courses.created_at','<=',$data['created_at_end']];
-            } else {
-                $where[] = ['courses.end_time','>=',Carbon::now()];
             }
         } else {
             $where[] = ['courses.end_time','>=',Carbon::now()];
