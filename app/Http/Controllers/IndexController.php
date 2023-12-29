@@ -355,7 +355,10 @@ class IndexController extends Controller
         $user->entry = $user->user_courses()->count();
         if ($user->role == 3) {
             $user_entry_course = $user->deliver_log->filter(function ($item) {
-                return $item->course->adder_role !== 0;
+                if (isset($item->course)) {
+                    return $item->course->adder_role !== 0;
+                }
+                return 0;
             });
             $user->entry = $user_entry_course->count();
         }
