@@ -31,9 +31,9 @@ class BillController extends AdminController
             });
             $grid->column('user.role','用户身份')->using([1 => '学生', 2 => '家长', 3 => '教师', 4 => '机构']);
             $grid->column('amount');
-            $grid->column('type');
+            $grid->column('discount');
+            $grid->column('type')->using([4 => '购买课程', 5 => '查看教师']);
             $grid->column('description');
-            $grid->column('status');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         

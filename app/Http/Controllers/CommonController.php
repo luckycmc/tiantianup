@@ -56,6 +56,7 @@ class CommonController extends Controller
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
                     'type' => 5,
+                    'discount' => $order->discount ?? 0,
                     'description' => '查看教师',
                     'created_at' => Carbon::now()
                 ];
@@ -112,20 +113,22 @@ class CommonController extends Controller
                     'user_id' => $user->id,
                     'amount' => '-'.$order->discount,
                     'type' => $type,
+                    'discount' => $order->discount ?? 0,
                     'description' => $description,
                     'created_at' => Carbon::now()
                 ];
-                $log_data_wechat = [
+                /*$log_data_wechat = [
                     'user_id' => $user->id,
                     'amount' => '-'.($order->amount - $order->discount),
                     'type' => $type,
+
                     'description' => $description,
                     'created_at' => Carbon::now()
                 ];
                 if ($order->discount > 0) {
                     DB::table('bills')->insert($log_data);
-                }
-                DB::table('bills')->insert($log_data_wechat);
+                }*/
+                DB::table('bills')->insert($log_data);
                 // 当前时间
                 /*$current = Carbon::now()->format('Y-m-d');
                 // 查看是否有成交活动
@@ -163,6 +166,7 @@ class CommonController extends Controller
                         'user_id' => $user->id,
                         'amount' => '-'.$order->amount,
                         'type' => 10,
+                        'discount' => $order->discount ?? 0,
                         'description' => '查看报名',
                         'created_at' => Carbon::now()
                     ];
