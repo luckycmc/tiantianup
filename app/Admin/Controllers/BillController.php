@@ -39,7 +39,7 @@ class BillController extends AdminController
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('username');
-                $filter->equal('role','用户类型')->select([
+                $filter->equal('user.role','用户类型')->select([
                     1 => '学生',2 => '家长',3 => '教师',4 => '机构'
                 ]);
                 $filter->whereBetween('updated_at', function ($q) {
@@ -67,8 +67,8 @@ class BillController extends AdminController
                         $row['status'] = '/';
                     }
                     $role_arr = ['','学生','家长','教师','机构'];
-                    $row['role'] = $role_arr[$row['role']];
-                    // $row['user.name'] = $row->user->role == 4 ? $row->user->organization->name : $row->user->name;
+                    $row['user']['role'] = $role_arr[$row->role];
+                    $row['user']['name'] = $row->role == 4 ? $row->user->organization->name : $row->user->name;
 
                     $row['type'] = $type_arr[$row['type']];
                     $row['is_disabled'] = $row['is_disabled'] == 0 ? '否' : '是';
