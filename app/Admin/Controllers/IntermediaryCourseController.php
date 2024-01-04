@@ -43,6 +43,7 @@ class IntermediaryCourseController extends AdminController
             $grid->column('class_duration','上课时长(分钟)');
             $grid->column('platform_class_date','上课时间');
             $grid->column('mobile','联系方式');
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过']);
             $grid->column('adder_name','发布人');
             $grid->column('buyer_count','付费人数');
             $grid->column('visit_count','浏览人数');
@@ -54,6 +55,7 @@ class IntermediaryCourseController extends AdminController
                 $filter->equal('grade','年级');
                 $filter->equal('mobile','联系方式');
                 $filter->like('adder_name','发布人 ');
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过']);
                 $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
                 $filter->between('class_price','课时费');
                 $filter->whereBetween('created_at', function ($q) {

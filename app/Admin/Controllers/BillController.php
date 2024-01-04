@@ -24,7 +24,7 @@ class BillController extends AdminController
             $grid->column('user.name','用户姓名')->display(function () {
                 // dd($this->user->role);
                 if ($this->user->role == 4) {
-                    return $this->user->organization->name;
+                    return $this->user->organization ? $this->user->organization->name : null;
                 } else {
                     return $this->user->name;
                 }
@@ -68,7 +68,7 @@ class BillController extends AdminController
                     }
                     $role_arr = ['','学生','家长','教师','机构'];
                     $row['user']['role'] = $role_arr[$row->role];
-                    $row['user']['name'] = $row->role == 4 ? $row->user->organization->name : $row->user->name;
+                    $row['user']['name'] = $row->role == 4 ? ($row->user->organization ? $row->user->organization->name : null) : $row->user->name;
 
                     $row['type'] = $type_arr[$row['type']];
                     $row['is_disabled'] = $row['is_disabled'] == 0 ? '否' : '是';
