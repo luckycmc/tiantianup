@@ -348,7 +348,7 @@ class IndexController extends Controller
         // 当前用户
         $user = Auth::user();
         // 收益
-        $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
+        $user->commission = number_format(Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount'),2);
         // 我的收藏
         $user->collection = $user->collects()->count();
         // 我的报名
