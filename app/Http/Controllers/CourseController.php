@@ -274,4 +274,22 @@ class CourseController extends Controller
         }
         return $this->success('稍后会有商家给您致电');
     }
+
+    /**
+     * 上架/下架
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_on()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        $course_info = Course::find($course_id);
+        if (!$course_info) {
+            return $this->error('课程不存在');
+        }
+        $message = $course_info->is_on == 0 ? '上架成功' : '下架成功';
+        $course_info->is_on = !$course_info->is_on;
+        $course_info->update();
+        return $this->success($message);
+    }
 }
