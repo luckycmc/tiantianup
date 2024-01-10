@@ -39,6 +39,7 @@ class VerifyEducation extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherEducation::find($teacher_id);
         $teacher_info->status = 1;
+        $teacher_info->reason = null;
         $teacher_info->update();
         $user = User::find($teacher_info->user_id);
         $tag = $teacher_info->highest_education;

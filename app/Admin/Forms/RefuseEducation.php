@@ -37,7 +37,7 @@ class RefuseEducation extends Form  implements LazyRenderable
 
         // 发送通知
         if (SystemMessage::where('action',6)->value('site_message') == 1) {
-            (new Message())->saveMessage($teacher_info->user_id,0,'教育经历','教育经历审核失败',null,0,3);
+            (new Message())->saveMessage($teacher_info->user_id,0,'教育经历','教育经历审核失败，失败原因：'.$reason,null,0,3);
         }
         if (SystemMessage::where('action',6)->value('text_message') == 1) {
             $text = '教育经历';
@@ -46,7 +46,7 @@ class RefuseEducation extends Form  implements LazyRenderable
             try {
                 $number = new PhoneNumber($user->mobile);
                 $easySms->send($number,[
-                    'content'  => "【添添学】很抱歉，您的".$text."未通过审核",
+                    'content'  => "【添添学】很抱歉，您的".$text."未通过审核，拒绝原因：".$reason,
                 ]);
             } catch (Exception|NoGatewayAvailableException $exception) {
                 return $this->response()

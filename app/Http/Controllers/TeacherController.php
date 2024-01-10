@@ -38,19 +38,21 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $district_id = $data['district_id'] ?? 0;
-        if (isset($data['longitude']) && isset($data['latitude'])) {
+        $where = [];
+        if (isset($data['longitude']) && isset($data['latitude']) && !isset($data['district_id'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
                 return $this->error('定位出错');
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
+            $where[] = ['users.district_id','=',$district_id];
         }
         // 当前用户
         $user = Auth::user();
         // $user = User::find(18);
         $page_size = $data['page_size'] ?? 10;
-        $page = $data['page'];
+        $page = $data['page'] ?? 1;
         // 排序
         $order = $data['order'] ?? 'desc';
         $sort_field = 'users.age';
@@ -60,9 +62,16 @@ class TeacherController extends Controller
             $sort_field = 'teacher_education.education_id';
         }
         // 筛选
-        $where = [];
+
         if (isset($data['city_id'])) {
             $where[] = ['users.city_id','=',$data['city_id']];
+        }
+        if (isset($data['city'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['users.city_id','=',$city_id];
+        }
+        if (isset($data['district_id'])) {
+            $where[] = ['users.district_id','=',$data['district_id']];
         }
         if (isset($data['filter_object'])) {
             $where[] = ['teacher_career.object','like','%'.$data['filter_object'].'%'];
@@ -87,20 +96,22 @@ class TeacherController extends Controller
             ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
-            ->where(['users.district_id' => $district_id,'users.role' => 3])
+            ->where(['users.role' => 3])
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->orderBy($sort_field,$order)
+            ->distinct()
             ->paginate($page_size);
-        // 去重
-        $result = $result->unique('id')->values();
-        // 排序
+        // dd($result->toArray());
+        /*// 去重
+        $info = $result->unique('id')->values();
+        // 分页
         $result = new \Illuminate\Pagination\LengthAwarePaginator(
-            $result,
-            count($result),
+            $info,
+            count($info),
             $page_size,
             $page,
             ['path' => request()->url(), 'query' => request()->query()]
-        );
+        );*/
         foreach ($result as $v) {
             // 科目
             $v->subject = explode(',',$v->subject);
@@ -181,7 +192,7 @@ class TeacherController extends Controller
         // 查询实名认证
         $result = $arr[$type-1]::where('user_id',$user->id)->first();
         if ($type == 3) {
-            $result->teacher_cert = json_decode($result->teacher_cert,true);
+            $result->teacher_cert = isset($result->teacher_cert) ? json_decode($result->teacher_cert,true) : null;
             $result->other_cert = json_decode($result->other_cert,true);
             $result->honor_cert = json_decode($result->honor_cert,true);
         }
@@ -295,7 +306,6 @@ class TeacherController extends Controller
     public function course_list()
     {
         $data = \request()->all();
-        Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
@@ -318,8 +328,13 @@ class TeacherController extends Controller
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
+        // $city_id = 0;
         if (isset($data['city_id'])) {
-            $where[] = ['courses.city','=',$data['city_id']];
+            $city_id = $data['city_id'];
+            $where[] = ['courses.city','=',$city_id];
+        } else if (isset($data['city'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['courses.city','=',$city_id];
         } else {
             // 当前城市
             $location_info = get_location($longitude,$latitude);
@@ -343,10 +358,10 @@ class TeacherController extends Controller
         if (isset($data['filter_adder_role'])) {
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
-        Log::info($data['filter_adder_role']);
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
-            $district_id = Region::where('region_name',$data['district'])->value('id');
+            Log::info('city_id: '.$city_id);
+            $district_id = Region::where('region_name',$data['district'])->where('parent_id',$city_id)->value('id');
             $where[] = ['courses.district','=',$district_id];
             /*$longitude = $region_info[0];
             $latitude = $region_info[1];*/
@@ -360,6 +375,7 @@ class TeacherController extends Controller
             $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
             $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
+        Log::info('where: ',$where);
         if (isset($data['filter_delivery_status'])) {
             $delivery_arr = DeliverLog::where('user_id',$user->id)->pluck('course_id');
             if ($data['filter_delivery_status'] == 0) {
@@ -378,7 +394,7 @@ class TeacherController extends Controller
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3, 'courses.status' => 1])->where('courses.adder_role','!=',0)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+                ->where($where)->where(['courses.role' => 3])->where('courses.adder_role','!=',0)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
 
         foreach ($result as $v) {

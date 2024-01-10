@@ -21,7 +21,7 @@ class TeacherCareerController extends AdminController
     {
         return Grid::make(new TeacherCareer('teacher'), function (Grid $grid) {
             $grid->model()->orderByDesc('created_at');
-            $grid->column('id')->sortable();
+            $grid->column('teacher.number','教师编号');
             $grid->column('teacher.name','教师姓名');
             $grid->column('organization');
             $grid->column('subject');
@@ -34,7 +34,7 @@ class TeacherCareerController extends AdminController
             $grid->column('updated_at')->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->like('name');
+                $filter->like('teacher.name','教师名称');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;

@@ -91,6 +91,15 @@ class CourseController extends Controller
                 $where[] = ['courses.subject','=',$data['filter_subject']];
             }
         }
+        if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city']) && !isset($data['city_name'])) {
+            // 根据经纬度获取省市区
+            $location = get_location($data['longitude'],$data['latitude']);
+            if (!$location) {
+                return $this->error('定位出错');
+            }
+            $city_id = Region::where('code',$location['city'])->value('id');
+            $where[] = ['courses.city', '=', $city_id];
+        }
 
         if (isset($data['filter_price_min']) && isset($data['filter_price_max'])) {
             $where[] = ['courses.class_price','>=',$data['filter_price_min']];
@@ -150,18 +159,22 @@ class CourseController extends Controller
             $where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
                 $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
-                if ($data['is_show'] == 1) {
+                if ($data['is_show'] == true) {
                     $where[] = [function ($query) use ($order_arr) {
                         $query->whereIn('courses.id',$order_arr);
                     }];
+                    Log::info('where: ',$where);
                 }
+            } else {
+                $where[] = ['courses.end_time','>=',Carbon::now()];
             }
             if (isset($data['province'])) {
                 $id = Region::where('region_name',$data['province'])->value('id');
                 $where[] = ['courses.province','=',$id];
             }
             if (isset($data['district'])) {
-                $id = Region::where('region_name',$data['district'])->value('id');
+                $city_id = Region::where('region_name',$data['city'])->value('id');
+                $id = Region::where(['region_name' => $data['district'],'parent_id' => $city_id])->value('id');
                 $where[] = ['courses.district','=',$id];
             }
             if (isset($data['gender'])) {
@@ -171,14 +184,15 @@ class CourseController extends Controller
                 $where[] = ['courses.created_at','>=',$data['created_at_start']];
                 $where[] = ['courses.created_at','<=',$data['created_at_end']];
             }
-            Log::info('where: ',$where);
+        } else {
+            $where[] = ['courses.end_time','>=',Carbon::now()];
         }
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
-            ->where('courses.status','=',1)
-            ->where('courses.end_time','>',Carbon::now())
+            ->where('courses.status','!=',0)
             ->orderBy($sort_field,$order)
+            ->logListenedSql()
             ->paginate($page_size);
 
         foreach ($result as $v) {
@@ -260,5 +274,23 @@ class CourseController extends Controller
             }
         }
         return $this->success('稍后会有商家给您致电');
+    }
+
+    /**
+     * 上架/下架
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_on()
+    {
+        $data = \request()->all();
+        $course_id = $data['course_id'] ?? 0;
+        $course_info = Course::find($course_id);
+        if (!$course_info) {
+            return $this->error('课程不存在');
+        }
+        $message = $course_info->is_on == 0 ? '上架成功' : '下架成功';
+        $course_info->is_on = !$course_info->is_on;
+        $course_info->update();
+        return $this->success($message);
     }
 }

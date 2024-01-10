@@ -40,6 +40,7 @@ class VerifyCert extends RowAction
         $teacher_id = $this->getKey();
         $teacher_info = TeacherCert::find($teacher_id);
         $teacher_info->status = 1;
+        $teacher_info->reason = null;
         $user = User::find($teacher_info->user_id);
         $user->has_teacher_cert = 1;
         // 发送通知
@@ -76,7 +77,9 @@ class VerifyCert extends RowAction
         // 查看是否有注册活动
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
-        if ($teacher_activity) {
+        // 查询是否已获得奖励
+        $is_reward = \App\Models\ActivityLog::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '资格证书审核通过'])->exists();
+        if ($teacher_activity && !$is_reward) {
             // 查询奖励
             /*$reward = get_reward(2,3);
             $amount = $reward->teacher_real_auth_reward;

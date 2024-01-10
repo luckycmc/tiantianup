@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'UserCourse' => 'UserCourse',
+        'UserCourse' => '课程报名',
         'user-course' => 'UserCourse',
     ],
     'fields' => [

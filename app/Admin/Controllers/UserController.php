@@ -7,6 +7,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends AdminController
 {
@@ -28,6 +29,7 @@ class UserController extends AdminController
                     return $this->province->region_name.$this->city->region_name.$this->district->region_name;
                 }
             });
+            $grid->column('status','是否注册')->using([0 => '否', 1 => '是']);
             $grid->column('created_at','注册时间');
             $grid->column('updated_at')->sortable();
         
@@ -35,7 +37,15 @@ class UserController extends AdminController
                 $filter->equal('id');
         
             });
-            $grid->export();
+            $grid->export()->rows(function ($rows) {
+                // dd($rows);
+                foreach ($rows as &$row) {
+                    $row['role'] = $row['role'] == 1 ? '学生' : '家长';
+                    $row['status'] = $row['status'] == 0 ? '否' : '是';
+                    $row['region'] = isset($row->province) ? $row->province->region_name.$row->city->region_name.$row->district->region_name : null;
+                }
+                return $rows;
+            });
         });
     }
 

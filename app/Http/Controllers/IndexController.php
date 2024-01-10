@@ -33,28 +33,6 @@ use Illuminate\Support\Facades\Storage;
 class IndexController extends Controller
 {
     /**
-     * 获取定位
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function get_location()
-    {
-        $data_lat_lnt = request()->all();
-        $user = Auth::user();
-        $longitude = $data_lat_lnt['longitude']; // 经度
-        $latitude = $data_lat_lnt['latitude']; // 纬度
-        $key = '4a81139b372ea849981ff499f53c6344'; // 替换为您自己的API密钥
-        $url = "https://restapi.amap.com/v3/geocode/regeo?key={$key}&location={$longitude},{$latitude}";
-        $response = file_get_contents($url);
-        $data = json_decode($response, true);
-        if ($data['status'] == 1 ) {
-            $city = $data['regeocode']['addressComponent'];
-            return $this->success('成功',$city);
-        } else {
-            return $this->error('失败，请重新加载');
-        }
-    }
-
-    /**
      * 推荐教师列表
      * @return \Illuminate\Http\JsonResponse
      */
@@ -65,16 +43,26 @@ class IndexController extends Controller
         Log::info('district_id: '.$district_id);
         Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
-        if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id'])) {
+        $where = [];
+        if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id']) && !isset($data['city'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
                 return $this->error('定位出错');
             }
             $district_id = Region::where('code',$location['adcode'])->value('id');
+            $where[] = ['district_id', '=', $district_id];
         }
+        if (isset($data['city']) && !isset($data['district_id'])) {
+            $city_id = Region::where('region_name',$data['city'])->value('id');
+            $where[] = ['city_id','=',$city_id];
+        }
+        if (isset($data['district_id'])) {
+            $where[] = ['district_id','=',$data['district_id']];
+        }
+        Log::info('where: ',$where);
         // 查询当前位置的所有推荐教师
-        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['district_id' => $district_id,'is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
+        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where($where)->where(['is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
 
         // 当前用户
         $user = Auth::user();
@@ -188,7 +176,7 @@ class IndexController extends Controller
             $city = $location_info['city'];
             $city_id = Region::where('region_name',$city)->value('id');
         } else {
-            $city_id = $data['city'];
+            $city_id = Region::where('region_name',$data['city'])->value('id');
         }
         $where[] = ['city','=',$city_id];
 
@@ -284,6 +272,8 @@ class IndexController extends Controller
             // 课程信息
             $course_info = Course::find($course_id);
             if ($course_info->adder_role == 0) {
+                $course_info->visit_count += 1;
+                $course_info->update();
                 $result->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id,'pay_status' => 1])->exists();
             }
         }
@@ -357,14 +347,17 @@ class IndexController extends Controller
         // 当前用户
         $user = Auth::user();
         // 收益
-        $user->commission = Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount');
+        $user->commission = number_format(Bill::where(['user_id' => $user->id,['amount','>',0]])->sum('amount'),2);
         // 我的收藏
         $user->collection = $user->collects()->count();
         // 我的报名
         $user->entry = $user->user_courses()->count();
         if ($user->role == 3) {
             $user_entry_course = $user->deliver_log->filter(function ($item) {
-                return $item->course->adder_role !== 0;
+                if (isset($item->course)) {
+                    return $item->course->adder_role !== 0;
+                }
+                return 0;
             });
             $user->entry = $user_entry_course->count();
         }

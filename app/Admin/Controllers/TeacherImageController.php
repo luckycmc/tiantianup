@@ -21,7 +21,7 @@ class TeacherImageController extends AdminController
     {
         return Grid::make(new TeacherImage(['user']), function (Grid $grid) {
             $grid->model()->where('type',2)->orderByDesc('created_at');
-            $grid->column('id')->sortable();
+            $grid->column('user.number','教师编号');
             $grid->column('user.name','教师名称');
             $grid->column('url','图片')->display(function ($url) {
                 return json_decode($url,true);
@@ -32,7 +32,7 @@ class TeacherImageController extends AdminController
             $grid->column('updated_at')->sortable();
 
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->like('name');
+                $filter->like('user.name','教师名称');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
@@ -45,7 +45,7 @@ class TeacherImageController extends AdminController
                         $q->where('created_at', '<=', $end);
                     }
                 })->datetime();
-                $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
+                $filter->equal('status','状态')->select([0 => '待审核', 1 => '已通过', 2 => '已拒绝']);
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -94,7 +94,7 @@ class TeacherImageController extends AdminController
         return Form::make(new TeacherImage(), function (Form $form) {
             $form->display('id');
             $form->text('user_id');
-            $form->image('url')->saveFullUrl();
+            $form->multipleImage('url')->saveAsJson()->saveFullUrl();
             $form->hidden('type')->default(0);
             $form->select('status')->options([0 => '待审核',1 => '通过', 2 => '拒绝']);
             $form->text('reason','拒绝原因');

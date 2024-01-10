@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yansongda\Pay\Pay;
 
 class PaymentController extends Controller
@@ -57,7 +58,7 @@ class PaymentController extends Controller
             }
         }
         $order->pay_type = $pay_type;
-        $order->save();
+        $order->update();
         // 微信支付
         if ($pay_type == 1) {
             // 调起支付
@@ -80,32 +81,36 @@ class PaymentController extends Controller
             $balance = $user->withdraw_balance;
             // 更新订单数据
             $order->discount = $balance;
-            $order->save();
+            $order->update();
             // 微信支付金额
-            $amount = $order->amount - $balance;
+            $amount = bcsub($order->amount,$balance,2);
+            Log::info('amount: '.$amount);
             // 调起支付
             $pay_data = [
                 'out_trade_no' => $out_trade_no,
                 'description' => '服务费',
                 'amount' => [
-                    'total' => $amount * 100,
+                    'total' => floor($amount*100),
                     'currency' => 'CNY',
                 ],
                 'payer' => [
                     'openid' => $user->open_id,
-                ]
+                ],
+                '_config' => $pay_config,
             ];
+            Log::info('pay_status: ',$pay_data);
             $result = Pay::wechat($config)->mini($pay_data);
-            $user->withdraw_balance = $user->withdraw_balance - $balance;
+            /*$user->withdraw_balance = $user->withdraw_balance - $balance;
+            $user->update();*/
             // 保存日志
-            $log_data = [
+            /*$log_data = [
                 'user_id' => $user->id,
                 'amount' => '-'.$balance,
                 'type' => $type,
                 'description' => $description,
                 'created_at' => Carbon::now()
             ];
-            DB::table('bills')->insert($log_data);
+            DB::table('bills')->insert($log_data);*/
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
             $course_info = Course::find($order->course_id);
@@ -122,8 +127,8 @@ class PaymentController extends Controller
             $user->withdraw_balance = $user->withdraw_balance - $order->amount;
             $order->$status_field = 1;
             DB::transaction(function () use ($user,$order) {
-                $user->save();
-                $order->save();
+                $user->update();
+                $order->update();
             });
             $result = '支付成功';
             // 保存日志

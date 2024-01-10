@@ -73,8 +73,10 @@ class VerifyCourse extends RowAction
                 }
             }
         } else {
-            $course_info->number = create_df_number($course_id);
-            $course_info->update();
+            if (!$course_info->number) {
+                $course_info->number = create_df_number($course_id);
+                $course_info->update();
+            }
         }
 
         return $this->response()

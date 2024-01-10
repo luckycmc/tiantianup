@@ -7,6 +7,7 @@ use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
 use App\Models\Region;
 use Carbon\Carbon;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -22,8 +23,8 @@ class IntermediaryCourseController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Course('adder'), function (Grid $grid) {
-            $grid->model()->where('adder_role',0);
+        return Grid::make(new Course(['province_info','city_info','district_info']), function (Grid $grid) {
+            $grid->model()->where('adder_role',0)->orderByDesc('created_at');
             $grid->column('number','编号');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
@@ -42,13 +43,36 @@ class IntermediaryCourseController extends AdminController
             $grid->column('class_duration','上课时长(分钟)');
             $grid->column('platform_class_date','上课时间');
             $grid->column('mobile','联系方式');
-            $grid->column('adder.name','发布人');
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过']);
+            $grid->column('adder_name','发布人');
             $grid->column('buyer_count','付费人数');
-            $grid->column('visitor_count','浏览人数');
+            $grid->column('visit_count','浏览人数');
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->equal('number','需求编号');
+                $filter->equal('subject','科目');
+                $filter->equal('gender','性别');
+                $filter->equal('grade','年级');
+                $filter->equal('mobile','联系方式');
+                $filter->like('adder_name','发布人 ');
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过']);
+                $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
+                $filter->between('class_price','课时费');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                })->datetime();
+                $filter->equal('province_id','省份')->select('/api/city')->load('city_id','/api/city');
+                $filter->equal('city_id','城市')->select('/api/city')->load('district_id','/api/city');
+                $filter->equal('district_id','区县')->select('/api/city');
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -60,8 +84,9 @@ class IntermediaryCourseController extends AdminController
             $grid->export()->rows(function ($rows) {
                 foreach ($rows as &$row) {
                     $arr = ['待审核','已通过','已关闭','已拒绝'];
+                    $row['gender'] = $row['gender'] == 0 ? '男' : '女';
                     $row['status'] = $arr[$row['status']];
-                    $row['region'] = $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
+                    $row['region'] = $row->province_info->region_name.$row->city_info->region_name.$row->district_info->region_name;
                     $row['is_recommend'] = $row['is_recommend'] == 0 ? '否' : '是';
                 }
                 return $rows;
@@ -116,9 +141,9 @@ class IntermediaryCourseController extends AdminController
             $form->text('grade','年级');
             $form->radio('gender','性别')->options([0 => '女',1 => '男']);
             $form->text('platform_class_date','上课时间');
-            $form->select('province','省')->options('/api/city')->load('city','/api/city');
-            $form->select('city','市')->options('/api/city')->load('district','/api/city');
-            $form->select('district','区')->options('/api/city');
+            $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
+            $form->select('city','市')->options('/api/city')->load('district','/api/city')->required();
+            $form->select('district','区')->options('/api/city')->required();
             $form->text('address','上课地点')->required();
             $form->number('class_duration','上课时长(分钟)');
             $form->number('class_price','费用(元)');
@@ -131,6 +156,7 @@ class IntermediaryCourseController extends AdminController
             $form->text('contact','联系人');
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
+            $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
             $form->hidden('end_time');
             $form->saving(function (Form $form) {

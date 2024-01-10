@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Agreement;
+use App\Models\Banner;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Course;
 use App\Models\DeliverLog;
 use App\Models\Organization;
 use App\Models\OrganRole;
+use App\Models\Region;
+use App\Models\RotateImage;
 use App\Models\User;
 use App\Models\UserCourse;
 use App\Models\UserTeacherOrder;
@@ -44,15 +47,16 @@ class CommonController extends Controller
                 } else if ($order->pay_type == 2) {
                     // 组合支付
                     $order->status = 1;
-                    $user->withdraw_balance = $user->withdraw_balance - $order->discount;
-                    $user->save();
-                    $order->save();
+                    $user->withdraw_balance -= $order->discount;
+                    $user->update();
+                    $order->update();
                 }
                 // 保存日志
                 $log_data = [
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
                     'type' => 5,
+                    'discount' => $order->discount ?? 0,
                     'description' => '查看教师',
                     'created_at' => Carbon::now()
                 ];
@@ -74,6 +78,8 @@ class CommonController extends Controller
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
                 $course = Course::find($order->course_id);
+                $course->buyer_count += 1;
+                $course->update();
                 /*// 已授权
                 $order->status = 4;*/
                 // 查询用户
@@ -87,32 +93,50 @@ class CommonController extends Controller
                 } else if ($order->pay_type == 2) {
                     // 组合支付
                     $order->pay_status = 1;
-                    $user->withdraw_balance += $user->withdraw_balance - $order->discount;
-                    $user->total_income += $user->withdraw_balance - $order->discount;
-                    $user->save();
-                    $order->save();
+                    $user->withdraw_balance = $user->withdraw_balance - $order->discount;
+                    // $user->total_income = $user->withdraw_balance - $order->discount;
+                    $user->update();
+                    $order->update();
                 }
                 if ($course->adder_role !== 0) {
                     $course->course_status = 4;
                     $course->update();
                 }
+                $type = 4;
+                $description = '查看需求';
+                if ($course->adder_role == 0) {
+                    $type = 11;
+                    $description = '查看中介单';
+                }
                 // 保存日志
                 $log_data = [
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
-                    'type' => 4,
-                    'description' => '查看需求',
+                    'type' => $type,
+                    'discount' => $order->discount ?? 0,
+                    'description' => $description,
                     'created_at' => Carbon::now()
                 ];
+                /*$log_data_wechat = [
+                    'user_id' => $user->id,
+                    'amount' => '-'.($order->amount - $order->discount),
+                    'type' => $type,
+
+                    'description' => $description,
+                    'created_at' => Carbon::now()
+                ];
+                if ($order->discount > 0) {
+                    DB::table('bills')->insert($log_data);
+                }*/
                 DB::table('bills')->insert($log_data);
                 // 当前时间
-                $current = Carbon::now()->format('Y-m-d');
+                /*$current = Carbon::now()->format('Y-m-d');
                 // 查看是否有成交活动
                 $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)
                     ->where('end_time', '>=', $current)->first();
                 if ($deal_activity) {
                     deal_activity_log($user->id,$order->course_id,$deal_activity);
-                }
+                }*/
             }
         } catch (Exception $e) {
             Log::info($e->getMessage());
@@ -142,6 +166,7 @@ class CommonController extends Controller
                         'user_id' => $user->id,
                         'amount' => '-'.$order->amount,
                         'type' => 10,
+                        'discount' => $order->discount ?? 0,
                         'description' => '查看报名',
                         'created_at' => Carbon::now()
                     ];
@@ -256,8 +281,23 @@ class CommonController extends Controller
     {
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
-        $result = User::where(['is_perfect' => 1,'status' => 1,'role' => 3,'is_recommend' => 1])->paginate($page_size);
-        return $this->success('教师列表',$result);
+        // 查询当前位置的所有推荐教师
+        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where(['is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
+        foreach ($teachers as $teacher) {
+            $teaching_year = 0;
+            $subject = [];
+            foreach ($teacher->teacher_experience as $experience) {
+                $start_time = Carbon::parse($experience->start_time);
+                $end_time = Carbon::parse($experience->end_time);
+                $teaching_years = $start_time->diffInYears($end_time);
+                $teaching_year += $teaching_years;
+                // 课程
+                $subject[] = explode(',',$experience->subject);
+            }
+            $teacher->teaching_year = $teaching_year;
+            $teacher->subject = array_values(array_unique(array_reduce($subject,'array_merge',[])));
+        }
+        return $this->success('推荐教师列表',$teachers);
     }
 
     /**
@@ -281,7 +321,7 @@ class CommonController extends Controller
      * 活动详情
      * @return \Illuminate\Http\JsonResponse
      */
-    public function detail()
+    public function activity_detail()
     {
         $data = \request()->all();
         $id = $data['id'] ?? 0;
@@ -294,5 +334,41 @@ class CommonController extends Controller
         $result->first_reward = $result->{$prefix.'first_reward'};
         $result->second_reward = $result->{$prefix.'second_reward'};
         return $this->success('活动详情',$result);
+    }
+
+    /**
+     * 获取banner图
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_banner()
+    {
+        $data = \request()->all();
+        $role = $data['role'] ?? 4;
+        $role_arr = ['','学生','家长','教师','机构'];
+        $role_str = $role_arr[$role];
+
+        $result = Banner::whereRaw("FIND_IN_SET('$role_str',object)")->get();
+        return $this->success('获取banner图',$result);
+    }
+
+    /**
+     * 获取定位
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_location()
+    {
+        $data_lat_lnt = request()->all();
+        $longitude = $data_lat_lnt['longitude'] ?? '116.41339'; // 经度
+        $latitude = $data_lat_lnt['latitude'] ?? '39.91092'; // 纬度
+        $key = '4a81139b372ea849981ff499f53c6344'; // 替换为您自己的API密钥
+        $url = "https://restapi.amap.com/v3/geocode/regeo?key={$key}&location={$longitude},{$latitude}";
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+        if ($data['status'] == 1 ) {
+            $city = $data['regeocode']['addressComponent'];
+            return $this->success('成功',$city);
+        } else {
+            return $this->error('失败，请重新加载');
+        }
     }
 }

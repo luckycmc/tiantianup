@@ -36,6 +36,7 @@ class VerifyRealAuth extends Form implements LazyRenderable
         $real_name = $input['real_name'] ?? '';
         $teacher_info = TeacherInfo::find($id);
         $teacher_info->status = 1;
+        $teacher_info->reason = null;
         $teacher_info->id_card_no = $id_card_no;
         $teacher_info->real_name = $real_name;
         $user = User::find($teacher_info->user_id);
@@ -80,7 +81,9 @@ class VerifyRealAuth extends Form implements LazyRenderable
         // 查看是否有注册活动
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
-        if ($teacher_activity) {
+        // 查询是否已获得奖励
+        $is_reward = \App\Models\ActivityLog::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '实名认证审核通过'])->exists();
+        if ($teacher_activity && !$is_reward) {
             teacher_activity_log($teacher_info->user_id,'teacher_real_auth_reward','实名认证','实名认证审核通过',$teacher_activity);
         }
 

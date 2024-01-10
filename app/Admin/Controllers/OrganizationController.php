@@ -62,7 +62,15 @@ class OrganizationController extends AdminController
             // 禁用删除
             $grid->disableDeleteButton();
             // 导出
-            $grid->export();
+            $grid->export()->rows(function ($rows) {
+                foreach ($rows as &$row) {
+                    $status_arr = ['待审核','已通过','已拒绝'];
+                    $row['status'] = $status_arr[$row['status']];
+                    $row['user']['status'] = $row['user']['status'] == 1 ? '正常' : '禁用';
+                    $row['region'] = isset($row->province) ? $row->province->region_name.$row->city->region_name.$row->district->region_name : null;
+                }
+                return $rows;
+            });
             $grid->actions(function ($actions) {
                 $status = $actions->row->user->status;
                 if (!in_array($status,[2,3])) {
