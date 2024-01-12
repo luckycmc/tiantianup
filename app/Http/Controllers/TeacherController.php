@@ -192,9 +192,11 @@ class TeacherController extends Controller
         // 查询实名认证
         $result = $arr[$type-1]::where('user_id',$user->id)->first();
         if ($type == 3) {
-            $result->teacher_cert = isset($result->teacher_cert) ? json_decode($result->teacher_cert,true) : null;
-            $result->other_cert = json_decode($result->other_cert,true);
-            $result->honor_cert = json_decode($result->honor_cert,true);
+            if ($result) {
+                $result->teacher_cert = isset($result->teacher_cert) ? json_decode($result->teacher_cert,true) : null;
+                $result->other_cert = json_decode($result->other_cert,true);
+                $result->honor_cert = json_decode($result->honor_cert,true);
+            }
         }
         if ($type == 4) {
             if ($result) {
