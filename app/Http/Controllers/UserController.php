@@ -1113,4 +1113,30 @@ class UserController extends Controller
         $message->update();
         return $this->success('消息已读');
     }
+
+    /**
+     * 更新免冠照片
+     * @return \Illuminate\Http\JsonResponse|void
+     */
+    public function update_picture()
+    {
+        $data = \request()->all();
+        $rules = [
+            'picture' => 'required',
+        ];
+        $messages = [
+            'picture.required' => '免冠照片不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $teacher_info = TeacherInfo::where('user_id',Auth::id())->first();
+        $teacher_info->picture = $data['picture'];
+        $teacher_info->update();
+        $teacher_info->status = 1;
+        return $this->success('更新成功');
+    }
 }
