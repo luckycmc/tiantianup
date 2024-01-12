@@ -370,7 +370,7 @@ class UserController extends Controller
         $data['created_at'] = Carbon::now();
         $data['status'] = 0;
         Log::info('teaching_type: ',$data['teaching_type']);
-        $data['teaching_type'] = implode(',',$data['teaching_type']);
+        // $data['teaching_type'] = implode(',',$data['teaching_type']);
         Log::info('data: ',$data);
         $result = TeacherCareer::updateOrCreate(['id' => $id],$data);
         if (!$result) {
