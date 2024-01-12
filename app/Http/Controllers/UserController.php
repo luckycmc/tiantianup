@@ -1136,7 +1136,7 @@ class UserController extends Controller
         $teacher_info = TeacherInfo::where('user_id',Auth::id())->first();
         $teacher_info->picture = $data['picture'];
         $teacher_info->update();
-        $teacher_info->status = 1;
+        $teacher_info->status = 0;
         return $this->success('更新成功');
     }
 }
