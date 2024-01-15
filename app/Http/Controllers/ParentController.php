@@ -7,6 +7,7 @@ use App\Models\DeliverLog;
 use App\Models\Message;
 use App\Models\ParentCourse;
 use App\Models\ParentStudent;
+use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\User;
 use App\Models\UserTeacherOrder;
@@ -48,19 +49,18 @@ class ParentController extends Controller
         $config = config('services.sms');
         $data = \request()->all();
         $rules = [
-            'name' => 'required|string',
-            'student' => 'required|string',
-            'gender' => 'required|numeric',
-            'subject' => 'required'
+            'name' => 'required',
+            'class_commission' => 'required',
+            'method' => 'required',
+            'introduction' => 'required',
+            'valid_time' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
-            'name.string' => '名称必须为字符串',
-            'student.required' => '学生不能为空',
-            'student.string' => '学生必须为字符串',
-            'gender.required' => '性别不能为空',
-            'gender.numeric' => '性别必须为数字',
-            'subject.required' => '科目不能为空'
+            'class_commission.required' => '课时佣金不能为空',
+            'method.required' => '上课方式不能为空',
+            'introduction.required' => '详情不能为空',
+            'valid_time.required' => '有效期不能为空',
         ];
         $validator = Validator::make($data,$rules,$messages);
         $id = $data['id'] ?? 0;
@@ -73,26 +73,22 @@ class ParentController extends Controller
         $data['parent_id'] = $user->id;
         $data['role'] = 3;
         $data['created_at'] = Carbon::now();
+        $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $data['status'] = 0;
+        $data['is_on'] = 1;
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
-        if (strlen($data['end_time']) <= 12) {
-            $data['end_time'] = $data['end_time']." 23:59:59";
-        }
-
-        // 价格
-        $data['class_price'] = $data['class_price_min'] ?? 0;
-        // 处理时间
-        $data['class_date'] = json_encode($data['class_date']);
-        $data['longitude'] = $user->longitude ?? '';
-        $data['latitude'] = $user->latitude ?? '';
+        $location = get_location($data['longitude'],$data['latitude']);
+        $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
+        $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
+        $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
         // 保存数据
         $result = Course::updateOrCreate(['id' => $id],$data);
         if (!$result) {
             return $this->error('发布失败');
         }
         if (!$result->number) {
-            $number = create_course_number($result->id);
+            $number = new_create_course_number($result->id,$data['method'],2);
             $result->number = $number;
             $result->save();
         }
