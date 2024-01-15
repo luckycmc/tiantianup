@@ -176,15 +176,15 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $rules = [
             'name' => 'required',
-            'type' => 'required',
+            'class_price' => 'required',
             'method' => 'required',
-            'subject' => 'required',
+            'introduction' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
-            'type.required' => '辅导类型不能为空',
-            'method.required' => '上课形式不能为空',
-            'subject.required' => '科目不能为空',
+            'class_price.required' => '课时费不能为空',
+            'method.required' => '授课方式不能为空',
+            'introduction.required' => '课程详情不能为空',
         ];
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
@@ -195,22 +195,20 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $data['organ_id'] = $user->organization->id;
         $data['created_at'] = Carbon::now();
-        $data['class_date'] = json_encode($data['class_date']);
         $data['adder_role'] = 4;
         $data['adder_id'] = $user->id;
-        $data['end_time'] = $data['end_time'].' 23:59:59' ?? Carbon::now()->setTime(23,59,59)->addDays(7);
-        $data['class_duration']  = $data['duration'] * $data['class_number'];
-        $data['longitude'] = $user->organization->longitude ?? '';
-        $data['latitude'] = $user->organization->latitude ?? '';
-        if ($data['role'] == 3) {
-            $data['class_price'] = $data['base_price'];
-        }
+        $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
+        $data['is_on'] = 1;
+        $location = get_location($data['longitude'],$data['latitude']);
+        $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
+        $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
+        $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
             return $this->error('提交失败');
         }
         $course_info = Course::find($id);
-        $course_info->number = create_course_number($id);
+        $course_info->number = new_create_course_number($id,$data['method'],4);
         $course_info->save();
         // 发送通知
         if (SystemMessage::where('action',7)->value('site_message') == 1) {

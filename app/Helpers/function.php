@@ -41,6 +41,30 @@ function create_course_number($course_id)
     return $number;
 }
 
+/**
+ * 增项-创建课程编号
+ * @param $course_id
+ * @param $method
+ * @param $adder_role
+ * @return string
+ */
+function new_create_course_number($course_id,$method,$adder_role) {
+    $method_arr = [
+        '线下' => '01',
+        '线上' => '02',
+        '线上/线下' => '03'
+    ];
+    $method_id = $method_arr[$method];
+    $role_arr = [
+        '4' => '01',
+        '2' => '02',
+        '0' => '03'
+    ];
+    $role_id = $role_arr[$adder_role];
+    $time = get_time();
+    return $time.$role_id.$method_id.pad($course_id,4);
+}
+
 function create_df_number($course_id)
 {
     $city_id = Course::where('id',$course_id)->value('city');
@@ -67,6 +91,7 @@ function get_time()
     $date = Carbon::now();
     $year = $date->format('Y');
     $month = $date->format('m');
+    $day = $date->format('d');
 
     $pattern = '/(\d{2}$)/'; // 匹配后两位数字的正则表达式
 
@@ -76,7 +101,10 @@ function get_time()
     preg_match($pattern, $month, $matches);
     $last_two_month_digits = $matches[0];
 
-    $result = $last_two_year_digits . $last_two_month_digits;
+    preg_match($pattern, $day, $matches);
+    $last_two_day_digits = $matches[0];
+
+    $result = $last_two_year_digits . $last_two_month_digits . $last_two_day_digits;
     return $result;
 }
 
