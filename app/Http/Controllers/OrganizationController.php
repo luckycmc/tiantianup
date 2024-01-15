@@ -206,7 +206,7 @@ class OrganizationController extends Controller
             return $this->error('提交失败');
         }
         $course_info = Course::find($id);
-        $course_info->number = new_create_course_number($id,$data['method'],4);
+        $course_info->number = new_create_course_number($id,$data['method'],4, $data['role']);
         $course_info->save();
         // 发送通知
         if (SystemMessage::where('action',7)->value('site_message') == 1) {

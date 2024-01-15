@@ -48,7 +48,7 @@ function create_course_number($course_id)
  * @param $adder_role
  * @return string
  */
-function new_create_course_number($course_id,$method,$adder_role) {
+function new_create_course_number($course_id,$method,$adder_role,$role) {
     $method_arr = [
         '线下' => '01',
         '线上' => '02',
@@ -62,7 +62,12 @@ function new_create_course_number($course_id,$method,$adder_role) {
     ];
     $role_id = $role_arr[$adder_role];
     $time = get_time();
-    return $time.$role_id.$method_id.pad($course_id,4);
+    if ($role == 1) {
+        $number = $time.$method_id.pad($course_id,4);
+    } else {
+        $number = $time.$role_id.$method_id.pad($course_id,4);
+    }
+    return $number;
 }
 
 function create_df_number($course_id)
