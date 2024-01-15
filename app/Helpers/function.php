@@ -52,7 +52,7 @@ function new_create_course_number($course_id,$method,$adder_role,$role) {
     $method_arr = [
         '线下' => '01',
         '线上' => '02',
-        '线上/线下' => '03'
+        '线下/线上' => '03'
     ];
     $method_id = $method_arr[$method];
     $role_arr = [
