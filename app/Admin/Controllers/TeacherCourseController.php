@@ -31,10 +31,11 @@ class TeacherCourseController extends AdminController
                 }
             });
             $grid->column('name');
-            $grid->column('type','辅导类型');
+            /*$grid->column('type','辅导类型');
             $grid->column('subject','科目');
-            $grid->column('grade','年级');
+            $grid->column('grade','年级');*/
             $grid->column('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已结束',3 => '已拒绝']);
+            $grid->column('is_on','是否上架')->select([0 => '否', 1 => '是']);
             $grid->column('reason','拒绝原因');
             $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             $grid->column('region','省市区')->display(function () {
@@ -125,6 +126,7 @@ class TeacherCourseController extends AdminController
             $form->text('introduction');
             $form->text('adder_id');
             $form->select('status')->options([0 => '待审核',1 => '已通过',3 => '已拒绝']);
+            $form->select('is_on','是否上架')->options([0 => '否',1 => '是']);
             $form->text('reviewer_id');
             $form->text('reason');
             $form->radio('is_recommend','是否推荐')->options([0 => '否', 1 => '是']);
