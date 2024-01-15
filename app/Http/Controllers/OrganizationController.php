@@ -176,13 +176,11 @@ class OrganizationController extends Controller
         $data = \request()->all();
         $rules = [
             'name' => 'required',
-            'class_price' => 'required',
             'method' => 'required',
             'introduction' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
-            'class_price.required' => '课时费不能为空',
             'method.required' => '授课方式不能为空',
             'introduction.required' => '课程详情不能为空',
         ];
