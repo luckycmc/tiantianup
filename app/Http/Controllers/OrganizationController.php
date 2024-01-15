@@ -298,8 +298,8 @@ class OrganizationController extends Controller
             // 查询投递人数
             $course_info->deliver_count = $course_info->deliver->count();
         }
-        $course_info->class_date = json_decode($course_info->class_date,true);
-        $course_info->total_price = $course_info->class_price * $course_info->class_number;
+        /*$course_info->class_date = json_decode($course_info->class_date,true);
+        $course_info->total_price = $course_info->class_price * $course_info->class_number;*/
         if (in_array($course_info->course_status,[4,5])) {
             $delivers = $course_info->deliver->filter(function ($item) {
                 if ($item->pay_status == 1) {
