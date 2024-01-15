@@ -421,6 +421,11 @@ class UserController extends Controller
     {
         $user_id = Auth::id();
         $result = TeacherCareer::where('user_id',$user_id)->orderBy('updated_at','desc')->get();
+        foreach ($result as $v) {
+            $v->subject = explode(',',$v['subject']);
+            $v->object = explode(',',$v['object']);
+            $v->teaching_type = explode(',',$v['teaching_type']);
+        }
         return $this->success('经历列表',$result);
     }
 
@@ -934,9 +939,9 @@ class UserController extends Controller
         if ($user->id !== $career_info->user_id) {
             return $this->error('错误请求');
         }
-        $career_info->object = explode('、',$career_info->object);
-        $career_info->subject = explode('、',$career_info->subject);
-        $career_info->teaching_type = explode('、',$career_info->teaching_type);
+        $career_info->object = explode(',',$career_info->object);
+        $career_info->subject = explode(',',$career_info->subject);
+        $career_info->teaching_type = explode(',',$career_info->teaching_type);
         return $this->success('教学经历',$career_info);
     }
 
