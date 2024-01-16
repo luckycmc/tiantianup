@@ -92,27 +92,29 @@ class IntermediaryCourseController extends AdminController
     protected function detail($id)
     {
         return Show::make($id, new Course(), function (Show $show) {
-            $show->field('id');
-            $show->field('organ_id');
-            $show->field('name');
-            $show->field('type');
+            $show->field('name','标题');
             $show->field('method');
-            $show->field('subject');
-            $show->field('count');
-            $show->field('class_price');
-            $show->field('duration');
-            $show->field('class_duration');
-            $show->field('base_count');
-            $show->field('base_price');
-            $show->field('improve_price');
-            $show->field('max_price');
-            $show->field('introduction');
-            $show->field('adder_id');
-            $show->field('status');
-            $show->field('reviewer_id');
-            $show->field('reason');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('city','所在城市')->as(function () {
+                $province = Region::where('id',$this->province)->value('region_name');
+                $city = Region::where('id',$this->city)->value('region_name');
+                return $province.$city;
+            });
+
+            $show->contents('详情')->as(function () {
+                return html_entity_decode("{aa<br />bb}");
+            });
+            $show->field('valid_time','有效期');
+            $show->field('end_time','失效时间');
+            $show->field('contact','联系人');
+            $show->field('qq_account','QQ号');
+            $show->field('wechat_account','微信号');
+            $show->field('mobile','手机号');
+            $show->field('reviewer','审核员');
+            $show->field('created_at','发布时间');
+            $show->field('updated_at','审核时间');
+            if ($show->model()->status == 2) {
+                $show->field('reason');
+            }
         });
     }
 

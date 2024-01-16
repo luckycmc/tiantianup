@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Extensions\Show\UnSerialize;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Form;
@@ -24,3 +25,4 @@ use Dcat\Admin\Show;
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+Show\Field::extend('unserialize', UnSerialize::class);

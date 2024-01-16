@@ -6,7 +6,7 @@ return [
     ],
     'fields' => [
         'organ_id' => '机构id',
-        'name' => '课程名称',
+        'name' => '标题',
         'type' => '辅导类型',
         'method' => '授课方式',
         'subject' => '科目',
@@ -23,6 +23,13 @@ return [
         'status' => '状态',
         'reviewer_id' => '审核人id',
         'reason' => '原因',
+        'valid_time' => '有效期',
+        'end_time' => '有效期',
+        'contact' => '联系人',
+        'qq_account' => 'QQ号',
+        'wechat_account' => '微信号',
+        'mobile' => '手机号',
+        'reviewer' => '审核人',
     ],
     'options' => [
     ],
