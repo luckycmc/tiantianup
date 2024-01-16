@@ -145,12 +145,6 @@ class IntermediaryCourseController extends AdminController
             $form->hidden('role')->default(3);
             $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
-            $form->hidden('end_time');
-            $form->saving(function (Form $form) {
-                $form->deleteInput('class_date_start');
-                $form->deleteInput('class_date_end');
-                $form->end_time = Carbon::now()->addDays($form->valid_time);
-            });
             $form->saved(function (Form $form, $result) {
                 // 判断是否是新增操作
                 if ($form->isCreating()) {
