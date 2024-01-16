@@ -145,21 +145,6 @@ class IntermediaryCourseController extends AdminController
             $form->hidden('role')->default(3);
             $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
-            $form->saved(function (Form $form, $result) {
-                // 判断是否是新增操作
-                if ($form->isCreating()) {
-                    // 也可以这样获取自增ID
-                    $course_id = $form->getKey();
-
-                    if (!$course_id) {
-                        return $form->error('数据保存失败');
-                    }
-                    $number = create_df_number($course_id);
-                    $form->model()->update(['number' => $number]);
-                }
-                $form->model()->update(['status' => 0]);
-            });
-
             $form->display('created_at');
             $form->display('updated_at');
         });
