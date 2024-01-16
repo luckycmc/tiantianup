@@ -260,7 +260,7 @@ class OrganizationController extends Controller
         if (isset($data['name'])) {
             $where[] = ['name','like','%'.$data['name'].'%'];
         }
-        if (isset($data['grade'])) {
+        /*if (isset($data['grade'])) {
             $where[] = ['grade','=',$data['grade']];
         }
         if (isset($data['subject'])) {
@@ -268,7 +268,7 @@ class OrganizationController extends Controller
         }
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
-        }
+        }*/
         if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];

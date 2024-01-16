@@ -33,7 +33,7 @@ class RefuseCourse extends Form implements LazyRenderable
         $course_info = Course::find($id);
         $course_info->status = 3;
         $course_info->reason = $reason;
-        $course_info->reviewer = Admin::user()->id;
+        $course_info->reviewer = Admin::user()->name;
         $course_info->update();
 
         $user = User::find($course_info->adder_id);
