@@ -88,7 +88,7 @@ class ParentController extends Controller
             return $this->error('发布失败');
         }
         if (!$result->number) {
-            $number = new_create_course_number($result->id,$data['method'],2);
+            $number = new_create_course_number($result->id,$data['method'],2,3);
             $result->number = $number;
             $result->save();
         }
