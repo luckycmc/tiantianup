@@ -137,23 +137,22 @@ class IntermediaryCourseController extends AdminController
     {
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
-            $form->text('subject','科目');
-            $form->text('grade','年级');
-            $form->radio('gender','性别')->options([0 => '女',1 => '男']);
-            $form->text('platform_class_date','上课时间');
+            $form->text('name','标题');
+            $form->text('method');
             $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
-            $form->select('city','市')->options('/api/city')->load('district','/api/city')->required();
-            $form->select('district','区')->options('/api/city')->required();
-            $form->text('address','上课地点')->required();
-            $form->number('class_duration','上课时长(分钟)');
-            $form->number('class_price','费用(元)');
-            $form->text('requirement','要求');
-            $form->text('detail','详情');
+            $form->select('city','市')->options('/api/city');
+            $form->text('introduction','详情');
             $form->number('valid_time','有效期(天)');
-            $form->text('qq_account','QQ号');
-            $form->text('wechat_account','微信号');
-            $form->mobile('mobile','手机号');
             $form->text('contact','联系人');
+            $form->text('qq_account','QQ号')->rules('required_without_all:wechat_account,mobile',[
+                'required_without_all' => 'QQ号、微信号、手机号至少填写一项'
+            ]);
+            $form->text('wechat_account','微信号')->rules('required_without_all:qq_account,mobile',[
+                'required_without_all' => 'QQ号、微信号、手机号至少填写一项'
+            ]);
+            $form->mobile('mobile','手机号')->rules('required_without_all:wechat_account,qq_account',[
+                'required_without_all' => 'QQ号、微信号、手机号至少填写一项'
+            ]);
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
             $form->hidden('adder_name')->default(Admin::user()->name);

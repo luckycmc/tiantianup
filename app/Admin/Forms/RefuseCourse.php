@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Message;
 use App\Models\SystemMessage;
 use App\Models\User;
+use Dcat\Admin\Admin;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
@@ -32,6 +33,7 @@ class RefuseCourse extends Form implements LazyRenderable
         $course_info = Course::find($id);
         $course_info->status = 3;
         $course_info->reason = $reason;
+        $course_info->reviewer = Admin::user()->id;
         $course_info->update();
 
         $user = User::find($course_info->adder_id);
