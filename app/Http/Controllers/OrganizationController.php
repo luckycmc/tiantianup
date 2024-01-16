@@ -331,15 +331,13 @@ class OrganizationController extends Controller
         }
         $rules = [
             'name' => 'required',
-            'type' => 'required',
             'method' => 'required',
-            'subject' => 'required',
+            'introduction' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
-            'type.required' => '辅导类型不能为空',
-            'method.required' => '上课形式不能为空',
-            'subject.required' => '科目不能为空',
+            'method.required' => '授课方式不能为空',
+            'introduction.required' => '课程详情不能为空',
         ];
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
