@@ -28,35 +28,26 @@ class IntermediaryCourseController extends AdminController
             $grid->column('number','编号');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
-            $grid->column('subject','科目');
-            $grid->column('gender','学员性别')->using([0 => '女', 1 => '男']);
-            $grid->column('grade','年级');
-            $grid->column('region','省市区')->display(function () {
-                // dd($this->province,$this->city,$this->district);
+            $grid->column('name','标题');
+            $grid->column('region','所在城市')->display(function () {
                 $province = Region::where('id',$this->province)->value('region_name');
                 $city = Region::where('id',$this->city)->value('region_name');
-                $district = Region::where('id',$this->district)->value('region_name');
-                return $province.$city.$district;
+                return $province.$city;
             });
-            $grid->column('address','上课地点');
-            $grid->column('class_price','费用(元)');
-            $grid->column('class_duration','上课时长(分钟)');
-            $grid->column('platform_class_date','上课时间');
-            $grid->column('mobile','联系方式');
             $grid->column('status')->using([0 => '待审核', 1 => '已通过']);
+            $grid->column('reason','拒绝原因');
             $grid->column('adder_name','发布人');
             $grid->column('buyer_count','付费人数');
             $grid->column('visit_count','浏览人数');
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('number','需求编号');
-                $filter->equal('subject','科目');
-                $filter->equal('gender','性别');
-                $filter->equal('grade','年级');
-                $filter->equal('mobile','联系方式');
+                $filter->like('name','标题');
                 $filter->like('adder_name','发布人 ');
                 $filter->equal('status')->select([0 => '待审核', 1 => '已通过']);
+                $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
                 $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
+                $filter->equal('method','授课方式')->radio(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
                 $filter->between('class_price','课时费');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
@@ -72,7 +63,6 @@ class IntermediaryCourseController extends AdminController
                 })->datetime();
                 $filter->equal('province_id','省份')->select('/api/city')->load('city_id','/api/city');
                 $filter->equal('city_id','城市')->select('/api/city')->load('district_id','/api/city');
-                $filter->equal('district_id','区县')->select('/api/city');
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -84,10 +74,8 @@ class IntermediaryCourseController extends AdminController
             $grid->export()->rows(function ($rows) {
                 foreach ($rows as &$row) {
                     $arr = ['待审核','已通过','已关闭','已拒绝'];
-                    $row['gender'] = $row['gender'] == 0 ? '男' : '女';
                     $row['status'] = $arr[$row['status']];
-                    $row['region'] = $row->province_info->region_name.$row->city_info->region_name.$row->district_info->region_name;
-                    $row['is_recommend'] = $row['is_recommend'] == 0 ? '否' : '是';
+                    $row['region'] = $row->province_info->region_name.$row->city_info->region_name;
                 }
                 return $rows;
             });
@@ -138,10 +126,10 @@ class IntermediaryCourseController extends AdminController
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
             $form->text('name','标题');
-            $form->text('method');
+            $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
             $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
             $form->select('city','市')->options('/api/city');
-            $form->text('introduction','详情');
+            $form->editor('introduction','详情');
             $form->number('valid_time','有效期(天)');
             $form->text('contact','联系人');
             $form->text('qq_account','QQ号')->rules('required_without_all:wechat_account,mobile',[

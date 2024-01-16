@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\User;
+use Carbon\Carbon;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\RowAction;
@@ -41,6 +42,7 @@ class VerifyCourse extends RowAction
         $course_info->status = 1;
         $course_info->is_recommend = 1;
         $course_info->reviewer = Admin::user()->name;
+        $course_info->end_time = Carbon::now()->setTime(23,59,59)->addDays($course_info->valid_time);
         if ($course_info->adder_role == 0) {
             $province = Region::where('id',$course_info->province)->value('region_name');
             $city = Region::where('id',$course_info->city)->value('region_name');
