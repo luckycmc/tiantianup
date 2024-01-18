@@ -119,7 +119,7 @@ class TeacherCourseController extends AdminController
             $show->field('visit_count','浏览人数');
             $show->field('buyer_count','联系人数');
             $show->field('reviewer','审核人');
-            $show->field('update_at','审核时间');
+            $show->field('updated_at','审核时间');
             $show->field('reason','拒绝原因');
         });
     }
