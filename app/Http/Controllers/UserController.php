@@ -968,6 +968,9 @@ class UserController extends Controller
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
         }
+        if (isset($data['name'])) {
+            $where[] = ['name','like','%'.$data['name'].'%'];
+        }
         if (isset($data['subject'])) {
             $where[] = ['subject','=',$data['subject']];
         }
