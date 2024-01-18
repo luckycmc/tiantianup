@@ -23,13 +23,7 @@ class TeacherCourseController extends AdminController
         return Grid::make(new Course(['organization','adder','province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('role',3)->whereNotIn('adder_role',[0]);
             $grid->column('number','编号');
-            $grid->column('publisher','发布者')->display(function () {
-                if ($this->adder_role == 2) {
-                    return $this->adder->name;
-                } else {
-                    return $this->organization->name;
-                }
-            });
+            $grid->column('adder_name','发布者');
             $grid->column('name','标题');
             $grid->column('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已结束',3 => '已拒绝']);
             $grid->column('reason','拒绝原因');
@@ -56,8 +50,29 @@ class TeacherCourseController extends AdminController
             $grid->column('created_at','创建时间');*/
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-        
+                $filter->like('number','编号');
+                $filter->like('name','标题');
+                $filter->equal('status','状态')->select([0 => '待审核', 1 => '已通过',3 => '已拒绝']);
+                $filter->equal('method','授课方式')->multipleSelect([0 => '待审核', 1 => '已通过',3 => '已拒绝']);
+                $filter->equal('province','省份')->select('/api/city')->load('city','/api/city');
+                $filter->equal('city','城市')->select('/api/city')->load('district_id','/api/city');
+                $filter->equal('district','区县')->select('/api/city');
+                $filter->equal('course_status','是否失效')->radio([0 => '否', 1 => '是']);
+                $filter->equal('is_recommend','是否推荐')->radio([0 => '否', 1 => '是']);
+                $filter->equal('is_on','是否上架')->radio([0 => '否', 1 => '是']);
+                $filter->like('adder_name','发布者');
+                $filter->whereBetween('created_at', function ($q) {
+                    $start = $this->input['start'] ?? null;
+                    $end = $this->input['end'] ?? null;
+
+                    if ($start !== null) {
+                        $q->where('created_at', '>=', $start);
+                    }
+
+                    if ($end !== null) {
+                        $q->where('created_at', '<=', $end);
+                    }
+                },'发布时间')->datetime();
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;

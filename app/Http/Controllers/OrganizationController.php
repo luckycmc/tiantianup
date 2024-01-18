@@ -195,6 +195,7 @@ class OrganizationController extends Controller
         $data['created_at'] = Carbon::now();
         $data['adder_role'] = 4;
         $data['adder_id'] = $user->id;
+        $data['adder_name'] = $user->organization->name;
         $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $data['is_on'] = 1;
         $location = get_location($data['longitude'],$data['latitude']);

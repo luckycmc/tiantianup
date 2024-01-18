@@ -78,6 +78,7 @@ class ParentController extends Controller
         $data['is_on'] = 1;
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
+        $data['adder_name'] = $user->name;
         $location = get_location($data['longitude'],$data['latitude']);
         $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
         $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
