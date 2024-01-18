@@ -275,6 +275,9 @@ class TeacherController extends Controller
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
         }
+        if (isset($data['search_keyword'])) {
+            $where[] = ['name','like','%'.$data['status'].'%'];
+        }
         $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
         foreach ($result as $v) {
             $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
