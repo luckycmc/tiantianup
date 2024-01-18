@@ -276,7 +276,7 @@ class TeacherController extends Controller
             $where[] = ['status','=',$data['status']];
         }
         if (isset($data['search_keyword'])) {
-            $where[] = ['name','like','%'.$data['status'].'%'];
+            $where[] = ['name','like','%'.$data['search_keyword'].'%'];
         }
         $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
         foreach ($result as $v) {
