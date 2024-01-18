@@ -22,7 +22,7 @@ class TeacherCourseController extends AdminController
     {
         return Grid::make(new Course(['organization','adder','province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('role',3)->whereNotIn('adder_role',[0]);
-            $grid->column('id')->sortable();
+            $grid->column('number','编号');
             $grid->column('publisher','发布者')->display(function () {
                 if ($this->adder_role == 2) {
                     return $this->adder->name;
@@ -30,19 +30,30 @@ class TeacherCourseController extends AdminController
                     return $this->organization->name;
                 }
             });
-            $grid->column('name');
+            $grid->column('name','标题');
+            $grid->column('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已结束',3 => '已拒绝']);
+            $grid->column('reason','拒绝原因');
+            $grid->column('method','授课方式');
+            $grid->column('class_commission','课时佣金');
+            $grid->column('address','上课地点');
+            $grid->column('contact','联系人');
+            $grid->column('mobile','联系手机');
+            $grid->column('end_time','失效时间');
+            $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             /*$grid->column('type','辅导类型');
             $grid->column('subject','科目');
             $grid->column('grade','年级');*/
-            $grid->column('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已结束',3 => '已拒绝']);
+
             $grid->column('is_on','是否上架')->select([0 => '否', 1 => '是']);
-            $grid->column('reason','拒绝原因');
-            $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
-            $grid->column('region','省市区')->display(function () {
+            $grid->column('visit_count','浏览人数');
+            $grid->column('buyer_count','联系人数');
+
+
+            /*$grid->column('region','省市区')->display(function () {
                 return $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
             });
             $grid->column('adder.name','创建人');
-            $grid->column('created_at','创建时间');
+            $grid->column('created_at','创建时间');*/
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
