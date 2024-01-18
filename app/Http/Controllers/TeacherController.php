@@ -275,9 +275,6 @@ class TeacherController extends Controller
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
         }
-        if (isset($data['search_keyword'])) {
-            $where[] = ['name','like','%'.$data['search_keyword'].'%'];
-        }
         $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
         foreach ($result as $v) {
             $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
@@ -299,6 +296,11 @@ class TeacherController extends Controller
         if (isset($data['name'])) {
             $course = $course->filter(function ($user) use ($data) {
                 return str_contains(strtolower($user['name']), strtolower($data['name']));
+            });
+        }
+        if (isset($data['search_keyword'])) {
+            $course = $course->filter(function ($course) use ($data) {
+                return str_contains(strtolower($course['name']), strtolower($data['name']));
             });
         }
         return $this->success('我的接单',$course);
