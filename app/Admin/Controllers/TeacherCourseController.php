@@ -103,27 +103,25 @@ class TeacherCourseController extends AdminController
     protected function detail($id)
     {
         return Show::make($id, new Course(), function (Show $show) {
-            $show->field('id');
-            $show->field('organ_id');
-            $show->field('name');
-            $show->field('type');
-            $show->field('method');
-            $show->field('subject');
-            $show->field('count');
-            $show->field('class_price');
-            $show->field('duration');
-            $show->field('class_duration');
-            $show->field('base_count');
-            $show->field('base_price');
-            $show->field('improve_price');
-            $show->field('max_price');
-            $show->field('introduction');
-            $show->field('adder_id');
-            $show->field('status');
-            $show->field('reviewer_id');
-            $show->field('reason');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('number','编号');
+            $show->field('adder_name','发布者');
+            $show->field('name','标题');
+            $show->field('status','状态')->using([0 => '待审核', 1 => '已通过',2 => '已结束',3 => '已拒绝']);
+            $show->field('method','授课方式');
+            $show->field('class_commission','课时佣金');
+            $show->field('address','上课地点');
+            $show->map('longitude','latitude');
+            $show->field('contact','联系人');
+            $show->field('mobile','联系手机');
+            $show->field('created_at','发布时间');
+            $show->field('end_time','失效时间');
+            $show->field('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
+            $show->field('is_on','是否上架')->select([0 => '否', 1 => '是']);
+            $show->field('visit_count','浏览人数');
+            $show->field('buyer_count','联系人数');
+            $show->field('reviewer','审核人');
+            $show->field('update_at','审核时间');
+            $show->field('reason','拒绝原因');
         });
     }
 

@@ -26,3 +26,4 @@ use Dcat\Admin\Show;
  *
  */
 Show\Field::extend('unserialize', UnSerialize::class);
+Form\Field\Map::requireAssets();
