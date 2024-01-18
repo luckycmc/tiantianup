@@ -65,6 +65,10 @@ class CourseController extends Controller
             $sort_field = 'courses.class_price';
         } else if (isset($data['sort_distance'])) {
             $sort_field = 'distance';
+        } else if ($data['sort_visit_count']) {
+            $sort_field = 'courses.visit_count';
+        } else if ($data['sort_buyer_count']) {
+            $sort_field = 'courses.buyer_count';
         }
         $order = $data['order'] ?? 'desc';
         // 筛选
@@ -91,6 +95,10 @@ class CourseController extends Controller
                 $where[] = ['courses.subject','=',$data['filter_subject']];
             }
         }
+        if (isset($data['filter_name'])) {
+            $where[] = ['courses.name','like','%'.$data['filter_name'].'%'];
+        }
+
         if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city']) && !isset($data['city_name'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
