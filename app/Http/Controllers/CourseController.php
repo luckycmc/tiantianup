@@ -97,7 +97,7 @@ class CourseController extends Controller
             if (!$location) {
                 return $this->error('定位出错');
             }
-            $city_id = Region::where('code',$location['city'])->value('id');
+            $city_id = Region::where('region_name',$location['city'])->value('id');
             $where[] = ['courses.city', '=', $city_id];
         }
 
