@@ -256,6 +256,12 @@ class OrganizationController extends Controller
         if (isset($data['entry_number'])) {
             $sort_field = 'entry_number';
         }
+        if (isset($data['sort_buyer_count'])) {
+            $sort_field = 'buyer_count';
+        }
+        if (isset($data['sort_visit_count'])) {
+            $sort_field = 'visit_count';
+        }
         // 筛选条件
         $where = [];
         if (isset($data['name'])) {
@@ -274,6 +280,10 @@ class OrganizationController extends Controller
             $where[] = ['created_at','>','created_at_start'];
             $where[] = ['created_at','<','created_at_end'];
         }
+        if (isset($data['course_status'])) {
+            $where[] = ['course_status','=',$data['course_status']];
+        }
+
         $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->orderBy($sort_field,$sort)->paginate($page_size);
         return $this->success('需求列表',$result);
     }
