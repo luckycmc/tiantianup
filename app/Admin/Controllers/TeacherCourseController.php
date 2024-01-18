@@ -110,7 +110,6 @@ class TeacherCourseController extends AdminController
             $show->field('method','授课方式');
             $show->field('class_commission','课时佣金');
             $show->field('address','上课地点');
-            $show->map('longitude','latitude');
             $show->field('contact','联系人');
             $show->field('mobile','联系手机');
             $show->field('created_at','发布时间');
