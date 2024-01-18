@@ -243,17 +243,18 @@ class IndexController extends Controller
         $latitude = $data['latitude'] ?? 0;
         $result = Course::with(['organization','adder'])->find($course_id);
         // 距离
-        if ($result->adder_role == 4) {
+        /*if ($result->adder_role == 4) {
             $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
             // 地址
-            $result->address = $result->organization->address;
-        }
-        if ($result->adder_role == 2) {
+            // $result->address = $result->organization->address;
+        }*/
+        $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
+        /*if ($result->adder_role == 2) {
             $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
             // 地址
-            $result->address = $result->adder->address;
+            // $result->address = $result->adder->address;
             $result->nickname = $result->adder->nickname;
-        }
+        }*/
         // 当前用户
         $user = Auth::user();
         // 是否收藏
