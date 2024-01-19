@@ -242,6 +242,8 @@ class IndexController extends Controller
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         $result = Course::with(['organization','adder'])->find($course_id);
+        $result->visit_count++;
+        $result->update();
         // 距离
         /*if ($result->adder_role == 4) {
             $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
