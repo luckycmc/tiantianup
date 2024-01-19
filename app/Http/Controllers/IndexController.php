@@ -290,7 +290,7 @@ class IndexController extends Controller
         $result->class_date = json_decode($result->class_date,true);
         $result->province = $result->province_info->region_name;
         $result->city = $result->city_info->region_name;
-        $result->district = $result->district_info->region_name;
+        $result->district = $result->district_info ? $result->district_info->region_name : null;
         return $this->success('课程详情',$result);
     }
 
