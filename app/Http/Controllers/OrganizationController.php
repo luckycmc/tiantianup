@@ -277,8 +277,8 @@ class OrganizationController extends Controller
             $where[] = ['type','=',$data['type']];
         }*/
         if (isset($data['create_at_start']) && isset($data['created_at_end'])) {
-            $where[] = ['created_at','>','created_at_start'];
-            $where[] = ['created_at','<','created_at_end'];
+            $where[] = ['created_at','>',$data['create_at_start']];
+            $where[] = ['created_at','<',$data['created_at_end']];
         }
         if (isset($data['course_status'])) {
             $where[] = ['course_status','=',$data['course_status']];
