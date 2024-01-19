@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\CourseDown;
+use App\Admin\Actions\Grid\CourseUp;
 use App\Admin\Actions\Grid\RefuseCourse;
 use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
@@ -69,6 +71,12 @@ class IntermediaryCourseController extends AdminController
                 if ($status == 0) {
                     $actions->append(new VerifyCourse());
                     $actions->append(new RefuseCourse());
+                }
+                $is_on = $actions->row->is_on;
+                if ($is_on == 1) {
+                    $actions->append(new CourseDown());
+                } else {
+                    $actions->append(new CourseUp());
                 }
             });
             $grid->export()->rows(function ($rows) {
