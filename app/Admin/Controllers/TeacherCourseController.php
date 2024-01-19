@@ -59,7 +59,7 @@ class TeacherCourseController extends AdminController
                 $filter->equal('district','区县')->select('/api/city');
                 $filter->equal('course_status','是否失效')->radio([0 => '否', 1 => '是']);
                 $filter->equal('is_recommend','是否推荐')->radio([0 => '否', 1 => '是']);
-                $filter->equal('is_on','是否上架')->radio([0 => '否', 1 => '是']);
+                $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
                 $filter->like('adder_name','发布者');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
@@ -133,19 +133,10 @@ class TeacherCourseController extends AdminController
     {
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
-            $form->text('organ_id');
+            $form->display('number');
             $form->text('name');
-            $form->text('type');
             $form->text('method');
-            $form->text('subject');
-            $form->text('count');
-            $form->text('class_price');
-            $form->text('duration');
-            $form->text('class_duration');
-            $form->text('base_count');
-            $form->text('base_price');
-            $form->text('improve_price');
-            $form->text('max_price');
+            $form->text('class_commission','课时佣金');
             $form->text('introduction');
             $form->text('adder_id');
             $form->select('status')->options([0 => '待审核',1 => '已通过',3 => '已拒绝']);

@@ -20,7 +20,6 @@ class StudentCourseSettingController extends AdminController
         return Grid::make(new CourseSetting(), function (Grid $grid) {
             $grid->model()->where('role',1);
             $grid->column('id')->sortable();
-            $grid->column('end_time');
             $grid->column('latest_end_time');
             $grid->column('course_end');
             $grid->column('deal_pay');
