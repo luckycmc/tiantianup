@@ -300,7 +300,7 @@ class TeacherController extends Controller
         }
         if (isset($data['search_keyword'])) {
             $course = $course->filter(function ($course) use ($data) {
-                return str_contains(strtolower($course['name']), strtolower($data['name']));
+                return str_contains(strtolower($course['name']), strtolower($data['search_keyword']));
             });
         }
         return $this->success('我的接单',$course);
