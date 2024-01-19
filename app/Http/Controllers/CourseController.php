@@ -218,7 +218,7 @@ class CourseController extends Controller
             }
             $v->province = $v->province_info->region_name;
             $v->city = $v->city_info->region_name;
-            $v->district = $v->district_info->region_name;
+            $v->district = $v->district_info ? $v->district_info->region_name : null;
             if ($v->adder_role == 0) {
                 $v->class_date = $v->platform_class_date;
             }
