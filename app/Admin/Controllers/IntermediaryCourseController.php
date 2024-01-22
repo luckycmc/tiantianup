@@ -139,8 +139,8 @@ class IntermediaryCourseController extends AdminController
             $form->display('id');
             $form->text('name','标题');
             $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上'])->when('!=','线上',function (Form $form) {
-                $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
-                $form->select('city','市')->options('/api/city')->required();
+                $form->select('province','省')->options('/api/city')->load('city','/api/city');
+                $form->select('city','市')->options('/api/city');
             });
             $form->editor('introduction','详情');
             $form->number('valid_time','有效期(天)');
