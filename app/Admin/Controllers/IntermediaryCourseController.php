@@ -138,7 +138,7 @@ class IntermediaryCourseController extends AdminController
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
             $form->text('name','标题');
-            $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上'])->when(['线下','线下'],function (Form $form) {
+            $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上'])->when(['线下','线下/线上'],function (Form $form) {
                 $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
                 $form->select('city','市')->options('/api/city')->required();
             });
