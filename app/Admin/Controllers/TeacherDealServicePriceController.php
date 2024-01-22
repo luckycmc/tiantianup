@@ -25,7 +25,14 @@ class TeacherDealServicePriceController extends AdminController
             $grid->column('price','服务费');
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
-            $grid->column('region','地区');
+            $grid->column('region','地区')->display(function ($region) {
+                $name = [];
+                $ids = $this->areas->pluck('id');
+                foreach ($ids as $v) {
+                    $name[] = Region::where('id',$v)->value('region_name');
+                }
+                return implode(',',$name);
+            });
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -67,25 +74,26 @@ class TeacherDealServicePriceController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new ServicePrice(), function (Form $form) {
-            $model = new Area();
+        return Form::make(ServicePrice::with(['areas']), function (Form $form) {
             $form->display('id');
             $form->text('price','服务费');
             $form->hidden('type')->default(1);
             $form->dateRange('start_time','end_time','有效期');
-            $form->tree('region','执行地区')
-                ->nodes($model->get()->toArray())
-                ->exceptParentNode()
-                ->setIdColumn('id')
+            $form->tree('areas','执行地区')
                 ->setTitleColumn('region_name')
-                ->saving(function ($v) {
-                    $name = [];
-                    foreach ($v as $vv) {
-                        $name[] = Area::where('id',$vv)->value('region_name');
+                ->nodes(function () {
+                    $areaModel = new Area();
+                    return $areaModel->allNodes();
+                })
+                ->customFormat(function ($v) {
+                    if (!$v) {
+                        return [];
                     }
-                    return implode(',',$name);
-                });
-            $form->text('adder','添加人');
+                    // dd(array_column($v,'id'));
+                    return array_column($v, 'id');
+                })
+                ->expand(false);
+            // $form->text('adder','添加人');
         
             $form->display('created_at');
             $form->display('updated_at');
