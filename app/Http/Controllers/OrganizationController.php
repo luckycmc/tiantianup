@@ -198,6 +198,7 @@ class OrganizationController extends Controller
         $data['adder_name'] = $user->organization->name;
         $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $data['is_on'] = 1;
+        $data['introduction'] = nl2br($data['introduction']);
         $location = get_location($data['longitude'],$data['latitude']);
         $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
         $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
