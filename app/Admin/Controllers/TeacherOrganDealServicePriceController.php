@@ -9,6 +9,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use Illuminate\Support\Str;
 
 class TeacherOrganDealServicePriceController extends AdminController
 {
@@ -31,7 +32,8 @@ class TeacherOrganDealServicePriceController extends AdminController
                 foreach ($ids as $v) {
                     $name[] = Region::where('id',$v)->value('region_name');
                 }
-                return implode(',',$name);
+                $result = implode(',',$name);
+                return Str::limit($result,30,'...');
             });
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
