@@ -47,9 +47,11 @@ class VerifyCourse extends RowAction
             $province = Region::where('id',$course_info->province)->value('region_name');
             $city = Region::where('id',$course_info->city)->value('region_name');
             $district = Region::where('id',$course_info->district)->value('region_name');
-            $long_lat = get_long_lat($province,$city,$district,$course_info->address);
-            $course_info->longitude = $long_lat[0];
-            $course_info->latitude = $long_lat[1];
+            if ($course_info->method !== '线上') {
+                $long_lat = get_long_lat($province,$city,$district,$course_info->address);
+                $course_info->longitude = $long_lat[0];
+                $course_info->latitude = $long_lat[1];
+            }
         }
         $course_info->update();
         $user = User::find($course_info->adder_id);
