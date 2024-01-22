@@ -28,6 +28,7 @@ class IntermediaryCourseController extends AdminController
         return Grid::make(new Course(['province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('adder_role',0)->orderByDesc('created_at');
             $grid->column('number','编号');
+            $grid->column('method','授课方式');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
             $grid->column('name','标题');
@@ -37,6 +38,7 @@ class IntermediaryCourseController extends AdminController
                 return $province.$city;
             });
             $grid->column('status')->using([0 => '待审核', 1 => '已通过']);
+            $grid->column('is_on','是否上架')->using([0 => '否', 1 => '是']);
             $grid->column('reason','拒绝原因');
             $grid->column('adder_name','发布人');
             $grid->column('buyer_count','付费人数');
@@ -136,9 +138,10 @@ class IntermediaryCourseController extends AdminController
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
             $form->text('name','标题');
-            $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
-            $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
-            $form->select('city','市')->options('/api/city');
+            $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上'])->when(['线下','线下'],function (Form $form) {
+                $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
+                $form->select('city','市')->options('/api/city')->required();
+            });
             $form->editor('introduction','详情');
             $form->number('valid_time','有效期(天)');
             $form->text('contact','联系人');
@@ -153,6 +156,7 @@ class IntermediaryCourseController extends AdminController
             ]);
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
+            $form->hidden('is_on')->default(1);
             $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
             $form->display('created_at');
