@@ -44,6 +44,7 @@ Route::group([
     $router->resource('/bill','BillController');
     $router->resource('/user_course','UserCourseController');
     $router->resource('/teacher_deal','TeacherDealServicePriceController');
+    $router->resource('/teacher_organ_deal','TeacherOrganDealServicePriceController');
     $router->resource('/look_teacher','LookTeacherServicePriceController');
     $router->resource('/entry','EntryServicePriceController');
     $router->resource('/course_contact','CourseContactServicePriceController');

@@ -25,7 +25,14 @@ class LookTeacherServicePriceController extends AdminController
             $grid->column('price','服务费');
             $grid->column('start_time','开始时间');
             $grid->column('end_time','结束时间');
-            $grid->column('region','地区');
+            $grid->column('region','地区')->display(function ($region) {
+                $name = [];
+                $ids = $this->areas->pluck('id');
+                foreach ($ids as $v) {
+                    $name[] = Region::where('id',$v)->value('region_name');
+                }
+                return implode(',',$name);
+            });
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
