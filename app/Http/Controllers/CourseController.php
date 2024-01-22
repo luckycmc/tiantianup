@@ -197,7 +197,7 @@ class CourseController extends Controller
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
-            ->orWhere('method','线上')
+            ->orWhere('courses.method','线上')
             ->where('courses.status','!=',0)
             ->orderBy($sort_field,$order)
             ->logListenedSql()
