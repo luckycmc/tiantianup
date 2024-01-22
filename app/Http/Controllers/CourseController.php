@@ -199,7 +199,11 @@ class CourseController extends Controller
             ->where($where)
             ->where('courses.is_on',1)
             ->where('courses.status','!=',0)
-            ->orWhere(['courses.method'  => '线上','courses.status' => ['!=', 0],'courses.is_on' => 1])
+            ->orWhere(function ($query) use ($where) {
+                $query->where('courses.is_on',1)
+                    ->where('courses.status','!=',1)
+                    ->where('courses.method','线上');
+            })
             ->orderBy($sort_field,$order)
             ->logListenedSql()
             ->paginate($page_size);
