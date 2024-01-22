@@ -282,7 +282,12 @@ class OrganizationController extends Controller
             $where[] = ['created_at','<',$data['created_at_end']];
         }
         if (isset($data['course_status'])) {
-            $where[] = ['course_status','=',$data['course_status']];
+            if ($data['course_status'] == 1) {
+                $where[] = ['course_status','=',2];
+            } else {
+                $where[] = ['course_status','!=',2];
+            }
+
         }
 
         $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->orderBy($sort_field,$sort)->logListenedSql()->paginate($page_size);
