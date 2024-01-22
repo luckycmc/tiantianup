@@ -214,7 +214,7 @@ class IndexController extends Controller
         } else {
             $role = 3;
         }
-        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->paginate($page_size);
+        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);

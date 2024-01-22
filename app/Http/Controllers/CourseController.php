@@ -199,6 +199,7 @@ class CourseController extends Controller
             ->where($where)
             ->orWhere('courses.method','线上')
             ->where('courses.status','!=',0)
+            ->where('is_on',1)
             ->orderBy($sort_field,$order)
             ->logListenedSql()
             ->paginate($page_size);
