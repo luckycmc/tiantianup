@@ -494,4 +494,20 @@ class TeacherController extends Controller
         $tag_info->update();
         return $this->success('操作成功');
     }
+
+    /**
+     * 删除标签
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_tag()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $tag_info = TeacherTag::find($id);
+        if (!$tag_info) {
+            return $this->error('标签不存在');
+        }
+        $tag_info->delete();
+        return $this->success('操作成功');
+    }
 }
