@@ -170,6 +170,7 @@ class IndexController extends Controller
         $latitude = $data['latitude'] ?? 0;
 
         $where = [];
+        $or_where = [];
         if (isset($data['is_default'])) {
             // 当前城市
             $location_info = get_location($longitude,$latitude);
@@ -181,7 +182,7 @@ class IndexController extends Controller
         $where[] = ['city','=',$city_id];
 
         if (isset($data['name'])) {
-            $where[] = ['name','like','%'.$data['name'].'%'];
+            $where[] = $or_where = ['name','like','%'.$data['name'].'%'];
         }
         if (isset($data['subject'])) {
             $where[] = ['subject','=',$data['subject']];
@@ -190,7 +191,7 @@ class IndexController extends Controller
             $where[] = ['type','=',$data['type']];
         }
         if (isset($data['method'])) {
-            $where[] = ['method','=',$data['method']];
+            $where[] = $or_where = ['method','=',$data['method']];
         }
         if (isset($data['district'])) {
             $id = Region::where('region_name',$data['district']);
@@ -214,7 +215,9 @@ class IndexController extends Controller
         } else {
             $role = 3;
         }
-        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->paginate($page_size);
+        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->orWhere(function ($query) use ($or_where,$role) {
+            $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上'])->where('status','!=',0)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->where($or_where);
+        })->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
