@@ -48,13 +48,14 @@ class ParentController extends Controller
     {
         $config = config('services.sms');
         $data = \request()->all();
-        Log::info('post_data: ',$data);
         $rules = [
             'name' => 'required',
             'class_commission' => 'required',
             'method' => 'required',
             'introduction' => 'required',
             'valid_time' => 'required',
+            'contact' => 'required',
+            'mobile' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
@@ -62,6 +63,7 @@ class ParentController extends Controller
             'method.required' => '上课方式不能为空',
             'introduction.required' => '详情不能为空',
             'valid_time.required' => '有效期不能为空',
+            'mobile.required' => '手机号不能为空',
         ];
         $validator = Validator::make($data,$rules,$messages);
         $id = $data['id'] ?? 0;
@@ -85,7 +87,6 @@ class ParentController extends Controller
         $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
         $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
         $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
-        Log::info('post_after_data: ',$data);
         // 保存数据
         $result = Course::updateOrCreate(['id' => $id],$data);
         if (!$result) {
