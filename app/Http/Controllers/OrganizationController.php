@@ -174,6 +174,7 @@ class OrganizationController extends Controller
     {
         $config = config('services.sms');
         $data = \request()->all();
+        Log::info('post_data: ',$data);
         $rules = [
             'name' => 'required',
             'method' => 'required',

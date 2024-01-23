@@ -22,7 +22,7 @@ class StudentCourseController extends AdminController
     {
         return Grid::make(new Course(['organization','province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('role',1);
-            $grid->column('number');
+            $grid->column('number','编号');
             $grid->column('organization.name','发布机构');
             $grid->column('name','课程名称');
             $grid->column('status','状态')->using([0 => '待审核',1 => '已通过',2 => '已结束',3 => '已拒绝']);
