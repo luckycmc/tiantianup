@@ -335,6 +335,7 @@ class TeacherController extends Controller
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
+        $or_where = [];
         // $city_id = 0;
         if (isset($data['city_id'])) {
             $city_id = $data['city_id'];
@@ -354,7 +355,7 @@ class TeacherController extends Controller
             $where[] = ['courses.type','=',$data['filter_type']];
         }
         if (isset($data['filter_method'])) {
-            $where[] = ['courses.method','=',$data['filter_method']];
+            $where[] = $or_where[] = ['courses.method','=',$data['filter_method']];
         }
         if (isset($data['filter_subject'])) {
             $where[] = ['courses.subject','=',$data['filter_subject']];
@@ -366,7 +367,7 @@ class TeacherController extends Controller
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
         if (isset($data['name'])) {
-            $where[] = ['courses.name','like','%'.$data['name'].'%'];
+            $where[] = $or_where[] = ['courses.name','like','%'.$data['name'].'%'];
         }
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
@@ -377,8 +378,8 @@ class TeacherController extends Controller
             $latitude = $region_info[1];*/
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
-            $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
-            $where[] = ['courses.class_price','<=',$data['filter_class_price_max']];
+            $where[] = $or_where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
+            $where[] = $or_where[] = ['courses.class_price','<=',$data['filter_class_price_max']];
         }
         if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
@@ -394,26 +395,28 @@ class TeacherController extends Controller
             } else {
                 // 已投递
                 $condition = "whereIn";
-                $where[] = ['deliver_log.status','=',$data['filter_delivery_status']];
+                $where[] = $or_where[] = ['deliver_log.status','=',$data['filter_delivery_status']];
             }
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3,'courses.status' => 1])->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($where) {
+                ->where($where)->where(['courses.role' => 3,'courses.status' => 1])->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($or_where) {
                     $query->where('courses.is_on',1)
                         ->where('courses.status','!=',0)
                         ->where('courses.method','线上')
-                        ->where('courses.role',3);
+                        ->where('courses.role',3)
+                        ->where($or_where);
                 })->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         } else {
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3])->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($where) {
+                ->where($where)->where(['courses.role' => 3])->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($or_where) {
                     $query->where('courses.is_on',1)
                         ->where('courses.status','!=',0)
                         ->where('courses.method','线上')
-                        ->where('courses.role',3);
+                        ->where('courses.role',3)
+                        ->where($or_where);
                 })->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
 
@@ -462,15 +465,12 @@ class TeacherController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
-        $user_city = Region::where('id',$user->city_id)->value('region_name');
-        $user_province = Region::where('id',$user->province_id)->value('region_name');
-        $user_district = Region::where('id',$user->district_id)->value('region_name');
         if ($course_info->adder_role == 0) {
             $type = 4;
         } else {
             $type = 3;
         }
-       $amount = get_service_price($type,$user_province,$user_city,$user_district);
+       $amount = get_service_price($type,$user->province_id,$user->city_id,$user->district_id);
         // $amount = 0.01;
         $insert_data = [
             'user_id' => $user->id,

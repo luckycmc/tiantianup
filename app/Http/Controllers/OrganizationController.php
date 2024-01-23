@@ -135,17 +135,19 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
         if ($user->role == 4) {
-            $user_city = Region::where('id',$user->organization->city_id)->value('region_name');
-            $user_province = Region::where('id',$user->organization->province_id)->value('region_name');
-            $user_district = Region::where('id',$user->organization->district_id)->value('region_name');
+            $type = 5;
+            $city_id = $user->organization->city_id;
+            $province_id = $user->organization->province_id;
+            $district_id = $user->organization->district_id;
         } else {
-            $user_city = Region::where('id',$user->city_id)->value('region_name');
-            $user_province = Region::where('id',$user->province_id)->value('region_name');
-            $user_district = Region::where('id',$user->district_id)->value('region_name');
+            $type = 1;
+            $city_id = $user->city_id;
+            $province_id = $user->province_id;
+            $district_id = $user->district_id;
         }
 
         // 查询服务费
-        $service_price = get_service_price(2,$user_province,$user_city,$user_district);
+        $service_price = get_service_price($type,$province_id,$city_id,$district_id);
         Log::info('service_price: '.$service_price);
         // $service_price = 0.01;
         $order_data = [
