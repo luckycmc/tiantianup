@@ -405,6 +405,7 @@ class TeacherController extends Controller
                         ->where('courses.status','!=',0)
                         ->where('courses.method','线上')
                         ->where('courses.role',3)
+                        ->where('courses.adder_role','!=',0)
                         ->where($or_where);
                 })->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         } else {
@@ -416,6 +417,7 @@ class TeacherController extends Controller
                         ->where('courses.status','!=',0)
                         ->where('courses.method','线上')
                         ->where('courses.role',3)
+                        ->where('courses.adder_role','!=',0)
                         ->where($or_where);
                 })->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
