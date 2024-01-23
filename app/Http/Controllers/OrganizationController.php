@@ -199,10 +199,12 @@ class OrganizationController extends Controller
         $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $data['is_on'] = 1;
         $data['introduction'] = nl2br($data['introduction']);
-        $location = get_location($data['longitude'],$data['latitude']);
-        $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
-        $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
-        $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
+        if ($data['method'] !== '线上') {
+            $location = get_location($data['longitude'],$data['latitude']);
+            $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
+            $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
+            $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
+        }
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
             return $this->error('提交失败');
