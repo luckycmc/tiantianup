@@ -217,7 +217,7 @@ class IndexController extends Controller
         }
         $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->orWhere(function ($query) use ($or_where,$role) {
             $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上'])->where('status','!=',0)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->where($or_where);
-        })->paginate($page_size);
+        })->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
