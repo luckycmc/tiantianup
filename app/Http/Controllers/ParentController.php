@@ -83,10 +83,12 @@ class ParentController extends Controller
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
         $data['adder_name'] = $user->name;
-        $location = get_location($data['longitude'],$data['latitude']);
-        $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
-        $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
-        $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
+        if ($data['method'] !== '线上') {
+            $location = get_location($data['longitude'],$data['latitude']);
+            $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
+            $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
+            $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
+        }
         // 保存数据
         $result = Course::updateOrCreate(['id' => $id],$data);
         if (!$result) {
