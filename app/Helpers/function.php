@@ -227,14 +227,12 @@ function get_reward($type,$role) {
 }
 
 // 获取服务费
-function get_service_price($type,$province,$city,$district) {
+function get_service_price($type,$province_id,$city_id,$district_id) {
     $today = Carbon::now()->toDateString();
-    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->where(function ($query) use ($province,$city,$district) {
-        $query->whereRaw("FIND_IN_SET('$province',region)")
-            ->orWhereRaw("FIND_IN_SET('$city',region)")
-            ->orWhereRaw("FIND_IN_SET('$district',region)");
-    })->orderByDesc('created_at')->first();
-    if (!$info) {
+    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->orderByDesc('created_at')->first();
+    // 判断当前城市是否为执行地区
+    $address_ids = $info->areas()->pluck('area_id')->toArray();
+    if (!in_array($province_id,$address_ids) && !in_array($city_id,$address_ids) && !in_array($district_id,$address_ids)) {
         return 0;
     }
     return $info->price;

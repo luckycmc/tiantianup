@@ -76,24 +76,26 @@ class EntryServicePriceController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new ServicePrice(), function (Form $form) {
+        return Form::make(new ServicePrice(['areas']), function (Form $form) {
             $model = new Area();
             $form->display('id');
             $form->text('price','服务费');
             $form->hidden('type')->default(3);
             $form->dateRange('start_time','end_time','有效期');
-            $form->tree('region','执行地区')
-                ->nodes($model->get()->toArray())
-                ->exceptParentNode()
-                ->setIdColumn('id')
+            $form->tree('areas','执行地区')
                 ->setTitleColumn('region_name')
-                ->saving(function ($v) {
-                    $name = [];
-                    foreach ($v as $vv) {
-                        $name[] = Area::where('id',$vv)->value('region_name');
+                ->nodes(function () {
+                    $areaModel = new Area();
+                    return $areaModel->allNodes();
+                })
+                ->customFormat(function ($v) {
+                    if (!$v) {
+                        return [];
                     }
-                    return implode(',',$name);
-                });
+                    // dd(array_column($v,'id'));
+                    return array_column($v, 'id');
+                })
+                ->expand(false);
             $form->text('adder','添加人');
 
             $form->display('created_at');

@@ -250,11 +250,7 @@ class CourseController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
-        $user_city = Region::where('id',$user->city_id)->value('region_name');
-        $user_province = Region::where('id',$user->province_id)->value('region_name');
-        $user_district = Region::where('id',$user->district_id)->value('region_name');
-        $amount = get_service_price(3, $user_province,$user_city,$user_district);
-        // $amount = 0.01;
+        $amount = get_service_price(3, $user->province_id,$user->city_id,$user->district_id);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
