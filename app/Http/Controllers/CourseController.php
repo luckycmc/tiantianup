@@ -199,10 +199,17 @@ class CourseController extends Controller
             ->where($where)
             ->where('courses.is_on',1)
             ->where('courses.status','!=',0)
-            ->orWhere(function ($query) use ($where) {
+            ->orWhere(function ($query) use ($where,$user) {
+                if ($user->role == 1  || $user->role == 2) {
+                    $where[] = ['courses.role','=',1];
+                }
+                if ($user->role == 2 && !isset($data['is_platform'])) {
+                    $where[] = ['courses.adder_role','=',4];
+                }
                 $query->where('courses.is_on',1)
                     ->where('courses.status','!=',0)
-                    ->where('courses.method','线上');
+                    ->where('courses.method','线上')
+                    ->where($where);
             })
             ->orderBy($sort_field,$order)
             ->logListenedSql()
