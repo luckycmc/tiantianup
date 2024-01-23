@@ -35,6 +35,7 @@ class CourseController extends Controller
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         $where = [];
+        $or_where = [];
         // 排序
         $sort_field = 'courses.created_at';
         /*if (isset($data['district_id'])) {
@@ -83,10 +84,10 @@ class CourseController extends Controller
 
 
         if (isset($data['fitler_type'])) {
-            $where[] = ['courses.type','=',$data['fitler_type']];
+            $where[] = $or_where[] = ['courses.type','=',$data['fitler_type']];
         }
         if (isset($data['filter_method'])) {
-            $where[] = ['courses.method','=',$data['filter_method']];
+            $where[] = $or_where[] = ['courses.method','=',$data['filter_method']];
         }
         if (isset($data['filter_subject'])) {
             if (isset($data['is_platform'])) {
@@ -96,7 +97,7 @@ class CourseController extends Controller
             }
         }
         if (isset($data['filter_name'])) {
-            $where[] = ['courses.name','like','%'.$data['filter_name'].'%'];
+            $where[] = $or_where[] = ['courses.name','like','%'.$data['filter_name'].'%'];
         }
 
         if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city']) && !isset($data['city_name'])) {
@@ -123,8 +124,8 @@ class CourseController extends Controller
         }
         if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
-            $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
-            $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
+            $where[] = $or_where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
+            $where[] = $or_where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
         // 当前用户
         $user = Auth::user();
@@ -144,26 +145,26 @@ class CourseController extends Controller
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
             if ($data['is_entry'] == 1) {
-                $where[] = [function ($query) use ($course_arr) {
+                $where[] = $or_where[] = [function ($query) use ($course_arr) {
                     $query->whereIn('courses.id',$course_arr);
                 }];
             } else {
-                $where[] = [function ($query) use ($course_arr) {
+                $where[] = $or_where[] = [function ($query) use ($course_arr) {
                     $query->whereNotIn('courses.id',$course_arr);
                 }];
             }
         }
         if ($user->role == 3) {
-            $where[] = ['courses.role','=',3];
+            $where[] = $or_where[] = ['courses.role','=',3];
         }
         if ($user->role == 1  || $user->role == 2) {
-            $where[] = ['courses.role','=',1];
+            $where[] = $or_where[] = ['courses.role','=',1];
         }
         if ($user->role == 2 && !isset($data['is_platform'])) {
-            $where[] = ['courses.adder_role','=',4];
+            $where[] = $or_where[] = ['courses.adder_role','=',4];
         }
         if (isset($data['is_platform'])) {
-            $where[] = ['courses.adder_role','=',0];
+            $where[] = $or_where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
                 $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
                 if ($data['is_show'] == true) {
@@ -188,8 +189,8 @@ class CourseController extends Controller
                 $where[] = ['courses.gender','=',$data['gender']];
             }
             if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
-                $where[] = ['courses.created_at','>=',$data['created_at_start']];
-                $where[] = ['courses.created_at','<=',$data['created_at_end']];
+                $where[] = $or_where[] = ['courses.created_at','>=',$data['created_at_start']];
+                $where[] = $or_where[] = ['courses.created_at','<=',$data['created_at_end']];
             }
         } else {
             $where[] = ['courses.end_time','>=',Carbon::now()];
@@ -199,14 +200,7 @@ class CourseController extends Controller
             ->where($where)
             ->where('courses.is_on',1)
             ->where('courses.status','!=',0)
-            ->orWhere(function ($query) use ($where,$user) {
-                $or_where = [];
-                if ($user->role == 1  || $user->role == 2) {
-                    $or_where[] = ['courses.role','=',1];
-                }
-                if ($user->role == 3) {
-                    $or_where[] = ['courses.role','=',3];
-                }
+            ->orWhere(function ($query) use ($or_where,$user) {
                 $query->where('courses.is_on',1)
                     ->where('courses.status','!=',0)
                     ->where('courses.method','线上')
