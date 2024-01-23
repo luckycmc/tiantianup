@@ -201,7 +201,7 @@ class CourseController extends Controller
             ->where('courses.status','!=',0)
             ->orWhere(function ($query) use ($where) {
                 $query->where('courses.is_on',1)
-                    ->where('courses.status','!=',1)
+                    ->where('courses.status','!=',0)
                     ->where('courses.method','线上');
             })
             ->orderBy($sort_field,$order)
