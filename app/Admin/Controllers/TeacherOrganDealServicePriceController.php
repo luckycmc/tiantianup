@@ -79,7 +79,7 @@ class TeacherOrganDealServicePriceController extends AdminController
         return Form::make(ServicePrice::with(['areas']), function (Form $form) {
             $form->display('id');
             $form->text('price','服务费');
-            $form->hidden('type')->default(1);
+            $form->hidden('type')->default(5);
             $form->dateRange('start_time','end_time','有效期');
             $form->tree('areas','执行地区')
                 ->setTitleColumn('region_name')
