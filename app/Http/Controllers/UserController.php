@@ -743,7 +743,7 @@ class UserController extends Controller
                 'content'  => "【添添学】有新的投递",
             ]);
         }
-        return $this->success('投递成功');
+        return $this->success('投递成功',compact('out_trade_no','amount'));
     }
 
     /**
