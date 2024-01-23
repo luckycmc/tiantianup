@@ -204,6 +204,9 @@ class CourseController extends Controller
                 if ($user->role == 1  || $user->role == 2) {
                     $or_where[] = ['courses.role','=',1];
                 }
+                if ($user->role == 3) {
+                    $or_where[] = ['courses.role','=',3];
+                }
                 $query->where('courses.is_on',1)
                     ->where('courses.status','!=',0)
                     ->where('courses.method','线上')
