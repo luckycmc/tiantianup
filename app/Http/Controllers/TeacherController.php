@@ -482,8 +482,7 @@ class TeacherController extends Controller
         } else {
             $type = 3;
         }
-       $amount = get_service_price($type,$user->province_id,$user->city_id,$user->district_id);
-        // $amount = 0.01;
+        $amount = get_service_price($type,$user->province_id,$user->city_id,$user->district_id);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
