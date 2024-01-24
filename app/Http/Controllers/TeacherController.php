@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -267,6 +268,7 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
+        $page = $data['page'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
@@ -275,7 +277,7 @@ class TeacherController extends Controller
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
         }
-        $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
+        $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->get();
         foreach ($result as $v) {
             $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
             // 机构
@@ -303,7 +305,15 @@ class TeacherController extends Controller
                 return str_contains(strtolower($course['name']), strtolower($data['search_keyword']));
             });
         }
-        return $this->success('我的接单',$course);
+        // 分页
+        $result = new LengthAwarePaginator(
+            $course->forPage($page, $page_size),
+            $course->count(),
+            $page_size,
+            $page,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+        return $this->success('我的接单',$result);
     }
 
     /**

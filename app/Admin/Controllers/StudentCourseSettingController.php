@@ -21,9 +21,8 @@ class StudentCourseSettingController extends AdminController
             $grid->model()->where('role',1);
             $grid->column('id')->sortable();
             $grid->column('latest_end_time');
-            $grid->column('course_end');
-            $grid->column('deal_pay');
-            $grid->column('is_can_look');
+            $grid->column('latest_end_time');
+            $grid->column('looked_course_valid_time','用户已咨询需求默认展示天数');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
