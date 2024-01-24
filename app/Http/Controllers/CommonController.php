@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\InvalidCourse;
 use App\Models\Activity;
 use App\Models\Agreement;
 use App\Models\Banner;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\Organization;
 use App\Models\OrganRole;
@@ -129,6 +131,9 @@ class CommonController extends Controller
                     DB::table('bills')->insert($log_data);
                 }*/
                 DB::table('bills')->insert($log_data);
+                $days = CourseSetting::where('role',$course->adder_role)->orderByDesc('created_at')->first();
+                // 加入延时队列
+                InvalidCourse::dispatch($order)->delay(now()->addDays($days))->onQueue('invalid_course');
                 // 当前时间
                 /*$current = Carbon::now()->format('Y-m-d');
                 // 查看是否有成交活动
