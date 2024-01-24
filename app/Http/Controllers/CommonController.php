@@ -39,8 +39,7 @@ class CommonController extends Controller
                 // 查询订单
                 $order = UserTeacherOrder::where('out_trade_no',$info['out_trade_no'])->first();
                 $course = Course::find($order->course_id);
-                $course->buyer_count += 1;
-                $course->visit_course += 1;
+                $course->buyer_count++;
                 $course->update();
                 // 查询用户
                 $user = User::find($order->user_id);
@@ -84,8 +83,7 @@ class CommonController extends Controller
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
                 $course = Course::find($order->course_id);
-                $course->buyer_count += 1;
-                $course->visit_course += 1;
+                $course->buyer_count++;
                 $course->update();
                 /*// 已授权
                 $order->status = 4;*/
