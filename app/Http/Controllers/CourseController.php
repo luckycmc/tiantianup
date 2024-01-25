@@ -61,7 +61,7 @@ class CourseController extends Controller
                     sin(radians(courses.latitude))
                 )
             ) AS distance";
-        $select_field = ['courses.*','organizations.name as organ_name',DB::raw($distance_expr)];
+        $select_field = ['courses.*','organizations.name as organ_name'];
         if (isset($data['sort_price'])) {
             $sort_field = 'courses.class_price';
         } else if (isset($data['sort_distance'])) {
