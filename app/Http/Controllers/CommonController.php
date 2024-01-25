@@ -63,9 +63,6 @@ class CommonController extends Controller
                     'created_at' => Carbon::now()
                 ];
                 DB::table('bills')->insert($log_data);
-                $days = CourseSetting::where('role',$course->adder_role)->orderByDesc('created_at')->first();
-                // 加入延时队列
-                InvalidCourse::dispatch($order)->delay(now()->addDays($days->looked_course_valid_time))->onQueue('invalid_course');
             }
         } catch (Exception $e) {
             Log::info($data);
@@ -80,6 +77,7 @@ class CommonController extends Controller
             $data = $pay->callback(); // 是的，验签就这么简单！
             $info = $data['resource']['ciphertext'];
             if ($info['trade_state'] == 'SUCCESS') {
+                Log::info('支付回调');
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
                 $course = Course::find($order->course_id);
