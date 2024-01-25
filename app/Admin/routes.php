@@ -58,6 +58,7 @@ Route::group([
     $router->resource('/region','RegionController');
     $router->resource('/student_course_setting','StudentCourseSettingController');
     $router->resource('/teacher_course_setting','TeacherCourseSettingController');
+    $router->resource('/intermediary_course_setting','IntermediaryCourseSettingController');
     $router->resource('/platform_message','PlatformMessageController');
     $router->resource('/area','AreaController');
     $router->resource('/tag','TagController');
