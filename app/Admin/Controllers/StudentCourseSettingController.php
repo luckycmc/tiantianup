@@ -21,7 +21,6 @@ class StudentCourseSettingController extends AdminController
             $grid->model()->where('role',1);
             $grid->column('id')->sortable();
             $grid->column('latest_end_time');
-            $grid->column('latest_end_time');
             $grid->column('looked_course_valid_time','用户已咨询需求默认展示天数');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -46,10 +45,7 @@ class StudentCourseSettingController extends AdminController
             $show->field('id');
             $show->field('end_time');
             $show->field('latest_end_time');
-            $show->field('course_end');
-            $show->field('deal_pay');
-            $show->field('confirm_course');
-            $show->field('is_can_look');
+            $show->field('looked_course_valid_time','用户已咨询需求默认展示天数');
             $show->field('created_at');
             $show->field('updated_at');
         });
