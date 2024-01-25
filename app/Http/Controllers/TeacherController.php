@@ -268,7 +268,7 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
-        $page = $data['page'] ?? 10;
+        $page = $data['page'] ?? 1;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
@@ -277,45 +277,46 @@ class TeacherController extends Controller
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
         }
-        if (isset($data['search_keyword'])) {
-            $where[] = ['name','like','%'.$data['search_keyword'].'%'];
-        }
-        $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->get();
-        foreach ($result as $v) {
-            $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
-            // 机构
-            if ($v->course->adder_role == 4) {
-                // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
-                $v->course->course_role = $v->course->adder_role;
-                $v->organization_name = $v->course->organization->name;
+
+        $info = DeliverLog::with(['course' => function ($query) use ($data) {
+            if (isset($data['search_keyword'])) {
+                $query->where('name','like','%'.$data['search_keyword'].'%');
             }
-            $v->course->pay_status = $v->pay_status;
-            $v->course->is_checked = $v->is_checked;
+        }])->where('user_id',$user->id)->where($where)->get();
+        $info = $info->filter(function ($item) {
+            return $item->course !== null;
+        })->values();
+        foreach ($info as $v) {
+            if ($v->course) {
+                if ($v->course->method !== '线上') {
+                    $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
+                }
+                // 机构
+                if ($v->course->adder_role == 4) {
+                    // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
+                    $v->course->course_role = $v->course->adder_role;
+                    $v->organization_name = $v->course->organization->name;
+                }
+                $v->course->pay_status = $v->pay_status;
+                $v->course->is_checked = $v->is_checked;
+            }
         }
-        $course = $result->map(function ($item) {
+        $course = $info->map(function ($item) {
             return $item->course;
         });
         $course = $course->filter(function ($item) {
             return $item->adder_role !== 0;
         })->values();
-        if (isset($data['name'])) {
-            $course = $course->filter(function ($user) use ($data) {
-                return str_contains(strtolower($user['name']), strtolower($data['name']));
-            });
-        }
-        /*if (isset($data['search_keyword'])) {
-            $course = $course->filter(function ($course) use ($data) {
-                return str_contains(strtolower($course['name']), strtolower($data['search_keyword']));
-            });
-        }*/
+        // dd($course->toArray());
         // 分页
         $result = new LengthAwarePaginator(
-            $course->forPage($page, $page_size),
+            $course,
             $course->count(),
             $page_size,
             $page,
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
+        // dd($result);
         return $this->success('我的接单',$result);
     }
 
