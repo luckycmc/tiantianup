@@ -131,7 +131,9 @@ class CommonController extends Controller
                     DB::table('bills')->insert($log_data);
                 }*/
                 DB::table('bills')->insert($log_data);
+                Log::info('role: '.$course->role);
                 $days = CourseSetting::where('role',$course->role)->orderByDesc('created_at')->first();
+                Log::info('days: ',$days->toArray());
                 // 加入延时队列
                 InvalidCourse::dispatch($order)->delay(now()->addDays($days->looked_course_valid_time))->onQueue('invalid_course');
                 // 当前时间
