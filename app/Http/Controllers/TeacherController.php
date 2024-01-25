@@ -307,7 +307,6 @@ class TeacherController extends Controller
         $course = $course->filter(function ($item) {
             return $item->adder_role !== 0;
         })->values();
-        // dd($course->toArray());
         // 分页
         $result = new LengthAwarePaginator(
             $course,
@@ -333,8 +332,6 @@ class TeacherController extends Controller
 
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(10);
-        // $user = User::find(4);
         $sort_field = 'courses.created_at';
         $order = 'desc';
         if (isset($data['sort_created_at'])) {
@@ -350,7 +347,6 @@ class TeacherController extends Controller
         }
         $where = [];
         $or_where = [];
-        // $city_id = 0;
         if (isset($data['city_id'])) {
             $city_id = $data['city_id'];
             $where[] = ['courses.city','=',$city_id];
