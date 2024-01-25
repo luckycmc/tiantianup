@@ -43,7 +43,6 @@ class StudentCourseSettingController extends AdminController
     {
         return Show::make($id, new CourseSetting(), function (Show $show) {
             $show->field('id');
-            $show->field('end_time');
             $show->field('latest_end_time');
             $show->field('looked_course_valid_time','用户已咨询需求默认展示天数');
             $show->field('created_at');
@@ -61,11 +60,8 @@ class StudentCourseSettingController extends AdminController
         return Form::make(new CourseSetting(), function (Form $form) {
             $form->display('id');
             $form->hidden('role')->default(1);
-            $form->number('end_time');
             $form->number('latest_end_time');
-            $form->number('course_end');
-            $form->number('deal_pay');
-            $form->radio('is_can_look')->options([0 => '否', 1 => '是']);
+            $form->number('looked_course_valid_time','用户已咨询需求默认展示天数');
         
             $form->display('created_at');
             $form->display('updated_at');
