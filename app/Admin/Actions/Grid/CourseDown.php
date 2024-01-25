@@ -31,7 +31,7 @@ class CourseDown extends RowAction
         if (!$course_info) {
             return $this->response()->error('需求不存在');
         }
-        $course_info->is_on = 1;
+        $course_info->is_on = 0;
         $course_info->update();
 
         return $this->response()
