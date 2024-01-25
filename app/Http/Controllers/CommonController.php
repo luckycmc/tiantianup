@@ -66,6 +66,9 @@ class CommonController extends Controller
                     'created_at' => Carbon::now()
                 ];
                 DB::table('bills')->insert($log_data);
+                $days = CourseSetting::where('role',$course->adder_role)->orderByDesc('created_at')->first();
+                // 加入延时队列
+                InvalidCourse::dispatch($order)->delay(now()->addDays($days->looked_course_valid_time))->onQueue('invalid_course');
             }
         } catch (Exception $e) {
             Log::info($data);
@@ -136,7 +139,7 @@ class CommonController extends Controller
                 DB::table('bills')->insert($log_data);
                 $days = CourseSetting::where('role',$course->adder_role)->orderByDesc('created_at')->first();
                 // 加入延时队列
-                InvalidCourse::dispatch($order)->delay(now()->addDays($days))->onQueue('invalid_course');
+                InvalidCourse::dispatch($order)->delay(now()->addDays($days->looked_course_valid_time))->onQueue('invalid_course');
                 // 当前时间
                 /*$current = Carbon::now()->format('Y-m-d');
                 // 查看是否有成交活动
