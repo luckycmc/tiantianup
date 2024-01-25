@@ -114,7 +114,7 @@ class CommonController extends Controller
                 $description = '查看需求';
                 if ($course->adder_role == 0) {
                     $type = 11;
-                    $description = '查看中介单';
+                    $description = '查看代发单';
                 }
                 // 保存日志
                 $log_data = [

@@ -51,7 +51,7 @@ class PaymentController extends Controller
             $course_info = Course::find($order->course_id);
             if ($course_info->adder_role == 0) {
                 $type = 11;
-                $description = '查看中介单';
+                $description = '查看代发单';
             }
             if (in_array($course_info->course_status,[4,5])) {
                 return $this->error('该订单已关闭');
