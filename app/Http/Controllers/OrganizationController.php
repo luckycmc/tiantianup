@@ -329,7 +329,7 @@ class OrganizationController extends Controller
                 }
             })->first();
             $course_info->teacher_name = $delivers ? $delivers->user->name : '';
-            $course_info->teacher_mobile = $delivers? $delivers->user->mobile ? '';
+            $course_info->teacher_mobile = $delivers ? $delivers->user->mobile : '';
         } else {
             $course_info->teacher_name = null;
             $course_info->teacher_mobile = null;
