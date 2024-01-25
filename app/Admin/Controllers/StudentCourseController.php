@@ -33,7 +33,7 @@ class StudentCourseController extends AdminController
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
             $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
-            $grid->column('is_up','是否上架')->select([0 => '否', 1 => '是']);
+            $grid->column('is_on','是否上架')->select([0 => '否', 1 => '是']);
             $grid->column('visit_count','浏览人数');
             $grid->column('buyer_count','咨询人数');
 
