@@ -69,7 +69,7 @@ class CourseController extends Controller
         } else if (isset($data['sort_visit_count'])) {
             $sort_field = 'courses.visit_count';
         } else if (isset($data['sort_buyer_count'])) {
-            $sort_field = 'courses.buyer_count';
+            $sort_field = 'courses.entry_number';
         }
         $order = $data['order'] ?? 'desc';
         // 筛选
