@@ -213,6 +213,11 @@ class CourseController extends Controller
         foreach ($result as $v) {
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+            if ($v->adder_role == 4) {
+                $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            } else {
+                $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
+            }
             // 是否已投递
             if ($v->adder_role == 0) {
                 $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
