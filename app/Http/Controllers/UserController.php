@@ -528,9 +528,9 @@ class UserController extends Controller
                 $where[] = ['created_at','>=',$data['created_at'].' 00:00:00'];
                 $where[] = ['created_at','<=',$data['created_at'].' 23:59:59'];
             }
-            $result = Bill::with('user')->where('user_id',$user->id)->where($where)->paginate($page_size);
+            $result = Bill::with('user')->where('user_id',$user->id)->where($where)->orderByDesc('created_at')->paginate($page_size);
         } else {
-            $result = Bill::with('user')->where('user_id',$user->id)->limit(10)->get();
+            $result = Bill::with('user')->where('user_id',$user->id)->orderByDesc('created_at')->limit(10)->get();
         }
         // 我的收益
         $total_income = $user->total_income;
