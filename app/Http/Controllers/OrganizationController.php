@@ -200,7 +200,7 @@ class OrganizationController extends Controller
         $data['adder_id'] = $user->id;
         $data['adder_name'] = $user->organization->name;
         $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
-        $data['is_on'] = 1;
+        $data['is_on'] = 0;
         $data['introduction'] = nl2br($data['introduction']);
         if ($data['method'] !== '线上') {
             $location = get_location($data['longitude'],$data['latitude']);
