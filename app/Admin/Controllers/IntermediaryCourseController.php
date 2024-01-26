@@ -37,7 +37,7 @@ class IntermediaryCourseController extends AdminController
                 $city = Region::where('id',$this->city)->value('region_name');
                 return $province.$city;
             });
-            $grid->column('status')->using([0 => '待审核', 1 => '已通过']);
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过', 3 => '已拒绝']);
             $grid->column('is_on','是否上架')->using([0 => '否', 1 => '是']);
             $grid->column('reason','拒绝原因');
             $grid->column('adder_name','发布人');
@@ -48,7 +48,7 @@ class IntermediaryCourseController extends AdminController
                 $filter->equal('number','需求编号');
                 $filter->like('name','标题');
                 $filter->like('adder_name','发布人 ');
-                $filter->equal('status')->select([0 => '待审核', 1 => '已通过']);
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 3 => '已拒绝']);
                 $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
                 $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
                 $filter->equal('method','授课方式')->radio(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
@@ -156,7 +156,11 @@ class IntermediaryCourseController extends AdminController
             ]);
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
-            $form->hidden('is_on')->default(1);
+            $form->hidden('is_on')->default(0);
+            $form->hidden('status');
+            $form->saving(function (Form $form) {
+                $form->status = 0;
+            });
             $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
             $form->display('created_at');

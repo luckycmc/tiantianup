@@ -42,6 +42,7 @@ class VerifyCourse extends RowAction
         $course_info->status = 1;
         $course_info->is_on = 1;
         $course_info->is_recommend = 1;
+        $course_info->reason = null;
         $course_info->reviewer = Admin::user()->name;
         $course_info->end_time = Carbon::now()->setTime(23,59,59)->addDays($course_info->valid_time);
         if ($course_info->adder_role == 0) {
