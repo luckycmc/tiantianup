@@ -2,7 +2,9 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Jobs\UpdateCourse;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\Message;
 use App\Models\Region;
 use App\Models\SystemMessage;
@@ -84,6 +86,19 @@ class VerifyCourse extends RowAction
                 $course_info->update();
             }
         }
+        // 放入延时队列
+        if ($course_info->adder_role == 0) {
+            $role = 0;
+        } else {
+            if ($course_info->role == 1) {
+                $role = 1;
+            } else {
+                $role = 3;
+            }
+        }
+        $days = CourseSetting::where('role',$role)->orderByDesc('created_at')->first();
+        // $days->latest_end_time)
+        UpdateCourse::dispatch($course_info)->delay(now()->addMinute())->onQueue('update_course');
 
         return $this->response()
             ->success('操作成功')
