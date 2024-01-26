@@ -98,7 +98,7 @@ class VerifyCourse extends RowAction
         }
         $days = CourseSetting::where('role',$role)->orderByDesc('created_at')->first();
         // $days->latest_end_time)
-        UpdateCourse::dispatch($course_info)->delay(now()->addMinute())->onQueue('update_course');
+        UpdateCourse::dispatch($course_info)->delay(now()->addDays($days->latest_end_time))->onQueue('update_course');
 
         return $this->response()
             ->success('操作成功')
