@@ -41,7 +41,7 @@ class IntermediaryCourseController extends AdminController
             $grid->column('is_on','是否上架')->using([0 => '否', 1 => '是']);
             $grid->column('reason','拒绝原因');
             $grid->column('adder_name','发布人');
-            $grid->column('buyer_count','付费人数');
+            $grid->column('entry_number','付费人数');
             $grid->column('visit_count','浏览人数');
         
             $grid->filter(function (Grid\Filter $filter) {
