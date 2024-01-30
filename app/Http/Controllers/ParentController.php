@@ -79,7 +79,7 @@ class ParentController extends Controller
         $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $data['status'] = 0;
         $data['is_on'] = 1;
-        $data['introduction'] = nl2br($data['introduction']);
+        // $data['introduction'] = nl2br($data['introduction']);
         $data['adder_role'] = 2;
         $data['adder_id'] = $user->id;
         $data['adder_name'] = $user->name;
