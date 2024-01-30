@@ -309,7 +309,7 @@ class TeacherController extends Controller
         })->values();
         // 分页
         $result = new LengthAwarePaginator(
-            $course,
+            $course->forPage($page, $page_size),
             $course->count(),
             $page_size,
             $page,
