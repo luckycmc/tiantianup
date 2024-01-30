@@ -213,8 +213,8 @@ class IndexController extends Controller
         } else {
             $role = 3;
         }
-        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->orWhere(function ($query) use ($or_where,$role) {
-            $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上'])->where('status','!=',0)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->where($or_where);
+        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1,'course_status' => 1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->orWhere(function ($query) use ($or_where,$role) {
+            $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上','course_status' => 1])->where('status','!=',0)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->where($or_where);
         })->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
