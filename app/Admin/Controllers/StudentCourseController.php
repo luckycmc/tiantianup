@@ -35,7 +35,7 @@ class StudentCourseController extends AdminController
             $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             $grid->column('is_on','是否上架')->select([0 => '否', 1 => '是']);
             $grid->column('visit_count','浏览人数');
-            $grid->column('buyer_count','咨询人数');
+            $grid->column('entry_number','咨询人数');
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('number','编号');
@@ -105,7 +105,7 @@ class StudentCourseController extends AdminController
             $show->field('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
             $show->field('is_on','是否上架')->select([0 => '否', 1 => '是']);
             $show->field('visit_count','浏览人数');
-            $show->field('buyer_count','联系人数');
+            $show->field('entry_number','咨询人数');
             $show->field('reviewer','审核人');
             $show->field('updated_at','审核时间');
             $show->field('reason','拒绝原因');
