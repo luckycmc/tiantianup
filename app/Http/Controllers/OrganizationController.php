@@ -381,6 +381,7 @@ class OrganizationController extends Controller
         // 更新数据
         $data['status'] = 0;
         $data['updated_at'] = Carbon::now();
+        $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $result = DB::table('courses')->where('id',$id)->update($data);
         if (!$result) {
             return $this->error('编辑失败');
