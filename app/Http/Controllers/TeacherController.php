@@ -93,15 +93,17 @@ class TeacherController extends Controller
         if (isset($data['filter_is_auth'])) {
             $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
         }
-        $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+        $result = User::with(['teacher_education','teacher_info','teacher_career'])->where($where)->where(['role' => 3])->orderBy($sort_field,$order)->paginate($page_size);
+        // dd($result);
+        /*$result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
             ->where(['users.role' => 3])
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->orderBy($sort_field,$order)
-            ->distinct('users.id')
-            ->paginate($page_size);
+            ->distinct()
+            ->paginate($page_size);*/
         // dd($result->toArray());
         /*// 去重
         $info = $result->unique('id')->values();
@@ -114,8 +116,11 @@ class TeacherController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );*/
         foreach ($result as $v) {
+            $subject = $v->teacher_career->pluck('subject')->toArray();
+            // var_dump($subject);
+            // exit;
             // 科目
-            $v->subject = explode(',',$v->subject);
+            $v->subject = count($subject) > 0 ? handel_subject(implode(',',$subject)) : [];
             $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
         }
         return $this->success('教师列表',$result);
