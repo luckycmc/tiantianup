@@ -808,7 +808,8 @@ class OrganizationController extends Controller
         if (isset($data['keyword'])) {
             $where[] = ['users.name','like','%'.$data['keyword'].'%'];
         }
-        $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+        $result = User::with(['teacher_education','teacher_info','teacher_career'])->where($where)->whereIn('users.id',$teacher_ids)->orderBy($sort_field,$order)->paginate($page_size);
+        /*$result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
@@ -816,10 +817,11 @@ class OrganizationController extends Controller
             ->whereIn('users.id',$teacher_ids)
             ->orderBy($sort_field,$order)
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
-            ->paginate($page_size);
+            ->paginate($page_size);*/
         foreach ($result as $v) {
             // 科目
-            $v->subject = explode(',',$v->subject);
+            $subject = $v->teacher_career->pluck('subject')->toArray();
+            $v->subject = count($subject) > 0 ? handel_subject(implode(',',$subject)) : [];
         }
         return $this->success('教师列表',$result);
     }

@@ -1072,7 +1072,7 @@ class UserController extends Controller
         if ($user->role == 2) {
             $deliver_teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['parent_id' => $user->id,'pay_status' => 1])->get();
             $buy_teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['user_id' => $user->id,'status' => 1])->get();
-            $merge_teachers = $deliver_teachers->merge($buy_teachers);
+            $merge_teachers = $deliver_teachers->merge($buy_teachers)->unique();
             $teachers = new LengthAwarePaginator(
                 $merge_teachers->forPage($page, $page_size),
                 $merge_teachers->count(),
