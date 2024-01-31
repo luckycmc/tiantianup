@@ -495,6 +495,5 @@ function handel_subject($subject)
     // 将字符串转换为数组，并去除重复的字段
     $array = explode(",", $subject);
     $uniqueArray = array_unique($array);
-    $uniqueStr = implode(",", $uniqueArray);
-    return $uniqueStr;
+    return $uniqueArray;
 }
