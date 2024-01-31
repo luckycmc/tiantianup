@@ -180,7 +180,7 @@ class IndexController extends Controller
         $where[] = ['city','=',$city_id];
 
         if (isset($data['name'])) {
-            $where[] = $or_where = ['name','like','%'.$data['name'].'%'];
+            $where[] = $or_where[] = ['name','like','%'.$data['name'].'%'];
         }
         if (isset($data['subject'])) {
             $where[] = ['subject','=',$data['subject']];
@@ -189,7 +189,7 @@ class IndexController extends Controller
             $where[] = ['type','=',$data['type']];
         }
         if (isset($data['method'])) {
-            $where[] = $or_where = ['method','=',$data['method']];
+            $where[] = $or_where[] = ['method','=',$data['method']];
         }
         if (isset($data['district'])) {
             $id = Region::where('region_name',$data['district']);
