@@ -95,7 +95,7 @@ class TeacherController extends Controller
         }
         $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
-            ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
+            // ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
             ->where(['users.role' => 3])
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
