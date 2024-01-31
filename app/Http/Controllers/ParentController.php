@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\Message;
 use App\Models\ParentCourse;
@@ -70,6 +71,11 @@ class ParentController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors();
             return $this->error(implode(',',$errors->all()));
+        }
+        // 查询招教师需求最大的有效期
+        $system_valid_time = CourseSetting::where(['role' => 3])->orderByDesc('created_at')->value('end_time');
+        if ($data['valid_time'] > $system_valid_time) {
+            return $this->error('有效期不能大于系统设置时间');
         }
         // 当前用户
         $user = Auth::user();

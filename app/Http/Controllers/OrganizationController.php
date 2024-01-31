@@ -192,6 +192,11 @@ class OrganizationController extends Controller
             $errors = $validator->errors();
             return $this->error(implode(',',$errors->all()));
         }
+        // 查询招教师需求最大的有效期
+        $system_valid_time = CourseSetting::where(['role' => $data['role']])->orderByDesc('created_at')->value('end_time');
+        if ($data['valid_time'] > $system_valid_time) {
+            return $this->error('有效期不能大于系统设置时间');
+        }
         // 当前用户
         $user = Auth::user();
         $data['organ_id'] = $user->organization->id;
@@ -367,6 +372,11 @@ class OrganizationController extends Controller
         if ($validator->fails()) {
             $errors = $validator->errors();
             return $this->error(implode(',',$errors->all()));
+        }
+        // 查询招教师需求最大的有效期
+        $system_valid_time = CourseSetting::where(['role' => $data['role']])->orderByDesc('created_at')->value('end_time');
+        if ($data['valid_time'] > $system_valid_time) {
+            return $this->error('有效期不能大于系统设置时间');
         }
         // 更新数据
         $data['status'] = 0;
