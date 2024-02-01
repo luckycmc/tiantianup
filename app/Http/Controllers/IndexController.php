@@ -245,9 +245,14 @@ class IndexController extends Controller
         $result = Course::with(['organization','adder'])->find($course_id);
         // 当前用户
         $user = Auth::user();
-        if ($result->adder_role !== 0 && $user->id !== $result->adder_id) {
+        if ($result->add_role == 0) {
             $result->visit_count++;
             $result->update();
+        } else {
+            if ($user->id !== $result->adder_id) {
+                $result->visit_count++;
+                $result->update();
+            }
         }
         // 距离
         /*if ($result->adder_role == 4) {
