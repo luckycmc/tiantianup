@@ -136,6 +136,7 @@ class PaymentController extends Controller
                 'user_id' => $user->id,
                 'amount' => '-'.$order->amount,
                 'type' => $type,
+                'discount' => 0,
                 'description' => $description,
                 'created_at' => Carbon::now()
             ];
