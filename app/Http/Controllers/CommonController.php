@@ -115,7 +115,7 @@ class CommonController extends Controller
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
                     'type' => $type,
-                    'discount' => is_null($order->discount) ?? 0,
+                    'discount' => $order->discount ?? 0,
                     'description' => $description,
                     'created_at' => Carbon::now()
                 ];
@@ -182,7 +182,7 @@ class CommonController extends Controller
                         'user_id' => $user->id,
                         'amount' => '-'.$order->amount,
                         'type' => 10,
-                        'discount' => is_null($order->discount) ?? 0,
+                        'discount' => $order->discount ?? 0,
                         'description' => '查看报名',
                         'created_at' => Carbon::now()
                     ];
