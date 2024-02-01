@@ -122,7 +122,7 @@ class TeacherController extends Controller
             // 科目
             $v->subject = count($subject) > 0 ? handel_subject(implode(',',$subject)) : [];
             $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
-            $v->picture = $v->teacher_info ? $v->teacher_info->picture ? null;
+            $v->picture = $v->teacher_info ? $v->teacher_info->picture : null;
         }
         return $this->success('教师列表',$result);
     }
