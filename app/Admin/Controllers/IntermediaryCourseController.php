@@ -160,6 +160,10 @@ class IntermediaryCourseController extends AdminController
             $form->hidden('status');
             $form->saving(function (Form $form) {
                 $form->status = 0;
+                if ($form->method == '线上') {
+                    $form->province = null;
+                    $form->city = null;
+                }
             });
             $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
