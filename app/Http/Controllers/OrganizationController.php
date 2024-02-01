@@ -317,8 +317,12 @@ class OrganizationController extends Controller
         if (!$course_info) {
             return $this->error('课程不存在');
         }
-        $course_info->visit_count++;
-        $course_info->update();
+        // 当前用户
+        $user = Auth::user();
+        if ($course_info->adder_role !== 0 && $course_info->adder_id !== $user->id) {
+            $course_info->visit_count++;
+            $course_info->update();
+        }
         if ($course_info->end_time < date('Y-m-d H:i:s')) {
             $course_info->status = 2;
             $course_info->save();

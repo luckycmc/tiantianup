@@ -243,8 +243,12 @@ class IndexController extends Controller
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         $result = Course::with(['organization','adder'])->find($course_id);
-        $result->visit_count++;
-        $result->update();
+        // 当前用户
+        $user = Auth::user();
+        if ($result->adder_role !== 0 && $user->id !== $result->adder_id) {
+            $result->visit_count++;
+            $result->update();
+        }
         // 距离
         /*if ($result->adder_role == 4) {
             $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
@@ -258,8 +262,7 @@ class IndexController extends Controller
             // $result->address = $result->adder->address;
             $result->nickname = $result->adder->nickname;
         }*/
-        // 当前用户
-        $user = Auth::user();
+
         // 是否收藏
         $result->has_collect = $user->has_collect_course($course_id);
         // 总费用
