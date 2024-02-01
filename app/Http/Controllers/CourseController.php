@@ -271,7 +271,7 @@ class CourseController extends Controller
         ];
         // 保存数据
         $result = DB::table('user_courses')->insert($insert_data);
-        // $course_info->entry_number += 1;
+        $course_info->entry_number += 1;
         $course_info->save();
         if (!$result) {
             return $this->error('联系机构失败');
