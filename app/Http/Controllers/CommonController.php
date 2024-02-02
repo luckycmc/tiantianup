@@ -148,7 +148,7 @@ class CommonController extends Controller
                     }
                 }
                 $days = CourseSetting::where('role',$role)->orderByDesc('created_at')->first();
-                Log::info('days: ',$days->looked_course_valid_time);
+                Log::info('days: '.$days->looked_course_valid_time);
                 // 加入延时队列
                 InvalidCourse::dispatch($order)->delay(now()->addDays($days->looked_course_valid_time))->onQueue('invalid_course');
                 // 当前时间
