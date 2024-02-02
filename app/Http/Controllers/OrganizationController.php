@@ -293,9 +293,9 @@ class OrganizationController extends Controller
         }
         if (isset($data['course_status'])) {
             if ($data['course_status'] == 1) {
-                $where[] = ['course_status','=',2];
+                $where[] = ['is_invalid','=',1];
             } else {
-                $where[] = ['course_status','!=',2];
+                $where[] = ['is_invalid','!=',1];
             }
 
         }

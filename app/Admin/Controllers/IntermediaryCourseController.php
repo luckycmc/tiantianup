@@ -50,7 +50,7 @@ class IntermediaryCourseController extends AdminController
                 $filter->like('adder_name','发布人 ');
                 $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 3 => '已拒绝']);
                 $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
-                $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
+                $filter->equal('is_invalid','是否失效')->radio([1 => '是',0 => '否']);
                 $filter->equal('method','授课方式')->radio(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
