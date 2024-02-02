@@ -92,6 +92,7 @@ class CommonController extends Controller
                     // 微信支付
                     // 修改支付状态
                     $order->pay_status = 1;
+                    Log::info('aaaa');
                     $order->update();
                 } else if ($order->pay_type == 2) {
                     // 组合支付
