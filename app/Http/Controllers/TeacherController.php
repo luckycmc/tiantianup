@@ -486,8 +486,10 @@ class TeacherController extends Controller
         $out_trade_no = app('snowflake')->id();
         if ($course_info->adder_role == 0) {
             $type = 4;
+        } else if ($course_info->adder_role == 4) {
+            $type = 5;
         } else {
-            $type = 3;
+            $type = 1;
         }
         $amount = get_service_price($type,$user->province_id,$user->city_id,$user->district_id);
         $insert_data = [
