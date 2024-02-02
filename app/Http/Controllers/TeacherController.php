@@ -491,6 +491,7 @@ class TeacherController extends Controller
         } else {
             $type = 1;
         }
+        Log::info('type: '.$type);
         $amount = get_service_price($type,$user->province_id,$user->city_id,$user->district_id);
         $insert_data = [
             'user_id' => $user->id,
