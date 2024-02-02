@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class InvalidCourse implements ShouldQueue
 {
@@ -33,6 +34,7 @@ class InvalidCourse implements ShouldQueue
      */
     public function handle()
     {
+        Log::info('bnbnb');
         $order = $this->order;
         // 更新支付状态
         $order->pay_status = 0;
