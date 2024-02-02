@@ -42,7 +42,7 @@ class UpdateCourseStatus extends Command
         // 获取当天日期
         $current_date = Carbon::now();
         // 更新所有过期订单
-        $result = Course::where('end_time','<',$current_date)->update(['course_status' => 2]);
+        $result = Course::where('end_time','<',$current_date)->update(['is_invalid' => 1]);
         if (!$result) {
             return false;
         }
