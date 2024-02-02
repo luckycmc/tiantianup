@@ -20,11 +20,8 @@ class TeacherCourseSettingController extends AdminController
         return Grid::make(new CourseSetting(), function (Grid $grid) {
             $grid->model()->where('role',3);
             $grid->column('id')->sortable();
-            $grid->column('end_time');
             $grid->column('latest_end_time');
-            $grid->column('course_end');
-            $grid->column('deal_pay');
-            $grid->column('confirm_course');
+            $grid->column('looked_course_valid_time');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -46,11 +43,8 @@ class TeacherCourseSettingController extends AdminController
     {
         return Show::make($id, new CourseSetting(), function (Show $show) {
             $show->field('id');
-            $show->field('end_time');
             $show->field('latest_end_time');
-            $show->field('course_end');
-            $show->field('deal_pay');
-            $show->field('confirm_course');
+            $show->field('looked_course_valid_time');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -66,12 +60,9 @@ class TeacherCourseSettingController extends AdminController
         return Form::make(new CourseSetting(), function (Form $form) {
             $form->display('id');
             $form->hidden('role')->default(3);
-            $form->number('end_time');
             $form->number('latest_end_time');
-            $form->number('course_end');
-            $form->number('deal_pay');
-            $form->number('confirm_course');
-        
+            $form->number('looked_course_valid_time');
+
             $form->display('created_at');
             $form->display('updated_at');
         });

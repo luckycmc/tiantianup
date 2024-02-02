@@ -51,7 +51,7 @@ class PaymentController extends Controller
             $course_info = Course::find($order->course_id);
             if ($course_info->adder_role == 0) {
                 $type = 11;
-                $description = '查看中介单';
+                $description = '查看代发单';
             }
             if (in_array($course_info->course_status,[4,5])) {
                 return $this->error('该订单已关闭');
@@ -136,6 +136,7 @@ class PaymentController extends Controller
                 'user_id' => $user->id,
                 'amount' => '-'.$order->amount,
                 'type' => $type,
+                'discount' => $order->amount,
                 'description' => $description,
                 'created_at' => Carbon::now()
             ];
@@ -143,6 +144,10 @@ class PaymentController extends Controller
             // 当前时间
             $current = Carbon::now()->format('Y-m-d');
             $course_info = Course::find($order->course_id);
+            if ($course_info) {
+                $course_info->entry_number++;
+                $course_info->update();
+            }
             if ($user->role == 3 && $course_info->adder_role !== 0) {
                 // 查看是否有成交活动
                 $deal_activity = Activity::where(['status' => 1,'type' => 3])->where('start_time', '<=', $current)

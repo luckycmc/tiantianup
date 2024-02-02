@@ -44,6 +44,7 @@ Route::group([
     $router->resource('/bill','BillController');
     $router->resource('/user_course','UserCourseController');
     $router->resource('/teacher_deal','TeacherDealServicePriceController');
+    $router->resource('/teacher_organ_deal','TeacherOrganDealServicePriceController');
     $router->resource('/look_teacher','LookTeacherServicePriceController');
     $router->resource('/entry','EntryServicePriceController');
     $router->resource('/course_contact','CourseContactServicePriceController');
@@ -57,6 +58,7 @@ Route::group([
     $router->resource('/region','RegionController');
     $router->resource('/student_course_setting','StudentCourseSettingController');
     $router->resource('/teacher_course_setting','TeacherCourseSettingController');
+    $router->resource('/intermediary_course_setting','IntermediaryCourseSettingController');
     $router->resource('/platform_message','PlatformMessageController');
     $router->resource('/area','AreaController');
     $router->resource('/tag','TagController');

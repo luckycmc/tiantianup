@@ -12,5 +12,12 @@ class ServicePrice extends EloquentRepository
      *
      * @var string
      */
-    protected $eloquentClass = Model::class;
+    // protected $eloquentClass = Model::class;
+
+    public function __construct($relations = [])
+    {
+        $this->eloquentClass = Model::class;
+
+        parent::__construct($relations);
+    }
 }

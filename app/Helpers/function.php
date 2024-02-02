@@ -41,6 +41,35 @@ function create_course_number($course_id)
     return $number;
 }
 
+/**
+ * 增项-创建课程编号
+ * @param $course_id
+ * @param $method
+ * @param $adder_role
+ * @return string
+ */
+function new_create_course_number($course_id,$method,$adder_role,$role) {
+    $method_arr = [
+        '线下' => '01',
+        '线上' => '02',
+        '线下/线上' => '03'
+    ];
+    $method_id = $method_arr[$method];
+    $role_arr = [
+        '4' => '01',
+        '2' => '02',
+        '0' => '03'
+    ];
+    $role_id = $role_arr[$adder_role];
+    $time = get_time();
+    if ($role == 1) {
+        $number = $time.$method_id.pad($course_id,4);
+    } else {
+        $number = $time.$role_id.$method_id.pad($course_id,4);
+    }
+    return $number;
+}
+
 function create_df_number($course_id)
 {
     $city_id = Course::where('id',$course_id)->value('city');
@@ -67,6 +96,7 @@ function get_time()
     $date = Carbon::now();
     $year = $date->format('Y');
     $month = $date->format('m');
+    $day = $date->format('d');
 
     $pattern = '/(\d{2}$)/'; // 匹配后两位数字的正则表达式
 
@@ -76,7 +106,10 @@ function get_time()
     preg_match($pattern, $month, $matches);
     $last_two_month_digits = $matches[0];
 
-    $result = $last_two_year_digits . $last_two_month_digits;
+    preg_match($pattern, $day, $matches);
+    $last_two_day_digits = $matches[0];
+
+    $result = $last_two_year_digits . $last_two_month_digits . $last_two_day_digits;
     return $result;
 }
 
@@ -194,14 +227,12 @@ function get_reward($type,$role) {
 }
 
 // 获取服务费
-function get_service_price($type,$province,$city,$district) {
+function get_service_price($type,$province_id,$city_id,$district_id) {
     $today = Carbon::now()->toDateString();
-    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->where(function ($query) use ($province,$city,$district) {
-        $query->whereRaw("FIND_IN_SET('$province',region)")
-            ->orWhereRaw("FIND_IN_SET('$city',region)")
-            ->orWhereRaw("FIND_IN_SET('$district',region)");
-    })->orderByDesc('created_at')->first();
-    if (!$info) {
+    $info = ServicePrice::where(['type' => $type,['start_time','<=',$today],['end_time','>=',$today]])->orderByDesc('created_at')->first();
+    // 判断当前城市是否为执行地区
+    $address_ids = $info->areas()->pluck('area_id')->toArray();
+    if (!in_array($province_id,$address_ids) && !in_array($city_id,$address_ids) && !in_array($district_id,$address_ids)) {
         return 0;
     }
     return $info->price;
@@ -411,30 +442,32 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
     $user->update();
     // 教师
     $teacher_reward = get_reward(3,3);
-    $teacher_activity_log = [
-        'user_id' => $adder_id,
-        'username' => $teacher->name,
-        'number' => $teacher->number,
-        'role' => 3,
-        'amount' => $teacher_reward->teacher_deal_reward,
-        'type' => $deal_activity->type,
-        'created_at' => Carbon::now()
-    ];
-    $teacher_bill_log = [
-        'user_id' => $user_id,
-        'amount' => $teacher_reward->teacher_deal_reward,
-        'type' => 9,
-        'description' => '成交奖励',
-        'created_at' => Carbon::now()
-    ];
-    $teacher->withdraw_balance += $teacher_reward->teacher_deal_reward;
-    $teacher->total_income += $teacher_reward->teacher_deal_reward;
-    $teacher->update();
-
-    DB::table('activity_log')->insert($teacher_activity_log);
+    if ($teacher_reward) {
+        $teacher_activity_log = [
+            'user_id' => $adder_id,
+            'username' => $teacher->name,
+            'number' => $teacher->number,
+            'role' => 3,
+            'amount' => $teacher_reward->teacher_deal_reward,
+            'type' => $deal_activity->type,
+            'created_at' => Carbon::now()
+        ];
+        $teacher_bill_log = [
+            'user_id' => $user_id,
+            'amount' => $teacher_reward->teacher_deal_reward,
+            'type' => 9,
+            'description' => '成交奖励',
+            'created_at' => Carbon::now()
+        ];
+        $teacher->withdraw_balance += $teacher_reward->teacher_deal_reward;
+        $teacher->total_income += $teacher_reward->teacher_deal_reward;
+        $teacher->update();
+        DB::table('activity_log')->insert($teacher_activity_log);
+        DB::table('bills')->insert($teacher_bill_log);
+    }
     DB::table('activity_log')->insert($activity_log);
     DB::table('bills')->insert($bill_log);
-    DB::table('bills')->insert($teacher_bill_log);
+
 }
 
 /**
@@ -456,4 +489,13 @@ function https_request($url, $data = null)
     $output = curl_exec($curl);
     curl_close($curl);
     return $output;
+}
+
+function handel_subject($subject)
+{
+
+    // 将字符串转换为数组，并去除重复的字段
+    $array = explode(",", $subject);
+    $uniqueArray = array_unique($array);
+    return $uniqueArray;
 }

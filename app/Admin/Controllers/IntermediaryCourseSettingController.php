@@ -8,7 +8,7 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 
-class StudentCourseSettingController extends AdminController
+class IntermediaryCourseSettingController extends AdminController
 {
     /**
      * Make a grid builder.
@@ -18,10 +18,10 @@ class StudentCourseSettingController extends AdminController
     protected function grid()
     {
         return Grid::make(new CourseSetting(), function (Grid $grid) {
-            $grid->model()->where('role',1);
+            $grid->model()->where('role',0);
             $grid->column('id')->sortable();
             $grid->column('latest_end_time');
-            $grid->column('looked_course_valid_time','用户已咨询需求默认展示天数');
+            $grid->column('looked_course_valid_time');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
@@ -44,7 +44,7 @@ class StudentCourseSettingController extends AdminController
         return Show::make($id, new CourseSetting(), function (Show $show) {
             $show->field('id');
             $show->field('latest_end_time');
-            $show->field('looked_course_valid_time','用户已咨询需求默认展示天数');
+            $show->field('looked_course_valid_time');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -59,10 +59,10 @@ class StudentCourseSettingController extends AdminController
     {
         return Form::make(new CourseSetting(), function (Form $form) {
             $form->display('id');
-            $form->hidden('role')->default(1);
+            $form->hidden('role')->default(0);
             $form->number('latest_end_time');
-            $form->number('looked_course_valid_time','用户已咨询需求默认展示天数');
-        
+            $form->number('looked_course_valid_time');
+
             $form->display('created_at');
             $form->display('updated_at');
         });

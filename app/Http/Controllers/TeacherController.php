@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Models\UserTeacherOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -92,7 +93,9 @@ class TeacherController extends Controller
         if (isset($data['filter_is_auth'])) {
             $where[] = ['users.is_real_auth','=',$data['is_real_auth']];
         }
-        $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+        $result = User::with(['teacher_education','teacher_info','teacher_career'])->where($where)->where(['role' => 3])->orderBy($sort_field,$order)->paginate($page_size);
+        // dd($result);
+        /*$result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
@@ -100,7 +103,7 @@ class TeacherController extends Controller
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','users.teaching_year as teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
             ->orderBy($sort_field,$order)
             ->distinct()
-            ->paginate($page_size);
+            ->paginate($page_size);*/
         // dd($result->toArray());
         /*// 去重
         $info = $result->unique('id')->values();
@@ -113,9 +116,13 @@ class TeacherController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );*/
         foreach ($result as $v) {
+            $subject = $v->teacher_career->pluck('subject')->toArray();
+            // var_dump($subject);
+            // exit;
             // 科目
-            $v->subject = explode(',',$v->subject);
+            $v->subject = count($subject) > 0 ? handel_subject(implode(',',$subject)) : [];
             $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
+            $v->picture = $v->teacher_info ? $v->teacher_info->picture : null;
         }
         return $this->success('教师列表',$result);
     }
@@ -192,9 +199,11 @@ class TeacherController extends Controller
         // 查询实名认证
         $result = $arr[$type-1]::where('user_id',$user->id)->first();
         if ($type == 3) {
-            $result->teacher_cert = isset($result->teacher_cert) ? json_decode($result->teacher_cert,true) : null;
-            $result->other_cert = json_decode($result->other_cert,true);
-            $result->honor_cert = json_decode($result->honor_cert,true);
+            if ($result) {
+                $result->teacher_cert = isset($result->teacher_cert) ? json_decode($result->teacher_cert,true) : null;
+                $result->other_cert = json_decode($result->other_cert,true);
+                $result->honor_cert = json_decode($result->honor_cert,true);
+            }
         }
         if ($type == 4) {
             if ($result) {
@@ -265,6 +274,7 @@ class TeacherController extends Controller
     {
         $data = \request()->all();
         $page_size = $data['page_size'] ?? 10;
+        $page = $data['page'] ?? 1;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         // 当前用户
@@ -273,30 +283,46 @@ class TeacherController extends Controller
         if (isset($data['status'])) {
             $where[] = ['status','=',$data['status']];
         }
-        $result = DeliverLog::with('course')->where('user_id',$user->id)->where($where)->paginate($page_size);
-        foreach ($result as $v) {
-            $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
-            // 机构
-            if ($v->course->adder_role == 4) {
-                // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
-                $v->course->course_role = $v->course->adder_role;
-                $v->organization_name = $v->course->organization->name;
+
+        $info = DeliverLog::with(['course' => function ($query) use ($data) {
+            if (isset($data['search_keyword'])) {
+                $query->where('name','like','%'.$data['search_keyword'].'%');
             }
-            $v->course->pay_status = $v->pay_status;
-            $v->course->is_checked = $v->is_checked;
+        }])->where('user_id',$user->id)->where($where)->get();
+        $info = $info->filter(function ($item) {
+            return $item->course !== null;
+        })->values();
+        foreach ($info as $v) {
+            if ($v->course) {
+                if ($v->course->method !== '线上') {
+                    $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
+                }
+                // 机构
+                if ($v->course->adder_role == 4) {
+                    // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
+                    $v->course->course_role = $v->course->adder_role;
+                    $v->organization_name = $v->course->organization->name;
+                }
+                $v->course->pay_status = $v->pay_status;
+                $v->course->is_checked = $v->is_checked;
+            }
         }
-        $course = $result->map(function ($item) {
+        $course = $info->map(function ($item) {
             return $item->course;
         });
         $course = $course->filter(function ($item) {
             return $item->adder_role !== 0;
         })->values();
-        if (isset($data['name'])) {
-            $course = $course->filter(function ($user) use ($data) {
-                return str_contains(strtolower($user['name']), strtolower($data['name']));
-            });
-        }
-        return $this->success('我的接单',$course);
+        // 分页
+        $result = new LengthAwarePaginator(
+            $course->forPage($page, $page_size),
+            $course->count(),
+            $page_size,
+            $page,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+        // dd($result);
+        return $this->success('我的接单',$result);
     }
 
     /**
@@ -312,8 +338,6 @@ class TeacherController extends Controller
 
         // 当前用户
         $user = Auth::user();
-        // $user = User::find(10);
-        // $user = User::find(4);
         $sort_field = 'courses.created_at';
         $order = 'desc';
         if (isset($data['sort_created_at'])) {
@@ -328,7 +352,7 @@ class TeacherController extends Controller
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
         }
         $where = [];
-        // $city_id = 0;
+        $or_where = [];
         if (isset($data['city_id'])) {
             $city_id = $data['city_id'];
             $where[] = ['courses.city','=',$city_id];
@@ -347,7 +371,7 @@ class TeacherController extends Controller
             $where[] = ['courses.type','=',$data['filter_type']];
         }
         if (isset($data['filter_method'])) {
-            $where[] = ['courses.method','=',$data['filter_method']];
+            $where[] = $or_where[] = ['courses.method','=',$data['filter_method']];
         }
         if (isset($data['filter_subject'])) {
             $where[] = ['courses.subject','=',$data['filter_subject']];
@@ -358,6 +382,9 @@ class TeacherController extends Controller
         if (isset($data['filter_adder_role'])) {
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
+        if (isset($data['name'])) {
+            $where[] = $or_where[] = ['courses.name','like','%'.$data['name'].'%'];
+        }
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
             Log::info('city_id: '.$city_id);
@@ -367,8 +394,8 @@ class TeacherController extends Controller
             $latitude = $region_info[1];*/
         }
         if (isset($data['filter_class_price_min']) && isset($data['filter_class_price_max'])) {
-            $where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
-            $where[] = ['courses.class_price','<=',$data['filter_class_price_max']];
+            $where[] = $or_where[] = ['courses.class_price','>=',$data['filter_class_price_min']];
+            $where[] = $or_where[] = ['courses.class_price','<=',$data['filter_class_price_max']];
         }
         if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
@@ -384,17 +411,32 @@ class TeacherController extends Controller
             } else {
                 // 已投递
                 $condition = "whereIn";
-                $where[] = ['deliver_log.status','=',$data['filter_delivery_status']];
+                $where[] = $or_where[] = ['deliver_log.status','=',$data['filter_delivery_status']];
             }
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3,'courses.status' => 1])->where('courses.adder_role','!=',0)->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+                ->where($where)->where(['courses.role' => 3,'courses.status' => 1,'courses.course_status' => 1])->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($or_where) {
+                    $query->where('courses.is_on',1)
+                        ->where('courses.status','!=',0)
+                        ->where('courses.method','线上')
+                        ->where('courses.role',3)
+                        ->where('courses.course_status',1)
+                        ->where('courses.adder_role','!=',0)
+                        ->where($or_where);
+                })->$condition('courses.id',$delivery_arr)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         } else {
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3])->where('courses.adder_role','!=',0)->orderBy($sort_field,$order)->distinct()->paginate($page_size);
+                ->where($where)->where(['courses.role' => 3])->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($or_where) {
+                    $query->where('courses.is_on',1)
+                        ->where('courses.status','!=',0)
+                        ->where('courses.method','线上')
+                        ->where('courses.role',3)
+                        ->where('courses.adder_role','!=',0)
+                        ->where($or_where);
+                })->orderBy($sort_field,$order)->distinct()->paginate($page_size);
         }
 
         foreach ($result as $v) {
@@ -442,16 +484,12 @@ class TeacherController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
-        $user_city = Region::where('id',$user->city_id)->value('region_name');
-        $user_province = Region::where('id',$user->province_id)->value('region_name');
-        $user_district = Region::where('id',$user->district_id)->value('region_name');
         if ($course_info->adder_role == 0) {
             $type = 4;
         } else {
             $type = 3;
         }
-       $amount = get_service_price($type,$user_province,$user_city,$user_district);
-        // $amount = 0.01;
+        $amount = get_service_price($type,$user->province_id,$user->city_id,$user->district_id);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,
@@ -482,6 +520,22 @@ class TeacherController extends Controller
         }
         $tag_info->is_show = !$tag_info->is_show;
         $tag_info->update();
+        return $this->success('操作成功');
+    }
+
+    /**
+     * 删除标签
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete_tag()
+    {
+        $data = \request()->all();
+        $id = $data['id'] ?? 0;
+        $tag_info = TeacherTag::find($id);
+        if (!$tag_info) {
+            return $this->error('标签不存在');
+        }
+        $tag_info->delete();
         return $this->success('操作成功');
     }
 }

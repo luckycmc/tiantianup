@@ -35,6 +35,7 @@ class CourseController extends Controller
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         $where = [];
+        $or_where = [];
         // 排序
         $sort_field = 'courses.created_at';
         /*if (isset($data['district_id'])) {
@@ -60,11 +61,15 @@ class CourseController extends Controller
                     sin(radians(courses.latitude))
                 )
             ) AS distance";
-        $select_field = ['courses.*','organizations.name as organ_name',DB::raw($distance_expr)];
+        $select_field = ['courses.*','organizations.name as organ_name'];
         if (isset($data['sort_price'])) {
             $sort_field = 'courses.class_price';
         } else if (isset($data['sort_distance'])) {
             $sort_field = 'distance';
+        } else if (isset($data['sort_visit_count'])) {
+            $sort_field = 'courses.visit_count';
+        } else if (isset($data['sort_buyer_count'])) {
+            $sort_field = 'courses.entry_number';
         }
         $order = $data['order'] ?? 'desc';
         // 筛选
@@ -79,10 +84,10 @@ class CourseController extends Controller
 
 
         if (isset($data['fitler_type'])) {
-            $where[] = ['courses.type','=',$data['fitler_type']];
+            $where[] = $or_where[] = ['courses.type','=',$data['fitler_type']];
         }
         if (isset($data['filter_method'])) {
-            $where[] = ['courses.method','=',$data['filter_method']];
+            $where[] = $or_where[] = ['courses.method','=',$data['filter_method']];
         }
         if (isset($data['filter_subject'])) {
             if (isset($data['is_platform'])) {
@@ -91,13 +96,17 @@ class CourseController extends Controller
                 $where[] = ['courses.subject','=',$data['filter_subject']];
             }
         }
+        if (isset($data['filter_name'])) {
+            $where[] = $or_where[] = ['courses.name','like','%'.$data['filter_name'].'%'];
+        }
+
         if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city']) && !isset($data['city_name'])) {
             // 根据经纬度获取省市区
             $location = get_location($data['longitude'],$data['latitude']);
             if (!$location) {
                 return $this->error('定位出错');
             }
-            $city_id = Region::where('code',$location['city'])->value('id');
+            $city_id = Region::where('region_name',$location['city'])->value('id');
             $where[] = ['courses.city', '=', $city_id];
         }
 
@@ -115,8 +124,8 @@ class CourseController extends Controller
         }
         if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
-            $where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
-            $where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
+            $where[] = $or_where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
+            $where[] = $or_where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
         }
         // 当前用户
         $user = Auth::user();
@@ -136,26 +145,26 @@ class CourseController extends Controller
             $user_courses = DB::table('user_courses')->where('user_id',$user->id)->select('course_id')->get();
             $course_arr = $user_courses->pluck('course_id')->toArray();
             if ($data['is_entry'] == 1) {
-                $where[] = [function ($query) use ($course_arr) {
+                $where[] = $or_where[] = [function ($query) use ($course_arr) {
                     $query->whereIn('courses.id',$course_arr);
                 }];
             } else {
-                $where[] = [function ($query) use ($course_arr) {
+                $where[] = $or_where[] = [function ($query) use ($course_arr) {
                     $query->whereNotIn('courses.id',$course_arr);
                 }];
             }
         }
         if ($user->role == 3) {
-            $where[] = ['courses.role','=',3];
+            $where[] = $or_where[] = ['courses.role','=',3];
         }
         if ($user->role == 1  || $user->role == 2) {
-            $where[] = ['courses.role','=',1];
+            $where[] = $or_where[] = ['courses.role','=',1];
         }
         if ($user->role == 2 && !isset($data['is_platform'])) {
-            $where[] = ['courses.adder_role','=',4];
+            $where[] = $or_where[] = ['courses.adder_role','=',4];
         }
         if (isset($data['is_platform'])) {
-            $where[] = ['courses.adder_role','=',0];
+            $where[] = $or_where[] = ['courses.adder_role','=',0];
             if (isset($data['is_show'])) {
                 $order_arr = DeliverLog::where(['user_id' => $user->id,'pay_status' => 1])->distinct()->pluck('course_id');
                 if ($data['is_show'] == true) {
@@ -180,8 +189,8 @@ class CourseController extends Controller
                 $where[] = ['courses.gender','=',$data['gender']];
             }
             if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
-                $where[] = ['courses.created_at','>=',$data['created_at_start']];
-                $where[] = ['courses.created_at','<=',$data['created_at_end']];
+                $where[] = $or_where[] = ['courses.created_at','>=',$data['created_at_start']];
+                $where[] = $or_where[] = ['courses.created_at','<=',$data['created_at_end']];
             }
         } else {
             $where[] = ['courses.end_time','>=',Carbon::now()];
@@ -189,7 +198,16 @@ class CourseController extends Controller
         $result = Course::leftJoin('organizations','courses.organ_id','=','organizations.id')
             ->select($select_field)
             ->where($where)
+            ->where('courses.is_on',1)
             ->where('courses.status','!=',0)
+            ->whereNotIn('courses.course_status',[2,3])
+            ->orWhere(function ($query) use ($or_where,$user) {
+                $query->where('courses.is_on',1)
+                    ->where('courses.status','!=',0)
+                    ->where('courses.method','线上')
+                    ->whereNotIn('courses.course_status',[2,3])
+                    ->where($or_where);
+            })
             ->orderBy($sort_field,$order)
             ->logListenedSql()
             ->paginate($page_size);
@@ -197,6 +215,11 @@ class CourseController extends Controller
         foreach ($result as $v) {
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+            if ($v->adder_role == 4) {
+                $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            } else {
+                $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
+            }
             // 是否已投递
             if ($v->adder_role == 0) {
                 $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
@@ -208,9 +231,11 @@ class CourseController extends Controller
                 // 是否查看
                 $v->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
             }
-            $v->province = $v->province_info->region_name;
-            $v->city = $v->city_info->region_name;
-            $v->district = $v->district_info->region_name;
+            if ($v->method !== '线上') {
+                $v->province = $v->province_info->region_name;
+                $v->city = $v->city_info->region_name;
+                $v->district = $v->district_info ? $v->district_info->region_name : null;
+            }
             if ($v->adder_role == 0) {
                 $v->class_date = $v->platform_class_date;
             }
@@ -234,11 +259,7 @@ class CourseController extends Controller
         // 当前用户
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
-        $user_city = Region::where('id',$user->city_id)->value('region_name');
-        $user_province = Region::where('id',$user->province_id)->value('region_name');
-        $user_district = Region::where('id',$user->district_id)->value('region_name');
-        $amount = get_service_price(3, $user_province,$user_city,$user_district);
-        // $amount = 0.01;
+        $amount = get_service_price(3, $course_info->organization->province_id,$course_info->organization->city_id,$course_info->organization->district_id);
         $insert_data = [
             'user_id' => $user->id,
             'course_id' => $course_id,

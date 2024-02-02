@@ -369,6 +369,11 @@ class UserController extends Controller
         // 查询是否存在
         $data['created_at'] = Carbon::now();
         $data['status'] = 0;
+        Log::info('teaching_type: ',$data['teaching_type']);
+        $data['teaching_type'] = implode(',',$data['teaching_type']);
+        $data['subject'] = implode(',',$data['subject']);
+        $data['object'] = implode(',',$data['object']);
+        Log::info('data: ',$data);
         $result = TeacherCareer::updateOrCreate(['id' => $id],$data);
         if (!$result) {
             return $this->error('保存失败');
@@ -416,6 +421,11 @@ class UserController extends Controller
     {
         $user_id = Auth::id();
         $result = TeacherCareer::where('user_id',$user_id)->orderBy('updated_at','desc')->get();
+        foreach ($result as $v) {
+            $v->subject = explode(',',$v['subject']);
+            $v->object = explode(',',$v['object']);
+            $v->teaching_type = explode(',',$v['teaching_type']);
+        }
         return $this->success('经历列表',$result);
     }
 
@@ -518,9 +528,9 @@ class UserController extends Controller
                 $where[] = ['created_at','>=',$data['created_at'].' 00:00:00'];
                 $where[] = ['created_at','<=',$data['created_at'].' 23:59:59'];
             }
-            $result = Bill::with('user')->where('user_id',$user->id)->where($where)->paginate($page_size);
+            $result = Bill::with('user')->where('user_id',$user->id)->where($where)->orderByDesc('created_at')->paginate($page_size);
         } else {
-            $result = Bill::with('user')->where('user_id',$user->id)->limit(10)->get();
+            $result = Bill::with('user')->where('user_id',$user->id)->orderByDesc('created_at')->limit(10)->get();
         }
         // 我的收益
         $total_income = $user->total_income;
@@ -696,10 +706,7 @@ class UserController extends Controller
         $out_trade_no = app('snowflake')->id();
         $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
         // 金额
-        $user_city = Region::where('id',$user->city_id)->value('region_name');
-        $user_province = Region::where('id',$user->province_id)->value('region_name');
-        $user_district = Region::where('id',$user->district_id)->value('region_name');
-        $amount = get_service_price(1,$user_province,$user_city,$user_district);
+        $amount = get_service_price(1,$user->city_id,$user->province_id,$user->district_id);
         // $amount = 0.01;
         // 查看是否已投递
         $deliver_data = [
@@ -717,6 +724,7 @@ class UserController extends Controller
         // 保存数据
         $result = DeliverLog::updateOrCreate(['user_id' => $user->id,'course_id' => $data['course_id']],$deliver_data);
         $course_info->deliver_number += 1;
+        $course_info->entry_number += 1;
         $course_info->course_status = 1;
         $course_info->update();
         if (!$result) {
@@ -736,7 +744,7 @@ class UserController extends Controller
                 'content'  => "【添添学】有新的投递",
             ]);
         }
-        return $this->success('投递成功');
+        return $this->success('投递成功',compact('out_trade_no','amount'));
     }
 
     /**
@@ -929,9 +937,9 @@ class UserController extends Controller
         if ($user->id !== $career_info->user_id) {
             return $this->error('错误请求');
         }
-        $career_info->object = explode('、',$career_info->object);
-        $career_info->subject = explode('、',$career_info->subject);
-        $career_info->teaching_type = explode('、',$career_info->teaching_type);
+        $career_info->object = explode(',',$career_info->object);
+        $career_info->subject = explode(',',$career_info->subject);
+        $career_info->teaching_type = explode(',',$career_info->teaching_type);
         return $this->success('教学经历',$career_info);
     }
 
@@ -957,6 +965,9 @@ class UserController extends Controller
         $where = [];
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
+        }
+        if (isset($data['name'])) {
+            $where[] = ['name','like','%'.$data['name'].'%'];
         }
         if (isset($data['subject'])) {
             $where[] = ['subject','=',$data['subject']];
@@ -1061,7 +1072,7 @@ class UserController extends Controller
         if ($user->role == 2) {
             $deliver_teachers = DeliverLog::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['parent_id' => $user->id,'pay_status' => 1])->get();
             $buy_teachers = UserTeacherOrder::with(['teacher_info','teacher_experience','teacher_detail','teacher_education'])->where(['user_id' => $user->id,'status' => 1])->get();
-            $merge_teachers = $deliver_teachers->merge($buy_teachers);
+            $merge_teachers = $deliver_teachers->merge($buy_teachers)->unique();
             $teachers = new LengthAwarePaginator(
                 $merge_teachers->forPage($page, $page_size),
                 $merge_teachers->count(),
@@ -1112,5 +1123,31 @@ class UserController extends Controller
         $message->status = 1;
         $message->update();
         return $this->success('消息已读');
+    }
+
+    /**
+     * 更新免冠照片
+     * @return \Illuminate\Http\JsonResponse|void
+     */
+    public function update_picture()
+    {
+        $data = \request()->all();
+        $rules = [
+            'picture' => 'required',
+        ];
+        $messages = [
+            'picture.required' => '免冠照片不能为空',
+        ];
+        $validator = Validator::make($data,$rules,$messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return $this->error(implode(',',$errors->all()));
+        }
+        // 当前用户
+        $teacher_info = TeacherInfo::where('user_id',Auth::id())->first();
+        $teacher_info->picture = $data['picture'];
+        $teacher_info->status = 0;
+        $teacher_info->update();
+        return $this->success('更新成功');
     }
 }

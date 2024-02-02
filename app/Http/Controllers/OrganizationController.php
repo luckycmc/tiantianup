@@ -135,17 +135,19 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
         if ($user->role == 4) {
-            $user_city = Region::where('id',$user->organization->city_id)->value('region_name');
-            $user_province = Region::where('id',$user->organization->province_id)->value('region_name');
-            $user_district = Region::where('id',$user->organization->district_id)->value('region_name');
+            $type = 5;
+            $city_id = $user->organization->city_id;
+            $province_id = $user->organization->province_id;
+            $district_id = $user->organization->district_id;
         } else {
-            $user_city = Region::where('id',$user->city_id)->value('region_name');
-            $user_province = Region::where('id',$user->province_id)->value('region_name');
-            $user_district = Region::where('id',$user->district_id)->value('region_name');
+            $type = 1;
+            $city_id = $user->city_id;
+            $province_id = $user->province_id;
+            $district_id = $user->district_id;
         }
 
         // 查询服务费
-        $service_price = get_service_price(2,$user_province,$user_city,$user_district);
+        $service_price = get_service_price($type,$province_id,$city_id,$district_id);
         Log::info('service_price: '.$service_price);
         // $service_price = 0.01;
         $order_data = [
@@ -174,43 +176,49 @@ class OrganizationController extends Controller
     {
         $config = config('services.sms');
         $data = \request()->all();
+        Log::info('post_data: ',$data);
         $rules = [
             'name' => 'required',
-            'type' => 'required',
             'method' => 'required',
-            'subject' => 'required',
+            'introduction' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
-            'type.required' => '辅导类型不能为空',
-            'method.required' => '上课形式不能为空',
-            'subject.required' => '科目不能为空',
+            'method.required' => '授课方式不能为空',
+            'introduction.required' => '课程详情不能为空',
         ];
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $errors = $validator->errors();
             return $this->error(implode(',',$errors->all()));
         }
+        // 查询招教师需求最大的有效期
+        $system_valid_time = CourseSetting::where(['role' => $data['role']])->orderByDesc('created_at')->value('end_time');
+        if ($data['valid_time'] > $system_valid_time) {
+            return $this->error('有效期不能大于系统设置时间');
+        }
         // 当前用户
         $user = Auth::user();
         $data['organ_id'] = $user->organization->id;
         $data['created_at'] = Carbon::now();
-        $data['class_date'] = json_encode($data['class_date']);
         $data['adder_role'] = 4;
         $data['adder_id'] = $user->id;
-        $data['end_time'] = $data['end_time'].' 23:59:59' ?? Carbon::now()->setTime(23,59,59)->addDays(7);
-        $data['class_duration']  = $data['duration'] * $data['class_number'];
-        $data['longitude'] = $user->organization->longitude ?? '';
-        $data['latitude'] = $user->organization->latitude ?? '';
-        if ($data['role'] == 3) {
-            $data['class_price'] = $data['base_price'];
+        $data['adder_name'] = $user->organization->name;
+        $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
+        $data['is_on'] = 0;
+        // $data['introduction'] = nl2br($data['introduction']);
+        if ($data['method'] !== '线上') {
+            $location = get_location($data['longitude'],$data['latitude']);
+            $data['province'] = Region::where(['region_name' => $location['province']])->value('id');
+            $data['city'] = Region::where(['region_name' => $location['city'],'parent_id' => $data['province']])->value('id');
+            $data['district'] = Region::where(['region_name' => $location['district'],'parent_id' => $data['city']])->value('id');
         }
         $id = DB::table('courses')->insertGetId($data);
         if (!$id) {
             return $this->error('提交失败');
         }
         $course_info = Course::find($id);
-        $course_info->number = create_course_number($id);
+        $course_info->number = new_create_course_number($id,$data['method'],4, $data['role']);
         $course_info->save();
         // 发送通知
         if (SystemMessage::where('action',7)->value('site_message') == 1) {
@@ -259,12 +267,18 @@ class OrganizationController extends Controller
         if (isset($data['entry_number'])) {
             $sort_field = 'entry_number';
         }
+        if (isset($data['sort_buyer_count'])) {
+            $sort_field = 'buyer_count';
+        }
+        if (isset($data['sort_visit_count'])) {
+            $sort_field = 'visit_count';
+        }
         // 筛选条件
         $where = [];
         if (isset($data['name'])) {
             $where[] = ['name','like','%'.$data['name'].'%'];
         }
-        if (isset($data['grade'])) {
+        /*if (isset($data['grade'])) {
             $where[] = ['grade','=',$data['grade']];
         }
         if (isset($data['subject'])) {
@@ -272,12 +286,21 @@ class OrganizationController extends Controller
         }
         if (isset($data['type'])) {
             $where[] = ['type','=',$data['type']];
+        }*/
+        if (isset($data['create_at_start']) && isset($data['created_at_end'])) {
+            $where[] = ['created_at','>',$data['create_at_start']];
+            $where[] = ['created_at','<',$data['created_at_end']];
         }
-        if (isset($data['created_at_start']) && isset($data['created_at_end'])) {
-            $where[] = ['created_at','>','created_at_start'];
-            $where[] = ['created_at','<','created_at_end'];
+        if (isset($data['course_status'])) {
+            if ($data['course_status'] == 1) {
+                $where[] = ['course_status','=',2];
+            } else {
+                $where[] = ['course_status','!=',2];
+            }
+
         }
-        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->orderBy($sort_field,$sort)->paginate($page_size);
+
+        $result = Course::with('adder')->where(['adder_role' => 4,'role' => $role,'status' => $status])->where($where)->whereIn('adder_id',$organ_users)->orderBy($sort_field,$sort)->logListenedSql()->paginate($page_size);
         return $this->success('需求列表',$result);
     }
 
@@ -294,6 +317,17 @@ class OrganizationController extends Controller
         if (!$course_info) {
             return $this->error('课程不存在');
         }
+        // 当前用户
+        $user = Auth::user();
+        if ($course_info->adder_role == 0) {
+            $course_info->visit_count++;
+            $course_info->update();
+        } else {
+            if ($course_info->adder_id !== $user->id) {
+                $course_info->visit_count++;
+                $course_info->update();
+            }
+        }
         if ($course_info->end_time < date('Y-m-d H:i:s')) {
             $course_info->status = 2;
             $course_info->save();
@@ -302,16 +336,16 @@ class OrganizationController extends Controller
             // 查询投递人数
             $course_info->deliver_count = $course_info->deliver->count();
         }
-        $course_info->class_date = json_decode($course_info->class_date,true);
-        $course_info->total_price = $course_info->class_price * $course_info->class_number;
+        /*$course_info->class_date = json_decode($course_info->class_date,true);
+        $course_info->total_price = $course_info->class_price * $course_info->class_number;*/
         if (in_array($course_info->course_status,[4,5])) {
             $delivers = $course_info->deliver->filter(function ($item) {
                 if ($item->pay_status == 1) {
                     return $item;
                 }
             })->first();
-            $course_info->teacher_name = $delivers->user->name;
-            $course_info->teacher_mobile = $delivers->user->mobile;
+            $course_info->teacher_name = $delivers ? $delivers->user->name : '';
+            $course_info->teacher_mobile = $delivers ? $delivers->user->mobile : '';
         } else {
             $course_info->teacher_name = null;
             $course_info->teacher_mobile = null;
@@ -335,24 +369,28 @@ class OrganizationController extends Controller
         }
         $rules = [
             'name' => 'required',
-            'type' => 'required',
             'method' => 'required',
-            'subject' => 'required',
+            'introduction' => 'required',
         ];
         $messages = [
             'name.required' => '名称不能为空',
-            'type.required' => '辅导类型不能为空',
-            'method.required' => '上课形式不能为空',
-            'subject.required' => '科目不能为空',
+            'method.required' => '授课方式不能为空',
+            'introduction.required' => '课程详情不能为空',
         ];
         $validator = Validator::make($data,$rules,$messages);
         if ($validator->fails()) {
             $errors = $validator->errors();
             return $this->error(implode(',',$errors->all()));
         }
+        // 查询招教师需求最大的有效期
+        $system_valid_time = CourseSetting::where(['role' => $data['role']])->orderByDesc('created_at')->value('end_time');
+        if ($data['valid_time'] > $system_valid_time) {
+            return $this->error('有效期不能大于系统设置时间');
+        }
         // 更新数据
         $data['status'] = 0;
         $data['updated_at'] = Carbon::now();
+        $data['end_time'] = Carbon::now()->setTime(23,59,59)->addDays($data['valid_time']);
         $result = DB::table('courses')->where('id',$id)->update($data);
         if (!$result) {
             return $this->error('编辑失败');
@@ -779,7 +817,8 @@ class OrganizationController extends Controller
         if (isset($data['keyword'])) {
             $where[] = ['users.name','like','%'.$data['keyword'].'%'];
         }
-        $result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
+        $result = User::with(['teacher_education','teacher_info','teacher_career'])->where($where)->whereIn('users.id',$teacher_ids)->orderBy($sort_field,$order)->paginate($page_size);
+        /*$result = User::leftJoin('teacher_info', 'users.id', '=', 'teacher_info.user_id')
             ->leftJoin('teacher_education','users.id','=','teacher_education.user_id')
             ->leftJoin('teacher_career','users.id','=','teacher_career.user_id')
             ->where($where)
@@ -787,10 +826,11 @@ class OrganizationController extends Controller
             ->whereIn('users.id',$teacher_ids)
             ->orderBy($sort_field,$order)
             ->select('users.*','teacher_education.highest_education','teacher_education.graduate_school','teacher_info.teaching_year','teacher_career.subject','teacher_info.picture')
-            ->paginate($page_size);
+            ->paginate($page_size);*/
         foreach ($result as $v) {
             // 科目
-            $v->subject = explode(',',$v->subject);
+            $subject = $v->teacher_career->pluck('subject')->toArray();
+            $v->subject = count($subject) > 0 ? handel_subject(implode(',',$subject)) : [];
         }
         return $this->success('教师列表',$result);
     }

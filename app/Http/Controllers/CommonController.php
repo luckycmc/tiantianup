@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\InvalidCourse;
 use App\Models\Activity;
 use App\Models\Agreement;
 use App\Models\Banner;
 use App\Models\BaseInformation;
 use App\Models\Bill;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\Organization;
 use App\Models\OrganRole;
@@ -75,10 +77,11 @@ class CommonController extends Controller
             $data = $pay->callback(); // 是的，验签就这么简单！
             $info = $data['resource']['ciphertext'];
             if ($info['trade_state'] == 'SUCCESS') {
+                Log::info('支付回调');
                 // 查询订单
                 $order = DeliverLog::where('out_trade_no',$info['out_trade_no'])->first();
                 $course = Course::find($order->course_id);
-                $course->buyer_count += 1;
+                $course->entry_number++;
                 $course->update();
                 /*// 已授权
                 $order->status = 4;*/
@@ -106,7 +109,7 @@ class CommonController extends Controller
                 $description = '查看需求';
                 if ($course->adder_role == 0) {
                     $type = 11;
-                    $description = '查看中介单';
+                    $description = '查看代发单';
                 }
                 // 保存日志
                 $log_data = [
@@ -129,6 +132,20 @@ class CommonController extends Controller
                     DB::table('bills')->insert($log_data);
                 }*/
                 DB::table('bills')->insert($log_data);
+                Log::info('role: '.$course->role);
+                if ($course->adder_role == 0) {
+                    $role = 0;
+                } else {
+                    if ($course->role == 1) {
+                        $role = 1;
+                    } else {
+                        $role = 3;
+                    }
+                }
+                $days = CourseSetting::where('role',$role)->orderByDesc('created_at')->first();
+                Log::info('days: ',$days->toArray());
+                // 加入延时队列
+                InvalidCourse::dispatch($order)->delay(now()->addDays($days->looked_course_valid_time))->onQueue('invalid_course');
                 // 当前时间
                 /*$current = Carbon::now()->format('Y-m-d');
                 // 查看是否有成交活动

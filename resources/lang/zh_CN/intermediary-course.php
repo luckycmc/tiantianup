@@ -1,7 +1,7 @@
 <?php 
 return [
     'labels' => [
-        'IntermediaryCourse' => '中介单',
+        'IntermediaryCourse' => '需求代发',
         'course' => 'Course',
     ],
     'fields' => [

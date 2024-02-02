@@ -2,11 +2,14 @@
 
 namespace App\Admin\Actions\Grid;
 
+use App\Jobs\UpdateCourse;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\Message;
 use App\Models\Region;
 use App\Models\SystemMessage;
 use App\Models\User;
+use Carbon\Carbon;
 use Dcat\Admin\Actions\Response;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Grid\RowAction;
@@ -39,15 +42,20 @@ class VerifyCourse extends RowAction
         $course_id = $this->getKey();
         $course_info = Course::find($course_id);
         $course_info->status = 1;
+        $course_info->is_on = 1;
         $course_info->is_recommend = 1;
+        $course_info->reason = null;
         $course_info->reviewer = Admin::user()->name;
+        $course_info->end_time = Carbon::now()->setTime(23,59,59)->addDays($course_info->valid_time);
         if ($course_info->adder_role == 0) {
             $province = Region::where('id',$course_info->province)->value('region_name');
             $city = Region::where('id',$course_info->city)->value('region_name');
             $district = Region::where('id',$course_info->district)->value('region_name');
-            $long_lat = get_long_lat($province,$city,$district,$course_info->address);
-            $course_info->longitude = $long_lat[0];
-            $course_info->latitude = $long_lat[1];
+            if ($course_info->method !== '线上') {
+                $long_lat = get_long_lat($province,$city,$district,$course_info->address);
+                $course_info->longitude = $long_lat[0];
+                $course_info->latitude = $long_lat[1];
+            }
         }
         $course_info->update();
         $user = User::find($course_info->adder_id);
@@ -74,10 +82,23 @@ class VerifyCourse extends RowAction
             }
         } else {
             if (!$course_info->number) {
-                $course_info->number = create_df_number($course_id);
+                $course_info->number = new_create_course_number($course_id,$course_info->method,0,3);
                 $course_info->update();
             }
         }
+        // 放入延时队列
+        if ($course_info->adder_role == 0) {
+            $role = 0;
+        } else {
+            if ($course_info->role == 1) {
+                $role = 1;
+            } else {
+                $role = 3;
+            }
+        }
+        $days = CourseSetting::where('role',$role)->orderByDesc('created_at')->first();
+        // $days->latest_end_time)
+        UpdateCourse::dispatch($course_info)->delay(now()->addDays($days->latest_end_time))->onQueue('update_course');
 
         return $this->response()
             ->success('操作成功')

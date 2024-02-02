@@ -78,16 +78,19 @@ class VerifyCert extends RowAction
         $teacher_activity = Activity::where(['status' => 1,'type' => 2])->where('start_time', '<=', $current)
             ->where('end_time', '>=', $current)->first();
         // 查询是否已获得奖励
-        $is_reward = \App\Models\ActivityLog::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '资格证书审核通过'])->exists();
-        if ($teacher_activity && !$is_reward) {
-            // 查询奖励
-            /*$reward = get_reward(2,3);
-            $amount = $reward->teacher_real_auth_reward;
-            $user->withdraw_balance += $amount;
-            $user->total_income += $amount;
-            $user->update();*/
-            teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书','资格证书审核通过',$teacher_activity);
+        if ($teacher_activity) {
+            $is_reward = \App\Models\ActivityLog::where(['user_id' => $user->id,'activity_id' => $teacher_activity->id,'description' => '资格证书审核通过'])->exists();
+            if ($teacher_activity && !$is_reward) {
+                // 查询奖励
+                /*$reward = get_reward(2,3);
+                $amount = $reward->teacher_real_auth_reward;
+                $user->withdraw_balance += $amount;
+                $user->total_income += $amount;
+                $user->update();*/
+                teacher_activity_log($teacher_info->user_id,'teacher_cert_reward','资格证书','资格证书审核通过',$teacher_activity);
+            }
         }
+
 
         return $this->response()
             ->success('操作成功')

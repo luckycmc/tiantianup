@@ -135,9 +135,7 @@ class IndexController extends Controller
         // $result->teacher_cert = isset($result->teacher_info) ? json_decode($result->teacher_info->teacher_cert,true) : '';
         // 判断当前机构是否购买
         if (in_array($user->role,[2,4])) {
-            $courses = Course::where('adder_id',$user->id)->select('id')->get();
-            $ids = $courses->pluck('id')->toArray();
-            $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1])->whereIn('course_id',$ids)->exists();
+            $is_buy = DeliverLog::where(['user_id' => $id,'pay_status' => 1,'course_id' => $data['course_id']])->exists();
             if (!$is_buy) {
                 $is_buy = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $id,'status' => 1])->exists();
             }
@@ -170,6 +168,7 @@ class IndexController extends Controller
         $latitude = $data['latitude'] ?? 0;
 
         $where = [];
+        $or_where = [];
         if (isset($data['is_default'])) {
             // 当前城市
             $location_info = get_location($longitude,$latitude);
@@ -181,7 +180,7 @@ class IndexController extends Controller
         $where[] = ['city','=',$city_id];
 
         if (isset($data['name'])) {
-            $where[] = ['name','like','%'.$data['name'].'%'];
+            $where[] = $or_where[] = ['name','like','%'.$data['name'].'%'];
         }
         if (isset($data['subject'])) {
             $where[] = ['subject','=',$data['subject']];
@@ -190,7 +189,7 @@ class IndexController extends Controller
             $where[] = ['type','=',$data['type']];
         }
         if (isset($data['method'])) {
-            $where[] = ['method','=',$data['method']];
+            $where[] = $or_where[] = ['method','=',$data['method']];
         }
         if (isset($data['district'])) {
             $id = Region::where('region_name',$data['district']);
@@ -214,8 +213,9 @@ class IndexController extends Controller
         } else {
             $role = 3;
         }
-        Log::info('where: ',$where);
-        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->where('status','!=',0)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->paginate($page_size);
+        $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->whereNotIn('course_status',[2,3])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->orWhere(function ($query) use ($or_where,$role) {
+            $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上'])->where('status','!=',0)->whereNotIn('adder_role',[0])->whereNotIn('course_status',[2,3])->where('end_time','>',Carbon::now())->where($or_where);
+        })->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
@@ -243,24 +243,37 @@ class IndexController extends Controller
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         $result = Course::with(['organization','adder'])->find($course_id);
-        // 距离
-        if ($result->adder_role == 4) {
-            $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
-            // 地址
-            $result->address = $result->organization->address;
-        }
-        if ($result->adder_role == 2) {
-            $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
-            // 地址
-            $result->address = $result->adder->address;
-            $result->nickname = $result->adder->nickname;
-        }
+        Log::info('latitude: '.$result->latitude);
+        Log::info('longitude: '.$result->longitude);
         // 当前用户
         $user = Auth::user();
+        if ($result->add_role == 0) {
+            $result->visit_count++;
+            $result->update();
+        } else {
+            if ($user->id !== $result->adder_id) {
+                $result->visit_count++;
+                $result->update();
+            }
+        }
+        // 距离
+        /*if ($result->adder_role == 4) {
+            $result->distance = calculate_distance($latitude,$longitude,$result->organization->latitude,$result->organization->longitude);
+            // 地址
+            // $result->address = $result->organization->address;
+        }*/
+        $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
+        /*if ($result->adder_role == 2) {
+            $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
+            // 地址
+            // $result->address = $result->adder->address;
+            $result->nickname = $result->adder->nickname;
+        }*/
+
         // 是否收藏
         $result->has_collect = $user->has_collect_course($course_id);
         // 总费用
-        $result->total_price = $result->class_price * $result->class_number;
+        $result->total_price = $result->class_price;
         if (in_array($user->role,[1,2])) {
             // 是否报名
             $result->is_entry = $user->has_entry_course($course_id);
@@ -273,8 +286,8 @@ class IndexController extends Controller
             // 课程信息
             $course_info = Course::find($course_id);
             if ($course_info->adder_role == 0) {
-                $course_info->visit_count += 1;
-                $course_info->update();
+                /*$course_info->visit_count += 1;
+                $course_info->update();*/
                 $result->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $course_id,'pay_status' => 1])->exists();
             }
         }
@@ -288,9 +301,11 @@ class IndexController extends Controller
             $result->entry_time = $entry_time;
         }
         $result->class_date = json_decode($result->class_date,true);
-        $result->province = $result->province_info->region_name;
-        $result->city = $result->city_info->region_name;
-        $result->district = $result->district_info->region_name;
+        if ($result->method !== '线上') {
+            $result->province = $result->province_info->region_name;
+            $result->city = $result->city_info->region_name;
+            $result->district = $result->district_info ? $result->district_info->region_name : null;
+        }
         return $this->success('课程详情',$result);
     }
 

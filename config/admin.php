@@ -338,6 +338,8 @@ return [
         'navbar_color' => '',
     ],
 
+    'map_provider' => 'amap',
+
     /*
     |--------------------------------------------------------------------------
     | The exception handler class

@@ -11,7 +11,7 @@ use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Illuminate\Support\Str;
 
-class TeacherDealServicePriceController extends AdminController
+class TeacherOrganDealServicePriceController extends AdminController
 {
     /**
      * Make a grid builder.
@@ -21,7 +21,7 @@ class TeacherDealServicePriceController extends AdminController
     protected function grid()
     {
         return Grid::make(new ServicePrice(), function (Grid $grid) {
-            $grid->model()->where('type',1);
+            $grid->model()->where('type',5);
             $grid->column('id')->sortable();
             $grid->column('price','服务费');
             $grid->column('start_time','开始时间');
@@ -79,7 +79,7 @@ class TeacherDealServicePriceController extends AdminController
         return Form::make(ServicePrice::with(['areas']), function (Form $form) {
             $form->display('id');
             $form->text('price','服务费');
-            $form->hidden('type')->default(1);
+            $form->hidden('type')->default(5);
             $form->dateRange('start_time','end_time','有效期');
             $form->tree('areas','执行地区')
                 ->setTitleColumn('region_name')

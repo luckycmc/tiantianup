@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\CourseDown;
+use App\Admin\Actions\Grid\CourseUp;
 use App\Admin\Actions\Grid\RefuseCourse;
 use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
@@ -26,37 +28,30 @@ class IntermediaryCourseController extends AdminController
         return Grid::make(new Course(['province_info','city_info','district_info']), function (Grid $grid) {
             $grid->model()->where('adder_role',0)->orderByDesc('created_at');
             $grid->column('number','编号');
+            $grid->column('method','授课方式');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
-            $grid->column('subject','科目');
-            $grid->column('gender','学员性别')->using([0 => '女', 1 => '男']);
-            $grid->column('grade','年级');
-            $grid->column('region','省市区')->display(function () {
-                // dd($this->province,$this->city,$this->district);
+            $grid->column('name','标题');
+            $grid->column('region','所在城市')->display(function () {
                 $province = Region::where('id',$this->province)->value('region_name');
                 $city = Region::where('id',$this->city)->value('region_name');
-                $district = Region::where('id',$this->district)->value('region_name');
-                return $province.$city.$district;
+                return $province.$city;
             });
-            $grid->column('address','上课地点');
-            $grid->column('class_price','费用(元)');
-            $grid->column('class_duration','上课时长(分钟)');
-            $grid->column('platform_class_date','上课时间');
-            $grid->column('mobile','联系方式');
-            $grid->column('status')->using([0 => '待审核', 1 => '已通过']);
+            $grid->column('status')->using([0 => '待审核', 1 => '已通过', 3 => '已拒绝']);
+            $grid->column('is_on','是否上架')->using([0 => '否', 1 => '是']);
+            $grid->column('reason','拒绝原因');
             $grid->column('adder_name','发布人');
-            $grid->column('buyer_count','付费人数');
+            $grid->column('entry_number','付费人数');
             $grid->column('visit_count','浏览人数');
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('number','需求编号');
-                $filter->equal('subject','科目');
-                $filter->equal('gender','性别');
-                $filter->equal('grade','年级');
-                $filter->equal('mobile','联系方式');
+                $filter->like('name','标题');
                 $filter->like('adder_name','发布人 ');
-                $filter->equal('status')->select([0 => '待审核', 1 => '已通过']);
+                $filter->equal('status')->select([0 => '待审核', 1 => '已通过', 3 => '已拒绝']);
+                $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
                 $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
+                $filter->equal('method','授课方式')->radio(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
                 $filter->between('class_price','课时费');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
@@ -72,7 +67,6 @@ class IntermediaryCourseController extends AdminController
                 })->datetime();
                 $filter->equal('province_id','省份')->select('/api/city')->load('city_id','/api/city');
                 $filter->equal('city_id','城市')->select('/api/city')->load('district_id','/api/city');
-                $filter->equal('district_id','区县')->select('/api/city');
             });
             $grid->actions(function ($actions) {
                 $status = $actions->row->status;
@@ -80,14 +74,18 @@ class IntermediaryCourseController extends AdminController
                     $actions->append(new VerifyCourse());
                     $actions->append(new RefuseCourse());
                 }
+                $is_on = $actions->row->is_on;
+                if ($is_on == 1) {
+                    $actions->append(new CourseDown());
+                } else {
+                    $actions->append(new CourseUp());
+                }
             });
             $grid->export()->rows(function ($rows) {
                 foreach ($rows as &$row) {
                     $arr = ['待审核','已通过','已关闭','已拒绝'];
-                    $row['gender'] = $row['gender'] == 0 ? '男' : '女';
                     $row['status'] = $arr[$row['status']];
-                    $row['region'] = $row->province_info->region_name.$row->city_info->region_name.$row->district_info->region_name;
-                    $row['is_recommend'] = $row['is_recommend'] == 0 ? '否' : '是';
+                    $row['region'] = $row->province_info->region_name.$row->city_info->region_name;
                 }
                 return $rows;
             });
@@ -104,27 +102,29 @@ class IntermediaryCourseController extends AdminController
     protected function detail($id)
     {
         return Show::make($id, new Course(), function (Show $show) {
-            $show->field('id');
-            $show->field('organ_id');
-            $show->field('name');
-            $show->field('type');
+            $show->field('name','标题');
             $show->field('method');
-            $show->field('subject');
-            $show->field('count');
-            $show->field('class_price');
-            $show->field('duration');
-            $show->field('class_duration');
-            $show->field('base_count');
-            $show->field('base_price');
-            $show->field('improve_price');
-            $show->field('max_price');
-            $show->field('introduction');
-            $show->field('adder_id');
-            $show->field('status');
-            $show->field('reviewer_id');
-            $show->field('reason');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('city','所在城市')->as(function () {
+                $province = Region::where('id',$this->province)->value('region_name');
+                $city = Region::where('id',$this->city)->value('region_name');
+                return $province.$city;
+            });
+
+            $show->contents('详情')->as(function () {
+                return html_entity_decode("{aa<br />bb}");
+            });
+            $show->field('valid_time','有效期');
+            $show->field('end_time','失效时间');
+            $show->field('contact','联系人');
+            $show->field('qq_account','QQ号');
+            $show->field('wechat_account','微信号');
+            $show->field('mobile','手机号');
+            $show->field('reviewer','审核员');
+            $show->field('created_at','发布时间');
+            $show->field('updated_at','审核时间');
+            if ($show->model()->status == 2) {
+                $show->field('reason');
+            }
         });
     }
 
@@ -137,48 +137,36 @@ class IntermediaryCourseController extends AdminController
     {
         return Form::make(new Course(), function (Form $form) {
             $form->display('id');
-            $form->text('subject','科目');
-            $form->text('grade','年级');
-            $form->radio('gender','性别')->options([0 => '女',1 => '男']);
-            $form->text('platform_class_date','上课时间');
-            $form->select('province','省')->options('/api/city')->load('city','/api/city')->required();
-            $form->select('city','市')->options('/api/city')->load('district','/api/city')->required();
-            $form->select('district','区')->options('/api/city')->required();
-            $form->text('address','上课地点')->required();
-            $form->number('class_duration','上课时长(分钟)');
-            $form->number('class_price','费用(元)');
-            $form->text('requirement','要求');
-            $form->text('detail','详情');
+            $form->text('name','标题');
+            $form->select('method')->options(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上'])->when('!=','线上',function (Form $form) {
+                $form->select('province','省')->options('/api/city')->load('city','/api/city');
+                $form->select('city','市')->options('/api/city');
+            });
+            $form->editor('introduction','详情');
             $form->number('valid_time','有效期(天)');
-            $form->text('qq_account','QQ号');
-            $form->text('wechat_account','微信号');
-            $form->mobile('mobile','手机号');
             $form->text('contact','联系人');
+            $form->text('qq_account','QQ号')->rules('required_without_all:wechat_account,mobile',[
+                'required_without_all' => 'QQ号、微信号、手机号至少填写一项'
+            ]);
+            $form->text('wechat_account','微信号')->rules('required_without_all:qq_account,mobile',[
+                'required_without_all' => 'QQ号、微信号、手机号至少填写一项'
+            ]);
+            $form->mobile('mobile','手机号')->rules('required_without_all:wechat_account,qq_account',[
+                'required_without_all' => 'QQ号、微信号、手机号至少填写一项'
+            ]);
             $form->hidden('adder_role')->default(0);
             $form->hidden('role')->default(3);
+            $form->hidden('is_on')->default(0);
+            $form->hidden('status');
+            $form->saving(function (Form $form) {
+                $form->status = 0;
+                if ($form->method == '线上') {
+                    $form->province = null;
+                    $form->city = null;
+                }
+            });
             $form->hidden('adder_name')->default(Admin::user()->name);
             $form->hidden('class_date');
-            $form->hidden('end_time');
-            $form->saving(function (Form $form) {
-                $form->deleteInput('class_date_start');
-                $form->deleteInput('class_date_end');
-                $form->end_time = Carbon::now()->addDays($form->valid_time);
-            });
-            $form->saved(function (Form $form, $result) {
-                // 判断是否是新增操作
-                if ($form->isCreating()) {
-                    // 也可以这样获取自增ID
-                    $course_id = $form->getKey();
-
-                    if (!$course_id) {
-                        return $form->error('数据保存失败');
-                    }
-                    $number = create_df_number($course_id);
-                    $form->model()->update(['number' => $number]);
-                }
-                $form->model()->update(['status' => 0]);
-            });
-
             $form->display('created_at');
             $form->display('updated_at');
         });
