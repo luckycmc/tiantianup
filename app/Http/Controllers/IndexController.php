@@ -243,6 +243,8 @@ class IndexController extends Controller
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
         $result = Course::with(['organization','adder'])->find($course_id);
+        Log::info('latitude: '.$result->latitude);
+        Log::info('longitude: '.$result->longitude);
         // 当前用户
         $user = Auth::user();
         if ($result->add_role == 0) {
