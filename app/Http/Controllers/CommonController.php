@@ -93,7 +93,7 @@ class CommonController extends Controller
                     // 修改支付状态
                     $order->pay_status = 1;
                     Log::info('aaaa');
-                    $order->update();
+                    DB::table('deliver_log')->where('out_trade_no',$info['out_trade_no'])->update(['pay_status' => 1]);
                 } else if ($order->pay_type == 2) {
                     // 组合支付
                     $order->pay_status = 1;
