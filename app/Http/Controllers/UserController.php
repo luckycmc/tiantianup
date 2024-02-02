@@ -706,7 +706,7 @@ class UserController extends Controller
         $out_trade_no = app('snowflake')->id();
         $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
         if ($course_info->adder_role == 2) {
-            $type = 2;
+            $type = 1;
         } else if ($course_info->adder_role == 4) {
             $type = 5;
         } else {
