@@ -29,14 +29,14 @@ class ApiAuth
                 ], 404);
             }
             $user = JWTAuth::parseToken()->authenticate();
-            /*$usertoken = Redis::get('TOKEN:'.$user->id);
+            $usertoken = Redis::get('TOKEN:'.$user->id);
             if($usertoken!=$request->bearerToken()){
                 return response()->json([
                     'code' => 1005,
                     'message' => '账户已在其他地方登陆'
 
                 ], 404);
-            }*/
+            }
             $userinfo = ['uid'=>$user->id,'status'=>$user->status,'token'=>$request->bearerToken()];
             if($userinfo['status'] != 1){
                 return response()->json([
