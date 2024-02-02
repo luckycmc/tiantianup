@@ -442,30 +442,32 @@ function deal_activity_log($user_id,$course_id,$deal_activity) {
     $user->update();
     // 教师
     $teacher_reward = get_reward(3,3);
-    $teacher_activity_log = [
-        'user_id' => $adder_id,
-        'username' => $teacher->name,
-        'number' => $teacher->number,
-        'role' => 3,
-        'amount' => $teacher_reward->teacher_deal_reward,
-        'type' => $deal_activity->type,
-        'created_at' => Carbon::now()
-    ];
-    $teacher_bill_log = [
-        'user_id' => $user_id,
-        'amount' => $teacher_reward->teacher_deal_reward,
-        'type' => 9,
-        'description' => '成交奖励',
-        'created_at' => Carbon::now()
-    ];
-    $teacher->withdraw_balance += $teacher_reward->teacher_deal_reward;
-    $teacher->total_income += $teacher_reward->teacher_deal_reward;
-    $teacher->update();
-
-    DB::table('activity_log')->insert($teacher_activity_log);
+    if ($teacher_reward) {
+        $teacher_activity_log = [
+            'user_id' => $adder_id,
+            'username' => $teacher->name,
+            'number' => $teacher->number,
+            'role' => 3,
+            'amount' => $teacher_reward->teacher_deal_reward,
+            'type' => $deal_activity->type,
+            'created_at' => Carbon::now()
+        ];
+        $teacher_bill_log = [
+            'user_id' => $user_id,
+            'amount' => $teacher_reward->teacher_deal_reward,
+            'type' => 9,
+            'description' => '成交奖励',
+            'created_at' => Carbon::now()
+        ];
+        $teacher->withdraw_balance += $teacher_reward->teacher_deal_reward;
+        $teacher->total_income += $teacher_reward->teacher_deal_reward;
+        $teacher->update();
+        DB::table('activity_log')->insert($teacher_activity_log);
+        DB::table('bills')->insert($teacher_bill_log);
+    }
     DB::table('activity_log')->insert($activity_log);
     DB::table('bills')->insert($bill_log);
-    DB::table('bills')->insert($teacher_bill_log);
+
 }
 
 /**
