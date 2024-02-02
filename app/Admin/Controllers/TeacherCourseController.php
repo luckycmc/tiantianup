@@ -57,7 +57,7 @@ class TeacherCourseController extends AdminController
                 $filter->equal('province','省份')->select('/api/city')->load('city','/api/city');
                 $filter->equal('city','城市')->select('/api/city')->load('district_id','/api/city');
                 $filter->equal('district','区县')->select('/api/city');
-                $filter->equal('course_status','是否失效')->radio([0 => '否', 1 => '是']);
+                $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
                 $filter->equal('is_recommend','是否推荐')->radio([0 => '否', 1 => '是']);
                 $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
                 $filter->like('adder_name','发布者');

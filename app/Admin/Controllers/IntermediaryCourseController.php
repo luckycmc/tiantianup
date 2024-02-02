@@ -52,7 +52,6 @@ class IntermediaryCourseController extends AdminController
                 $filter->equal('is_on','是否上架')->select([0 => '否', 1 => '是']);
                 $filter->equal('course_status','是否失效')->radio([2 => '是',1 => '否']);
                 $filter->equal('method','授课方式')->radio(['线下' => '线下','线上' => '线上','线下/线上' => '线下/线上']);
-                $filter->between('class_price','课时费');
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
