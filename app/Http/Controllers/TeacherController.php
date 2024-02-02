@@ -441,7 +441,7 @@ class TeacherController extends Controller
 
         foreach ($result as $v) {
             $v->distance = round(calculate_distance($latitude,$longitude,$v->latitude,$v->longitude),2);
-            $v->is_deliver = $user->deliver_log()->where('course_id',$v->id)->exists();
+            $v->is_deliver = $user->deliver_log()->where('course_id',$v->id)->where('pay_status',1)->exists();
         }
         return $this->success('找学员列表',$result);
     }
