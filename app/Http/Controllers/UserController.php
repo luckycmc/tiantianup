@@ -705,8 +705,15 @@ class UserController extends Controller
         $user = Auth::user();
         $out_trade_no = app('snowflake')->id();
         $adder_field = $course_info->adder_role == 1 ? 'parent_id' : 'organ_id';
+        if ($course_info->adder_role == 1) {
+            $type = 1;
+        } else if ($course_info->adder_role == 4) {
+            $type = 5;
+        } else {
+            $type = 4;
+        }
         // 金额
-        $amount = get_service_price(1,$user->city_id,$user->province_id,$user->district_id);
+        $amount = get_service_price($type,$user->city_id,$user->province_id,$user->district_id);
         // $amount = 0.01;
         // 查看是否已投递
         $deliver_data = [
