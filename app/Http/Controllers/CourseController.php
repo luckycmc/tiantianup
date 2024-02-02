@@ -224,7 +224,7 @@ class CourseController extends Controller
             if ($v->adder_role == 0) {
                 $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
             } else {
-                $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
+                $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
             }
             $v->distance = round($v->distance,2);
             if ($v->adder_role == 0) {
