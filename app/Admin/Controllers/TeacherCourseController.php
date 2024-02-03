@@ -85,7 +85,7 @@ class TeacherCourseController extends AdminController
                 foreach ($rows as &$row) {
                     $arr = ['待审核','已通过','已关闭','已拒绝'];
                     $row['status'] = $arr[$row['status']];
-                    $row['region'] = $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
+                    // $row['region'] = $this->province_info->region_name.$this->city_info->region_name.$this->district_info->region_name;
                     $row['is_recommend'] = $row['is_recommend'] == 0 ? '否' : '是';
                 }
                 return $rows;
