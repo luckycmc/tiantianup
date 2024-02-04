@@ -2,9 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\CancelRecommendTeacher;
 use App\Admin\Actions\Grid\DisableTeacher;
 use App\Admin\Actions\Grid\EnableTeacher;
 use App\Admin\Actions\Grid\Recommend;
+use App\Admin\Actions\Grid\RecommendTeacher;
 use App\Admin\Repositories\User;
 use App\Models\TeacherCareer;
 use App\Models\TeacherCert;
@@ -48,7 +50,7 @@ class TeacherInfoController extends AdminController
             $grid->column('is_real_auth','实名认证状态')->using([0 => '未实名', 1 => '已实名']);
             $grid->column('has_teacher_cert','是否有教师资格证')->using([0 => '否',1 => '是']);
             $grid->column('teacher_info.status','审核状态')->using([0 => '待审核', 1 => '审核通过', 2 => '拒绝']);
-            $grid->column('is_recommend','推荐')->select([0 => '否', 1 => '是']);
+            $grid->column('is_recommend','推荐')->using([0 => '否', 1 => '是']);
             $grid->column('updated_at','注册时间');
 
             $grid->filter(function (Grid\Filter $filter) {
@@ -83,6 +85,12 @@ class TeacherInfoController extends AdminController
                     $actions->append(new DisableTeacher());
                 } else {
                     $actions->append(new EnableTeacher());
+                }
+                $is_recommend = $actions->row->is_recommend;
+                if ($is_recommend) {
+                    $actions->append(new CancelRecommendTeacher());
+                } else {
+                    $actions->append(new RecommendTeacher());
                 }
             });
             $grid->export()->rows(function ($rows) {

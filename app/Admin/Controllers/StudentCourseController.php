@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\CancelRecommendCourse;
+use App\Admin\Actions\Grid\RecommendCourse;
 use App\Admin\Actions\Grid\RefuseCourse;
 use App\Admin\Actions\Grid\VerifyCourse;
 use App\Admin\Repositories\Course;
@@ -32,7 +34,7 @@ class StudentCourseController extends AdminController
             $grid->column('address','上课地点');
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
-            $grid->column('is_recommend','是否推荐')->select([0 => '否', 1 => '是']);
+            $grid->column('is_recommend','是否推荐')->using([0 => '否', 1 => '是']);
             $grid->column('is_on','是否上架')->select([0 => '否', 1 => '是']);
             $grid->column('visit_count','浏览人数');
             $grid->column('entry_number','咨询人数');
@@ -67,6 +69,12 @@ class StudentCourseController extends AdminController
                 if ($status == 0) {
                     $actions->append(new VerifyCourse());
                     $actions->append(new RefuseCourse());
+                }
+                $is_recommend = $actions->row->is_recommend;
+                if ($is_recommend) {
+                    $actions->append(new CancelRecommendCourse());
+                } else {
+                    $actions->append(new RecommendCourse());
                 }
             });
             $grid->export()->rows(function ($rows) {
