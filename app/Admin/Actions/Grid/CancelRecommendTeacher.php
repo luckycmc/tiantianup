@@ -16,7 +16,7 @@ class CancelRecommendTeacher extends RowAction
     /**
      * @return string
      */
-	protected $title = 'Title';
+	protected $title = '取消推荐';
 
     /**
      * Handle the action request.

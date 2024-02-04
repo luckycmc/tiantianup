@@ -108,11 +108,12 @@ class WithdrawController extends AdminController
     {
         return Show::make($id, new Withdraw(), function (Show $show) {
             $show->field('id');
-            $show->field('user_id');
+            $show->field('username','用户名');
             $show->field('amount');
             $show->field('type');
             $show->field('username');
             $show->field('mobile');
+            $show->field('account','账号');
             $show->field('status');
             $show->field('reason');
             $show->field('created_at');

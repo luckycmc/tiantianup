@@ -28,9 +28,9 @@ class PayWithdraw extends RowAction
     {
         $id = $this->getKey();
         $info = Withdraw::find($id);
-        $info->status = 2;
+        $info->status = 3;
         $info->update();
-        return $this->response()->success('审核成功')->refresh();
+        return $this->response()->success('已打款')->refresh();
     }
 
     /**
@@ -38,7 +38,7 @@ class PayWithdraw extends RowAction
 	 */
 	public function confirm()
 	{
-		// return ['Confirm?', 'contents'];
+		return ['确认已打款吗？'];
 	}
 
     /**
