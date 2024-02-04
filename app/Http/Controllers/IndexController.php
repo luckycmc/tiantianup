@@ -62,7 +62,7 @@ class IndexController extends Controller
         }
         Log::info('where: ',$where);
         // 查询当前位置的所有推荐教师
-        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where($where)->where(['is_recommend' => 1,'role' => 3,'status' => 1])->paginate($page_size);
+        $teachers = User::with(['teacher_experience','teacher_info','teacher_education'])->where($where)->where(['is_recommend' => 1,'role' => 3,'status' => 1])->orderByDesc('recommend_time')->paginate($page_size);
 
         // 当前用户
         $user = Auth::user();
@@ -215,7 +215,7 @@ class IndexController extends Controller
         }
         $result = Course::with('organization')->where($where)->where(['role' => $role,'is_recommend' => 1])->whereNotIn('is_invalid',[1])->where('status','!=',0)->where('is_on',1)->whereNotIn('adder_role',[0])->where('end_time','>',Carbon::now())->orWhere(function ($query) use ($or_where,$role) {
             $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上'])->where('status','!=',0)->whereNotIn('adder_role',[0])->whereNotIn('is_invalid',[1])->where('end_time','>',Carbon::now())->where($or_where);
-        })->orderByDesc('created_at')->paginate($page_size);
+        })->orderByDesc('recommend_time')->paginate($page_size);
         foreach ($result as $v) {
             if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
