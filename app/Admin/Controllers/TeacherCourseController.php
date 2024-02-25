@@ -43,6 +43,7 @@ class TeacherCourseController extends AdminController
             $grid->column('is_on','是否上架')->select([0 => '否', 1 => '是']);
             $grid->column('visit_count','浏览人数');
             $grid->column('entry_number','联系人数');
+            $grid->column('created_at','发布时间');
 
 
             /*$grid->column('region','省市区')->display(function () {

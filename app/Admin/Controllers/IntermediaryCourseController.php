@@ -32,12 +32,17 @@ class IntermediaryCourseController extends AdminController
             $grid->column('created_at','发布时间');
             $grid->column('end_time','失效时间');
             $grid->column('name','标题');
-            $grid->column('address','上课地点');
-            /*$grid->column('region','所在城市')->display(function () {
-                $province = Region::where('id',$this->province)->value('region_name');
-                $city = Region::where('id',$this->city)->value('region_name');
-                return $province.$city;
-            });*/
+            // $grid->column('address','上课地点');
+            $grid->column('region','上课地点')->display(function () {
+                if ($this->method == '线下') {
+                    $province = Region::where('id',$this->province)->value('region_name');
+                    $city = Region::where('id',$this->city)->value('region_name');
+                    return $province.$city;
+                } else {
+                    return '';
+                }
+
+            });
             $grid->column('status')->using([0 => '待审核', 1 => '已通过', 3 => '已拒绝']);
             $grid->column('is_on','是否上架')->using([0 => '否', 1 => '是']);
             $grid->column('reason','拒绝原因');

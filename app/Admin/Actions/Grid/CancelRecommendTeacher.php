@@ -32,7 +32,7 @@ class CancelRecommendTeacher extends RowAction
         if (!$teacher_info) {
             return $this->response()->error('老师不存在');
         }
-        $teacher_info->is_recommend = 1;
+        $teacher_info->is_recommend = 0;
         $teacher_info->recommend_time = Carbon::now();
         $teacher_info->update();
 
