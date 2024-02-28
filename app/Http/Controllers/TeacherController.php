@@ -429,9 +429,9 @@ class TeacherController extends Controller
             $result = Course::leftJoin('organizations','organizations.id','=','courses.organ_id')
                 ->leftJoin('deliver_log','deliver_log.course_id','=','courses.id')
                 ->select('courses.*','organizations.name as organ_name',DB::raw('6371 * ACOS(COS(RADIANS('.$latitude.')) * COS(RADIANS(courses.latitude)) * COS(RADIANS(courses.longitude) - RADIANS('.$longitude.')) + SIN(RADIANS('.$latitude.')) * SIN(RADIANS(courses.latitude))) AS distance'))
-                ->where($where)->where(['courses.role' => 3])->where('courses.status','!=',0)->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($or_where) {
+                ->where($where)->where(['courses.role' => 3])->where('courses.status',1)->where('courses.is_on',1)->where('courses.adder_role','!=',0)->orWhere(function ($query) use ($or_where) {
                     $query->where('courses.is_on',1)
-                        ->where('courses.status','!=',0)
+                        ->where('courses.status',1)
                         ->where('courses.method','线上')
                         ->where('courses.role',3)
                         ->where('courses.adder_role','!=',0)
