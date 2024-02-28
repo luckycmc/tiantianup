@@ -176,6 +176,7 @@ class IndexController extends Controller
         } else {
             $city_id = Region::where('region_name',$data['city'])->value('id');
         }
+        Log::info('city_id: '.$city_id);
         $where[] = ['city','=',$city_id];
 
         if (isset($data['name'])) {
@@ -191,7 +192,7 @@ class IndexController extends Controller
             $where[] = $or_where[] = ['method','=',$data['method']];
         }
         if (isset($data['district'])) {
-            $id = Region::where('region_name',$data['district']);
+            $id = Region::where('region_name',$data['district'])->value('id');
             /*$district = get_long_lat('','',$data['district'],'');
             $longitude = $district[0];
             $latitude = $district[1];*/
