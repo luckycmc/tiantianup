@@ -217,11 +217,11 @@ class IndexController extends Controller
             $query->where(['role' => $role,'is_recommend' => 1,'is_on' => 1,'method' => '线上'])->where('status','!=',0)->whereNotIn('adder_role',[0])->whereNotIn('is_invalid',[1])->where('end_time','>',Carbon::now())->where($or_where);
         })->orderByDesc('recommend_time')->paginate($page_size);
         foreach ($result as $v) {
-            if ($v->adder_role == 4) {
+            /*if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
             } else {
                 $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
-            }
+            }*/
 
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
@@ -262,7 +262,7 @@ class IndexController extends Controller
             // 地址
             // $result->address = $result->organization->address;
         }*/
-        $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
+        // $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
         /*if ($result->adder_role == 2) {
             $result->distance = calculate_distance($latitude,$longitude,floatval($result->latitude),floatval($result->longitude));
             // 地址

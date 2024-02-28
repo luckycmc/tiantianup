@@ -294,9 +294,9 @@ class TeacherController extends Controller
         })->values();
         foreach ($info as $v) {
             if ($v->course) {
-                if ($v->course->method !== '线上') {
+                /*if ($v->course->method !== '线上') {
                     $v->course->distance = calculate_distance($latitude,$longitude,floatval($v->course->latitude),floatval($v->course->longitude));
-                }
+                }*/
                 // 机构
                 if ($v->course->adder_role == 4) {
                     // $v->course->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
@@ -347,10 +347,10 @@ class TeacherController extends Controller
             $sort_field = 'courses.class_price';
             $order = $data['sort_class_price'] == 0 ? 'desc' : 'asc';
         }
-        if (isset($data['sort_distance'])) {
+        /*if (isset($data['sort_distance'])) {
             $sort_field = 'distance';
             $order = $data['sort_distance'] == 0 ? 'desc' : 'asc';
-        }
+        }*/
         $where = [];
         $or_where = [];
         if (isset($data['city_id'])) {
@@ -440,7 +440,7 @@ class TeacherController extends Controller
         }
 
         foreach ($result as $v) {
-            $v->distance = round(calculate_distance($latitude,$longitude,$v->latitude,$v->longitude),2);
+            // $v->distance = round(calculate_distance($latitude,$longitude,$v->latitude,$v->longitude),2);
             $v->is_deliver = $user->deliver_log()->where('course_id',$v->id)->where('pay_status',1)->exists();
         }
         return $this->success('找学员列表',$result);

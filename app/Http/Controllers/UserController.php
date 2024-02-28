@@ -490,7 +490,7 @@ class UserController extends Controller
             foreach ($result as $v) {
                 $course_info = Course::find($v->course->id);
                 if ($course_info->adder_role == 4) {
-                    $v->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
+                    // $v->distance = calculate_distance($latitude,$longitude,$v->course->organization->latitude,$v->course->organization->longitude);
                     $v->course_organ = $v->course->organization;
                 }
                 $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $course_info->id])->exists();
@@ -991,13 +991,13 @@ class UserController extends Controller
             $longitude = $data['longitude'];
             $latitude = $data['latitude'];
             $course = $user->user_courses()->where($where)->whereHas('organization',function ($query) use ($longitude,$latitude,$distance_min,$distance_max) {
-                $query->select(['id', 'name'])
-                    ->selectRaw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) *
-                    cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) *
-                    sin(radians(latitude)))) AS distance")
-                    ->having('distance', '>=', $distance_min)
-                    ->having('distance', '<=', $distance_max)
-                    ->orderBy('distance', 'asc');
+                $query->select(['id', 'name']);
+                    // ->selectRaw("(6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) *
+                    // cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) *
+                    // sin(radians(latitude)))) AS distance")
+                    /*->having('distance', '>=', $distance_min)
+                    ->having('distance', '<=', $distance_max)*/
+                    // ->orderBy('distance', 'asc');
             })->wherePivotBetween('created_at',[$entry_start_date." 00:00:00",$entry_end_date." 23:59:59"])->orderByPivot('created_at',$date_sort)->paginate($page_size);
         } else {
             $course = $user->user_courses()->where($where)->wherePivotBetween('created_at',[$entry_start_date." 00:00:00",$entry_end_date." 23:59:59"])->orderByPivot('created_at',$date_sort)->paginate($page_size);
@@ -1007,7 +1007,7 @@ class UserController extends Controller
             $v->is_expire = Carbon::now() > $v->end_time ? 1 : 0;
             $v->entry_time = Carbon::parse($v->pivot->created_at)->format('Y-m-d H:i:s');
             $v->organization_name = $v->organization->name;
-            $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
+            // $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
         }
         return $this->success('我的报名',$course);
     }

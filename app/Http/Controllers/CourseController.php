@@ -64,9 +64,9 @@ class CourseController extends Controller
         $select_field = ['courses.*','organizations.name as organ_name'];
         if (isset($data['sort_price'])) {
             $sort_field = 'courses.class_price';
-        } else if (isset($data['sort_distance'])) {
+        } /*else if (isset($data['sort_distance'])) {
             $sort_field = 'distance';
-        } else if (isset($data['sort_visit_count'])) {
+        } */else if (isset($data['sort_visit_count'])) {
             $sort_field = 'courses.visit_count';
         } else if (isset($data['sort_buyer_count'])) {
             $sort_field = 'courses.entry_number';
@@ -122,11 +122,11 @@ class CourseController extends Controller
             }
 
         }
-        if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
+        /*if (isset($data['filter_distance_min']) && isset($data['filter_distance_max'])) {
             $distance_expr = "6371 * acos(cos(radians($latitude)) * cos(radians(courses.latitude)) * cos(radians(courses.longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(courses.latitude)))";
             $where[] = $or_where[] = [DB::raw($distance_expr),'>=',$data['filter_distance_min']];
             $where[] = $or_where[] = [DB::raw($distance_expr),'<=',$data['filter_distance_max']];
-        }
+        }*/
         // 当前用户
         $user = Auth::user();
         if (isset($data['city_name'])) {
@@ -215,18 +215,18 @@ class CourseController extends Controller
         foreach ($result as $v) {
             // 是否已报名
             $v->is_entry = UserCourse::where(['user_id' => $user->id,'course_id' => $v->id])->exists();
-            if ($v->adder_role == 4) {
+            /*if ($v->adder_role == 4) {
                 $v->distance = calculate_distance($latitude,$longitude,$v->organization->latitude,$v->organization->longitude);
             } else {
                 $v->distance = calculate_distance($latitude,$longitude,$v->latitude,$v->longitude);
-            }
+            }*/
             // 是否已投递
             if ($v->adder_role == 0) {
                 $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
             } else {
                 $v->is_deliver = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
             }
-            $v->distance = round($v->distance,2);
+            // $v->distance = round($v->distance,2);
             if ($v->adder_role == 0) {
                 // 是否查看
                 $v->is_show = DeliverLog::where(['user_id' => $user->id,'course_id' => $v->id,'pay_status' => 1])->exists();
