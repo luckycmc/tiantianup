@@ -199,11 +199,11 @@ class CourseController extends Controller
             ->select($select_field)
             ->where($where)
             ->where('courses.is_on',1)
-            ->where('courses.status','!=',0)
+            ->where('courses.status',1)
             ->whereNotIn('courses.is_invalid',[1])
             ->orWhere(function ($query) use ($or_where,$user) {
                 $query->where('courses.is_on',1)
-                    ->where('courses.status','!=',0)
+                    ->where('courses.status',1)
                     ->where('courses.method','线上')
                     ->whereNotIn('courses.is_invalid',[1])
                     ->where($or_where);
