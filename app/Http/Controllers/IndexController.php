@@ -164,7 +164,7 @@ class IndexController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
-        Log::info('data: ',$data);
+        Log::info('course_data: ',$data);
 
         $where = [];
         $or_where = [];
