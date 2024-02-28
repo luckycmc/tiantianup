@@ -75,7 +75,7 @@ class ParentController extends Controller
         // 查询招教师需求最大的有效期
         $system_valid_time = CourseSetting::where(['role' => 3])->orderByDesc('created_at')->value('end_time');
         if ($data['valid_time'] > $system_valid_time) {
-            return $this->error('有效期不能大于'.$system_valid_time);
+            return $this->error('有效期不能超过'.$system_valid_time.'天');
         }
         // 当前用户
         $user = Auth::user();
