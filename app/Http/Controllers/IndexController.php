@@ -40,8 +40,6 @@ class IndexController extends Controller
     {
         $data = \request()->all();
         $district_id = $data['district_id'] ?? 0;
-        Log::info('district_id: '.$district_id);
-        Log::info('data: ',$data);
         $page_size = $data['page_size'] ?? 10;
         $where = [];
         if ((isset($data['longitude']) && isset($data['latitude'])) && !isset($data['district_id']) && !isset($data['city'])) {
@@ -166,6 +164,7 @@ class IndexController extends Controller
         $page_size = $data['page_size'] ?? 10;
         $longitude = $data['longitude'] ?? 0;
         $latitude = $data['latitude'] ?? 0;
+        Log::info('data: ',$data);
 
         $where = [];
         $or_where = [];
