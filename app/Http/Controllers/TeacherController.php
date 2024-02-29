@@ -383,7 +383,10 @@ class TeacherController extends Controller
             $where[] = ['courses.adder_role','=',$data['filter_adder_role']];
         }
         if (isset($data['name'])) {
-            $where[] = $or_where[] = ['courses.name','like','%'.$data['name'].'%'];
+            $where[] = $or_where[] = [function ($query) use ($data) {
+                $query->where('courses.name','like','%'.$data['name'].'%')
+                    ->orWhere('courses.number','like','%'.$data['name'].'%');
+            }];
         }
         if (isset($data['district'])) {
             $region_info = get_long_lat('','',$data['district'],'');
