@@ -40,6 +40,8 @@ class CommonController extends Controller
                 $order = UserTeacherOrder::where('out_trade_no',$info['out_trade_no'])->first();
                 // 查询用户
                 $user = User::find($order->user_id);
+                // 查询教师
+                $teacher = User::find($order->teacher_id);
                 // 查询支付类型
                 if ($order->pay_type == 1) {
                     // 微信支付
@@ -58,6 +60,7 @@ class CommonController extends Controller
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
                     'type' => 5,
+                    'number' => $teacher->number,
                     'discount' => $order->discount ?? 0,
                     'description' => '查看教师',
                     'created_at' => Carbon::now()
@@ -121,6 +124,7 @@ class CommonController extends Controller
                     'user_id' => $user->id,
                     'amount' => '-'.$order->amount,
                     'type' => $type,
+                    'number' => $course->number,
                     'discount' => $order->discount ?? 0,
                     'description' => $description,
                     'created_at' => Carbon::now()
@@ -188,6 +192,7 @@ class CommonController extends Controller
                         'user_id' => $user->id,
                         'amount' => '-'.$order->amount,
                         'type' => 10,
+                        'number' => $user->number,
                         'discount' => $order->discount ?? 0,
                         'description' => '查看报名',
                         'created_at' => Carbon::now()
@@ -205,6 +210,7 @@ class CommonController extends Controller
                             'user_id' => $user->id,
                             'amount' => '-'.$order->amount,
                             'type' => 10,
+                            'number' => $user->number,
                             'description' => '查看报名',
                             'created_at' => Carbon::now()
                         ];

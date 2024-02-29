@@ -19,7 +19,7 @@ class BillController extends AdminController
     protected function grid()
     {
         return Grid::make(new Bill(['user']), function (Grid $grid) {
-            $grid->model()->whereIn('type',[4,5,9,10,11]);
+            $grid->model()->whereIn('type',[4,5,9,10,11])->orderByDesc('created_at');
             $grid->column('id')->sortable();
             $grid->column('user.name','用户姓名')->display(function () {
                 // dd($this->user->role);
@@ -29,6 +29,7 @@ class BillController extends AdminController
                     return $this->user ? $this->user->name : null;
                 }
             });
+            $grid->column('user.number','用户编号');
             $grid->column('user.role','用户身份')->using([1 => '学生', 2 => '家长', 3 => '教师', 4 => '机构']);
             $grid->column('amount');
             $grid->column('discount');
