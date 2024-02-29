@@ -385,7 +385,8 @@ class TeacherController extends Controller
         if (isset($data['name'])) {
             $where[] = $or_where[] = [function ($query) use ($data) {
                 $query->where('courses.name','like','%'.$data['name'].'%')
-                    ->orWhere('courses.number','like','%'.$data['name'].'%');
+                    ->orWhere('courses.number','like','%'.$data['name'].'%')
+                    ->orWhere('courses.address','like','%'.$data['name'].'%');
             }];
         }
         if (isset($data['district'])) {
