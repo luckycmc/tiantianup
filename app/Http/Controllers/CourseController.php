@@ -97,7 +97,10 @@ class CourseController extends Controller
             }
         }
         if (isset($data['filter_name'])) {
-            $where[] = $or_where[] = ['courses.name','like','%'.$data['filter_name'].'%'];
+            $where[] = $or_where[] = [
+                ['courses.name','like','%'.$data['filter_name'].'%'],
+                ['courses.number','like','%'.$data['filter_name'].'%'],
+            ];
         }
 
         if (isset($data['latitude']) && isset($data['longitude']) && !isset($data['city']) && !isset($data['city_name'])) {
