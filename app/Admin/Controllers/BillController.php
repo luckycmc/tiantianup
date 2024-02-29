@@ -34,25 +34,27 @@ class BillController extends AdminController
             $grid->column('amount');
             $grid->column('discount');
             $grid->column('type')->using([4 => '购买课程', 5 => '查看教师', 9 => '成交', 10 => '查看报名', 11 => '查看中介单']);
+            $grid->column('number');
             $grid->column('description');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('username');
-                $filter->equal('user.role','用户类型')->select([
+                $filter->equal('user.role','用户身份')->select([
                     1 => '学生',2 => '家长',3 => '教师',4 => '机构'
                 ]);
-                $filter->whereBetween('updated_at', function ($q) {
+                $filter->like('number');
+                $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
 
                     if ($start !== null) {
-                        $q->where('updated_at', '>=', $start);
+                        $q->where('created_at', '>=', $start);
                     }
 
                     if ($end !== null) {
-                        $q->where('updated_at', '<=', $end);
+                        $q->where('created_at', '<=', $end);
                     }
                 })->datetime();
         
@@ -68,9 +70,10 @@ class BillController extends AdminController
                         $row['status'] = '/';
                     }
                     $role_arr = ['','学生','家长','教师','机构'];
-                    $row['user']['role'] = $role_arr[$row->role];
-                    $row['user']['name'] = $row->role == 4 ? ($row->user->organization ? $row->user->organization->name : null) : $row->user->name;
-
+                    if ($row->role > 0) {
+                        $row['user']['role'] = $role_arr[$row->user->role];
+                        $row['user']['name'] = $row->role == 4 ? ($row->user->organization ? $row->user->organization->name : null) : $row->user->name;
+                    }
                     $row['type'] = $type_arr[$row['type']];
                     $row['is_disabled'] = $row['is_disabled'] == 0 ? '否' : '是';
                 }
