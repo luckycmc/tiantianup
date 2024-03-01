@@ -89,7 +89,7 @@ class NoticeController extends AdminController
         return Form::make(new Notice(), function (Form $form) {
             $form->display('id');
             $form->text('title');
-            $form->editor('content');
+            $form->textarea('content');
             $form->checkbox('object','对象')->options(['1' => '学生', '2' => '家长', '3' => '教师', '4' => '机构'])->saving(function ($value) {
                 return implode(',', $value);
             });
