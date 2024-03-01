@@ -20,7 +20,7 @@ class MessageController extends Controller
         $status = $data['status'] ?? 0;
         // 当前用户
         $user = Auth::user();
-        $result = Message::where(['user_id' => $user->id,'status' => $status])->paginate($page_size);
+        $result = Message::where(['user_id' => $user->id,'status' => $status])->orderByDesc('created_at')->paginate($page_size);
         foreach ($result as $v) {
             $v->role = $user->role;
         }
