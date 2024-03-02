@@ -370,12 +370,7 @@ class IndexController extends Controller
         // 我的报名
         $user->entry = $user->user_courses()->count();
         if ($user->role == 3) {
-            $info = $user->deliver_log->filter(function ($item) {
-                if (isset($item->course)) {
-                    return $item->course->adder_role !== 0;
-                }
-                return 0;
-            });
+            $info = DeliverLog::with(['course'])->where('user_id',$user->id)->get();
             $info = $info->filter(function ($item) {
                 return $item->course !== null;
             })->values();
@@ -387,17 +382,19 @@ class IndexController extends Controller
             $course = $info->map(function ($item) {
                 return $item->course;
             });
-            // dd($course->toArray());
+            $course = $course->filter(function ($item) {
+                return $item->adder_role !== 0;
+            })->values();
             // 查询后台配置
             $system_setting = CourseSetting::orderByDesc('created_at')->first();
             $looked_course_valid_time = $system_setting->looked_course_valid_time;
             $user_course = $course->filter(function ($item) use ($looked_course_valid_time) {
                 // 当前时间
                 $day = Carbon::now();
-                $diff_day = $day->diffInDays($item->update_at);
+                $diff_day = $day->diffInDays($item->pay_time);
                 return $diff_day < $looked_course_valid_time;
-            });
-            $user->entry = $user_course->count();
+            })->values();
+            $user->entry = count($user_course->toArray());
         }
 
         $user->team = $user->child()->where('users.is_perfect',1)->count() + $user->grandson()->where('users.is_perfect',1)->count();
