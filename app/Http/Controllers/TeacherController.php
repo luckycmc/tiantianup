@@ -325,7 +325,7 @@ class TeacherController extends Controller
             $day = Carbon::now();
             $diff_day = $day->diffInDays($item->pay_time);
             return $diff_day < $looked_course_valid_time;
-        });
+        })->values();
         // 分页
         $result = new LengthAwarePaginator(
             $course->forPage($page, $page_size),

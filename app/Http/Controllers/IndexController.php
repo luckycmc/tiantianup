@@ -8,6 +8,7 @@ use App\Models\Bill;
 use App\Models\Collect;
 use App\Models\Constant;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\Education;
 use App\Models\Grade;
@@ -369,14 +370,36 @@ class IndexController extends Controller
         // 我的报名
         $user->entry = $user->user_courses()->count();
         if ($user->role == 3) {
-            $user_entry_course = $user->deliver_log->filter(function ($item) {
+            $info = $user->deliver_log->filter(function ($item) {
                 if (isset($item->course)) {
                     return $item->course->adder_role !== 0;
                 }
                 return 0;
             });
-            $user->entry = $user_entry_course->count();
+            $info = $info->filter(function ($item) {
+                return $item->course !== null;
+            })->values();
+            foreach ($info as $v) {
+                if ($v->course) {
+                    $v->course->pay_time = Carbon::parse($v->updated_at)->format('Y-m-d H:i:s');
+                }
+            }
+            $course = $info->map(function ($item) {
+                return $item->course;
+            });
+            // dd($course->toArray());
+            // 查询后台配置
+            $system_setting = CourseSetting::orderByDesc('created_at')->first();
+            $looked_course_valid_time = $system_setting->looked_course_valid_time;
+            $user_course = $course->filter(function ($item) use ($looked_course_valid_time) {
+                // 当前时间
+                $day = Carbon::now();
+                $diff_day = $day->diffInDays($item->update_at);
+                return $diff_day < $looked_course_valid_time;
+            });
+            $user->entry = $user_course->count();
         }
+
         $user->team = $user->child()->where('users.is_perfect',1)->count() + $user->grandson()->where('users.is_perfect',1)->count();
         // 未读消息
         $user->message = $user->messages()->where('status',0)->count();
