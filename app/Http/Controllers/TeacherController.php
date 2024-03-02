@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseInformation;
 use App\Models\Course;
+use App\Models\CourseSetting;
 use App\Models\DeliverLog;
 use App\Models\PlatformMessage;
 use App\Models\Region;
@@ -305,6 +306,7 @@ class TeacherController extends Controller
                 }
                 $v->course->pay_status = $v->pay_status;
                 $v->course->is_checked = $v->is_checked;
+                $v->course->pay_time = Carbon::parse($v->updated_at)->format('Y-m-d H:i:s');
             }
         }
         $course = $info->map(function ($item) {
@@ -313,6 +315,17 @@ class TeacherController extends Controller
         $course = $course->filter(function ($item) {
             return $item->adder_role !== 0;
         })->values();
+        // 查询后台配置
+        $system_setting = CourseSetting::orderByDesc('created_at')->first();
+        $looked_course_valid_time = $system_setting->looked_course_valid_time;
+        // dd($looked_course_valid_time);
+        // 筛选超出查看有效期的课程
+        $course = $course->filter(function ($item) use ($looked_course_valid_time) {
+            // 当前时间
+            $day = Carbon::now();
+            $diff_day = $day->diffInDays($item->pay_time);
+            return $diff_day < $looked_course_valid_time;
+        });
         // 分页
         $result = new LengthAwarePaginator(
             $course->forPage($page, $page_size),
