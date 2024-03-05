@@ -124,6 +124,8 @@ class TeacherController extends Controller
             $v->subject = count($subject) > 0 ? handel_subject(implode(',',$subject)) : [];
             $v->is_pay = UserTeacherOrder::where(['user_id' => $user->id,'teacher_id' => $v->id,'status' => 1])->exists();
             $v->picture = $v->teacher_info ? $v->teacher_info->picture : null;
+            $v->graduate_school = $v->teacher_education ? $v->teacher_education->graduate_school : null;
+            $v->highest_education = $v->teacher_education ? $v->teacher_education->highest_education : null;
         }
         return $this->success('教师列表',$result);
     }
