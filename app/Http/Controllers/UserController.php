@@ -884,6 +884,8 @@ class UserController extends Controller
         if (!$result) {
             return $this->error('提交失败');
         }
+        $user->education_id = $data['education_id'];
+        $user->update();
         // 发送通知
         if (SystemMessage::where('action',3)->value('site_message') == 1) {
             (new PlatformMessage())->saveMessage('教育经历更新','教育经历更新','教师端');

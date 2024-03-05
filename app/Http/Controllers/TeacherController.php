@@ -59,9 +59,9 @@ class TeacherController extends Controller
         $order = $data['order'] ?? 'desc';
         $sort_field = 'users.updated_at';
         if (isset($data['sort_teaching_year'])) {
-            $sort_field = 'teacher_info.teaching_year';
+            $sort_field = 'teaching_year';
         } elseif (isset($data['sort_education'])) {
-            $sort_field = 'teacher_education.education_id';
+            $sort_field = 'education_id';
         }
         // 筛选
 
